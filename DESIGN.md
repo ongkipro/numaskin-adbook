@@ -150,11 +150,13 @@ Tailwind blue focus ring, a card grid that reserves blank lines.
   can show distinct images); supply a packshot per bundle.
 - Twin Pack: compare-at Rp529.000 (numaskin.id) is above 2 × Rp239.000; the
   "2× 150ml" size on the Treatment Lotion page uses Rp478.000.
-- Bundle pricing (numaskin.id, 2026-10-16): most bundles cost the same as
-  their singles (±Rp2); those holding Sunscreen or Gloss Gel cost Rp30.000
-  more per item, because those singles are on promo (Rp79.000) while bundles
-  price them at Rp109.000. Only Twin Pack saves. "Paket Hemat" / "HEMAT x%"
-  is against compare-at, not against buying singly — owner decides prices.
+- Bundle prices now differ from numaskin.id (owner decision 2026-10-16,
+  below): mirror them in Shopify, or the two stores disagree.
+- Paket Exclusive keeps its numaskin.id price (Rp301.650): its contents
+  (travel size, pouch) are unconfirmed, so no saving is computed or shown.
+- Age Defense Trio and Sunscreen + Adenosine + Toner were priced Rp30.000 /
+  Rp10.000 above their listed contents on numaskin.id; repriced from the
+  listed contents — confirm nothing else is in the box.
 - Six bundle images print outcome promises or a gift (held from the home
   preview, still on /produk): Twin Pack, Adenosine & Toner 150ml, Duo Toner,
   Toner 50ml & Gloss Gel, Toner 150ml & Gloss Gel, and the "Why PDRN"
@@ -564,3 +566,44 @@ screenshots re-opened:
 - "Pilih ukuran" over "Toner 50ml / Toner 150ml" left a bundle buyer unsure
   whether the other items change → when every option names the same product,
   the label says "Pilih ukuran toner" and the pills show "50ml / 150ml".
+
+### Bundle repricing (owner decision 2026-10-16: "Turunkan harga paket")
+
+Found: on numaskin.id most bundles cost the same as their singles (±Rp2), and
+bundles holding Sunscreen or Gloss Gel cost Rp30.000 more per item (those
+singles are on promo at Rp79.000; bundles price them at the Rp109.000 list
+price). Only Twin Pack saved. Applied (live D1, guarded by old price; backup
+outside the repo): each bundle variant = today's singles total × 0.95, rounded
+down to Rp500, never above its old price (Twin Pack unchanged); 44 variants.
+Compare-at prices stay numaskin.id's. Fixed on the way: `bundleContents`
+missed "tabir surya" (Ultimate Anti-Aging 50ml holds Sunscreen; its label now
+lists five items, matching numaskin.id's price exactly).
+
+The PDP now states the saving a buyer can check — "RpX lebih hemat dibanding
+beli satuan" (`singlesTotal`, test added), updated with the size pills, hidden
+when an item cannot be priced (Exclusive). Range today: Rp7.498 – Rp66.400.
+
+Cycle 4 round 4 (REVISE): "HEMAT 30%" (against numaskin.id's compare-at)
+contradicted "Rp11.498 lebih hemat dibanding beli satuan" on the same page.
+Owner decision 2026-10-16 ("Total beli satuan"): a bundle's compare-at is its
+singles total at today's prices (live D1, 45 variants; Exclusive keeps
+numaskin.id's). Card strike, "Hemat x%", the PDP line and the checkout summary
+now share one basis; the card's screen-reader label says "Harga beli satuan"
+on bundles. Singles keep numaskin.id's compare-at. If a single's price
+changes, recompute bundle prices and compare-at together.
+
+Cycle 4 round 5: PASS. Its suggestion applied after it, re-rendered and the
+six screenshots re-opened: the order summary showed a two-size bundle's
+variant as "Toner 50ml", readable as the item bought → those 8 variants (Glow
+Up ×2, Fresh & Hydrate, Lengkap 6-in-1) are labelled with full contents in
+live D1; the PDP still asks "Pilih ukuran toner: 50ml / 150ml"
+(`sizeChoice`, test added); the summary gives the label its own line, price
+figures under it on the right.
+
+### Polish cycle 5 (2026-10-16)
+
+New review cycle; the previous log is archived as
+`design/review-rounds-2026-10-16-prices.log`. Starts from the renders above
+(`design/renders/ux-home-390.png`, `design/renders/ux-home-1440.png`,
+`design/renders/ux-produk-390.png`, `design/renders/ux-produk-1440.png`,
+`design/renders/ux-pdp-390.png`, `design/renders/ux-pdp-1440.png`).

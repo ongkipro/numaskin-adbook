@@ -37,6 +37,10 @@ test("bundle contents are listed in routine order and ignore unnamed products", 
     bundleContents("Kombinasi Treatment Lotion 150ml, Adenosine Moisturizer, dan PDRN Tone-Up Day Cream."),
     ["Toner", "Day Cream", "Adenosine"],
   );
+  assert.deepEqual(
+    bundleContents("Treatment Lotion 50ml, pelembap Adenosine, Day Cream PDRN, tabir surya SPF 50+, dan serum NAD+."),
+    ["Toner", "NAD+ Serum", "Day Cream", "Adenosine", "Sunscreen"],
+  );
   assert.deepEqual(bundleContents("Paket hemat untuk kulit."), []);
 });
 
@@ -84,4 +88,30 @@ test("a bundle's buy-singly list leads with its own products, padded to even", a
   assert.deepEqual(names(["NAD+ Serum", "Adenosine"]).slice(0, 2), ["NAD+ Booster Serum", "Adenosine Moisturizer"]);
   assert.equal(names(["Facial Wash", "Toner", "Adenosine", "Day Cream", "NAD+ Serum", "Sunscreen"]).length, 6);
   assert.equal(names([]).length, 4);
+});
+
+test("a bundle variant's singles total prices toner by size and fails closed", async () => {
+  const { singlesTotal } = await import("../components/storefront/numaskin/catalog-order.ts");
+  const singles = [
+    { productName: "Deep Sea Water Facial Wash Gel", variants: [{ label: "100 ml", price: 68999 }] },
+    { productName: "Deep Sea Water Treatment Lotion", variants: [{ label: "50ml", price: 79000 }, { label: "150ml", price: 109000 }, { label: "2× 150ml", price: 151600 }] },
+    { productName: "Adenosine Deep Sea Water Moisturizer", variants: [{ label: "30 gr", price: 78999 }] },
+    { productName: "NAD+ Booster Anti-Aging Serum", variants: [{ label: "20 ml", price: 108999 }] },
+  ];
+  assert.equal(singlesTotal("Toner 50ml + NAD+ Serum 20ml + Adenosine 30gr", [], singles), 266998);
+  assert.equal(singlesTotal("Facial Wash 100ml + Adenosine 30gr", [], singles), 147998);
+  assert.equal(singlesTotal("2× Toner 150ml", ["Toner"], singles), 218000);
+  assert.equal(singlesTotal("Toner 150ml + Toner 50ml", ["Toner"], singles), 188000);
+  assert.equal(singlesTotal("Toner 50ml", ["Facial Wash", "Toner", "Adenosine"], singles), 226998);
+  assert.equal(singlesTotal("Toner 50ml + Sunscreen 30ml", [], singles), 0);
+  assert.equal(singlesTotal("Paket", ["Toner"], singles), 0);
+});
+
+test("a size choice is found when labels differ in one item's size only", async () => {
+  const { sizeChoice } = await import("../components/storefront/numaskin/catalog-order.ts");
+  assert.deepEqual(sizeChoice(["Facial Wash 100ml + Toner 50ml + Adenosine 30gr", "Facial Wash 100ml + Toner 150ml + Adenosine 30gr"]), { part: "Toner", sizes: ["50ml", "150ml"] });
+  assert.deepEqual(sizeChoice(["Toner 50ml", "Toner 150ml"]), { part: "Toner", sizes: ["50ml", "150ml"] });
+  assert.equal(sizeChoice(["50ml", "150ml", "2× 150ml"]), null);
+  assert.equal(sizeChoice(["Toner 50ml + Sunscreen 30ml", "Toner 150ml + Gloss Gel 30ml"]), null);
+  assert.equal(sizeChoice(["Paket"]), null);
 });

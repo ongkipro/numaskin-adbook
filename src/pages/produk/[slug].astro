@@ -4,7 +4,7 @@ import Breadcrumb from '../../components/storefront/shared/Breadcrumb.astro';
 import MetaLandingTracker from '../../components/storefront/tracking/MetaLandingTracker.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getStorefrontProduct, getStorefrontProducts } from '../../lib/catalog';
-import { BUNDLE_CATEGORY, bundleContents, orderCategories, singlesForBundle, withoutSizes } from '../../components/storefront/numaskin/catalog-order';
+import { BUNDLE_CATEGORY, bundleContents, orderCategories, singlesForBundle, singlesTotal, sizeChoice, withoutSizes } from '../../components/storefront/numaskin/catalog-order';
 import ProductGrid from '../../components/storefront/numaskin/ProductGrid.astro';
 import { getProductPageLanding } from '../../lib/landing-pages';
 import Icon from '../../components/storefront/shared/Icon.astro';
@@ -60,18 +60,26 @@ if (productPageLanding) {
 const socialProofOrders = await recentOrderCount(getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined);
 
 const cheapestVariant = [...product.variants].sort((a, b) => a.price - b.price)[0] ?? null;
-// When every size option names the same one product ("Toner 50ml", "Toner
-// 150ml"), the label says which product's size changes and the pills show
-// just the size, so a bundle buyer does not wonder about the other items.
-const sizeOf = product.variants.map((v) => v.label.trim().match(/^([A-Za-z+]+)\s+(\d+\s?(?:ml|gr|g))$/i));
-const sizedPart = sizeOf.length > 1 && sizeOf.every((m) => m && m[1] === sizeOf[0]?.[1]) ? sizeOf[0]![1] : '';
-const pillText = (label: string) => (sizedPart ? label.trim().slice(sizedPart.length).trim() : label);
+// When the options differ in one item's size only, the label names that item
+// and the pills show just the size, so a bundle buyer does not wonder about
+// the other items ("Pilih ukuran toner": 50ml / 150ml).
+const sizePick = sizeChoice(product.variants.map((v) => v.label));
+const sizedPart = sizePick?.part ?? '';
+const pillText = (label: string) => sizePick?.sizes[product.variants.findIndex((v) => v.label === label)] ?? label;
 const shownDescription = product.variants.length > 1 ? withoutSizes(product.description ?? '') : product.description;
 // Install-owned (DESIGN.md §UX): bundle-aware labels, and "complete the
 // routine" picks — the single products other than this one, in routine order.
 const isBundle = product.category === BUNDLE_CATEGORY;
 const allProducts = await getStorefrontProducts(Astro.locals);
 const routineOrder = orderCategories(allProducts.map((p) => p.category));
+// A bundle's saving against buying its items singly, per variant, at today's
+// single prices; 0 (nothing shown) when an item cannot be priced or there is
+// no saving. This is the comparison a buyer can check, unlike compare-at.
+const singleProducts = allProducts.filter((p) => p.category !== BUNDLE_CATEGORY);
+const contents = isBundle ? bundleContents(product.description ?? '') : [];
+const vsSingles = (v: { label: string; price: number }) =>
+  isBundle ? Math.max(0, singlesTotal(v.label, contents, singleProducts) - v.price) : 0;
+const displayVsSingles = cheapestVariant ? vsSingles(cheapestVariant) : 0;
 const otherSingles = allProducts
   .filter((p) => p.slug !== product.slug && p.category !== BUNDLE_CATEGORY)
   .sort((a, b) => routineOrder.indexOf(a.category) - routineOrder.indexOf(b.category));
@@ -249,6 +257,11 @@ const productSchemaJson = JSON.stringify(productSchema).replace(/</g, '\\u003c')
           Hemat {displayDiscount}%
         </span>
       </div>
+      {isBundle && (
+        <p data-pdp-vs hidden={!(displayVsSingles > 0)} class="mt-2 text-[13px] font-semibold text-[var(--nm-teal)]">
+          Rp{displayVsSingles.toLocaleString('id-ID')} lebih hemat dibanding beli satuan
+        </p>
+      )}
 
       {/* One variant: no choice to make, so its label (a bundle's contents with
           sizes) is stated instead of a single pill. */}
@@ -268,6 +281,7 @@ const productSchemaJson = JSON.stringify(productSchema).replace(/</g, '\\u003c')
                 data-variant-pick={v.id}
                 data-price={v.price}
                 data-compare={v.comparePrice ?? 0}
+                data-vs={vsSingles(v)}
                 aria-pressed={v.id === cheapestVariant?.id ? 'true' : 'false'}
                 class="min-h-11 rounded-full border border-[var(--nm-border)] bg-[var(--nm-surface)] px-5 text-[13px] font-semibold text-[var(--nm-marine)] transition-colors hover:border-[var(--nm-teal)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--nm-cyan)] aria-pressed:border-[var(--nm-marine)] aria-pressed:bg-[var(--nm-marine)] aria-pressed:text-white"
               >
@@ -441,6 +455,7 @@ const productSchemaJson = JSON.stringify(productSchema).replace(/</g, '\\u003c')
       const compare = document.querySelector<HTMLElement>('[data-pdp-compare]');
       const save = document.querySelector<HTMLElement>('[data-pdp-save]');
       const sticky = document.querySelector('[data-pdp-sticky-price]');
+      const vs = document.querySelector<HTMLElement>('[data-pdp-vs]');
       const idr = (n: number) => `Rp${Math.round(n).toLocaleString('id-ID')}`;
       const show = (id: string) => {
         const pill = pills.find((p) => p.dataset.variantPick === id);
@@ -453,6 +468,8 @@ const productSchemaJson = JSON.stringify(productSchema).replace(/</g, '\\u003c')
         const discounted = c > p;
         if (compare) { compare.hidden = !discounted; compare.textContent = idr(c); }
         if (save) { save.hidden = !discounted; save.textContent = `Hemat ${Math.round((1 - p / c) * 100)}%`; }
+        const saving = Number(pill.dataset.vs);
+        if (vs) { vs.hidden = !(saving > 0); vs.textContent = `${idr(saving)} lebih hemat dibanding beli satuan`; }
       };
       // With the sync running, the pills are the one visible size choice: the
       // form's own variant step (same options, one screen lower) is hidden,

@@ -53,7 +53,7 @@ const CONTENT_KEYS: ReadonlyArray<[RegExp, string]> = [
   [/day cream|tone-up|pdrn/i, 'Day Cream'],
   [/adenosine/i, 'Adenosine'],
   [/gloss gel|calming/i, 'Gloss Gel'],
-  [/sunscreen|oxydew/i, 'Sunscreen'],
+  [/sunscreen|oxydew|tabir surya/i, 'Sunscreen'],
 ];
 
 export function bundleContents(description: string): string[] {
@@ -160,4 +160,55 @@ export function singlesForBundle<T extends { productName: string }>(
   const rest = singles.filter((p) => !picked.includes(p));
   const target = Math.max(max, picked.length + (picked.length % 2));
   return [...picked, ...rest].slice(0, target);
+}
+
+interface PricedSingle {
+  productName: string;
+  variants: ReadonlyArray<{ label: string; price: number }>;
+}
+
+/** What a bundle variant's items cost bought singly, or 0 when any item cannot
+ *  be priced (then no saving is claimed). Items come from the variant label
+ *  when it lists them ("Facial Wash 100ml + Adenosine 30gr", "2× Toner
+ *  150ml"); a label that only names the toner size ("Toner 50ml") is combined
+ *  with the bundle's contents. Toner is priced by its size. */
+export function singlesTotal(variantLabel: string, contents: readonly string[], singles: readonly PricedSingle[]): number {
+  const label = variantLabel.trim();
+  // Items are joined by " + "; a bare "+" belongs to a name ("NAD+ Serum").
+  const listed = label.includes(' + ') || /^\d+×/.test(label);
+  const tonerOnly = label.match(/^Toner (\d+)\s?ml$/i);
+  const items: Array<{ name: string; ml?: string; n: number }> = listed
+    ? label.split(' + ').map((part) => {
+        const m = part.trim().match(/^(?:(\d+)×\s*)?(.+?)\s+(\d+)\s?(?:ml|gr|g)$/i);
+        return m ? { name: m[2], ml: m[3], n: Number(m[1] ?? 1) } : { name: part.trim(), n: 1 };
+      })
+    : contents.map((name) => ({ name, ml: name === 'Toner' ? tonerOnly?.[1] : undefined, n: 1 }));
+  let total = 0;
+  for (const item of items) {
+    const re = SINGLE_FOR[item.name];
+    const single = re ? singles.find((p) => re.test(p.productName)) : undefined;
+    if (!single) return 0;
+    const variant =
+      single.variants.length === 1
+        ? single.variants[0]
+        : single.variants.find((v) => item.ml && new RegExp(`^${item.ml}\\s?ml$`, 'i').test(v.label.trim()));
+    if (!variant) return 0;
+    total += variant.price * item.n;
+  }
+  return total;
+}
+
+/** When variant labels differ in one item's size only ("Facial Wash 100ml +
+ *  Toner 50ml" / "… + Toner 150ml", or just "Toner 50ml" / "Toner 150ml"),
+ *  that item's name and each label's size, so the picker can say "Pilih
+ *  ukuran toner" over "50ml / 150ml". Null otherwise. */
+export function sizeChoice(labels: readonly string[]): { part: string; sizes: string[] } | null {
+  if (labels.length < 2) return null;
+  const split = labels.map((l) => l.trim().split(' + '));
+  if (split.some((parts) => parts.length !== split[0].length)) return null;
+  const differing = split[0].map((_, i) => i).filter((i) => split.some((parts) => parts[i] !== split[0][i]));
+  if (differing.length !== 1) return null;
+  const sized = split.map((parts) => parts[differing[0]].match(/^(.+?)\s+(\d+\s?(?:ml|gr|g))$/i));
+  if (sized.some((m) => !m || m[1] !== sized[0]![1])) return null;
+  return { part: sized[0]![1], sizes: sized.map((m) => m![2]) };
 }

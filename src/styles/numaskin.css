@@ -216,8 +216,7 @@ html :is([data-hybrid-form-root], [data-middle-form-root]) .trust-strip {
 
 /* Order summary: the product name takes the row's full width and the size and
    price sit under it. The product's two-column row squeezed a
-   bundle name into a 52 % column ("Paket Glow / Up Adenosine"). Size on the
-   left of the second line, price on the right. */
+   bundle name into a 52 % column ("Paket Glow / Up Adenosine"). */
 html :is([data-hybrid-form-root], [data-middle-form-root]) .summary-row-product {
   flex-wrap: wrap;
 }
@@ -228,6 +227,17 @@ html :is([data-hybrid-form-root], [data-middle-form-root]) .summary-product-name
 html :is([data-hybrid-form-root], [data-middle-form-root]) .summary-row-product .summary-price {
   flex-basis: 100%;
   flex-direction: row;
+  flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
+  gap: 0.25rem 0.75rem;
+}
+/* A bundle's variant label lists its contents; it gets its own left-aligned
+   line and the price figures sit under it on the right. */
+html :is([data-hybrid-form-root], [data-middle-form-root]) .summary-row-product .summary-variant {
+  flex: 1 1 12rem;
+  text-align: left;
+}
+html :is([data-hybrid-form-root], [data-middle-form-root]) .summary-row-product .summary-price-figures {
+  margin-left: auto;
 }

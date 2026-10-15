@@ -97,7 +97,7 @@ const discountPercentage = hasDiscount
         <p class="text-sm font-bold leading-5 text-[var(--nm-marine)]">{formatPrice(product.price)}</p>
         {hasDiscount && (
           <p class="nm-strike text-[11px] leading-4 text-[var(--nm-muted)] line-through">
-            <span class="sr-only">Harga normal </span>{formatPrice(comparePrice)}
+            <span class="sr-only">{isBundle ? 'Harga beli satuan ' : 'Harga normal '}</span>{formatPrice(comparePrice)}
           </p>
         )}
         {isBundle && discountPercentage > 0 && (
