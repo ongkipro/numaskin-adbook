@@ -51,7 +51,12 @@ From numaskin.id's own CSS custom properties (`app-*.css`):
 | muted text | `#5A6E7F` | secondary copy (≥4.97:1) |
 
 Inter (the product's, 400/600/700) for body; **DM Serif Display 400** for
-h1/h2; **JetBrains Mono 500** for small tracked labels. Both added fonts are
+h1/h2; **JetBrains Mono 500** only for the product card's category line
+(`.nm-mono`), the one place numaskin.id uses it. Every other small label
+(`.nm-label`: field labels, discount pill, checkout step titles) is Inter 600,
+lightly tracked. Sections carry no eyebrow over their serif title; the title
+and cyan rule are the whole heading (polish pass 2026-10-15: a mono eyebrow over
+every heading read as template chrome). Both added fonts are
 OFL latin subsets from `@fontsource/*@5.2.8`, self-hosted in `public/fonts/`.
 Prices and struck prices are Inter (mono's dotted zero misread 99.000 as
 99.888). Katakana falls back to the system CJK face, as on numaskin.id.
@@ -149,6 +154,14 @@ Tailwind blue focus ring, a card grid that reserves blank lines.
   preview, still on /produk): Twin Pack, Adenosine & Toner 150ml, Duo Toner,
   Toner 50ml & Gloss Gel, Toner 150ml & Gloss Gel, and the "Why PDRN"
   infographic (Youth Glow and the bundles sharing it).
+- "Cocok untuk" chips ("Anti-aging", "Mencerahkan", "Memperkuat skin
+  barrier") are hidden on the PDP until sourced; descriptions still say
+  "kulit glowing". Source the claims or rewrite them in the product data.
+- Bundle images show one size (Paket Glow Up's says "Routine 150ml") while the
+  PDP preselects the cheapest variant (50 ml). Supply an image per variant.
+- The Treatment Lotion landing page's meta description (shown on the home
+  row) says "meredakan kemerahan, dan memperkuat skin barrier": an outcome
+  claim; rewrite it in the landing editor.
 - numaskin.id's ritual bar says the 4-in-1 holds Facial Wash, Toner, NAD+
   Serum and Moisturizer; its product page says Toner, Adenosine, Sunscreen and
   NAD+ Serum. Confirm which is true.
@@ -243,7 +256,7 @@ Review round 4 of the rebuild (REVISE) — findings and changes:
   now covers every "cerah / flek / tersamarkan / sejak pemakaian pertama /
   14 hari / instan" image; the preview shows six of the nine clean ones.
 - The 4-in-1 row read as "these four steps in one pack" while its contents
-  differ → labelled "Paket hemat 4-in-1"; contents shown as they are.
+  differ → since cycle 2 round 3 the ritual no longer ends with it (it does not hold the four steps); it stays in the catalogue and bundle list.
 - Identical collages adjacent on `/produk` → spread apart.
 - Not changed, with reason: the checkout's three-up process row (product
   code, out of scope) and the mobile sticky-bar clearance under the PDP rail.
@@ -278,3 +291,177 @@ the grid and a polite status; size pill by keyboard → price Rp257.000 and
 `aria-pressed`; "Pesan Sekarang" scrolls the form into view; accordion opens.
 Keyboard Tab shows a 2 px cyan ring on every control after its transition.
 Contrast as in the token table.
+
+### Polish pass (2026-10-15, owner: "sempurnakan ui ux, hindari ai slop")
+
+New review cycle; the previous log is archived as
+`design/review-rounds-2026-10-15-ux.log`. Re-rendered locally; screenshots
+opened and read: `design/renders/ux-home-390.png`,
+`design/renders/ux-home-1440.png`, `design/renders/ux-produk-390.png`,
+`design/renders/ux-produk-1440.png`, `design/renders/ux-pdp-390.png`,
+`design/renders/ux-pdp-1440.png`.
+
+- Owner removed the PDP's inline "Pesan Sekarang": the form follows the
+  details. Checked: on this catalogue the sticky bar never shows (the photo or
+  the form is always on screen), so scrolling is the one route — the owner's
+  intent. The COD line stays, left-aligned under the size pills.
+- Template chrome cut: no eyebrow over any home section title (hero "Deep Sea
+  Mineral Science", "Rutinitas harian", "7 produk", "Lebih hemat…" removed);
+  mono is the card category line only; top band, field labels, checkout step
+  titles and the process row are Inter; the submit button's trailing arrow is
+  hidden. `A · B` step labels → "1. Bersihkan"; "Pilihan ukuran / varian" →
+  "Pilih ukuran".
+- Hero subline no longer promises an outcome ("skin barrier yang lebih kuat")
+  → it says what the range is.
+- Render judgement: home reads hero → search/chips → ritual → singles →
+  bundles with one heading system (serif title + cyan rule); the PDP reads
+  photo → title → price → sizes → COD rule → details → form without a
+  competing button. Swapping the brand name would not leave this page
+  unexplained: palette, ritual and imagery are numaskin.id's.
+- Still open, owner content: PDP brightening chips vs held images; per-variant
+  bundle images (Owner list).
+
+Polish review round 1 (REVISE) — findings and changes, re-rendered and the
+same six screenshots re-opened:
+
+- Hero h1 and ritual title promised an outcome ("Kulit Awet Muda", copied from
+  numaskin.id) → "Skincare dengan Air Laut Dalam Ulleung" and "Rutinitas 4
+  Langkah"; the subline names the range, not a result.
+- `/produk` "KATALOG" eyebrow → removed (`PageIntro` shows no eyebrow; the
+  breadcrumb names the page).
+- Twin Pack and the other held-image bundles were in the first ten cards →
+  `heldLast` puts them at the end of /produk (one held list in
+  `catalog-order.ts`, shared with the home preview; test added).
+- PDP `pb-20` sticky-bar clearance read as a dead band → removed.
+- Not changed, with reason: the landing row's text is that page's
+  meta description in D1 ("meredakan kemerahan, memperkuat skin barrier");
+  editing it is a live content change for the owner (Owner list). The rail's
+  two-line type line ("FACIAL / CLEANSER · 100 ML") is the 44% rail width.
+
+Polish review round 2 (REVISE) — findings and changes, re-rendered and the
+six screenshots re-opened:
+
+- The singles grid opened with the four products the ritual had just shown →
+  it opens with the ones the ritual does not show (Day Cream, Gloss Gel,
+  Sunscreen), reusing `pickRitual`.
+- "Beli satuan" rail cards stacked the struck price, unlike every other card →
+  inline, as in the grids: rail cells 48 % (a third card still peeks), price
+  gap 6 px. A card narrower than 148 px (a rail at 360 px) stacks both prices
+  through a container query on a wrapper, so one row never mixes layouts
+  (measured at 360/390/1440). Containment on the subgridded `<article>`
+  itself broke the card's subgrid — caught in the render, moved to a wrapper.
+
+Polish review round 3 (REVISE) — findings and changes, re-rendered and the
+six screenshots re-opened:
+
+- The claim rule held images but not text → the PDP's "Cocok untuk" chips
+  ("Anti-aging", "Mencerahkan", "Memperkuat skin barrier") are not rendered,
+  and the home landing row shows the page title only (its meta description
+  claimed "meredakan kemerahan"). Both return when the owner sources them.
+- Not changed, with reason: the bundle photo shows the 150 ml routine while the
+  cheapest (50 ml) variant is preselected — a per-variant image is owner
+  content, and preselecting by image text would guess; the form's variant
+  radios beside the pills and its three-up process row are the product's
+  checkout code (out of this install's scope; open, not resolved); the
+  description's "kulit glowing" is merchant copy (Owner list).
+
+Polish review round 4 (REVISE) — findings and changes, re-rendered and the
+six screenshots re-opened:
+
+- The PDP asked for the size twice (pills, then the form's radios) → while
+  the pill sync runs, the form's variant step gets `nm-variant-synced` and is
+  hidden; the radios stay the submit control and the order summary names the
+  chosen size. Without script the step shows as before (checked both ways).
+- The ritual's four singles repeated in the singles grid → that section is
+  "Lengkapi Rutinitas" with the three the ritual does not show, and a "Lihat
+  semua produk" button; the hero's "Lihat Produk" lands on the ritual.
+- "Form Pemesanan" lacked the cyan rule → added; checkout step titles drop
+  their dot marker.
+- Not changed, with reason: Moist Glow Duo's collage (its own file, not
+  shared) has a "UV" tile — owner content; the three-up process row is
+  product checkout code.
+
+Polish review round 5 (REVISE; the cycle's last allowed round) — changes made
+after it, rendered and the six screenshots re-opened, not re-reviewed:
+
+- Two near-identical "Glow Up Routine" posters (different files) sat side by
+  side in the bundle preview → one bundle per line (`bundleLine`, the name's
+  first two words; test added). The preview now shows six distinct lines.
+- "Lengkapi Rutinitas" left a hole beside its third card → it is the shared
+  `ProductRail`; "Lihat semua produk" follows it.
+- Hero "Lihat Produk" landed on the ritual → "Lihat Semua Produk" to /produk.
+- The 4-in-1 row's label repeated its name → "Keempat langkah, satu paket".
+- The checkout submit was a grey block outside the button system → a marine
+  pill (aqua pill with muted text while incomplete); the three-up process row
+  (repeated the notice; "Harga tervalidasi" read as a claim) is not shown.
+- Checked, not changed: the NAD+ Youth Boost poster says "membantu … melawan
+  tanda-tanda penuaan" — a hedged cosmetic function claim, not a measurable
+  outcome promise; left for the owner's claim review.
+
+### Polish cycle 2 (2026-10-15, owner: "lanjut sempurnakan")
+
+New review cycle; the previous log is archived as
+`design/review-rounds-2026-10-15-polish.log`. Starts from the renders above
+(`design/renders/ux-home-390.png`, `design/renders/ux-home-1440.png`,
+`design/renders/ux-produk-390.png`, `design/renders/ux-produk-1440.png`,
+`design/renders/ux-pdp-390.png`, `design/renders/ux-pdp-1440.png`), which
+include the round-5 changes.
+
+Cycle 2 round 1 (REVISE) — findings and changes, re-rendered and the six
+screenshots re-opened:
+
+- The 4-in-1 label "Keempat langkah, satu paket" claimed the bundle holds the
+  four steps; its contents line shows it does not → "Hemat dalam satu paket".
+- Home marked the "Semua" chip active (`aria-current`) though home is not the
+  catalogue → `active={null}` marks no chip there.
+- Bundle type line said only "SKINCARE SET" → with no size in the name it
+  says how many products the bundle holds ("SKINCARE SET · 2 PRODUK").
+- Moist Glow Duo's collage has a "UV" tile for a bundle without sunscreen →
+  held, like the "UV Protection" image; Paket Lengkap 6-in-1 takes its slot.
+- PDP breadcrumb said "Katalog" where /produk says "Produk" → "Produk".
+- Form fields sat 4 px inside the page gutter → the form section's side
+  padding is 4 px; measured 20/20 at 390 and 500/500 at 1440.
+
+Cycle 2 round 2 (REVISE) — findings and changes, re-rendered and the six
+screenshots re-opened:
+
+- Card names broke at hyphens ("6-IN-" / "1 ROUTINE", "TONE-/UP",
+  "ANTI-/AGING") → the shared card uses non-breaking hyphens, as the ritual
+  row already did. Measured: no name breaks after a hyphen and no overflow at
+  360, 390 and 1440 on home and the full catalogue.
+- Not changed, with reason: the blank band above prices in a rail is the
+  subgrid reserving the tallest name in the row (Oxydew's three lines, on the
+  peeking card); it is what keeps prices on one line across the row.
+
+Cycle 2 round 3 (REVISE) — findings and changes, re-rendered and the six
+screenshots re-opened:
+
+- "Pilihan paket dengan harga terendah" was false: the preview skips held
+  images, repeated images and repeated lines → "Sebagian dari 42 paket;
+  semuanya ada di katalog."
+- The 4-in-1 row under the four steps read as "the four steps in one pack",
+  though it holds Toner, Adenosine, Sunscreen and NAD+ Serum → the ritual
+  ends with its four steps; the bundle stays in the catalogue. Its contents
+  conflict on numaskin.id remains on the Owner list.
+
+Cycle 2 round 4 (REVISE) — findings and changes, re-rendered and the six
+screenshots re-opened:
+
+- On a multi-size bundle the description named one size ("hydrating lotion
+  150ml") while 50 ml is preselected → the PDP renders the description
+  without sizes when the product has more than one variant (`withoutSizes`,
+  test added); the published content is unchanged (a live write is the
+  owner's call), so the structured data keeps the original text.
+- Not changed, with reason: the bundle preview opens with the Daily Care
+  collage because it is the cheapest clean line; reordering by image type
+  would need an image classification the data does not have (Owner list:
+  packshot per bundle).
+
+Cycle 2 round 5 (REVISE; last round of the cycle) — changes made after it,
+rendered and the six screenshots re-opened, not re-reviewed:
+
+- Rails showed the third card as a 5 px hairline (48 % cells) → 42 % cells:
+  the third card shows 47–66 px at 360/390/1440 (measured). At 390 and below
+  every rail card stacks its prices (the container query), uniformly per row;
+  at 1440 they sit inline.
+- The bundle subline orphaned a word → `text-wrap: balance`.

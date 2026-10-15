@@ -33,7 +33,7 @@ const hasLabels = items.some((item) => Boolean(item.label));
 <List
   aria-label={label}
   class:list={[
-    'relative grid snap-x snap-mandatory scroll-px-5 auto-cols-[44%] grid-flow-col gap-x-3 overflow-x-auto px-5 pb-2 [scrollbar-width:none]',
+    'relative grid snap-x snap-mandatory scroll-px-5 auto-cols-[42%] grid-flow-col gap-x-3 overflow-x-auto px-5 pb-2 [scrollbar-width:none]',
     hasLabels ? 'grid-rows-[auto_auto_auto_auto_auto]' : 'grid-rows-[auto_auto_auto_auto]',
   ]}
 >
@@ -51,7 +51,6 @@ const hasLabels = items.some((item) => Boolean(item.label));
           variants: product.variants,
         }}
         formatPrice={idr}
-        stackPrice
       />
     </li>
   ))}

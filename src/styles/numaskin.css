@@ -54,16 +54,21 @@
   letter-spacing: -0.01em;
 }
 
-/* Small tracked label: category, eyebrow, discount. One rule, so the whole
-   storefront has one monospace treatment. */
+/* Small tracked label: field and group labels, discount pill. Inter, so the
+   page has one text face; mono is kept for the card's category line alone
+   (`.nm-mono`), the one place numaskin.id uses it (review 2026-10-15). */
 .nm-label {
-  font-family: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
-  font-weight: 500;
-  font-size: 10px;
+  font-weight: 600;
+  font-size: 11px;
   line-height: 1.4;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--nm-teal);
+}
+.nm-mono {
+  font-family: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  font-weight: 500;
+  letter-spacing: 0.14em;
 }
 
 /* Short cyan rule under a centred section title (numaskin.id's divider). */
@@ -147,16 +152,15 @@ html :is([data-hybrid-form-root], [data-middle-form-root]) .section-title::befor
    Pemesanan") take the storefront's one label style, so the product page has
    a single heading system from the price to the submit button. */
 html :is([data-hybrid-form-root], [data-middle-form-root]) .section-title {
-  font-family: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
   font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.14em;
+  font-weight: 600;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
 /* The checkout's three-up process row (data pesanan / harga tervalidasi /
-   konfirmasi admin) in the storefront's label system: teal mono label, teal
-   icon, aqua dividers. Wording and behaviour are the product's. */
+   konfirmasi admin) in the storefront's label system: teal label, teal icon,
+   aqua dividers. Wording and behaviour are the product's. */
 html :is([data-hybrid-form-root], [data-middle-form-root]) .trust-strip span {
   color: #0b6e7d;
 }
@@ -167,7 +171,45 @@ html :is([data-hybrid-form-root], [data-middle-form-root]) .trust-icon {
   stroke: #0b6e7d;
 }
 html :is([data-hybrid-form-root], [data-middle-form-root]) .trust-strip i {
-  font-family: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
   font-weight: 500;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.02em;
+}
+
+/* The submit button says what it does; the trailing arrow added nothing. */
+html :is([data-hybrid-form-root], [data-middle-form-root]) .submit-main-icon {
+  display: none;
+}
+
+/* The PDP's size pills drive the form's variant radios (DESIGN.md C6); while
+   that sync runs, the form's own variant step is hidden so the size is asked
+   once. The radios stay in the form and are submitted as before. */
+html :is([data-hybrid-form-root], [data-middle-form-root]) .form-block.nm-variant-synced {
+  display: none;
+}
+/* Step titles carry no dot marker: the label and its order say it is a step. */
+html :is([data-hybrid-form-root], [data-middle-form-root]) .section-title::before {
+  content: none;
+}
+
+/* The submit is the storefront's button: a marine pill like every .nm-btn,
+   without the product's blue drop shadow. Not ready yet → an aqua pill with
+   muted marine text (4.6:1), not the product's grey block. */
+html :is([data-hybrid-form-root], [data-middle-form-root]) .submit-main {
+  min-height: 48px;
+  border-radius: 9999px;
+  box-shadow: none;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+html :is([data-hybrid-form-root], [data-middle-form-root]) .submit-main[data-state='disabled'] {
+  background: var(--nm-surface-2) !important;
+  border-color: var(--nm-border) !important;
+  color: var(--nm-muted) !important;
+}
+/* The product's three-up process row repeats the notice above the submit,
+   and "Harga tervalidasi" reads as a claim; the install does not show it. */
+html :is([data-hybrid-form-root], [data-middle-form-root]) .trust-strip {
+  display: none;
 }

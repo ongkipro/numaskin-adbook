@@ -10,8 +10,9 @@ import NumaHero from '../numaskin/NumaHero.astro';
 import CategoryChips from '../numaskin/CategoryChips.astro';
 import RitualSection from '../numaskin/RitualSection.astro';
 import ProductGrid from '../numaskin/ProductGrid.astro';
+import ProductRail from '../numaskin/ProductRail.astro';
 import Icon from '../shared/Icon.astro';
-import { BUNDLE_CATEGORY } from '../numaskin/catalog-order';
+import { bundleLine, heldImagesOf, pickRitual, BUNDLE_CATEGORY } from '../numaskin/catalog-order';
 import type { TenantHomeContent } from '../../../lib/tenant-content';
 
 interface ProductCard {
@@ -44,43 +45,26 @@ interface Props {
 
 const { content, products, heroSlides, sections } = Astro.props;
 const singles = products.filter((p) => p.category !== BUNDLE_CATEGORY);
+// The ritual shows four singles just above; the singles section shows the
+// rest, so home never repeats a packshot. All singles stay one tap away.
+const inRitual = new Set(pickRitual(singles).map(({ product }) => product.slug));
+const singlesGrid = singles.filter((p) => !inRitual.has(p.slug));
 const bundles = products
   .filter((p) => p.category === BUNDLE_CATEGORY)
   .sort((a, b) => a.price - b.price);
 const BUNDLE_PREVIEW = 6;
 // The home preview is the cheapest bundles whose image is not already shown,
-// so two bundles sharing one merchant collage never sit side by side. Images
-// held here stay on /produk but are kept off the busiest page until the owner
-// replaces them (DESIGN.md owner list); every bundle sharing a held image is
-// held with it. Twin Pack's promises a gift the store does not give; the
-// others print outcome promises ("Dalam 14 Hari Flek Mulai Hilang", "Garis
-// halus tersamarkan", "sejak pemakaian pertama", "efek instan", "menyamarkan
-// flek hitam", "kulit tampak lebih cerah", "brightening"). Eight clean images
-// remain.
-const HELD_IMAGES_OF = new Set([
-  'paket-twin-pack-toner-2x150ml',
-  'paket-adenosine-dan-toner-150ml',
-  'paket-duo-toner-150ml-50ml',
-  'paket-toner-50ml-dan-gloss-gel',
-  'paket-toner-150ml-dan-gloss-gel',
-  'paket-youth-glow-duo-50ml',
-  'paket-adenosine-dan-sunscreen',
-  'paket-sunscreen-dan-toner-50ml',
-  'paket-sunscreen-dan-toner-150ml',
-  'paket-sunscreen-adenosine-toner-50ml',
-  'paket-sunscreen-adenosine-toner-150ml',
-  'paket-sunscreen-dan-gloss-gel',
-]);
-const heldImages = new Set(bundles.filter((p) => HELD_IMAGES_OF.has(p.slug)).map((p) => p.image));
+// so two bundles sharing one merchant collage never sit side by side. Held
+// images (catalog-order.ts) are kept off it; /produk lists them last.
+const heldImages = heldImagesOf(bundles);
 const seenImages = new Set<string>();
+const seenLines = new Set<string>();
 const bundlePreview = bundles.filter((p) => {
-  if (heldImages.has(p.image) || seenImages.has(p.image)) return false;
+  if (heldImages.has(p.image) || seenImages.has(p.image) || seenLines.has(bundleLine(p.name))) return false;
   seenImages.add(p.image);
+  seenLines.add(bundleLine(p.name));
   return true;
 }).slice(0, BUNDLE_PREVIEW);
-// numaskin.id closes its ritual with this bundle (wash, toner, NAD+ serum,
-// moisturiser); shown only while the catalogue carries it.
-const ritualBundle = bundles.find((p) => p.slug === 'paket-complete-routine-4-in-1-150ml');
 const operatorSlides = content.heroSlides.length > 0;
 const categories = products.map((p) => p.category);
 ---
@@ -105,30 +89,32 @@ const categories = products.map((p) => p.category);
             />
             <Icon name="lucide:search" class="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--nm-teal)]" aria-hidden="true" />
           </form>
-          <CategoryChips categories={categories} class="mt-4" />
+          <CategoryChips categories={categories} active={null} class="mt-4" />
         </section>
 
-        <RitualSection products={singles} ritualBundle={ritualBundle} />
+        <RitualSection products={singles} />
 
-        {singles.length > 0 && (
-          <section id="produk" aria-labelledby="produk-title" class="scroll-mt-4 px-4 pt-10">
-            <div class="mb-6 text-center">
-              <span class="nm-label">{singles.length} produk</span>
-              <h2 id="produk-title" class="nm-serif mt-2 text-[26px] uppercase leading-tight text-[var(--nm-marine)]">Produk Satuan</h2>
+        {singlesGrid.length > 0 && (
+          <section aria-labelledby="produk-title" class="pt-10">
+            <div class="mb-6 px-4 text-center">
+              <h2 id="produk-title" class="nm-serif text-[26px] uppercase leading-tight text-[var(--nm-marine)]">Lengkapi Rutinitas</h2>
               <span class="nm-rule mt-3" aria-hidden="true"></span>
             </div>
-            <ProductGrid id="grid-satuan" products={singles} />
+            {/* A rail, not the grid: three cards in two columns left a hole. */}
+            <ProductRail items={singlesGrid.map((product) => ({ product }))} label="Produk satuan lainnya" />
+            <div class="mt-6 pb-10 text-center">
+              <a href="/produk" class="nm-btn">Lihat semua produk</a>
+            </div>
           </section>
         )}
 
         {bundles.length > 0 && (
           <section id="paket" aria-labelledby="paket-title" class="scroll-mt-4 bg-[var(--nm-surface)] px-4 pb-10 pt-10">
             <div class="mb-6 text-center">
-              <span class="nm-label">Lebih hemat dalam satu paket</span>
-              <h2 id="paket-title" class="nm-serif mt-2 text-[26px] uppercase leading-tight text-[var(--nm-marine)]">Paket Hemat</h2>
+              <h2 id="paket-title" class="nm-serif text-[26px] uppercase leading-tight text-[var(--nm-marine)]">Paket Hemat</h2>
               <span class="nm-rule mt-3" aria-hidden="true"></span>
-              <p class="mx-auto mt-3 max-w-[34ch] text-[13px] leading-6 text-[var(--nm-muted)]">
-                Pilihan paket dengan harga terendah. Semua {bundles.length} paket ada di katalog.
+              <p class="mx-auto mt-3 max-w-[34ch] text-[13px] leading-6 text-[var(--nm-muted)] [text-wrap:balance]">
+                Sebagian dari {bundles.length} paket; semuanya ada di katalog.
               </p>
             </div>
             <ProductGrid id="grid-paket" products={bundlePreview} />

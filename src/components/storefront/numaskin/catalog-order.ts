@@ -82,3 +82,54 @@ export function spreadSameImages<T extends { image: string }>(items: readonly T[
   }
   return out;
 }
+
+// Bundle images held back until the owner replaces them (DESIGN.md owner
+// list): kept off the home preview and listed last on /produk, together with
+// every bundle sharing the same image. Twin Pack's promises a gift the store
+// does not give; the others print outcome promises ("Dalam 14 Hari Flek Mulai
+// Hilang", "Garis halus tersamarkan", "sejak pemakaian pertama", "efek
+// instan", "menyamarkan flek hitam", "kulit tampak lebih cerah",
+// "brightening"), or a product the bundle lacks (Moist Glow Duo's "UV" tile).
+const HELD_IMAGES_OF = new Set([
+  'paket-moist-glow-duo',
+  'paket-twin-pack-toner-2x150ml',
+  'paket-adenosine-dan-toner-150ml',
+  'paket-duo-toner-150ml-50ml',
+  'paket-toner-50ml-dan-gloss-gel',
+  'paket-toner-150ml-dan-gloss-gel',
+  'paket-youth-glow-duo-50ml',
+  'paket-adenosine-dan-sunscreen',
+  'paket-sunscreen-dan-toner-50ml',
+  'paket-sunscreen-dan-toner-150ml',
+  'paket-sunscreen-adenosine-toner-50ml',
+  'paket-sunscreen-adenosine-toner-150ml',
+  'paket-sunscreen-dan-gloss-gel',
+]);
+
+export function heldImagesOf(products: ReadonlyArray<{ slug: string; image: string }>): Set<string> {
+  return new Set(products.filter((p) => HELD_IMAGES_OF.has(p.slug)).map((p) => p.image));
+}
+
+/** Stable: products with a held image move to the end, order otherwise kept. */
+export function heldLast<T extends { slug: string; image: string }>(products: readonly T[]): T[] {
+  const held = heldImagesOf(products);
+  return [...products.filter((p) => !held.has(p.image)), ...products.filter((p) => held.has(p.image))];
+}
+
+// The merchant names a bundle line by its first two words ("Paket Glow Up
+// Adenosine", "Paket Glow Up Gloss Gel") and gives the line near-identical
+// posters in different files, so the home preview shows one bundle per line.
+// lazy: name-based; a line named differently is not grouped. Upgrade path: a
+// line column on the product.
+export function bundleLine(name: string): string {
+  return name.replace(/^paket\s+/i, '').toLowerCase().split(/\s+/).slice(0, 2).join(' ');
+}
+
+// A product sold in several sizes states its size with the size pills; a size
+// in the merchant's shared description ("hydrating lotion 150ml") contradicts
+// the 50 ml default, so it is left out of the rendered copy.
+// lazy: render-time; the published description keeps it. Upgrade path: edit
+// the description in the admin.
+export function withoutSizes(text: string): string {
+  return text.replace(/\s*\(?\b\d+\s?ml\b\)?/gi, '');
+}

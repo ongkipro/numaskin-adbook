@@ -42,8 +42,9 @@ const hasDiscount = comparePrice > product.price;
 // count truncated the line at 390 px), and a bundle's "Paket" says nothing.
 const isBundle = product.category === 'Paket Hemat';
 const onlyLabel = product.variants.length === 1 ? product.variants[0]?.label?.trim() : '';
+// A bundle without a size in its name says how many products it holds.
 const sizeNote = isBundle
-  ? (product.productName.match(/\((\d+\s?ml)\)/i)?.[1] ?? '')
+  ? (product.productName.match(/\((\d+\s?ml)\)/i)?.[1] ?? (contents.length > 1 ? `${contents.length} produk` : ''))
   : onlyLabel && onlyLabel.toLowerCase() !== 'paket' ? onlyLabel : '';
 // A bundle's category is the section it sits in ("Paket Hemat"); the label says
 // what it is instead, as numaskin.id does ("SKINCARE SET · 150ML").
@@ -75,12 +76,13 @@ const discountPercentage = hasDiscount
         decoding="async"
       />
     </div>
-    <span class="nm-label block px-1 pt-3 !text-[9px] [text-wrap:balance]">
+    <span class="nm-label nm-mono block px-1 pt-3 !text-[9px] [text-wrap:balance]">
       {!hideType && <>{typeLabel}{sizeNote && <span class="whitespace-nowrap">{` · ${sizeNote}`}</span>}</>}
     </span>
     <div class="px-1 pt-1.5">
       <h2 class="text-[12.5px] font-normal uppercase leading-[18px] tracking-[0.05em] text-[var(--nm-marine)] [text-wrap:pretty]">
-        {product.productName}
+        {/* Non-breaking hyphens keep "6-IN-1", "TONE-UP" and "ANTI-AGING" whole. */}
+        {product.productName.replace(/-/g, '\u2011')}
       </h2>
       {contents.length > 0 && (
         <p class="mt-1 text-[11px] leading-4 text-[var(--nm-muted)]">{contents.join(' + ')}</p>
@@ -88,16 +90,22 @@ const discountPercentage = hasDiscount
     </div>
     {/* The saving sits in the price row and only on bundle cards, as on
         numaskin.id; a single product shows the struck price alone. */}
-    <div class:list={['flex content-start items-center justify-center gap-x-2 gap-y-1 px-1 pt-2', stackPrice ? 'flex-col pb-2' : 'flex-wrap pb-6']}>
-      <p class="text-sm font-bold leading-5 text-[var(--nm-marine)]">{formatPrice(product.price)}</p>
-      {hasDiscount && (
-        <p class="nm-strike text-[11px] leading-4 text-[var(--nm-muted)] line-through">
-          <span class="sr-only">Harga normal </span>{formatPrice(comparePrice)}
-        </p>
-      )}
-      {isBundle && discountPercentage > 0 && (
-        <span class="nm-label nm-pill !text-[9px]">Hemat {discountPercentage}%</span>
-      )}
+    {/* A card too narrow for price and struck price on one line (a rail at
+        360 px) stacks them, so a row of cards never mixes the two layouts.
+        The wrapper is the size container: containment on the subgridded
+        <article> itself breaks the subgrid. */}
+    <div class="@container">
+      <div class:list={['flex content-start items-center justify-center gap-x-1.5 gap-y-1 px-1 pt-2', stackPrice ? 'flex-col pb-2' : 'flex-wrap pb-6 @max-[9.25rem]:flex-col @max-[9.25rem]:pb-2']}>
+        <p class="text-sm font-bold leading-5 text-[var(--nm-marine)]">{formatPrice(product.price)}</p>
+        {hasDiscount && (
+          <p class="nm-strike text-[11px] leading-4 text-[var(--nm-muted)] line-through">
+            <span class="sr-only">Harga normal </span>{formatPrice(comparePrice)}
+          </p>
+        )}
+        {isBundle && discountPercentage > 0 && (
+          <span class="nm-label nm-pill !text-[9px]">Hemat {discountPercentage}%</span>
+        )}
+      </div>
     </div>
   </a>
 </article>

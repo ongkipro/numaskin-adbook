@@ -8,7 +8,7 @@ import Icon from '../../components/storefront/shared/Icon.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import CategoryChips from '../../components/storefront/numaskin/CategoryChips.astro';
 import ProductGrid from '../../components/storefront/numaskin/ProductGrid.astro';
-import { BUNDLE_CATEGORY, spreadSameImages } from '../../components/storefront/numaskin/catalog-order';
+import { BUNDLE_CATEGORY, heldLast, spreadSameImages } from '../../components/storefront/numaskin/catalog-order';
 import { getStorefrontProducts } from '../../lib/catalog';
 
 const catalog = await getStorefrontProducts(Astro.locals);
@@ -35,8 +35,9 @@ let results = all
   .filter((p) => terms.every((t) => p.haystack.includes(t)));
 // Bundles read best cheapest-first; singles keep the merchant's catalogue order.
 if (category === BUNDLE_CATEGORY) results = [...results].sort((a, b) => a.price - b.price);
-// Bundles that share one merchant collage are kept apart in the grid.
-results = spreadSameImages(results);
+// Held bundle images (gift and outcome claims) go last, so the first screen a
+// buyer reaches from "Lihat Produk" is clean; identical collages stay apart.
+results = spreadSameImages(heldLast(results));
 // Ten at first; the "more" control reveals in place with script, and without
 // it links to ?semua=1, which renders the whole list server-side.
 const showAll = Astro.url.searchParams.get('semua') === '1';
@@ -58,7 +59,6 @@ const resetHref = category ? `/produk?kategori=${encodeURIComponent(category)}` 
 >
   <main id="konten-utama" class="min-h-screen bg-white text-[var(--nm-marine)]">
     <PageIntro
-      badge="Katalog"
       title={heading}
       description=""
       breadcrumbs={category

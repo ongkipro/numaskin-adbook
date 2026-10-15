@@ -2,10 +2,11 @@
 // Install-owned (numaskin-adbook, DESIGN.md §UX). numaskin.id's four-step
 // ritual: a real sequence, so the steps are numbered. One product per step,
 // picked from the live catalogue (catalog-order.ts), drawn with the shared
-// card. When the catalogue carries the merchant's own four-step bundle, the
-// ritual ends with it, as on numaskin.id; nothing is shown when it does not.
+// card. numaskin.id ends its ritual with a "4-in-1" bundle, but that bundle
+// does not hold these four steps, so the ritual here stands alone (review
+// 2026-10-15).
 import ProductListItem from '../shared/ProductListItem.astro';
-import { bundleContents, pickRitual } from './catalog-order';
+import { pickRitual } from './catalog-order';
 
 interface Product {
   slug: string;
@@ -15,34 +16,21 @@ interface Product {
   price: number;
   comparePrice?: number;
   variants: Array<{ label?: string; price?: number }>;
-  description?: string;
-  contentsText?: string;
 }
 interface Props {
   products: Product[];
-  /** The bundle that holds the ritual's four products, if the store sells it. */
-  ritualBundle?: Product;
 }
 
-const { products, ritualBundle } = Astro.props;
+const { products } = Astro.props;
 const ritual = pickRitual(products);
 const idr = (n: number) => `Rp${n.toLocaleString('id-ID')}`;
-const bundleCompare = ritualBundle?.comparePrice ?? 0;
-// The bundle's own description is the authority on what it holds. (numaskin.id's
-// ritual bar lists a different set for it than its product page does.)
-const bundleItems = ritualBundle ? bundleContents(ritualBundle.contentsText ?? ritualBundle.description ?? '') : [];
-const saving =
-  ritualBundle && bundleCompare > ritualBundle.price
-    ? Math.round((1 - ritualBundle.price / bundleCompare) * 100)
-    : 0;
 ---
 
 {ritual.length >= 2 && (
   <section aria-labelledby="ritual-title" class="bg-[var(--nm-surface)] py-10">
     <div class="px-5 text-center">
-      <span class="nm-label">Rutinitas harian</span>
-      <h2 id="ritual-title" class="nm-serif mt-2 text-[24px] uppercase leading-tight text-[var(--nm-marine)] [text-wrap:balance]">
-        {ritual.length} Langkah Kulit Awet Muda
+      <h2 id="ritual-title" class="nm-serif text-[24px] uppercase leading-tight text-[var(--nm-marine)] [text-wrap:balance]">
+        Rutinitas {ritual.length} Langkah
       </h2>
       <span class="nm-rule mt-3" aria-hidden="true"></span>
     </div>
@@ -52,7 +40,7 @@ const saving =
     <ol class="mt-6 grid grid-cols-2 gap-x-3 gap-y-3 px-4" aria-label="Urutan rutinitas">
       {ritual.map(({ step, product }, index) => (
         <li class="row-span-5 grid grid-rows-subgrid gap-0 rounded-xl bg-white p-2">
-          <span class="nm-label mb-2 block px-1 !text-[9px]">{index + 1} · {step}</span>
+          <span class="nm-label mb-2 block px-1 !text-[9px]">{index + 1}. {step}</span>
           <ProductListItem
             product={{
               slug: product.slug,
@@ -69,31 +57,5 @@ const saving =
         </li>
       ))}
     </ol>
-
-    {ritualBundle && (
-      <a
-        href={`/produk/${ritualBundle.slug}`}
-        class="mx-5 mt-4 flex items-center justify-between gap-3 rounded-xl border border-[var(--nm-border)] bg-white p-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--nm-cyan)]"
-      >
-        <span class="min-w-0">
-          <span class="nm-label block">Paket hemat 4‑in‑1</span>
-          {/* Non-breaking hyphens keep "4-in-1" whole. */}
-          <span class="mt-1 block text-[13px] font-semibold uppercase leading-5 tracking-[0.03em] text-[var(--nm-marine)]">{ritualBundle.name.replace(/-/g, '\u2011')}</span>
-          {bundleItems.length > 0 && (
-            <span class="mt-1 block text-[12px] leading-5 text-[var(--nm-muted)]">Isi: {bundleItems.join(' + ')}</span>
-          )}
-          <span class="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1">
-            <span class="text-[15px] font-bold text-[var(--nm-marine)]">{idr(ritualBundle.price)}</span>
-            {saving > 0 && (
-              <>
-                <span class="nm-strike text-[11px] text-[var(--nm-muted)] line-through"><span class="sr-only">Harga normal </span>{idr(bundleCompare)}</span>
-                <span class="nm-label nm-pill !text-[9px]">Hemat {saving}%</span>
-              </>
-            )}
-          </span>
-        </span>
-        <span class="nm-btn shrink-0 !px-4" aria-hidden="true">Lihat</span>
-      </a>
-    )}
   </section>
 )}

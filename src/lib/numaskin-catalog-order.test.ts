@@ -49,3 +49,29 @@ test("identical images are moved apart, keeping order otherwise", async () => {
   grid.forEach((p, i) => assert.ok(grid.slice(Math.max(0, i - 2), i).every((q) => q.image !== p.image)));
   assert.deepEqual(spreadSameImages([{ image: "x" }, { image: "x" }]).map((p) => p.image), ["x", "x"]);
 });
+
+test("bundles with a held image go last, with every bundle sharing that image", async () => {
+  const { heldLast } = await import("../components/storefront/numaskin/catalog-order.ts");
+  const order = heldLast([
+    { slug: "paket-twin-pack-toner-2x150ml", image: "gift" },
+    { slug: "a", image: "clean" },
+    { slug: "b", image: "gift" },
+    { slug: "c", image: "other" },
+  ]).map((p) => p.slug);
+  assert.deepEqual(order, ["a", "c", "paket-twin-pack-toner-2x150ml", "b"]);
+});
+
+test("bundle line is the name's first two words after 'Paket'", async () => {
+  const { bundleLine } = await import("../components/storefront/numaskin/catalog-order.ts");
+  assert.equal(bundleLine("Paket Glow Up Adenosine"), bundleLine("Paket Glow Up Gloss Gel"));
+  assert.notEqual(bundleLine("Paket Moist Glow Duo"), bundleLine("Paket Glow Up Adenosine"));
+});
+
+test("sizes are taken out of a multi-size product's description", async () => {
+  const { withoutSizes } = await import("../components/storefront/numaskin/catalog-order.ts");
+  assert.equal(
+    withoutSizes("Rangkaian pembersih facial wash, hydrating lotion 150ml, dan pelembap Adenosine."),
+    "Rangkaian pembersih facial wash, hydrating lotion, dan pelembap Adenosine.",
+  );
+  assert.equal(withoutSizes("Treatment Lotion (150 ml) dan Gloss Gel"), "Treatment Lotion dan Gloss Gel");
+});

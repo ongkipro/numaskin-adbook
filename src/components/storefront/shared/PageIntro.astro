@@ -9,7 +9,7 @@ interface BreadcrumbItem {
 }
 
 interface Props {
-  badge: string;
+  badge?: string;
   title: string;
   description: string;
   breadcrumbs?: BreadcrumbItem[];
@@ -22,9 +22,9 @@ const rail = 'max-w-[480px]';
 {breadcrumbs.length > 0 && <Breadcrumb items={breadcrumbs} />}
 <section class={introSectionClass}>
   <div class={cn('mx-auto', rail)}>
-    {/* Install-owned intro (DESIGN.md C3): mono eyebrow, serif title. */}
-    <span class="nm-label">{badge}</span>
-    <h1 class="nm-serif mt-2 text-[30px] leading-[1.15] text-[var(--nm-marine)] [text-wrap:balance]">
+    {/* Install-owned intro (DESIGN.md C3): serif title and cyan rule; the
+        breadcrumb already names the page, so no eyebrow (polish 2026-10-15). */}
+    <h1 class="nm-serif text-[30px] leading-[1.15] text-[var(--nm-marine)] [text-wrap:balance]">
       {title}
     </h1>
     <span class="nm-rule mt-3 !mx-0" aria-hidden="true"></span>

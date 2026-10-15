@@ -52,9 +52,10 @@ const hasMore = linked.length > visible.length;
             >
               <span class="min-w-0">
                 <span class="block truncate text-sm font-semibold text-[var(--nm-marine)]">{page.title}</span>
-                <span class="mt-0.5 line-clamp-2 block text-xs font-normal text-[var(--nm-muted)]">
-                  {page.excerpt}
-                </span>
+                {/* Install-owned: title only. The excerpt is the page's meta
+                    description, which currently makes outcome claims
+                    ("meredakan kemerahan"); the landing page itself is the
+                    place to read them (DESIGN.md owner list). */}
               </span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
