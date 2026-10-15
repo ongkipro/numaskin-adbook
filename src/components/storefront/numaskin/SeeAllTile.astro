@@ -11,12 +11,18 @@ const { href, title, note } = Astro.props;
 ---
 
 <li class="row-span-4 pb-6">
+  {/* Same anatomy as a card — an aqua square, then text and action — so the
+      cell fills the row without reading as an empty slab. */}
   <a
     href={href}
-    class="flex h-full flex-col items-center justify-center gap-2 rounded-xl border border-[var(--nm-border)] bg-white px-4 text-center transition-colors hover:border-[var(--nm-teal)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--nm-cyan)]"
+    class="flex h-full flex-col overflow-hidden rounded-xl border border-[var(--nm-border)] bg-white text-center transition-colors hover:border-[var(--nm-teal)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--nm-cyan)]"
   >
-    <span class="nm-serif text-[20px] uppercase leading-tight text-[var(--nm-marine)]">{title}</span>
-    <span class="text-[12px] leading-5 text-[var(--nm-muted)]">{note}</span>
-    <span class="nm-btn mt-2 !px-4" aria-hidden="true">Lihat</span>
+    <span class="flex aspect-square items-center justify-center bg-[linear-gradient(180deg,#fff_0%,var(--nm-surface-2)_100%)] px-4">
+      <span class="nm-serif text-[22px] uppercase leading-tight text-[var(--nm-marine)]">{title}</span>
+    </span>
+    <span class="flex flex-1 flex-col items-center justify-center gap-2 px-3 py-3">
+      <span class="text-[12px] leading-5 text-[var(--nm-muted)]">{note}</span>
+      <span class="nm-btn !px-4" aria-hidden="true">Lihat</span>
+    </span>
   </a>
 </li>

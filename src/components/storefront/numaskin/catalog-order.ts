@@ -1,7 +1,8 @@
 // Install-owned (numaskin-adbook). The merchant's routine order — cleanse,
 // hydrate, treat, protect, moisturise — used to order category chips and pick
 // the home routine. Categories not listed keep their catalogue order, after
-// the known ones; bundles always come last.
+// the known ones; bundles come first, ahead of the routine — the offer most
+// ad visitors arrive for, and the chip that would otherwise sit off-screen.
 
 export const BUNDLE_CATEGORY = 'Paket Hemat';
 
@@ -17,7 +18,7 @@ const ROUTINE: readonly string[] = [
 export function orderCategories(categories: readonly string[]): string[] {
   const unique = [...new Set(categories.filter(Boolean))];
   const rank = (c: string) =>
-    c === BUNDLE_CATEGORY ? Number.MAX_SAFE_INTEGER : ROUTINE.includes(c) ? ROUTINE.indexOf(c) : ROUTINE.length;
+    c === BUNDLE_CATEGORY ? -1 : ROUTINE.includes(c) ? ROUTINE.indexOf(c) : ROUTINE.length;
   return unique
     .map((c, i) => ({ c, i }))
     .sort((a, b) => rank(a.c) - rank(b.c) || a.i - b.i)

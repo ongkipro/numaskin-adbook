@@ -7,10 +7,10 @@ import {
   pickRitual,
 } from "../components/storefront/numaskin/catalog-order.ts";
 
-test("categories follow the routine, unknown ones keep catalogue order, bundles last", () => {
+test("bundles first, then the routine; unknown ones keep catalogue order", () => {
   assert.deepEqual(
     orderCategories(["Paket Hemat", "Sunscreen", "Toner Mist", "Facial Cleanser", "Body Lotion", "Sunscreen", ""]),
-    ["Facial Cleanser", "Sunscreen", "Toner Mist", "Body Lotion", "Paket Hemat"],
+    ["Paket Hemat", "Facial Cleanser", "Sunscreen", "Toner Mist", "Body Lotion"],
   );
 });
 

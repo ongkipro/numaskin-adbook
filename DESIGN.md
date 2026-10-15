@@ -607,3 +607,66 @@ New review cycle; the previous log is archived as
 (`design/renders/ux-home-390.png`, `design/renders/ux-home-1440.png`,
 `design/renders/ux-produk-390.png`, `design/renders/ux-produk-1440.png`,
 `design/renders/ux-pdp-390.png`, `design/renders/ux-pdp-1440.png`).
+
+Cycle 5 round 1 (REVISE) — findings and changes, re-rendered and the six
+screenshots re-opened:
+
+- Every bundle card said the same "HEMAT 5%" → the card pill states that
+  bundle's rupiah saving (compare-at, the singles total, minus price); the
+  bundle PDP states its saving once, on the "lebih hemat dibanding beli
+  satuan" line (the % pill stays for singles).
+- Paket Exclusive still carried numaskin.id's compare-at (Rp525.000), which
+  would have read as a Rp223.350 saving on another basis → its compare-at is
+  cleared in live D1 (no strike, no saving claimed until its contents are
+  confirmed).
+
+Cycle 5 round 2 (REVISE) — changes, re-rendered and the six screenshots
+re-opened:
+
+- "Paket Hemat" chip was off-screen at 390 → bundles are the second chip,
+  after "Semua" (`orderCategories`, test updated); chip peek re-measured
+  32–95 px at 360–480.
+- Ritual step labels centred over their centred cards, at the label size.
+- See-all tile was a tall bordered slab → square, as tall as a card image.
+- Bundle saving pill 9 px → the label size (11 px).
+- "Tentang produk ini" label → screen-reader heading only.
+- CS-confirmed order form: "Total Pembayaran" (shipping not included) →
+  "Subtotal"; the hybrid form, which prices shipping, keeps its label.
+- Not changed, owner decision: no button or anchor to the form under the
+  size pills ("hapus aja kan sudah ada form di bawah", 2026-10-15). Also kept:
+  "Official Store" (the brand's own domain); the PDP poster (owner content).
+
+Cycle 5 round 3 (REVISE) — changes, re-rendered and the six screenshots
+re-opened:
+
+- See-all tile left a hole beside a full card → it fills the row with a
+  card's anatomy: an aqua square holding the title, then note and action.
+- Singles showed a strike with no saving → "Hemat x%" pill against
+  numaskin.id's normal price, as the merchant shows it (bundles keep the
+  rupiah saving against singles).
+- Card type line 9 → 10 px; ritual step labels 13 px sentence case (not
+  tracked caps); 1440 canvas a step deeper (#E6F0F3) so the column reads.
+- Footer "All Rights Reserved" → "Hak cipta dilindungi."
+- Not changed, with reason: the hold rule covers marketing promises printed
+  on images (results in N days, gifts, instant effects); "Anti-Aging & Extra
+  Whitening" on the Glow Up poster is the facial wash's on-pack product name,
+  the same wording the singles' packshots carry, so it is not held.
+
+Cycle 5 round 4 (REVISE) — change, re-rendered and the six screenshots
+re-opened: the card type line broke mid-label at 10 px ("SKINCARE / SET",
+"FACIAL / CLEANSER") → each part is non-breaking and the line may only break
+at " · " (the separating space sits outside both parts; inside one, it made
+the whole line unbreakable and widened cards to 186 px at 360 — caught by
+measurement). Measured: no mid-label break, no overflow at 360/390/1440.
+
+Cycle 5 round 5 (REVISE) — change, re-rendered: a wrapped type line started
+with "·" → the separator ends the first part ("FACIAL CLEANSER ·" / "100 ML");
+re-measured, no break inside a part, no overflow at 360/390/1440.
+
+### Polish cycle 6 (2026-10-16)
+
+New review cycle; the previous log is archived as
+`design/review-rounds-2026-10-16-polish5.log`. Starts from the renders above
+(`design/renders/ux-home-390.png`, `design/renders/ux-home-1440.png`,
+`design/renders/ux-produk-390.png`, `design/renders/ux-produk-1440.png`,
+`design/renders/ux-pdp-390.png`, `design/renders/ux-pdp-1440.png`).

@@ -47,9 +47,6 @@ const sizeNote = isBundle
 // A bundle's category is the section it sits in ("Paket Hemat"); the label says
 // what it is instead, as numaskin.id does ("SKINCARE SET · 150ML").
 const typeLabel = isBundle ? 'Skincare Set' : product.category;
-const discountPercentage = hasDiscount
-  ? Math.round((1 - product.price / comparePrice) * 100)
-  : 0;
 ---
 
 {/* Install-owned card (DESIGN.md C4, §UX). Four subgrid rows — image,
@@ -74,8 +71,10 @@ const discountPercentage = hasDiscount
         decoding="async"
       />
     </div>
-    <span class="nm-label nm-mono block px-1 pt-3 !text-[9px] [text-wrap:balance]">
-      {!hideType && <>{typeLabel}{sizeNote && <span class="whitespace-nowrap">{` · ${sizeNote}`}</span>}</>}
+    <span class="nm-label nm-mono block px-1 pt-3 !text-[10px] [text-wrap:balance]">
+      {/* Each part stays whole; the line may only break after the " ·", so a
+          wrapped line never starts with the separator. */}
+      {!hideType && <><span class="whitespace-nowrap">{typeLabel}{sizeNote && ' ·'}</span>{sizeNote && <>{' '}<span class="whitespace-nowrap">{sizeNote}</span></>}</>}
     </span>
     <div class="px-1 pt-1.5">
       <h2 class="text-[12.5px] font-normal uppercase leading-[18px] tracking-[0.05em] text-[var(--nm-marine)] [text-wrap:pretty]">
@@ -100,8 +99,16 @@ const discountPercentage = hasDiscount
             <span class="sr-only">{isBundle ? 'Harga beli satuan ' : 'Harga normal '}</span>{formatPrice(comparePrice)}
           </p>
         )}
-        {isBundle && discountPercentage > 0 && (
-          <span class="nm-label nm-pill !text-[9px]">Hemat {discountPercentage}%</span>
+        {/* A bundle's compare-at is its singles total (DESIGN.md), so the
+            difference is the rupiah saving against buying singly — specific
+            to the bundle, where a flat "5%" said the same on every card. */}
+        {isBundle && hasDiscount && (
+          <span class="nm-label nm-pill">Hemat {formatPrice(comparePrice - product.price)}</span>
+        )}
+        {/* A single's compare-at is numaskin.id's normal price; its saving is a
+            percentage, as the merchant shows it. */}
+        {!isBundle && hasDiscount && (
+          <span class="nm-label nm-pill">Hemat {Math.round((1 - product.price / comparePrice) * 100)}%</span>
         )}
       </div>
     </div>

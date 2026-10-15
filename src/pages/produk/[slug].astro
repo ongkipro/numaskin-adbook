@@ -253,7 +253,8 @@ const productSchemaJson = JSON.stringify(productSchema).replace(/</g, '\\u003c')
         <span data-pdp-compare hidden={!(displayComparePrice > displayPrice)} class="text-[13px] font-normal text-[var(--nm-muted)] line-through">
           Rp{Math.round(displayComparePrice).toLocaleString('id-ID')}
         </span>
-        <span data-pdp-save hidden={!(displayDiscount > 0)} class="nm-label nm-pill self-center">
+        {/* A bundle states its saving once, in rupiah, on the line below. */}
+        <span data-pdp-save data-bundle={isBundle ? '' : undefined} hidden={isBundle || !(displayDiscount > 0)} class="nm-label nm-pill self-center">
           Hemat {displayDiscount}%
         </span>
       </div>
@@ -304,7 +305,7 @@ const productSchemaJson = JSON.stringify(productSchema).replace(/</g, '\\u003c')
          accordion pattern without script. The first list starts open so the
          main benefit is visible without a tap. -->
     <section aria-labelledby="pdp-detail" class="border-b border-[var(--nm-border)] bg-white px-5 py-6">
-      <h2 id="pdp-detail" class="nm-label !text-[var(--nm-marine)]">Tentang produk ini</h2>
+      <h2 id="pdp-detail" class="sr-only">Tentang produk ini</h2>
       <p class="mt-3 text-[14px] leading-6 text-[var(--nm-muted)]">{shownDescription}</p>
 
       <div class="mt-5 divide-y divide-[var(--nm-border)] border-y border-[var(--nm-border)]">
@@ -467,7 +468,7 @@ const productSchemaJson = JSON.stringify(productSchema).replace(/</g, '\\u003c')
         if (sticky) sticky.textContent = idr(p);
         const discounted = c > p;
         if (compare) { compare.hidden = !discounted; compare.textContent = idr(c); }
-        if (save) { save.hidden = !discounted; save.textContent = `Hemat ${Math.round((1 - p / c) * 100)}%`; }
+        if (save && !save.hasAttribute('data-bundle')) { save.hidden = !discounted; save.textContent = `Hemat ${Math.round((1 - p / c) * 100)}%`; }
         const saving = Number(pill.dataset.vs);
         if (vs) { vs.hidden = !(saving > 0); vs.textContent = `${idr(saving)} lebih hemat dibanding beli satuan`; }
       };

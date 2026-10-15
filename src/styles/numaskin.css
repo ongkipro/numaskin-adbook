@@ -43,7 +43,7 @@
   --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   /* Behind the 480 px column on a wide screen: numaskin.id's aqua surface,
      not storefront.css's white, so the column sits on the brand. */
-  --bg-canvas: #f4f9fa;
+  --bg-canvas: #e6f0f3;
   --focus-ring-offset: #f4f9fa;
 }
 
