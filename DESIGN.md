@@ -670,3 +670,49 @@ New review cycle; the previous log is archived as
 (`design/renders/ux-home-390.png`, `design/renders/ux-home-1440.png`,
 `design/renders/ux-produk-390.png`, `design/renders/ux-produk-1440.png`,
 `design/renders/ux-pdp-390.png`, `design/renders/ux-pdp-1440.png`).
+
+Cycle 6 round 1 (REVISE) — change, re-rendered and the six screenshots
+re-opened: a multi-size bundle's poster names one size ("Routine 150ml")
+while the cheapest is preselected → under the photo: "Foto ilustrasi. Isi
+paket mengikuti ukuran yang dipilih." Per-size photos stay on the Owner list.
+
+Cycle 6 round 2: PASS. Its suggestion applied after it, re-rendered and the
+six screenshots re-opened: the detail accordions all start closed, so with no
+button under the sizes (owner decision) the order form is a short scroll away.
+
+Cycle 6 round 3 (REVISE) — changes, re-rendered and the six screenshots
+re-opened:
+
+- "Beli satuan" on a bundle PDP was padded with a product not in the bundle
+  (NAD+ on Glow Up) → it lists exactly the bundle's own products; an odd
+  count closes with the see-all tile; a bundle whose items cannot be matched
+  falls back to "Lengkapi rutinitas" (`singlesForBundle`, test updated).
+- See-all tile's empty well read as a missing image → it holds a 2×2 of real
+  packshots.
+- Bundle type line "· N PRODUK" repeated the contents line → dropped (size
+  from the name stays, e.g. "· 150ML").
+
+Cycle 6 round 4 (REVISE) — changes, re-rendered; screenshots opened:
+`design/renders/ux-home-390.png`, `design/renders/ux-home-1440.png`,
+`design/renders/ux-produk-390.png`, `design/renders/ux-produk-1440.png`,
+`design/renders/ux-pdp-390.png`, `design/renders/ux-pdp-1440.png`, and the
+two states the review asked to see, `design/renders/ux-pdp-single-390.png`,
+`design/renders/ux-pdp-single-1440.png` (single product: one size, "Hemat
+30%" against the normal price, no "Isi paket", no size picker) and
+`design/renders/ux-empty-390.png`, `design/renders/ux-empty-1440.png` (search
+with no result: count line, message, "Hapus pencarian").
+
+- "Semua paket" tile showed singles → it shows the preview's bundle images.
+- Empty search outside a category said "di kategori ini" → suggests other
+  words ("misalnya toner atau serum"); inside a category it keeps the line.
+
+Cycle 6 round 5 (REVISE) — change, re-rendered and the ten screenshots above
+re-opened: the card type line 10 → 11 px and struck prices 11 → 12 px (muted
+#5A6E7F, 4.97:1); re-measured, no break inside a part, no overflow, price and
+strike still share a line at 360.
+
+### Polish cycle 7 (2026-10-16)
+
+New review cycle; the previous log is archived as
+`design/review-rounds-2026-10-16-polish6.log`. Renders: the ten listed in
+cycle 6 round 4.

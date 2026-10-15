@@ -40,9 +40,8 @@ const hasDiscount = comparePrice > product.price;
 // count truncated the line at 390 px), and a bundle's "Paket" says nothing.
 const isBundle = product.category === 'Paket Hemat';
 const onlyLabel = product.variants.length === 1 ? product.variants[0]?.label?.trim() : '';
-// A bundle without a size in its name says how many products it holds.
 const sizeNote = isBundle
-  ? (product.productName.match(/\((\d+\s?ml)\)/i)?.[1] ?? (contents.length > 1 ? `${contents.length} produk` : ''))
+  ? (product.productName.match(/\((\d+\s?ml)\)/i)?.[1] ?? '')
   : onlyLabel && onlyLabel.toLowerCase() !== 'paket' ? onlyLabel : '';
 // A bundle's category is the section it sits in ("Paket Hemat"); the label says
 // what it is instead, as numaskin.id does ("SKINCARE SET · 150ML").
@@ -71,7 +70,7 @@ const typeLabel = isBundle ? 'Skincare Set' : product.category;
         decoding="async"
       />
     </div>
-    <span class="nm-label nm-mono block px-1 pt-3 !text-[10px] [text-wrap:balance]">
+    <span class="nm-label nm-mono block px-1 pt-3 !text-[11px] [text-wrap:balance]">
       {/* Each part stays whole; the line may only break after the " ·", so a
           wrapped line never starts with the separator. */}
       {!hideType && <><span class="whitespace-nowrap">{typeLabel}{sizeNote && ' ·'}</span>{sizeNote && <>{' '}<span class="whitespace-nowrap">{sizeNote}</span></>}</>}
@@ -95,7 +94,7 @@ const typeLabel = isBundle ? 'Skincare Set' : product.category;
       <div class="flex flex-wrap content-start items-center justify-center gap-x-1.5 gap-y-1 px-1 pb-6 pt-2 @max-[9.25rem]:flex-col @max-[9.25rem]:pb-2">
         <p class="text-sm font-bold leading-5 text-[var(--nm-marine)]">{formatPrice(product.price)}</p>
         {hasDiscount && (
-          <p class="nm-strike text-[11px] leading-4 text-[var(--nm-muted)] line-through">
+          <p class="nm-strike text-[12px] leading-4 text-[var(--nm-muted)] line-through">
             <span class="sr-only">{isBundle ? 'Harga beli satuan ' : 'Harga normal '}</span>{formatPrice(comparePrice)}
           </p>
         )}

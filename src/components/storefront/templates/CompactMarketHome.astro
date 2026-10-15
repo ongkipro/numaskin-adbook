@@ -104,7 +104,7 @@ const categories = products.map((p) => p.category);
                 count is completed by the "all products" tile, so no hole. */}
             <ProductGrid id="grid-satuan" products={singlesGrid}>
               {singlesGrid.length % 2 === 1 && (
-                <SeeAllTile href="/produk" title="Semua produk" note={`${products.length} produk dan paket`} />
+                <SeeAllTile href="/produk" title="Semua produk" note={`${products.length} produk dan paket`} images={singles.slice(0, 4).map((p) => p.image)} />
               )}
             </ProductGrid>
           </section>
@@ -123,7 +123,7 @@ const categories = products.map((p) => p.category);
                 the button, so a full row is never broken by a tile. */}
             <ProductGrid id="grid-paket" products={bundlePreview}>
               {bundles.length > bundlePreview.length && bundlePreview.length % 2 === 1 && (
-                <SeeAllTile href={`/produk?kategori=${encodeURIComponent(BUNDLE_CATEGORY)}`} title="Semua paket" note={`${bundles.length} paket hemat`} />
+                <SeeAllTile href={`/produk?kategori=${encodeURIComponent(BUNDLE_CATEGORY)}`} title="Semua paket" note={`${bundles.length} paket hemat`} images={bundlePreview.slice(0, 4).map((p) => p.image)} />
               )}
             </ProductGrid>
             {bundles.length > bundlePreview.length && bundlePreview.length % 2 === 0 && (

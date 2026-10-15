@@ -106,7 +106,7 @@ const resetHref = category ? `/produk?kategori=${encodeURIComponent(category)}` 
           <p class="mx-auto mt-2 max-w-[30ch] text-[13px] leading-6 text-[var(--nm-muted)]">
             {all.length === 0
               ? 'Produk akan muncul setelah diterbitkan.'
-              : 'Coba kata lain yang lebih umum, atau lihat semua produk di kategori ini.'}
+              : category ? 'Coba kata lain yang lebih umum, atau lihat semua produk di kategori ini.' : 'Coba kata lain yang lebih umum, misalnya toner atau serum.'}
           </p>
           {all.length > 0 && <a href={resetHref} class="nm-btn mt-5">Hapus pencarian</a>}
         </div>

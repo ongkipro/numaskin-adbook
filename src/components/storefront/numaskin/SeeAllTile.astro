@@ -6,8 +6,11 @@ interface Props {
   href: string;
   title: string;
   note: string;
+  /** Up to four packshots shown small in the well, so it never reads as a
+   *  missing image. */
+  images?: string[];
 }
-const { href, title, note } = Astro.props;
+const { href, title, note, images = [] } = Astro.props;
 ---
 
 <li class="row-span-4 pb-6">
@@ -17,10 +20,13 @@ const { href, title, note } = Astro.props;
     href={href}
     class="flex h-full flex-col overflow-hidden rounded-xl border border-[var(--nm-border)] bg-white text-center transition-colors hover:border-[var(--nm-teal)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--nm-cyan)]"
   >
-    <span class="flex aspect-square items-center justify-center bg-[linear-gradient(180deg,#fff_0%,var(--nm-surface-2)_100%)] px-4">
-      <span class="nm-serif text-[22px] uppercase leading-tight text-[var(--nm-marine)]">{title}</span>
+    <span class="grid aspect-square grid-cols-2 gap-1 bg-[linear-gradient(180deg,#fff_0%,var(--nm-surface-2)_100%)] p-3" aria-hidden="true">
+      {images.slice(0, 4).map((src) => (
+        <img src={src} alt="" width="120" height="120" loading="lazy" decoding="async" class="aspect-square h-full w-full rounded-md object-cover" />
+      ))}
     </span>
-    <span class="flex flex-1 flex-col items-center justify-center gap-2 px-3 py-3">
+    <span class="flex flex-1 flex-col items-center justify-center gap-1.5 px-3 py-3">
+      <span class="nm-serif text-[20px] uppercase leading-tight text-[var(--nm-marine)]">{title}</span>
       <span class="text-[12px] leading-5 text-[var(--nm-muted)]">{note}</span>
       <span class="nm-btn !px-4" aria-hidden="true">Lihat</span>
     </span>

@@ -1,53 +1,52 @@
 Reviewer: claude via visual-review.py
 Review-Context: separate ai-ask invocation
 Model: unavailable: ai-ask does not report the resolved model/provider
-Screenshots: design/renders/ux-home-1440.png, design/renders/ux-home-390.png, design/renders/ux-pdp-1440.png, design/renders/ux-pdp-390.png, design/renders/ux-produk-1440.png, design/renders/ux-produk-390.png
+Screenshots: design/renders/ux-empty-1440.png, design/renders/ux-empty-390.png, design/renders/ux-home-1440.png, design/renders/ux-home-390.png, design/renders/ux-pdp-1440.png, design/renders/ux-pdp-390.png, design/renders/ux-pdp-single-1440.png, design/renders/ux-pdp-single-390.png, design/renders/ux-produk-1440.png, design/renders/ux-produk-390.png
 References: design/refs/current-home/1440.png, design/refs/current-home/390.png, design/refs/current-produk/1440.png, design/refs/current-produk/390.png, design/refs/numaskin-collection/1440.png, design/refs/numaskin-collection/390.png, design/refs/numaskin-home/1440.png, design/refs/numaskin-home/390.png, design/refs/numaskin-pdp/1440.png, design/refs/numaskin-pdp/390.png
 Prompt-SHA: 4ae0ce2195b477c4
-Context-SHA: d89ed9950614ef18
-Images-SHA: 34c43073d42a7275
-Output-SHA: dfb857a42c7d39c6
+Context-SHA: 09b0daf3abeb85de
+Images-SHA: 44c46594dd1033f6
+Output-SHA: 1c422d4765f9dc74
 
-Review of the storefront renders against the direction doc. I opened all 55 images. 24 are renders of the new build (home, PDP and `/produk` at 1440 and 390). 31 are baselines and references: the old monochrome store in `ff7ddb43…`, `e7d9abde…`, `717125b7…` and `71cbde06…`, and numaskin.id's home, collection and PDP in `346ae103…`, `2592db7c…`, `599f0d28…`, `2055b62e…`, `8ad616f6…` and `a76024c4…`. Nothing was uninspectable.
+All 61 images opened and read: 8 renders of the work, 11 earlier "current-*" renders (the plain monochrome version), and the numaskin.id reference captures. The reference captures are the home 1440/390 slices `599f…`/`2055…`, the collection slices `346a…`/`2592…`, and the PDP slices `8ad6…`/`a760…`. Nothing was UNVERIFIED. `…-pdp-1440-03.png` is a 13 px empty strip, and the "PAKET HEMAT" heading is cut at a slice seam in `…home-390-03.png`. Those are slice artifacts, not defects.
 
-## Home (`7d096ae0…` at 1440, `48feb52a…` at 390)
+## Per section
 
-- **Top band + wordmark** | authored | matched (marine band, centred `NUMA·SKIN` + katakana) | "Official Store Numa Skin" has no visible source on the page. The tick is already gone, but the words alone still make the claim. Keep it only if the owner accepts the brand's own domain as the source, otherwise use "Numa Skin".
-- **Hero** | authored | matched (water poster, serif headline, cropped 5:4) | At 390 the headline and the single full-width marine "Lihat Paket Hemat" button fit before the search row, so the task is clear. At 1440 the same 480 px column floats on about 960 px of empty pale canvas (owner-mandated compact model). Nothing is wrong inside the column.
-- **Search + chips** | authored | matched (rounded search, pill chips) | The cut-off chip ("Fac…" at 1440, "Hydrating" at 390) shows the row scrolls. No change needed.
-- **Ritual (4 steps)** | authored | partly (reference uses 4-up with water texture; here 2×2 by design) | The numbering is a real sequence, so the equal cards are justified. The toner image is pale on a pale well and almost vanishes at 1440 (`7d096ae0…-01`). Add a slightly stronger well tint or scale for slim bottles.
-- **Lengkapi Rutinitas + "Semua produk" tile** | authored | none | At 1440 the tile is a serif title floating on a blank gradient above a white half. It reads as an empty image well beside a real product card. Put a product collage or the category count in the top half instead of an empty gradient.
-- **Paket Hemat** | authored | matched (inline saving pill) | The caption "Sebagian dari 42 paket; semuanya ada di katalog." wraps to two centred lines and reads like an apology. The tile below already says "42 paket hemat". Cut the caption.
-- **Footer** | authored | partly | It is clean, but it has no CS/WhatsApp route while the reference footer does. For a COD buyer the only path is a "Kontak" text link. Add a WhatsApp link if the number is configured.
+- **Top band + wordmark** | authored | numaskin.id header, marine band plus centred NUMA·SKIN and katakana | The band says "Official Store Numa Skin" with no tick, which is fine. Nothing on the page backs "Official" except the brand's own posters, so either keep the claim only where the posters carry it or soften the wording.
+- **Hero (home)** | authored | water-splash poster from the reference, cropped to the column | At 1440 the headline and button sit on pale aqua under the image, and the reference puts them over the water. At 390 the stacking works: image, serif h1, one action. The fix is optional: put the h1 on a soft scrim over the lower third of the image to recover the reference's depth.
+- **Search + chips** | authored | the reference has no equivalent, but the filled-marine active state is clear | The chip row is cut at the edge ("Fac…", "Hydrating…") and fades, so it reads as scrollable. There is no change to make here.
+- **Ritual (2×2)** | authored | the reference's numbered ritual, adapted | Step labels are teal sentence case, cards are white on aqua, and prices and "HEMAT" pills align across each row. The cards have no type line, while "Lengkapi Rutinitas" below uses the mono type line and no white card. That makes two card treatments within one scroll, so give both grids one card container.
+- **Lengkapi Rutinitas + "Semua produk" tile** | authored | the reference grid, with a 2×2 packshot see-all tile | The tile fills the odd cell with real packshots and reads as a link card. It is correct.
+- **Paket Hemat preview** | authored, with weak imagery | the reference's bundle cards, with the rupiah saving as the pill | The images are infographic posters and collages with unreadable text at 170 px, so they don't match the clean packshots above. That is owner content, already on the Owner list. A visible defect remains: "Paket Fresh & Hydrate Duo" has a blank band between the contents line and the price (`…home-1440-02`, `…produk-1440-02`). The subgrid is reserving a second contents line that this card doesn't use, so make the reserved row `min-content` where no sibling in the row needs it.
+- **Card anatomy** | authored | the reference's teal mono category, uppercase centred name, marine price, grey strike | The type line is 10 px mono with wide tracking in teal on white, which is the weakest-legibility text on the page at 390. Struck prices are about 11 px mid-grey. Raise the type line to 11 px, or drop the letter-spacing, and darken the strike a step.
+- **Catalogue `/produk`** | authored | the reference collection grid | The status line "49 produk", ten cards and then "Lihat Produk Lainnya" with "Menampilkan 10 dari 49" is clear. Held-image bundles are pushed down the list, so the first screen shows only clean packshots.
+- **Empty state** | authored | none, original | The message and "Hapus pencarian" button are right and say what to do next. At 1440 about 340 px of white sits between the card and the footer. Give the page a min-height of the card plus a few suggestions, or let the footer follow the card.
+- **PDP, bundle** | authored | the reference's serif title, large price, pills | Hierarchy is photo, title, price, saving line, size pills, COD line, accordions, form. The poster says "Routine 150ml" while 50 ml is preselected, and the caption "Foto ilustrasi…" is correct but 12 px grey. Nothing needs changing beyond the owner's per-size photos.
+- **PDP, single** | authored | the reference PDP minus its buy button, by owner decision | The subtitle "Anti-Aging & Mencerahkan" prints a brightening claim. The same page set hides the "Mencerahkan" chips and holds "cerah" images, so the claim rule is applied inconsistently. Either state the rule as "function claims from the merchant stay", or trim the subtitle to what the label says.
+- **Order form + summary** | authored | the product's checkout, skinned | The summary is clean: name, size on its own line, price right, Subtotal row. The disabled submit is pale aqua with grey text, so it is quiet but its disabled state is clear. I can't confirm from stills whether the field labels persist after typing.
+- **Beli satuan / Lengkapi rutinitas (PDP)** | authored | the shared card | The 2×2 plus see-all tile works and the page ends cleanly on the aqua base.
+- **Footer** | authored | none | Links are plain and trust badges are omitted because no certificate source exists. That is the right call, and the page is thinner than the reference's footer for that reason.
 
-## PDP (`d393c002…` at 1440, `f28f7bb1…` at 390)
+## Template-signal check
 
-- **Breadcrumb + poster** | authored | matched | The full-width Glow Up poster works as the hero image. It prints "Routine 150ml" while 50ml is preselected. This is already logged as owner content.
-- **Title / price / saving / size pills** | authored | matched (serif title, large marine price, filled-marine pill) | The hierarchy is good. "Rp11.498 lebih hemat dibanding beli satuan" is a checkable claim next to the price, and "Pilih ukuran toner" is specific. The COD line is the last thing above the fold at 390 and gets clipped.
-- **Description + accordions** | authored | partial | There is no action between the pills and the form, which is the owner's decision. The consequence is visible at 390: about 350 px of description and accordions sit between the sizes and the first form field, so the buy path is a long scroll. The reference puts the buy button right under the sizes. I flag this as a conversion risk and not a defect.
-- **Order form + summary** | authored | none | The summary reads well: product name, contents label, then price. The disabled "Lengkapi nama terlebih dahulu" pill correctly looks inert.
-- **Beli satuan** | authored | matched | The bundle's own products come first, and the 2×2 grid has no hole.
-
-## Catalogue (`cb026733…` at 1440, `d16117a2…` at 390)
-
-- **Header + search + chips** | authored | matched (cyan rule, filled active chip, count line) | No issue.
-- **Grid** | authored | matched | Singles come first and the held-image bundles are pushed to the end. Subgrid leaves a visible gap between the contents line and the price when a neighbour's name wraps (Fresh & Hydrate vs NAD+ Youth Boost, `cb026733…-02`, about 30 px). Mixing poster images with studio packshots is owner content.
-- **Type line at 390** | authored | matched (mono category line, as on numaskin.id) | **Defect:** the line breaks so a dot starts the second row ("SKINCARE SET / · 2 PRODUK", "FACIAL CLEANSER / · 100 ML"). It shows in `48feb52a…-04`, `f28f7bb1…-03` and `d16117a2…-01` to `-03`. The direction doc says a size line never starts with "·", but it does at 390 on all three pages. At 10 px mono teal it is also the smallest text on the page.
-- **Load more + footer** | authored | matched | No issue.
+- **Dark hero with dot grid or terminal panel:** absent.
+- **Gradient or accent word in the headline:** absent.
+- **Eyebrows over headings:** none on any section. The reference has them, and they were removed deliberately.
+- **Equal-card rows with an icon tile:** absent. The repeated card is a product card, which is what a catalogue needs.
+- **Mono and the `A · B` pattern:** mono is confined to the category line, as in the reference. The only `·` use is the "type · size" line inside the card.
+- **Arrows on buttons, checkmark bullets, big unsourced stats:** absent.
+- **Name-swap test:** the page would not survive a name swap. The wordmark, the water imagery, the ritual and the packshots are numaskin.id's.
 
 ## Reference comparison
 
-- **Transferred well:** palette, DM Serif titles with the cyan rule, wordmark, the water hero, aqua wells, centred uppercase names, the "HEMAT" pill and the ritual numbering. The direction doc records the research and the transfer rationale (the reference captures it lists, then "Transfer rationale"). Swapping the brand name would not leave the page unexplained.
-- **Deliberately not transferred:**
-  - the trust strip, BPOM and Halal badges, and the "Kampanye 14 hari" outcome block, none of which have a visible source;
-  - the PDP buy button under the sizes (owner decision);
-  - the thumbnail gallery.
-- **Template signals checked:**
-  - There is no dark grid hero, no stat placeholders, no eyebrow over titles, no accent-word headline and no arrow on every button.
-  - Mono appears only on the category line.
-  - The repeated "HEMAT x%" pill on every single card is the one place the page leans generic. It is reference-faithful, but it carries little information when every card has one.
-- **Responsive:** I saw no clipping or horizontal overflow in any slice.
+- **Colour, type and card (390):** matches the reference home and collection in marine, teal mono, serif uppercase headings with a cyan rule, aqua image wells, and a strike price beside a saving pill. These come from numaskin.id's own CSS tokens.
+- **Hierarchy and density:** the references are full-width editorial pages with a trust strip, a hero with text over the image, and a gallery PDP. This build compresses them into the 480 px column the owner required. At 1440 about two-thirds of the viewport is empty canvas, which follows from that constraint and not from a design choice.
+- **Deliberate gaps from the reference, all documented:**
+  - no trust strip and no "Halal/BPOM" badges, for lack of a source;
+  - no buy button under the size pills, by owner decision;
+  - the 4-in-1 ritual bundle is dropped because its contents conflict between pages.
+- **Research:** the Direction file records references, a transfer rationale, tokens and review history, so the direction is supported. What it can't show is how the page behaves at 1440 beyond the column.
 
-Most important change: stop the "·" from leading the wrapped card type line at 390, by moving the separator to the end of the first line or shortening the labels, since this repeats on every card on all three pages.
+Most important change: raise the 10 px tracked mono type line and the grey struck prices to a legible size and contrast on the 390 card, since they carry the choice between a single and a bundle.
 
 Verdict: REVISE

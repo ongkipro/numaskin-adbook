@@ -144,23 +144,19 @@ const SINGLE_FOR: Readonly<Record<string, RegExp>> = {
   Sunscreen: /sunscreen/i,
 };
 
-/** A bundle page's "buy singly" list: the bundle's own products first, then
- *  other singles (already in routine order) to an even count, so the 2×2 grid
- *  has no hole: at least `max`, more when the bundle holds more. */
+/** A bundle page's "buy singly" list: exactly the bundle's own products,
+ *  in its contents order. Empty when none can be matched (the caller then
+ *  falls back to other singles under another title). */
 export function singlesForBundle<T extends { productName: string }>(
   contents: readonly string[],
   singles: readonly T[],
-  max = 4,
 ): T[] {
   const own = contents.flatMap((label) => {
     const re = SINGLE_FOR[label];
     const hit = re ? singles.find((p) => re.test(p.productName)) : undefined;
     return hit ? [hit] : [];
   });
-  const picked = [...new Set(own)];
-  const rest = singles.filter((p) => !picked.includes(p));
-  const target = Math.max(max, picked.length + (picked.length % 2));
-  return [...picked, ...rest].slice(0, target);
+  return [...new Set(own)];
 }
 
 interface PricedSingle {

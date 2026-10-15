@@ -80,14 +80,13 @@ test("sizes are taken out of a multi-size product's description", async () => {
   assert.equal(withoutSizes("Treatment Lotion (150 ml) dan Gloss Gel"), "Treatment Lotion dan Gloss Gel");
 });
 
-test("a bundle's buy-singly list leads with its own products, padded to even", async () => {
+test("a bundle's buy-singly list is exactly its own products", async () => {
   const { singlesForBundle } = await import("../components/storefront/numaskin/catalog-order.ts");
   const singles = ["Deep Sea Water Facial Wash Gel", "Deep Sea Water Treatment Lotion", "NAD+ Booster Serum", "PDRN Tone-Up Day Cream", "Adenosine Moisturizer", "Oxydew Sunscreen"].map((productName) => ({ productName }));
   const names = (labels: string[]) => singlesForBundle(labels, singles).map((p) => p.productName);
-  assert.deepEqual(names(["Facial Wash", "Toner", "Adenosine"]), ["Deep Sea Water Facial Wash Gel", "Deep Sea Water Treatment Lotion", "Adenosine Moisturizer", "NAD+ Booster Serum"]);
-  assert.deepEqual(names(["NAD+ Serum", "Adenosine"]).slice(0, 2), ["NAD+ Booster Serum", "Adenosine Moisturizer"]);
-  assert.equal(names(["Facial Wash", "Toner", "Adenosine", "Day Cream", "NAD+ Serum", "Sunscreen"]).length, 6);
-  assert.equal(names([]).length, 4);
+  assert.deepEqual(names(["Facial Wash", "Toner", "Adenosine"]), ["Deep Sea Water Facial Wash Gel", "Deep Sea Water Treatment Lotion", "Adenosine Moisturizer"]);
+  assert.equal(names(["Facial Wash", "Toner", "NAD+ Serum", "Day Cream", "Adenosine", "Sunscreen"]).length, 6);
+  assert.deepEqual(names([]), []);
 });
 
 test("a bundle variant's singles total prices toner by size and fails closed", async () => {

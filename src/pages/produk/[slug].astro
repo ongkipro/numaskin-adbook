@@ -6,6 +6,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getStorefrontProduct, getStorefrontProducts } from '../../lib/catalog';
 import { BUNDLE_CATEGORY, bundleContents, orderCategories, singlesForBundle, singlesTotal, sizeChoice, withoutSizes } from '../../components/storefront/numaskin/catalog-order';
 import ProductGrid from '../../components/storefront/numaskin/ProductGrid.astro';
+import SeeAllTile from '../../components/storefront/numaskin/SeeAllTile.astro';
 import { getProductPageLanding } from '../../lib/landing-pages';
 import Icon from '../../components/storefront/shared/Icon.astro';
 import RatingStars from '../../components/storefront/shared/RatingStars.astro';
@@ -85,9 +86,9 @@ const otherSingles = allProducts
   .sort((a, b) => routineOrder.indexOf(a.category) - routineOrder.indexOf(b.category));
 // A bundle offers its own products singly; a single offers the rest of the
 // routine. Even counts, so the 2×2 grid shows every card whole.
-const related = isBundle
-  ? singlesForBundle(bundleContents(product.description ?? ''), otherSingles)
-  : otherSingles.slice(0, 4);
+const ownSingles = isBundle ? singlesForBundle(bundleContents(product.description ?? ''), otherSingles) : [];
+const related = ownSingles.length > 0 ? ownSingles : otherSingles.slice(0, 4);
+const relatedIsOwn = ownSingles.length > 0;
 const displayPrice = cheapestVariant?.price ?? product.price;
 const displayComparePrice = cheapestVariant?.comparePrice ?? product.comparePrice ?? 0;
 const displayDiscount =
@@ -211,6 +212,14 @@ const productSchemaJson = JSON.stringify(productSchema).replace(/</g, '\\u003c')
         badgeText={undefined /* install: the breadcrumb already names the category */}
         discountPercentage={0 /* install: the saving shows once, beside the price (DESIGN.md C6) */}
       />
+      {/* The merchant's photos show one size of a multi-size bundle (Glow Up's
+          poster says "Routine 150ml"); until each size has its own photo, the
+          caption says which one the order follows. */}
+      {isBundle && product.variants.length > 1 && (
+        <p class="bg-white px-5 pt-3 text-[12px] leading-5 text-[var(--nm-muted)]">
+          Foto ilustrasi. Isi paket mengikuti ukuran yang dipilih.
+        </p>
+      )}
     </div>
 
     <!-- Main Header & Pricing Surface -->
@@ -302,8 +311,8 @@ const productSchemaJson = JSON.stringify(productSchema).replace(/</g, '\\u003c')
 
     <!-- Product details. Install-owned (DESIGN.md §UX): the description reads
          open; the lists are native <details> disclosures, numaskin.id's
-         accordion pattern without script. The first list starts open so the
-         main benefit is visible without a tap. -->
+         accordion pattern without script. All start closed: with no button
+         under the sizes (owner), the form should be one short scroll away. -->
     <section aria-labelledby="pdp-detail" class="border-b border-[var(--nm-border)] bg-white px-5 py-6">
       <h2 id="pdp-detail" class="sr-only">Tentang produk ini</h2>
       <p class="mt-3 text-[14px] leading-6 text-[var(--nm-muted)]">{shownDescription}</p>
@@ -312,8 +321,8 @@ const productSchemaJson = JSON.stringify(productSchema).replace(/</g, '\\u003c')
         {[
           { title: 'Manfaat utama', items: product.benefits ?? [] },
           { title: isBundle ? 'Urutan pemakaian' : 'Bahan aktif unggulan', items: product.keyPoints ?? [] },
-        ].filter((block) => block.items.length > 0).map((block, index) => (
-          <details class="group" open={index === 0}>
+        ].filter((block) => block.items.length > 0).map((block) => (
+          <details class="group">
             <summary class="flex min-h-12 cursor-pointer list-none items-center justify-between gap-3 py-3 text-[14px] font-semibold text-[var(--nm-marine)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--nm-cyan)] [&::-webkit-details-marker]:hidden">
               {block.title}
               <Icon name="lucide:chevron-down" class="h-4 w-4 shrink-0 text-[var(--nm-teal)] transition-transform group-open:rotate-180" aria-hidden="true" />
@@ -405,14 +414,18 @@ const productSchemaJson = JSON.stringify(productSchema).replace(/</g, '\\u003c')
         {/* On a bundle page the row offers the single products, so the buyer can
             also take one item instead of the set. */}
         <h2 id="pdp-related" class="nm-serif px-5 text-center text-[22px] uppercase leading-tight text-[var(--nm-marine)]">
-          {isBundle ? 'Beli satuan' : 'Lengkapi rutinitas'}
+          {relatedIsOwn ? 'Beli satuan' : 'Lengkapi rutinitas'}
         </h2>
         <span class="nm-rule mt-3" aria-hidden="true"></span>
         <div class="mt-5 px-4">
           <ProductGrid
             id="grid-related"
             products={related.map((p) => ({ slug: p.slug, name: p.productName, category: p.category, image: p.heroImage, price: p.price, comparePrice: p.comparePrice, variants: p.variants }))}
-          />
+          >
+            {related.length % 2 === 1 && (
+              <SeeAllTile href="/produk" title="Semua produk" note={`${allProducts.length} produk dan paket`} images={otherSingles.slice(0, 4).map((p) => p.heroImage)} />
+            )}
+          </ProductGrid>
         </div>
       </section>
     )}
