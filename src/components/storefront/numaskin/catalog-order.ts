@@ -41,9 +41,9 @@ export function pickRitual<T extends { category: string }>(products: readonly T[
   });
 }
 
-// The products a bundle contains, read from its description in the order they
-// are named there ("Facial Wash (100ml) + Treatment Lotion (150ml)" →
-// "Facial Wash + Toner"), as numaskin.id's bundle cards list them.
+// The products a bundle contains, read from its description and listed in
+// routine order (wash, toner, serum, day cream, moisturisers, sunscreen), so
+// the card, the variant label and the routine read the same way.
 // lazy: keyword match over merchant copy; a description that mentions a
 // product it does not contain would list it. Upgrade path: a contents column.
 const CONTENT_KEYS: ReadonlyArray<[RegExp, string]> = [
@@ -57,11 +57,7 @@ const CONTENT_KEYS: ReadonlyArray<[RegExp, string]> = [
 ];
 
 export function bundleContents(description: string): string[] {
-  return CONTENT_KEYS
-    .map(([re, label]) => ({ label, at: description.search(re) }))
-    .filter(({ at }) => at >= 0)
-    .sort((a, b) => a.at - b.at)
-    .map(({ label }) => label);
+  return CONTENT_KEYS.filter(([re]) => re.test(description)).map(([, label]) => label);
 }
 
 /** Reorders a list so no product shares an image with any of the `window`

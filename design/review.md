@@ -4,53 +4,56 @@ Model: unavailable: ai-ask does not report the resolved model/provider
 Screenshots: design/renders/ux-home-1440.png, design/renders/ux-home-390.png, design/renders/ux-pdp-1440.png, design/renders/ux-pdp-390.png, design/renders/ux-produk-1440.png, design/renders/ux-produk-390.png
 References: design/refs/current-home/1440.png, design/refs/current-home/390.png, design/refs/current-produk/1440.png, design/refs/current-produk/390.png, design/refs/numaskin-collection/1440.png, design/refs/numaskin-collection/390.png, design/refs/numaskin-home/1440.png, design/refs/numaskin-home/390.png, design/refs/numaskin-pdp/1440.png, design/refs/numaskin-pdp/390.png
 Prompt-SHA: 4ae0ce2195b477c4
-Context-SHA: 1ed71865b4661588
-Images-SHA: a738cda8671339d2
-Output-SHA: f6eef71f7c5c1c2f
+Context-SHA: a070995c38cca86c
+Images-SHA: c23532c8d2232b55
+Output-SHA: a733c50205243ae5
 
-Saya sudah membuka dan memeriksa ke-56 gambar. Sesi ini dalam plan mode, jadi tidak ada file repo yang diubah. Satu-satunya file yang ditulis adalah catatan review di file plan.
+I opened all 56 slices. No files were edited (plan mode). The review is below in English as technical output. The short version: the layout is fine, but there's one serious content problem: the "hemat" (savings) claim is contradicted by prices on the same page.
 
-## Per section (renders: home, /produk, PDP; 390 and 1440)
+**Image key** (from content, since the slices aren't labelled): `ux-*` = the current build. `ff7ddb…`/`e7d9ab…` = current-home before the change. `717125…`/`71cbde…` = current-produk before. `599f0d…`/`2055b6…` = numaskin.id collection. `346ae1…`/`2592db…` = numaskin.id home. `8ad616…`/`a76024…` = numaskin.id PDP.
+
+## Per section
 
 **Home**
-- Top band + wordmark | authored | numaskin.id's marine band and `NUMA·SKIN` + katakana wordmark (`346ae…-1440-01`, `2592…-390-01`) | Fine as built. "Official Store" here is the brand speaking on its own domain, not a platform badge, and the verification tick is gone.
-- Hero | authored | numaskin.id's water-splash Adenosine poster and serif headline, cut down to one action | No change. The h1 "Skincare dengan Air Laut Dalam Ulleung" makes no outcome claim, and at 390 (`48feb…-01`) the image, headline and "Lihat Paket Hemat" all fit on the first screen.
-- Search + chips | authored | numaskin.id's category order | No change. "Face Serum" fades at the right edge, which shows the row scrolls. No chip is marked active on home.
-- Rutinitas 4 Langkah | authored | numaskin.id's "4-Step Ritual" (`2592…-390-04`), minus its ingredient lines and its "Awet Muda" claim | No change. It is a 2×2 grid with all four steps visible. The numbers are a real sequence, and prices sit on one line across each row.
-- Lengkapi Rutinitas | generic-leaning | merchant collection card | Optional: the "Semua Produk" tile (`7d096…-1440-02`) is a bordered white card next to borderless cards. It reads as a link, but its serif title and pill button are a third style on the page. Consider dropping the button so the whole tile is the link.
-- Paket Hemat | authored layout, owner-limited imagery | merchant bundle cards with the inline "HEMAT" pill | Owner: supply packshots. At 170 px the Fresh & Hydrate, Glow Up and Daily Care posters are unreadable text plus faces (`48feb…-04`). The layout already gives packshots a square well, so this is owner content, not a design defect.
-- Footer | authored | merchant wordmark footer, without its BPOM, Halal or dermatology claims | No change.
+- **Top band + wordmark** | authored | numaskin.id header (centred `NUMA·SKIN` + katakana, marine band) | none needed. The verification tick from current-home (`ff7ddb…-01`) is gone, which is correct.
+- **Hero** | authored | numaskin.id hero (`346ae1…-01`): same Adenosine packshot in water and a serif headline, moved below the image to fit the 480 column | rename the only action "Lihat Paket Hemat" and drop "paket hemat" from the subline (see the main finding).
+- **Search + chips** | authored | numaskin.id filter row, reduced | none needed. At 390 "Face S…" is cut and fades (`48feb5…-01`), so the row clearly scrolls.
+- **Rutinitas 4 Langkah** | authored | numaskin.id "THE 4-STEP RITUAL" (`346ae1…-02/03`), without the eyebrow, "DETAIL →" links and ingredient mono lines | none material. The numbers are earned: it is a real sequence.
+- **Lengkapi Rutinitas** | authored | numaskin.id grid card (aqua well, teal mono type line, uppercase centred name) | minor: the "SEMUA PRODUK" tile at 1440 (`7d096a…-02`) is a 310 px card holding mostly empty space and a small "LIHAT" pill, a third button size on the page. Make the whole tile the link and drop the pill.
+- **Paket Hemat** | authored layout, contradicted copy | numaskin.id bundle cards with the inline HEMAT pill | **the main finding below**. Secondary: the "Fresh & Hydrate" and "Glow Up Routine" posters use the same template and sit in the same column at 390 (`48feb5…-04`). `bundleLine` catches same-name duplicates, not same-template ones. Owner content, but worth one more spread rule or an owner note.
+- **Footer** | authored, restrained | numaskin.id footer without BPOM/Halal/"Teruji Dermatologi" claims | none needed.
+
+**PDP**
+- **Breadcrumb + image** | authored | numaskin.id PDP gallery, single image | the image says "Routine 150ml" while 50ml is preselected (`f28f7b…-01`). This is already on the Owner list; not a design defect.
+- **Title, price, size pills, COD line** | authored | numaskin.id PDP (`8ad616…-01`): serif title, marine price + HEMAT pill, filled marine selected pill | the HEMAT 27% pill has the same contradiction as home (Glow Up Rp227.000 vs its three singles Rp226.998, listed lower on this same page under "Beli Satuan").
+- **Tentang / Manfaat / Urutan** | authored, native `<details>` | numaskin.id accordion without the icon tiles | none needed.
+- **Form Pemesanan** | authored skin over the product form | — | none material. The disabled submit reads as disabled. The summary row "Toner 50ml" names the chosen size.
+- **Beli Satuan** | authored | shared grid card | none needed. The bundle's own three products lead.
 
 **/produk**
-- Title + search + chips + count | authored | merchant collection header (`599f…-1440-01`), without the stock photo or the "resmi … berkualitas tinggi" copy | No change. The serif title with a cyan rule replaced the old "Semua Produk" pill (`717125…-1440-01`).
-- Grid + load-more | authored | merchant card | No change. Singles come first, then bundles. Prices share a baseline in each row (`d1611…-02`). "Menampilkan 10 dari 49" sits above a marine pill that replaced the old black block. The type line "HYDRATING TONER" has no size, which matches numaskin.id for a product with two sizes.
+- **Title + search + chips + count** | authored | numaskin.id collection header, without the claim copy ("resmi… berkualitas tinggi") and the mono counter | none needed. The left-aligned title is a page title, distinct from the centred section titles.
+- **Grid + load-more** | authored | numaskin.id collection card (`599f0d…-01`) | none material. Prices share a baseline in every row, including Gloss Gel's three-line name at 390 (`d16117…-02`).
 
-**PDP (bundle: Paket Glow Up Adenosine)**
-- Breadcrumb + image | authored | merchant PDP | Owner: the poster prints "Routine 150ml" and "Complete Anti-aging Ritual", but 50 ml is preselected. This is already on the owner list.
-- Title / price / sizes / COD | authored | merchant PDP (`8ad6…-1440-01`) without the trust strip, the "Garansi Resmi" card and the cart controls | No change. It reads title → large marine price + HEMAT → size pills → one honest COD line.
-- Description + accordions | authored | merchant accordion | Owner: "untuk kulit glowing" is still in the description.
-- Form Pemesanan | authored inside product checkout code | none | Not this install's scope: "Total Pembayaran Rp227.000" sits beside "Ongkir & admin dikonfirmasi via CS", so the "total" leaves out shipping. "Subtotal produk" would be accurate. That has to change in the product's checkout code.
-- Beli Satuan | authored | merchant "Rekomendasi Terkait" (`a7602…-03`) | No change. It leads with the bundle's own three products and adds NAD+ to make an even 2×2.
-- `d393…-1440-03` is an empty strip of page background below the footer. Nothing is clipped.
+## Main finding
 
-## Evidence and transfer
+The design's own copy makes a savings claim that the page's own prices disprove. The hero's single action is "Lihat Paket Hemat", the subline says "dalam paket hemat", the section title is "PAKET HEMAT", and every bundle carries a "HEMAT x%" pill. Yet the singles shown a screen earlier on the same page (ritual and Lengkapi Rutinitas) cost the same or less:
 
-What carried over from the references:
-- **Hierarchy:** serif uppercase titles over a short cyan rule, centred.
-- **Cards:** an aqua image well, the teal mono type line and the uppercase centred name.
-- **Ritual:** the numbered steps.
-- **Bundles:** the inline HEMAT pill.
+| Bundle | Bundle price | Sum of its singles | Pill shown |
+|---|---|---|---|
+| Daily Care Adenosine | Rp148.000 | Rp147.998 | HEMAT 30% |
+| Fresh & Hydrate Duo | Rp148.000 | Rp147.999 | HEMAT 26% |
+| NAD+ Youth Boost | Rp188.000 | Rp187.998 | HEMAT 36% |
+| Glow Up Adenosine | Rp227.000 | Rp226.998 | HEMAT 27% |
+| Lengkap 6-in-1 | Rp524.500 | Rp494.496 | HEMAT 23% |
 
-All of these are taken from `346ae…`, `599f…` and `8ad6…`, and they replace the monochrome before-state (`ff7dd…`, `e7d9…`, `717125…`, `71cbd…`): Cinzel "N NUMA SKIN", black "-30%" badges, a left-ruled eyebrow heading and a black load-more block.
+So the 6-in-1 costs about Rp30.000 *more* than buying its six products singly. The percentages are only against compare-at. A buyer on this page can do the sum, which hurts trust and task clarity. The Owner list records the pricing but treats it as the owner's call. The headline, CTA and pill wording, though, are template copy this install controls.
 
-What was deliberately dropped from the references: the stat and claim strips ("BPOM RI Resmi", "Uji Dermatologi", "Teruji klinis", "Berkurang Nyata dalam 14 Hari"), the arrow on every button, and the mono eyebrows. None of these had a visible source.
+## Reference fidelity
 
-Density fits the 480 px column: one product type per section, and no row of equal icon cards. The direction document records the references and the reasoning for what was transferred.
+The build carries over numaskin.id's palette, serif plus cyan-rule headings, card anatomy, 4-step ritual and HEMAT pill. It removes the reference's template signals: mono eyebrows over every heading (`346ae1…-02/03`), the 4-up icon-tile "Sains" cards, "→" on buttons, and the unsourced BPOM, Halal, "Teruji Klinis" and "14 Hari" claims. Compared with current-home and current-produk (black square badges, Cinzel "N NUMA SKIN", left-ruled heading, "1 VARIAN" lines), every forbidden item on the "Do not substitute" list is gone. Density fits the 480 column: two-up grids, no rails, no clipped rendering at 390 or 1440.
 
-No broken or clipped rendering at 390 or 1440. None of the template signals listed in the brief is present without a reason: mono appears only on the card's type line, which is the one place numaskin.id uses it.
+The research and transfer rationale in the direction are sufficient. Swapping the name would not leave the page generic, because the imagery, ritual and palette are the merchant's own.
 
-Most important change: the owner should supply one packshot per bundle (and per bundle variant). Those images now take up half of the home page and the catalogue, are unreadable at card width, and are the only thing between this page and the reference's visual quality.
+**Most important change:** Stop the template asserting savings it can't back up. Rename the hero CTA, hero subline and section to "Paket" / "Paket Rutinitas", and show a saving pill only when the bundle is cheaper than the sum of its singles (computable from `bundleContents` + D1 prices, with a test). Leave the D1 category name "Paket Hemat" on the Owner list.
 
-Verdict: PASS
-
-The follow-ups that don't block this verdict are recorded in `/home/ongki/.claude/plans/you-review-a-web-glowing-hickey.md`.
+**Verdict: REVISE**

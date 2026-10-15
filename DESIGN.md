@@ -148,8 +148,13 @@ Tailwind blue focus ring, a card grid that reserves blank lines.
   Hydra Glow / Youth Glow / Luminous share the "Why PDRN" infographic.
   Identical files now point at one URL in D1 (cache, and so the home preview
   can show distinct images); supply a packshot per bundle.
-- Twin Pack: compare-at Rp529.000 against Rp151.600 shows "HEMAT 71%"; the
-  single 150 ml toner's compare-at is Rp239.000, so verify the figure.
+- Twin Pack: compare-at Rp529.000 (numaskin.id) is above 2 × Rp239.000; the
+  "2× 150ml" size on the Treatment Lotion page uses Rp478.000.
+- Bundle pricing (numaskin.id, 2026-10-16): most bundles cost the same as
+  their singles (±Rp2); those holding Sunscreen or Gloss Gel cost Rp30.000
+  more per item, because those singles are on promo (Rp79.000) while bundles
+  price them at Rp109.000. Only Twin Pack saves. "Paket Hemat" / "HEMAT x%"
+  is against compare-at, not against buying singly — owner decides prices.
 - Six bundle images print outcome promises or a gift (held from the home
   preview, still on /produk): Twin Pack, Adenosine & Toner 150ml, Duo Toner,
   Toner 50ml & Gloss Gel, Toner 150ml & Gloss Gel, and the "Why PDRN"
@@ -532,3 +537,30 @@ New review cycle; the previous log is archived as
 (`design/renders/ux-home-390.png`, `design/renders/ux-home-1440.png`,
 `design/renders/ux-produk-390.png`, `design/renders/ux-produk-1440.png`,
 `design/renders/ux-pdp-390.png`, `design/renders/ux-pdp-1440.png`).
+
+### Prices and variants against numaskin.id (2026-10-16)
+
+- Prices: all 49 products and every variant re-fetched from numaskin.id
+  (Shopify, 2026-10-16) match D1 exactly, price and compare-at (0 diffs).
+- Variant labels (live D1): 37 single-variant bundles said only "Paket" →
+  their contents with sizes in routine order ("Facial Wash 100ml + Adenosine
+  30gr"; Twin Pack "2× Toner 150ml"). Exclusive keeps "Paket" (its image adds
+  a travel size and pouch the data does not confirm). `bundleContents` now
+  lists in routine order, so card, label and ritual read alike.
+- PDP: a single-variant bundle states "Isi paket" with that label instead of
+  a pill; the form's one-option variant step is hidden (radio stays checked).
+- "Beli 2": the merchant's only real multi-buy price is Twin Pack (2× Toner
+  150ml, Rp151.600 vs 2 × Rp109.000). It is offered on the Treatment Lotion
+  page as a third size, "2× 150ml" (compare-at 2 × Rp239.000), and the landing
+  copy names it. No other "beli 2" price exists, so none is invented.
+
+Cycle 4 round 2 (REVISE) — findings and changes, re-rendered and the six
+screenshots re-opened:
+
+- At 390 the chip row ended exactly between chips, so nothing said it
+  scrolls → chip padding 10 px, gap 6 px, fade dims to 30 % instead of
+  vanishing: a chip is cut at the edge at every common width (measured
+  peek 19/34/49/73 px at 360/375/390/414, 37 px in the 480 column).
+- "Pilih ukuran" over "Toner 50ml / Toner 150ml" left a bundle buyer unsure
+  whether the other items change → when every option names the same product,
+  the label says "Pilih ukuran toner" and the pills show "50ml / 150ml".

@@ -60,6 +60,12 @@ if (productPageLanding) {
 const socialProofOrders = await recentOrderCount(getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined);
 
 const cheapestVariant = [...product.variants].sort((a, b) => a.price - b.price)[0] ?? null;
+// When every size option names the same one product ("Toner 50ml", "Toner
+// 150ml"), the label says which product's size changes and the pills show
+// just the size, so a bundle buyer does not wonder about the other items.
+const sizeOf = product.variants.map((v) => v.label.trim().match(/^([A-Za-z+]+)\s+(\d+\s?(?:ml|gr|g))$/i));
+const sizedPart = sizeOf.length > 1 && sizeOf.every((m) => m && m[1] === sizeOf[0]?.[1]) ? sizeOf[0]![1] : '';
+const pillText = (label: string) => (sizedPart ? label.trim().slice(sizedPart.length).trim() : label);
 const shownDescription = product.variants.length > 1 ? withoutSizes(product.description ?? '') : product.description;
 // Install-owned (DESIGN.md §UX): bundle-aware labels, and "complete the
 // routine" picks — the single products other than this one, in routine order.
@@ -244,9 +250,17 @@ const productSchemaJson = JSON.stringify(productSchema).replace(/</g, '\\u003c')
         </span>
       </div>
 
+      {/* One variant: no choice to make, so its label (a bundle's contents with
+          sizes) is stated instead of a single pill. */}
+      {product.variants.length === 1 && isBundle && product.variants[0].label.trim().toLowerCase() !== 'paket' && (
+        <p class="mt-5 text-[13px] leading-6 text-[var(--nm-marine)]">
+          <span class="nm-label !text-[var(--nm-marine)]">Isi paket</span>
+          <span class="mt-1 block">{product.variants[0].label}</span>
+        </p>
+      )}
       {product.variants.length > 1 && (
         <div class="mt-5">
-          <p id="pdp-variant-label" class="nm-label !text-[var(--nm-marine)]">Pilih ukuran</p>
+          <p id="pdp-variant-label" class="nm-label !text-[var(--nm-marine)]">Pilih ukuran{sizedPart ? ` ${sizedPart.toLowerCase()}` : ''}</p>
           <div class="mt-2.5 flex flex-wrap gap-2" role="group" aria-labelledby="pdp-variant-label">
             {[...product.variants].sort((a, b) => a.price - b.price).map((v) => (
               <button
@@ -257,7 +271,7 @@ const productSchemaJson = JSON.stringify(productSchema).replace(/</g, '\\u003c')
                 aria-pressed={v.id === cheapestVariant?.id ? 'true' : 'false'}
                 class="min-h-11 rounded-full border border-[var(--nm-border)] bg-[var(--nm-surface)] px-5 text-[13px] font-semibold text-[var(--nm-marine)] transition-colors hover:border-[var(--nm-teal)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--nm-cyan)] aria-pressed:border-[var(--nm-marine)] aria-pressed:bg-[var(--nm-marine)] aria-pressed:text-white"
               >
-                {v.label}
+                {pillText(v.label)}
               </button>
             ))}
           </div>
@@ -416,7 +430,13 @@ const productSchemaJson = JSON.stringify(productSchema).replace(/</g, '\\u003c')
     // listeners then reprice the summary); either side updates the headline.
     function initVariantPills() {
       const pills = [...document.querySelectorAll<HTMLButtonElement>('[data-variant-pick]')];
-      if (pills.length === 0) return;
+      // A single variant needs no picking: the form's variant step is hidden
+      // (its one radio stays checked and is submitted).
+      const onlyRadios = document.querySelectorAll<HTMLInputElement>('input[name="variant"]');
+      if (pills.length === 0) {
+        if (onlyRadios.length === 1) onlyRadios[0].closest('.form-block')?.classList.add('nm-variant-synced');
+        return;
+      }
       const price = document.querySelector('[data-pdp-price]');
       const compare = document.querySelector<HTMLElement>('[data-pdp-compare]');
       const save = document.querySelector<HTMLElement>('[data-pdp-save]');

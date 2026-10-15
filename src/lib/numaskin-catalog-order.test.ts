@@ -27,7 +27,7 @@ test("the ritual takes the first product per step and drops a missing step", () 
   );
 });
 
-test("bundle contents follow the description's order and ignore unnamed products", async () => {
+test("bundle contents are listed in routine order and ignore unnamed products", async () => {
   const { bundleContents } = await import("../components/storefront/numaskin/catalog-order.ts");
   assert.deepEqual(
     bundleContents("Rangkaian pembersih facial wash, hydrating lotion 150ml, dan pelembap Adenosine Numa Skin."),
@@ -35,7 +35,7 @@ test("bundle contents follow the description's order and ignore unnamed products
   );
   assert.deepEqual(
     bundleContents("Kombinasi Treatment Lotion 150ml, Adenosine Moisturizer, dan PDRN Tone-Up Day Cream."),
-    ["Toner", "Adenosine", "Day Cream"],
+    ["Toner", "Day Cream", "Adenosine"],
   );
   assert.deepEqual(bundleContents("Paket hemat untuk kulit."), []);
 });

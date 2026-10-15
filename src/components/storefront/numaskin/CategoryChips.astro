@@ -17,13 +17,16 @@ interface Props {
 const { categories, active = '', allHref = '/produk', class: className = '' } = Astro.props;
 const ordered = orderCategories(categories);
 const chip =
-  'inline-flex min-h-11 shrink-0 snap-start items-center whitespace-nowrap rounded-full border px-4 text-[13px] font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--nm-cyan)]';
+  'inline-flex min-h-11 shrink-0 snap-start items-center whitespace-nowrap rounded-full border px-2.5 text-[13px] font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--nm-cyan)]';
 const on = 'border-[var(--nm-marine)] bg-[var(--nm-marine)] text-white';
 const off = 'border-[var(--nm-border)] bg-white text-[var(--nm-marine)] hover:border-[var(--nm-teal)]';
 ---
 
+{/* Chip padding and gap are set so a chip is cut at the right edge at 360,
+    375, 390, 414 and the 480 column (measured): the cut chip under the dimmed
+    fade is what says the row scrolls. Re-measure if categories change. */}
 <nav aria-label="Kategori produk" class={className}>
-  <ul class="-mx-4 flex snap-x scroll-px-4 gap-2 overflow-x-auto px-4 pb-1 [mask-image:linear-gradient(to_right,#000_85%,transparent)] [scrollbar-width:none]">
+  <ul class="-mx-4 flex snap-x scroll-px-4 gap-1.5 overflow-x-auto px-4 pb-1 [mask-image:linear-gradient(to_right,#000_82%,rgb(0_0_0/0.3))] [scrollbar-width:none]">
     <li>
       <a href={allHref} class={`${chip} ${active === '' ? on : off}`} aria-current={active === '' ? 'page' : undefined}>Semua</a>
     </li>
