@@ -78,7 +78,8 @@ const soldLabel = hasSoldCount
 
 const productImages = product.images && product.images.length > 0 ? product.images : [product.heroImage];
 
-const productAccent = '#111111';
+// Install-owned (DESIGN.md C6): icon accent is numaskin.id's deep teal.
+const productAccent = '#0b6e7d';
 const canonical = `${Astro.locals.tenant.siteUrl}/produk/${product.slug}`;
 const productTitle = product.seoTitle;
 const productDescription = product.seoDescription;
@@ -178,21 +179,21 @@ const productSchemaJson = JSON.stringify(productSchema).replace(/</g, '\\u003c')
         images={productImages}
         productName={product.productName}
         badgeText={product.tag}
-        discountPercentage={displayDiscount}
+        discountPercentage={0 /* install: the saving shows once, beside the price (DESIGN.md C6) */}
       />
     </div>
 
     <!-- Main Header & Pricing Surface -->
     <section class="border-fade-b bg-white px-5 py-5">
-      <h1 class="text-[20px] font-semibold leading-[1.35] tracking-[-0.025em] text-[#111111]">
+      <h1 class="nm-serif text-[26px] leading-[1.2] text-[var(--nm-marine)] [text-wrap:balance]">
         {product.productName}
       </h1>
-      <p class="mt-1 text-[13px] leading-relaxed text-[#555555]">
+      <p class="mt-1 text-[13px] leading-relaxed text-[var(--nm-muted)]">
         {product.subheadline || product.description}
       </p>
 
       <!-- Rating & Sold Claims -->
-      <div class="mt-3 flex items-center gap-3 text-[12px] text-[#555555]">
+      <div class="mt-3 flex items-center gap-3 text-[12px] text-[var(--nm-muted)]">
         {
           hasAggregateRating && (
             <>
@@ -202,122 +203,70 @@ const productSchemaJson = JSON.stringify(productSchema).replace(/</g, '\\u003c')
                   starClass="h-[13px] w-[13px]"
                   label={`Rating produk ${formattedRating} dari 5 bintang`}
                 />
-                <span class="font-semibold text-[#111111]">{formattedRating}</span>
+                <span class="font-semibold text-[var(--nm-marine)]">{formattedRating}</span>
               </div>
               <span>{reviewCount} penilaian</span>
             </>
           )
         }
-        {hasAggregateRating && hasSoldCount && <span class="h-3 w-px bg-[#E5E5E5]" />}
-        {hasSoldCount && <span class="font-normal text-[#767676]">{soldLabel}</span>}
+        {hasAggregateRating && hasSoldCount && <span class="h-3 w-px bg-[var(--nm-border)]" />}
+        {hasSoldCount && <span class="font-normal text-[var(--nm-muted)]">{soldLabel}</span>}
       </div>
 
-      <!-- Pricing Display -->
-      <div class="mt-4 flex items-baseline gap-3 border-fade-t pt-4">
-        <span class="text-[24px] font-bold leading-none tracking-tight text-[#111111]">
+      <!-- Pricing Display. Install-owned (DESIGN.md C6): one price on the page.
+           It shows the variant the order form starts on (the cheapest, passed
+           to GeoIpResolvedForm below), and the size pills move both together. -->
+      <div class="mt-4 flex flex-wrap items-baseline gap-x-3 gap-y-2 border-t border-[var(--nm-border)] pt-4">
+        <span data-pdp-price class="text-[28px] font-bold leading-none tracking-tight text-[var(--nm-marine)]">
           Rp{Math.round(displayPrice).toLocaleString('id-ID')}
         </span>
-        {
-          displayComparePrice > displayPrice && (
-            <span class="text-[13px] font-normal text-[#767676] line-through">
-              Rp{Math.round(displayComparePrice).toLocaleString('id-ID')}
-            </span>
-          )
-        }
+        <span data-pdp-compare hidden={!(displayComparePrice > displayPrice)} class="text-[13px] font-normal text-[var(--nm-muted)] line-through">
+          Rp{Math.round(displayComparePrice).toLocaleString('id-ID')}
+        </span>
+        <span data-pdp-save hidden={!(displayDiscount > 0)} class="nm-label nm-pill self-center">
+          Hemat {displayDiscount}%
+        </span>
       </div>
-    </section>
 
-    <!-- Variant Offer Matrix -->
-    <section class="border-fade-b bg-white px-5 py-6">
-      <h2 class="text-[12px] font-semibold uppercase tracking-[0.12em] text-[#111111]">
-        Pilihan Varian ({product.variants.length})
-      </h2>
-      <div class="divide-y divide-[#E5E5E5]">
-        {
-          product.variants.map((v) => (
-            <div class="flex items-start justify-between gap-4 py-4">
-              <div class="min-w-0 flex-1">
-                <div class="flex items-start gap-2">
-                  <span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#111111]" aria-hidden="true" />
-                  <div class="min-w-0">
-                    <p class="text-[14px] font-semibold text-[#111111]">{v.label}</p>
-                    <p class="mt-0.5 text-[11px] text-[#555555]">Siap Kirim</p>
-                  </div>
-                </div>
-              </div>
-              <div class="shrink-0 text-right">
-                <p class="text-[16px] font-bold leading-none text-[#111111]">
-                  Rp{Math.round(v.price).toLocaleString('id-ID')}
-                </p>
-                {v.comparePrice && (
-                  <p class="mt-1 text-[11px] leading-none text-[#767676] line-through">
-                    Rp{Math.round(v.comparePrice).toLocaleString('id-ID')}
-                  </p>
-                )}
-              </div>
-            </div>
-          ))
-        }
-      </div>
+      {product.variants.length > 1 && (
+        <div class="mt-5">
+          <p id="pdp-variant-label" class="nm-label !text-[var(--nm-marine)]">Pilihan ukuran / varian</p>
+          <div class="mt-2.5 flex flex-wrap gap-2" role="group" aria-labelledby="pdp-variant-label">
+            {product.variants.map((v) => (
+              <button
+                type="button"
+                data-variant-pick={v.id}
+                data-price={v.price}
+                data-compare={v.comparePrice ?? 0}
+                aria-pressed={v.id === cheapestVariant?.id ? 'true' : 'false'}
+                class="min-h-11 rounded-full border border-[var(--nm-border)] bg-[var(--nm-surface)] px-5 text-[13px] font-semibold text-[var(--nm-marine)] transition-colors hover:border-[var(--nm-teal)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--nm-cyan)] aria-pressed:border-[var(--nm-marine)] aria-pressed:bg-[var(--nm-marine)] aria-pressed:text-white"
+              >
+                {v.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
     </section>
 
     <!-- Detailed Specifications -->
     <section class="border-fade-b bg-white px-5 py-6">
-      <h2 class="border-fade-b pb-3 text-[12px] font-semibold uppercase tracking-[0.12em] text-[#111111]">Informasi Produk</h2>
-      <div class="mt-4 grid gap-5 text-[14px] leading-6 text-[#555555]">
+      <h2 class="nm-label border-b border-[var(--nm-border)] pb-3 !text-[var(--nm-marine)]">Informasi Produk</h2>
+      <div class="mt-4 grid gap-5 text-[14px] leading-6 text-[var(--nm-muted)]">
         <p>{product.description}</p>
-
-        <div class="grid gap-3 border-fade-b pb-4">
-          <div class="flex items-start gap-3">
-            <Icon
-              name="lucide:pencil"
-              class="mt-0.5 h-[18px] w-[18px] shrink-0"
-              style={`color: ${productAccent}`}
-              aria-hidden="true"
-            />
-            <div>
-              <p class="font-semibold text-[#111111]">Kategori</p>
-              <p>{product.category}</p>
-            </div>
-          </div>
-          <div class="flex items-start gap-3">
-            <Icon
-              name="lucide:package"
-              class="mt-0.5 h-[18px] w-[18px] shrink-0"
-              style={`color: ${productAccent}`}
-              aria-hidden="true"
-            />
-            <div>
-              <p class="font-semibold text-[#111111]">Fokus Produk</p>
-              <p>{product.tag}</p>
-            </div>
-          </div>
-          <div class="flex items-start gap-3">
-            <Icon
-              name="lucide:sliders-horizontal"
-              class="mt-0.5 h-[18px] w-[18px] shrink-0"
-              style={`color: ${productAccent}`}
-              aria-hidden="true"
-            />
-            <div>
-              <p class="font-semibold text-[#111111]">Ketersediaan</p>
-              <p>Seluruh varian yang ditampilkan tersedia untuk dipesan.</p>
-            </div>
-          </div>
-        </div>
 
         {product.benefits && product.benefits.length > 0 && (
           <div class="grid gap-4 border-fade-b pb-4">
             <div class="flex items-center gap-2">
               <Icon name="lucide:check" class="h-[17px] w-[17px]" style={`color: ${productAccent}`} aria-hidden="true" />
-              <h3 class="text-[13px] font-semibold uppercase tracking-[0.08em] text-[#111111]">Manfaat Utama</h3>
+              <h3 class="nm-label !text-[var(--nm-marine)]">Manfaat Utama</h3>
             </div>
             <div class="space-y-3">
               {
                 product.benefits.map((b) => (
                   <div class="grid grid-cols-[8px_1fr] gap-3">
                     <span
-                      class="mt-3 h-px w-2 bg-[#111111]"
+                      class="mt-3 h-px w-2 bg-[var(--nm-marine)]"
                       aria-hidden="true"
                     />
                     <span class="min-w-0 leading-6">{b}</span>
@@ -332,14 +281,14 @@ const productSchemaJson = JSON.stringify(productSchema).replace(/</g, '\\u003c')
           <div class="grid gap-4 border-fade-b pb-4">
             <div class="flex items-center gap-2">
               <Icon name="lucide:plus" class="h-[17px] w-[17px]" style={`color: ${productAccent}`} aria-hidden="true" />
-              <h3 class="text-[13px] font-semibold uppercase tracking-[0.08em] text-[#111111]">Poin Penting Produk</h3>
+              <h3 class="nm-label !text-[var(--nm-marine)]">Poin Penting Produk</h3>
             </div>
             <div class="space-y-3">
               {
                 product.keyPoints.map((point) => (
                   <div class="grid grid-cols-[8px_1fr] gap-3">
                     <span
-                      class="mt-3 h-px w-2 bg-[#111111]"
+                      class="mt-3 h-px w-2 bg-[var(--nm-marine)]"
                       aria-hidden="true"
                     />
                     <span class="min-w-0 leading-6">{point}</span>
@@ -359,14 +308,14 @@ const productSchemaJson = JSON.stringify(productSchema).replace(/</g, '\\u003c')
                 style={`color: ${productAccent}`}
                 aria-hidden="true"
               />
-              <h3 class="text-[13px] font-semibold uppercase tracking-[0.08em] text-[#111111]">Ideal Untuk</h3>
+              <h3 class="nm-label !text-[var(--nm-marine)]">Ideal Untuk</h3>
             </div>
             <div class="flex flex-wrap gap-x-3 gap-y-2">
               {
                 product.idealFor.map((item) => (
-                  <span class="inline-flex items-center gap-2 text-[12px] font-normal text-[#555555]">
+                  <span class="inline-flex items-center gap-2 text-[12px] font-normal text-[var(--nm-muted)]">
                     <span
-                      class="h-px w-2 bg-[#111111]"
+                      class="h-px w-2 bg-[var(--nm-marine)]"
                       aria-hidden="true"
                     />
                     <span>{item}</span>
@@ -386,13 +335,13 @@ const productSchemaJson = JSON.stringify(productSchema).replace(/</g, '\\u003c')
           <div class="border-fade-b pb-3.5">
             <div class="flex items-center gap-2">
               <RatingStars max={1} starClass="h-[17px] w-[17px]" label="Penilaian produk" />
-              <h2 class="text-[12px] font-semibold uppercase tracking-[0.12em] text-[#111111]">Ulasan Produk</h2>
+              <h2 class="text-[12px] font-semibold uppercase tracking-[0.12em] text-[var(--nm-marine)]">Ulasan Produk</h2>
             </div>
 
             {hasAggregateRating && (
-              <div class="mt-2.5 flex items-center gap-1.5 border-fade-t pt-2.5 text-[12px] font-bold text-[#111111]">
-                <span class="text-[#111111]">★ {formattedRating} / 5.0</span>
-                <span class="text-[#555555]">• {reviewCount} ulasan</span>
+              <div class="mt-2.5 flex items-center gap-1.5 border-fade-t pt-2.5 text-[12px] font-bold text-[var(--nm-marine)]">
+                <span class="text-[var(--nm-marine)]">★ {formattedRating} / 5.0</span>
+                <span class="text-[var(--nm-muted)]">• {reviewCount} ulasan</span>
               </div>
             )}
           </div>
@@ -403,25 +352,25 @@ const productSchemaJson = JSON.stringify(productSchema).replace(/</g, '\\u003c')
                 <div class="border-fade-b pb-4 last:border-0 last:pb-0">
                   <div class="flex items-center gap-3">
                     <div 
-                      class="flex h-10 w-10 shrink-0 items-center justify-center border border-[#111111] bg-[#111111] text-[13px] font-bold uppercase text-white"
+                      class="flex h-10 w-10 shrink-0 items-center justify-center border border-[var(--nm-marine)] bg-[var(--nm-marine)] text-[13px] font-bold uppercase text-white"
                       style="font-family: 'Cinzel', serif;"
                     >
                       {review.name.charAt(0)}
                     </div>
                     <div class="min-w-0 flex-1">
                       <div class="flex items-center gap-1.5">
-                        <p class="text-[12px] font-bold text-[#111111]">{review.name}</p>
+                        <p class="text-[12px] font-bold text-[var(--nm-marine)]">{review.name}</p>
                         {review.verified && (
-                          <span class="inline-flex items-center gap-0.5 border border-[#111111] bg-white px-1.5 py-0.5 text-[8px] font-semibold uppercase tracking-wider text-[#767676]">
+                          <span class="inline-flex items-center gap-0.5 border border-[var(--nm-marine)] bg-white px-1.5 py-0.5 text-[8px] font-semibold uppercase tracking-wider text-[var(--nm-muted)]">
                             Terverifikasi
                           </span>
                         )}
                       </div>
-                      <p class="mt-0.5 flex items-center gap-2 text-[11px] text-[#767676]"><span>{review.location}</span><span class="h-3 w-px bg-[#E5E5E5]" aria-hidden="true" /><span>{review.date}</span></p>
+                      <p class="mt-0.5 flex items-center gap-2 text-[11px] text-[var(--nm-muted)]"><span>{review.location}</span><span class="h-3 w-px bg-[var(--nm-border)]" aria-hidden="true" /><span>{review.date}</span></p>
                     </div>
                   </div>
                   <RatingStars rating={review.rating} class="mt-2" starClass="h-2.5 w-2.5" />
-                  <p class="mt-1.5 text-[13px] leading-6 text-[#555555]">"{review.comment}"</p>
+                  <p class="mt-1.5 text-[13px] leading-6 text-[var(--nm-muted)]">"{review.comment}"</p>
                 </div>
               ))}
             </div>
@@ -432,18 +381,18 @@ const productSchemaJson = JSON.stringify(productSchema).replace(/</g, '\\u003c')
 
     <!-- Shipping Information Notice Card -->
     <section class="border-fade-b bg-white px-5 py-5">
-      <div class="flex items-start gap-3.5 text-[12px] leading-relaxed text-[#555555]">
+      <div class="flex items-start gap-3.5 text-[12px] leading-relaxed text-[var(--nm-muted)]">
         <Icon name="lucide:truck" class="mt-0.5 h-5 w-5 shrink-0" style={`color: ${productAccent}`} aria-hidden="true" />
         <div>
-          <p class="font-bold uppercase tracking-wider text-[#111111]">Informasi Pengiriman</p>
-          <p class="mt-1 leading-5 text-[#555555]">Biaya pengiriman dihitung otomatis di halaman checkout setelah alamat pengiriman dilengkapi.</p>
+          <p class="font-bold uppercase tracking-wider text-[var(--nm-marine)]">Informasi Pengiriman</p>
+          <p class="mt-1 leading-5 text-[var(--nm-muted)]">Biaya pengiriman dihitung otomatis di halaman checkout setelah alamat pengiriman dilengkapi.</p>
         </div>
       </div>
     </section>
 
     <!-- Direct Order Form Container -->
     <section id="form-pemesanan" class="mt-4 scroll-mt-6 overflow-hidden rounded-none bg-white p-2">
-      <GeoIpResolvedForm mode={formContext.mode} province={formContext.province} productSlug={product.slug} embedded={true} />
+      <GeoIpResolvedForm mode={formContext.mode} province={formContext.province} productSlug={product.slug} embedded={true} selectedVariantId={cheapestVariant?.id} />
     </section>
 
     <SocialProofToast
@@ -456,12 +405,12 @@ const productSchemaJson = JSON.stringify(productSchema).replace(/</g, '\\u003c')
          already on screen) -->
     <div id="sticky-purchase-bar" class="fixed inset-x-0 bottom-0 z-40 mx-auto flex w-full max-w-[480px] items-center justify-between border-fade-t bg-white/95 px-5 py-3 shadow-[0_-8px_24px_rgba(17,17,17,0.08)] backdrop-blur-md transition-all duration-300 lg:hidden" style="transform: translateY(100%); opacity: 0; pointer-events: none;">
       <div>
-        <p class="text-[9px] font-semibold uppercase tracking-[0.12em] text-[#555555]">Harga Promo</p>
-        <p class="text-base font-bold text-[#111111]">Rp{Math.round(displayPrice).toLocaleString('id-ID')}</p>
+        <p class="text-[9px] font-semibold uppercase tracking-[0.12em] text-[var(--nm-muted)]">Harga Promo</p>
+        <p data-pdp-sticky-price class="text-base font-bold text-[var(--nm-marine)]">Rp{Math.round(displayPrice).toLocaleString('id-ID')}</p>
       </div>
       <a
         href="#form-pemesanan"
-        class="inline-flex min-h-11 items-center justify-center rounded-full border border-[#2c6ecb] bg-[#2c6ecb] px-6 text-[10px] font-semibold uppercase tracking-[0.1em] text-white transition-colors hover:bg-[#1f5199] hover:border-[#1f5199] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2c6ecb] active:scale-[0.98]"
+        class="nm-btn active:scale-[0.98]"
       >
         Pesan Sekarang
       </a>
@@ -469,6 +418,45 @@ const productSchemaJson = JSON.stringify(productSchema).replace(/</g, '\\u003c')
   </main>
 
   <script>
+    // Install-owned (DESIGN.md C6): the size pills and the order form's variant
+    // radios are one choice. A pill checks the form's radio (the form's own
+    // listeners then reprice the summary); either side updates the headline.
+    function initVariantPills() {
+      const pills = [...document.querySelectorAll<HTMLButtonElement>('[data-variant-pick]')];
+      if (pills.length === 0) return;
+      const price = document.querySelector('[data-pdp-price]');
+      const compare = document.querySelector<HTMLElement>('[data-pdp-compare]');
+      const save = document.querySelector<HTMLElement>('[data-pdp-save]');
+      const sticky = document.querySelector('[data-pdp-sticky-price]');
+      const idr = (n: number) => `Rp${Math.round(n).toLocaleString('id-ID')}`;
+      const show = (id: string) => {
+        const pill = pills.find((p) => p.dataset.variantPick === id);
+        if (!pill) return;
+        const p = Number(pill.dataset.price);
+        const c = Number(pill.dataset.compare);
+        pills.forEach((x) => x.setAttribute('aria-pressed', String(x === pill)));
+        if (price) price.textContent = idr(p);
+        if (sticky) sticky.textContent = idr(p);
+        const discounted = c > p;
+        if (compare) { compare.hidden = !discounted; compare.textContent = idr(c); }
+        if (save) { save.hidden = !discounted; save.textContent = `Hemat ${Math.round((1 - p / c) * 100)}%`; }
+      };
+      pills.forEach((pill) => pill.addEventListener('click', () => {
+        const id = pill.dataset.variantPick ?? '';
+        const radio = document.querySelector<HTMLInputElement>(`input[name="variant"][value="${CSS.escape(id)}"]`);
+        if (radio && !radio.checked) {
+          radio.checked = true;
+          radio.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+        show(id);
+      }));
+      document.addEventListener('change', (event) => {
+        const target = event.target as HTMLInputElement | null;
+        if (target?.name === 'variant' && target.checked) show(target.value);
+      });
+    }
+    initVariantPills();
+
     function initStickyBarObserver() {
       const stickyBar = document.getElementById('sticky-purchase-bar');
       const orderForm = document.getElementById('form-pemesanan');

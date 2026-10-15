@@ -62,8 +62,8 @@ const { content, products, heroSlides, sections } = Astro.props;
     [...heroDots.children].forEach((dot, itemIndex) => {
       dot.className =
         itemIndex === index
-          ? 'h-11 w-7 border-b-2 border-white bg-transparent transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white'
-          : 'h-11 w-4 border-b border-white/55 bg-transparent transition-colors hover:border-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white';
+          ? 'h-11 w-7 border-b-2 border-[#002b49] bg-transparent transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#269ba8]'
+          : 'h-11 w-4 border-b border-[#5a6e7f]/50 bg-transparent transition-colors hover:border-[#002b49] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#269ba8]';
     });
   };
 

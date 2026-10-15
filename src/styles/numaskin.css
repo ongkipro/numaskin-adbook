@@ -1,0 +1,143 @@
+/*
+ * Numa Skin storefront skin — install-owned (this repository is the
+ * numaskin-adbook install of AdsBookCMS). Matches the merchant's own store,
+ * numaskin.id; the decisions and references are in DESIGN.md.
+ *
+ * DM Serif Display and JetBrains Mono are self-hosted latin subsets
+ * (OFL-1.1, @fontsource/* 5.2.8) rather than dependencies, so a product merge
+ * never fights this install over package-lock.json. Inter is the product's.
+ */
+@font-face {
+  font-family: 'DM Serif Display';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url('/fonts/dm-serif-display-latin-400-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url('/fonts/jetbrains-mono-latin-500-normal.woff2') format('woff2');
+}
+
+:root {
+  --nm-marine: #002b49;
+  --nm-marine-hover: #081b2b;
+  --nm-teal: #0b6e7d;
+  --nm-cyan: #269ba8;
+  --nm-surface: #f4f9fa;
+  --nm-surface-2: #ebf5f8;
+  --nm-border: #e2edf0;
+  --nm-muted: #5a6e7f;
+  --text-main: var(--nm-marine);
+  --focus-ring: var(--nm-cyan);
+}
+
+/* Tailwind's `font-sans` resolves to a system stack the product declares; the
+   compact home sets it on <main>. numaskin.id is Inter throughout, and Inter
+   is already loaded by foundation.css. Doubled :root out-ranks the theme's
+   single :root regardless of order. */
+:root:root {
+  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  /* Behind the 480 px column on a wide screen: numaskin.id's aqua surface,
+     not storefront.css's white, so the column sits on the brand. */
+  --bg-canvas: #f4f9fa;
+  --focus-ring-offset: #f4f9fa;
+}
+
+/* Serif display: section and product titles. */
+.nm-serif {
+  font-family: 'DM Serif Display', Georgia, 'Times New Roman', serif;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+/* Small tracked label: category, eyebrow, discount. One rule, so the whole
+   storefront has one monospace treatment. */
+.nm-label {
+  font-family: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  font-weight: 500;
+  font-size: 10px;
+  line-height: 1.4;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--nm-teal);
+}
+
+/* Short cyan rule under a centred section title (numaskin.id's divider). */
+.nm-rule {
+  display: block;
+  width: 44px;
+  height: 3px;
+  margin-inline: auto;
+  border-radius: 9999px;
+  background: var(--nm-cyan);
+}
+
+.nm-pill {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  background: var(--nm-surface-2);
+  padding: 3px 9px;
+}
+
+.nm-btn {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 9999px;
+  background: var(--nm-marine);
+  padding: 10px 24px;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: background-color 0.15s ease;
+}
+.nm-btn:hover { background: var(--nm-marine-hover); }
+.nm-btn:focus-visible { outline: 2px solid var(--nm-cyan); outline-offset: 2px; }
+
+/* Checkout form: the product's single interactive accent becomes the brand
+   marine (selected variant, focus, primary button). Same variables, higher
+   specificity than form-hybrid.css's attribute selectors, so load order does
+   not matter. Behaviour is untouched. */
+html [data-hybrid-form-root],
+html [data-middle-form-root] {
+  --sf-accent: #002b49;
+  --sf-accent-strong: #081b2b;
+  --sf-accent-soft: #ebf5f8;
+  --sf-accent-ring: rgba(38, 155, 168, 0.35);
+  --sf-surface-alt: #f4f9fa;
+  --sf-line: #e2edf0;
+  --sf-field-empty: #f4f9fa;
+  --sf-field-border: #cfe0e6;
+  color: #002b49;
+}
+
+/* form-hybrid.css writes its ink as #111111 per selector; the same selectors,
+   scoped under the roots, carry the brand marine instead. Colour only. */
+html :is([data-hybrid-form-root], [data-middle-form-root]) :is(
+  .section-title, .variant-label, .variant-price, .form-field textarea,
+  #shipping-address-line, .district-item, .district-item strong,
+  .payment-option-label, .summary-card > .summary-row strong, .total-box p
+) {
+  color: #002b49;
+}
+html :is([data-hybrid-form-root], [data-middle-form-root]) .summary-variant {
+  color: #002b49 !important;
+}
+html :is([data-hybrid-form-root], [data-middle-form-root]) .section-title::before {
+  background: #269ba8;
+}
+
+/* Compare-at price in mono, as on numaskin.id's cards. */
+.nm-strike {
+  font-family: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  font-weight: 500;
+}

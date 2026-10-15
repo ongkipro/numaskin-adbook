@@ -1,6 +1,6 @@
 ---
 import { cn } from '../../../lib/cn';
-import { badgeVariants, introSectionClass, textVariants } from '../../../lib/ui-variants';
+import { introSectionClass } from '../../../lib/ui-variants';
 import Breadcrumb from './Breadcrumb.astro';
 
 interface BreadcrumbItem {
@@ -22,12 +22,12 @@ const rail = 'max-w-[480px]';
 {breadcrumbs.length > 0 && <Breadcrumb items={breadcrumbs} />}
 <section class={introSectionClass}>
   <div class={cn('mx-auto', rail)}>
-    <span class={badgeVariants()}>{badge}</span>
-    <h1
-      class={cn('mt-3 text-[28px] font-bold leading-[1.18] tracking-[-0.02em]', textVariants({ tone: 'heading' }))}
-    >
+    {/* Install-owned intro (DESIGN.md C3): mono eyebrow, serif title. */}
+    <span class="nm-label">{badge}</span>
+    <h1 class="nm-serif mt-2 text-[30px] leading-[1.15] text-[var(--nm-marine)] [text-wrap:balance]">
       {title}
     </h1>
-    <p class={cn('mt-3 max-w-[32rem] text-sm leading-6', textVariants({ tone: 'soft' }))}>{description}</p>
+    <span class="nm-rule mt-3 !mx-0" aria-hidden="true"></span>
+    <p class="mt-3 max-w-[32rem] text-sm leading-6 text-[var(--nm-muted)]">{description}</p>
   </div>
 </section>

@@ -1,4 +1,7 @@
 ---
+// Install-owned skin (numaskin-adbook, DESIGN.md): marine on the aqua surface.
+import SiteBrand from './SiteBrand.astro';
+
 const footerLegal = [
   // Four policies plus one way into the catalogue. Meta and Google both want a
   // reachable contact, privacy policy, terms, and a shipping/returns policy
@@ -15,18 +18,19 @@ const footerLegal = [
 ];
 ---
 
-<footer class="border-fade-t bg-white px-5 py-12 text-[#111111]">
+<footer class="border-t border-[var(--nm-border)] bg-[var(--nm-surface)] px-5 py-12 text-[var(--nm-marine)]">
   <div class="mx-auto max-w-[480px] space-y-6 text-center">
+    <SiteBrand href="/" />
     <!-- Policy Links -->
     <nav
       aria-label="Tautan footer"
-      class="flex flex-wrap items-center justify-center gap-x-5 gap-y-1 text-[10px] font-semibold uppercase tracking-widest text-[#555555]"
+      class="flex flex-wrap items-center justify-center gap-x-5 gap-y-1 text-[10px] font-semibold uppercase tracking-widest text-[var(--nm-muted)]"
     >
       {
         footerLegal.map((item) => (
           <a
             href={item.href}
-            class="inline-flex min-h-6 items-center underline-offset-4 transition-colors hover:text-[#111111] hover:underline focus-visible:text-[#111111] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111111] focus-visible:ring-offset-2"
+            class="inline-flex min-h-6 items-center underline-offset-4 transition-colors hover:text-[var(--nm-marine)] hover:underline focus-visible:text-[var(--nm-marine)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--nm-cyan)] focus-visible:ring-offset-2"
           >
             {item.label}
           </a>
@@ -35,7 +39,7 @@ const footerLegal = [
     </nav>
 
     <!-- Copyright -->
-    <p class="text-[10px] uppercase tracking-wider text-[#767676]">
+    <p class="text-[10px] uppercase tracking-wider text-[var(--nm-muted)]">
       © {new Date().getFullYear()} {Astro.locals.tenant.name}. All Rights Reserved.
     </p>
   </div>

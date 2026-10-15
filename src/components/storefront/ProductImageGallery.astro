@@ -33,7 +33,7 @@ const gallery = images.filter((image) => image.trim());
 {gallery.length > 0 && (
   <div class="w-full" data-gallery>
     {gallery.map((imgUrl, idx) => (
-      <div class="relative w-full bg-[#F5F5F5]">
+      <div class="relative w-full bg-[var(--nm-surface)]">
         <img
           src={imgUrl}
           alt={idx === 0 ? `Foto ${productName}` : `${productName} foto ${idx + 1}`}
@@ -48,13 +48,13 @@ const gallery = images.filter((image) => image.trim());
         {idx === 0 && (badgeText || discountPercentage > 0) && (
           <div class="pointer-events-none absolute left-3 top-3 z-10 flex flex-wrap items-center gap-1.5">
             {badgeText && (
-              <span class="bg-[#111111] px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-white">
+              <span class="nm-label nm-pill !bg-white/90">
                 {badgeText}
               </span>
             )}
             {discountPercentage > 0 && (
-              <span class="bg-[#111111] px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-white">
-                -{discountPercentage}%
+              <span class="nm-label nm-pill !bg-[var(--nm-marine)] !text-white">
+                Hemat {discountPercentage}%
               </span>
             )}
           </div>
