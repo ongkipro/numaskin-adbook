@@ -1,210 +1,280 @@
 # Numa Skin storefront — design direction
 
 Install-owned. The product's system is `DESIGN-SYSTEM.md`; this file records
-only how this install (`page.numaskin.id`) skins it to match the merchant's
-own Shopify Hydrogen store, `numaskin.id`.
+how this install (`page.numaskin.id`) skins and restructures the public
+storefront to match the merchant's own Shopify Hydrogen store, `numaskin.id`.
 
 ## Brief
 
-- **Audience:** Indonesian skincare buyers arriving from ads or search on a
-  phone, often after seeing numaskin.id or its marketplace stores.
-- **Task:** recognise the brand they already know, find a product or a bundle,
-  compare price and discount, and reach the COD/online checkout.
-- **Constraint (owner, 2026-10-15):** keep the compact model — the 480 px
-  mobile column, the compact-market template, its sections and order. Only the
-  skin changes. Checkout behaviour, tracking, URLs, and the form are untouched.
-- **Direction:** the numaskin.id visual language — marine ink, aqua-tinted
-  surfaces, a serif display for headings, small tracked monospace labels,
-  centred product cards — inside the existing compact composition.
+- **Audience:** Indonesian skincare buyers arriving on a phone from ads,
+  search or the merchant's marketplace stores, often after seeing numaskin.id.
+- **Jobs:** recognise the brand; decide between a single product and a bundle;
+  find a product by type or name; compare price and saving; choose a size;
+  reach the COD order form.
+- **Constraints:** the compact model stays — the 480 px column and its order
+  form (owner, 2026-10-15). The owner then authorised a full UX rebuild of the
+  public storefront only (same day). Checkout behaviour, pricing authority,
+  tracking, URLs and the admin are untouched.
 
 ## Reference evidence
 
 Captured with `ui-ref.mjs` at 390 and 1440 px; the 390 px screenshots were
 opened and read.
 
-- `design/refs/numaskin-home/` — merchant home. Centred header wordmark
-  `NUMA·SKIN` (Inter, tracked 0.16em) over katakana `ヌマスキン` in teal;
-  aqua water imagery; mono pill eyebrow; serif uppercase section titles
-  ("KOLEKSI UNGGULAN") with a short cyan rule; two-column product grid with a
-  pale aqua image well, a teal mono category line, an uppercase centred name,
-  marine price and a struck-through grey compare price.
-- `design/refs/numaskin-pdp/` — merchant product page. Serif product title,
-  large marine price, a mono "HEMAT 37%" pill, variant choices as pills (selected
-  = filled marine), marine full-width buy button, accordion details.
-- `design/refs/numaskin-collection/` — merchant collection grid, same card.
-- `design/refs/current-home/`, `design/refs/current-produk/` — this store
-  before the change: monochrome black, Cinzel-style monogram wordmark,
-  left-ruled heading, black square discount badges, left-aligned cards.
+- `design/refs/numaskin-home/` — merchant home: centred `NUMA·SKIN` + katakana
+  wordmark; water-splash hero with serif headline; serif uppercase section
+  titles over a short cyan rule; two-column cards (aqua well, teal mono
+  category, uppercase centred name, marine price, grey strike); "THE 4-STEP
+  RITUAL" with numbered steps; bundle cards with an inline "HEMAT" pill.
+- `design/refs/numaskin-pdp/` — merchant product page: serif title, large marine
+  price + "HEMAT" pill, size pills (selected = filled marine), full-width buy
+  button directly under the sizes, accordion details.
+- `design/refs/numaskin-collection/` — merchant collection grid.
+- `design/refs/current-home/`, `design/refs/current-produk/` — this store before
+  any change: monochrome, Cinzel monogram, left-ruled heading, black badges.
 
-Transfer rationale: the buyer should feel they are on the same brand as
-numaskin.id. Brand recognition comes from colour, type, wordmark, and card
-treatment — all transferable without changing the compact layout.
+Transfer rationale: the buyer should feel on the same brand as numaskin.id
+(colour, type, wordmark, card, ritual), inside the compact column.
 
-## Decisions
+## Tokens and type
 
-Tokens (from numaskin.id's own CSS custom properties, `app-*.css`):
+From numaskin.id's own CSS custom properties (`app-*.css`):
 
 | Role | Value | Use |
 | --- | --- | --- |
-| ink / primary | `#002B49` marine | headings, prices, primary buttons, header text |
+| ink / primary | `#002B49` marine | headings, prices, primary buttons, top band |
 | primary hover | `#081B2B` | button hover |
 | accent text | `#0B6E7D` deep teal | labels, links (5.9:1 on white) |
-| accent decorative | `#269BA8` cyan | rules, dots, focus ring only — 3.2:1, never body text |
-| surface | `#F4F9FA` / `#EBF5F8` | image wells, section bands |
-| border | `#E2EDF0` | card and input borders |
-| muted text | `#5A6E7F` | secondary copy (5.4:1) |
+| accent decorative | `#269BA8` cyan | rules, dots, focus ring only (3.3:1, non-text) |
+| surface | `#F4F9FA` / `#EBF5F8` | image wells, section bands, page canvas |
+| border | `#E2EDF0` | dividers, inputs |
+| muted text | `#5A6E7F` | secondary copy (≥4.97:1) |
 
-Type: Inter (already shipped by the product, 400/600/700 only) for body;
-**DM Serif Display 400** for h1/h2 and section titles; **JetBrains Mono 500**
-for small tracked labels (category, eyebrow, discount). Both added fonts are
-OFL, self-hosted latin subsets from `@fontsource/*@5.2.8` in `public/fonts/`
-(no dependency, so a product merge never fights over `package-lock.json`).
-Katakana falls back to the system CJK face, as on numaskin.id.
+Inter (the product's, 400/600/700) for body; **DM Serif Display 400** for
+h1/h2; **JetBrains Mono 500** for small tracked labels. Both added fonts are
+OFL latin subsets from `@fontsource/*@5.2.8`, self-hosted in `public/fonts/`.
+Prices and struck prices are Inter (mono's dotted zero misread 99.000 as
+99.888). Katakana falls back to the system CJK face, as on numaskin.id.
 
-Composition contract:
+## UX structure (the rebuild)
 
-- C1 Keep the 480 px column, section order, hero slider, search, load-more.
-- C2 Header: centred `NUMA·SKIN` wordmark with katakana subline replaces the
-  monogram; the official-store strip stays, recoloured marine.
-- C3 Section headings: mono teal eyebrow → serif uppercase marine title →
-  short cyan rule, centred (numaskin.id's "KOLEKSI UNGGULAN" pattern) — not
-  the black left rule.
-- C4 Product card: pale aqua image well, rounded 12 px; mono teal category;
-  uppercase centred marine name; marine price + grey strike; discount as a
-  mono pill "HEMAT n%" in place of the black "-n%" square.
-- C5 Primary actions marine, rounded; focus ring cyan.
-- C6 Product page: serif title, marine price, "HEMAT" pill, variant pills.
+Journey: entry (ad / search / home) → find (category, search, ritual) →
+evaluate (card: type, size, price, saving) → PDP (size pills, one price) →
+"Pesan Sekarang" → order form → thanks. Every filter and search is a URL.
 
-Do not substitute: generic black/white monochrome, Cinzel monogram, square
-black badges, Tailwind blue focus ring.
+**Home** (`templates/CompactMarketHome.astro`, install-owned):
 
-## Not changed / owner list
+1. Marine top band "Official Store Numa Skin" (no verification tick: nothing
+   on the page backs a platform check); centred wordmark.
+2. Brand hero (`numaskin/NumaHero.astro`): the merchant's water-splash poster
+   cropped to the column, serif h1 "Kemurnian Laut Dalam untuk Kulit Awet
+   Muda", one-line positioning, "Lihat Produk" and "Paket Hemat" jumps.
+   Operator-published slides, when they exist, replace it with the slider.
+3. Search (GET `/produk?q=`) and category chips (links to `/produk?kategori=`),
+   in the merchant's routine order (`numaskin/catalog-order.ts`).
+4. Ritual (`numaskin/RitualSection.astro`): four numbered steps shown two by
+   two (all visible at once, as numaskin.id does), one product per step from
+   the live catalogue — a real sequence, hence the numbers.
+   Each step shows the shared card without its type line (the step names the
+   role). It ends with the merchant's 4-in-1 bundle (Paket Complete Routine
+   4-in-1 150ml, the bundle numaskin.id's ritual offers), labelled "Paket hemat
+   4-in-1" — not as the four steps — with its contents read from its own
+   description — numaskin.id's
+   ritual bar lists a different set for it than its product page, so the
+   product page wins. Shown only while D1 carries it.
+5. Produk Satuan grid, then Paket Hemat: the six cheapest bundles with an
+   image not already shown and not held, and a link to all 42 on
+   `/produk?kategori=Paket Hemat`. Held images (and every bundle sharing
+   them): Twin Pack (a gift the store does not give), and ten that print
+   outcome promises ("Dalam 14 Hari Flek Mulai Hilang", "Garis halus
+   tersamarkan", "sejak pemakaian pertama", "efek instan", "menyamarkan flek
+   hitam", "kulit tampak lebih cerah"). Nine clean images remain.
+6. Landing pages: a small label and one row while there is one page, the full
+   section heading only for several; footer.
 
-- "Paket Daily Care Adenosine" and "Paket Daily Glow Duo" use the same
-  collage image; supply a distinct packshot for each.
-- Paket Glow Up's "Poin Penting" (copied from numaskin.id) describes a full
-  routine including products outside the 3-item bundle.
+**Catalogue** `/produk`: server-side `?kategori=` and `?q=` (name, type, tags,
+description), result count in a status line, empty state with a reset link,
+bundles sharing one collage kept apart (`spreadSameImages`, tested), ten
+cards then "Lihat Produk Lainnya" (reveals in place and moves focus; links
+to `?semua=1` without script). Canonical stays `/produk`; search pages are
+`noindex`.
 
-- Hero slides, product photos and copy come from the catalogue as imported.
-- numaskin.id shows trust claims ("Sertifikasi Halal", "Uji Dermatologi");
-  they are not added here — only BPOM numbers already on product pages are
-  shown. If the owner wants them, supply the certificate references.
+**Card** (`shared/ProductListItem.astro` + `numaskin/ProductGrid.astro`): four
+subgrid rows — image, type · size, full name, price — so each row of cards
+shares baselines without reserving empty lines (rails use the same card in a
+horizontal subgrid). Names are not clamped: the
+distinguishing word ("Moisturizer", "PA++++", "(150ml)") is usually last, and
+a truncated name was a round-1 review finding; subgrid removes the dead band
+that full names used to cost. The type line wraps rather than truncating. A
+bundle's line says what it is ("SKINCARE SET · 150ML"), not the section it
+sits in, and its contents follow the name ("Facial Wash + Toner"), read from
+the bundle's description (`bundleContents`, tested). The saving pill appears only on bundle cards, in the price block; in
+a 170 px column it wraps under the two prices.
+
+**PDP**: serif title; one marine price with "HEMAT" pill; size pills in price
+order, synchronised both ways with the form's radios; "Pesan Sekarang"
+directly under the sizes with the COD rule stated as it is ("Bisa bayar di
+tempat (COD) untuk sebagian besar wilayah" — COD is disabled for some
+provinces, online payment is not configured); description; Manfaat and Bahan
+aktif / Urutan pemakaian as native `<details>`; "Cocok untuk" chips; skinned
+order form; a rail of single products ("Lengkapi rutinitas", or "Beli satuan"
+on a bundle page). The page makes no shipping-cost statement of its own: the
+form that renders (full quote, or confirmed by CS, by province) states its
+rule, and the product's fixed "ongkir dihitung otomatis" card was removed
+because it was false for the CS-confirmed form.
+
+States covered: empty catalogue, no search match (reset), filtered,
+show-all, no script (links), operator slides vs brand hero, single vs
+multi-size product, bundle vs single.
+
+Do not substitute: monochrome black, Cinzel monogram, square black badges,
+Tailwind blue focus ring, a card grid that reserves blank lines.
+
+## Owner list
+
+- "Paket Twin Pack Toner" image (from numaskin.id) advertises "Free Ice Water
+  Globe", which this store does not offer — replace the image or add the gift.
+- "Paket Daily Care Adenosine" and "Paket Daily Glow Duo" share one collage;
+  several bundle images are infographics rather than packshots.
+- Paket Glow Up's "Urutan pemakaian" (from numaskin.id) names products outside
+  the bundle.
+- 26 of the 42 bundles use one of only four images (byte-identical files from
+  numaskin.id): e.g. Daily Care / Daily Glow / Clean & Glow share a collage;
+  Hydra Glow / Youth Glow / Luminous share the "Why PDRN" infographic.
+  Identical files now point at one URL in D1 (cache, and so the home preview
+  can show distinct images); supply a packshot per bundle.
+- Twin Pack: compare-at Rp529.000 against Rp151.600 shows "HEMAT 71%"; the
+  single 150 ml toner's compare-at is Rp239.000, so verify the figure.
+- Six bundle images print outcome promises or a gift (held from the home
+  preview, still on /produk): Twin Pack, Adenosine & Toner 150ml, Duo Toner,
+  Toner 50ml & Gloss Gel, Toner 150ml & Gloss Gel, and the "Why PDRN"
+  infographic (Youth Glow and the bundles sharing it).
+- numaskin.id's ritual bar says the 4-in-1 holds Facial Wash, Toner, NAD+
+  Serum and Moisturizer; its product page says Toner, Adenosine, Sunscreen and
+  NAD+ Serum. Confirm which is true.
+- Edited merchant copy in published content (all 42 bundles): removed the
+  "Nilai Lebih Hemat" benefit (sales copy) and the outcome clause "untuk hasil
+  yang lebih cepat dan optimal" (now "dalam satu rutinitas").
+- Trust claims on numaskin.id (Halal, Uji Dermatologi) are not shown; supply
+  certificate references to add them.
 
 ## Render critique
 
 Author: Claude Code (claude-opus-5-5), the builder.
 
-Rendered locally (`wrangler dev --local`, a copy of the live D1 and R2) after
-the refinement pass. Screenshots, opened and read:
+History: the skin went through five independent review rounds earlier the
+same day (log archived as `design/review-rounds-2026-10-15-skin.log`); their
+findings are folded into the decisions above. This critique covers the UX
+rebuild, a new review cycle.
 
-- `design/renders/final-home-390.png`, `design/renders/final-home-1440.png`
-- `design/renders/final-produk-390.png`, `design/renders/final-produk-1440.png`
-- `design/renders/final-pdp-390.png`, `design/renders/final-pdp-1440.png`
+Rendered locally (`wrangler dev --local`, a copy of the live D1 and R2).
+Screenshots, opened and read:
 
-Macro pass (renders since replaced): composition held — header wordmark,
-centred serif section titles, aqua card wells, marine buttons and footer all
-read as numaskin.id inside the unchanged compact column. Two findings, fixed:
+- `design/renders/ux-home-390.png`, `design/renders/ux-home-1440.png`
+- `design/renders/ux-produk-390.png`, `design/renders/ux-produk-1440.png`
+- `design/renders/ux-pdp-390.png`, `design/renders/ux-pdp-1440.png`
 
-1. Card and body text rendered in the system stack, not Inter: Tailwind's
-   `font-sans` resolves to the product's system list. `--font-sans` now names
-   Inter (`numaskin.css`). Verified by computed style on the card `h2`.
-2. On a wide screen the column sat on plain white, so the brand stopped at
-   the column edge. `--bg-canvas` is now the aqua surface `#F4F9FA`.
+Macro pass findings, fixed before these renders: category chips wrapped to two
+lines ("Facial / Cleanser") → nowrap in a scroll row; ritual step labels
+wrapped → shortened to "1 · Bersihkan"; white gap above the PDP footer → the
+page base is the aqua surface; the checkout's process row was grey → teal mono.
 
-Independent review round 1 (REVISE) — findings and what changed:
+Review round 1 of the rebuild (REVISE) — findings and changes:
 
-1. Hero caption over the slide's own artwork text → the caption now sits on
-   white under the slide; dots are marine on white.
-2. Card names bold and truncated ("CALMING BARRIER GLOSS GEL…") → regular
-   weight, tracked, up to three lines; full names now render.
-3. "HEMAT" in two treatments, on the image → one mono pill under the price on
-   cards and beside the price on the PDP; removed from images.
-4. PDP showed Rp227.000 while the form pre-selected Rp257.000 → the form now
-   starts on the variant the headline shows (`selectedVariantId` = cheapest).
-5. C6 not met (variant list + radios) → the list is replaced by size pills
-   under the price (selected = filled marine). Pills and the form's radios are
-   one choice, synchronised both ways. The form keeps its radio block: it is
-   the product's checkout control the order is submitted from (intended
-   deviation from the reference, which has no inline form).
-6. Mixed label systems and filler rows → all PDP section labels use the mono
-   label; the Kategori / Fokus Produk / Ketersediaan rows are removed.
-7. Checkout unskinned → form ink is marine, section bullets cyan, empty fields
-   aqua with an aqua border, totals marine; sticky "Pesan Sekarang" is marine.
-   My round-1 critique claimed C6 and the checkout skin before they existed;
-   that was wrong.
+- Three contradictory shipping statements on the PDP (one false) → the PDP's
+  own claims are removed; the rendered form states its rule.
+- Ritual and related rows were a second and third card style (left-aligned,
+  clamped names) → both are `ProductRail`, the shared card in a horizontal
+  subgrid; prices align across each rail.
+- "Koleksi unggulan" over all seven products → "7 produk · rangkaian lengkap".
+- "PAKET HEMAT" on every bundle card repeated the section title → the line
+  shows "SKINCARE SET · size".
+- A full section heading framing one landing link → a small label and the row.
+- `/produk` load-more touched the footer rule → bottom padding restored.
+- The ritual had no route to a bundle → it ends with the merchant's own 4-in-1
+  bundle, present in D1.
+- Found while fixing: the rail's sr-only "Harga normal" text escaped the
+  scroller and widened the PDP to 897 px (absolute child of a static
+  scroller); the rail list is now `relative`. Rails also got scroll padding so
+  the first card keeps its inset after snapping.
 
-Behaviour checked in the browser (`paket-glow-up-adenosine`): initial
-headline Rp227.000 = form "Toner 50ml" = total Rp227.000; tapping the
-"Toner 150ml" pill → headline Rp257.000, form radio 150ml, total Rp257.000;
-choosing "Toner 50ml" in the form → headline and pills follow. No console
-errors.
+Review round 2 of the rebuild (REVISE) — findings and changes:
 
-Round 2 (PASS) left two minor card notes, both taken:
+- Bundle preview surfaced duplicate imagery and the false-gift image → the
+  preview skips an image already shown and holds Twin Pack; identical image
+  files were found by content hash (26 bundles on 4 images) and re-pointed to
+  one URL each so the rule can see them.
+- Ritual hid step 4 in a scroller → 2×2 grid; the bundle row lists its
+  contents; "4‑in‑1" no longer breaks.
+- Hero pushed "Paket Hemat" below the fold → the poster is cropped 5:4.
+- Verification tick removed from the top band; chips fade at the right edge.
+- Rail cards: struck price always stacked; "· size" never starts a line;
+  desktop PDP no longer keeps the mobile sticky-bar clearance.
+- PDP: the image badge repeated the breadcrumb → removed; the form section has
+  a "Form Pemesanan" title the CTA lands on; the bundle benefit "Nilai Lebih
+  Hemat — penawaran bundling…" (sales copy, not a benefit) was removed from
+  all 42 bundles' published content.
+- `/produk` intro sentence (instructions only) removed; landing row
+  description may take two lines; eyebrow is a plain count.
+- Not changed, with reason: the form keeps its own variant radios (it is the
+  product's submit control; pills and radios are synchronised); collapsing
+  them would change product checkout code.
 
-- Compare-at price is mono (`.nm-strike`), as on numaskin.id's cards.
-- The category line repeated "SKINCARE". Single products now carry the
-  merchant's own product type (Facial Cleanser, Hydrating Toner, Face Serum,
-  Day Cream, Moisturizer, Sunscreen — `products.category`, live D1), and a
-  single-size card appends its size ("FACIAL CLEANSER · 100 ML"). A size count
-  for multi-size products truncated at 390 px and was dropped; the PDP pills
-  carry it. Bundles stay "Paket Hemat".
+Review round 3 of the rebuild (REVISE) — findings and changes:
 
-Round 3 (REVISE) — findings and changes:
+- Claim-bearing bundle images on the home preview → held by image (every
+  bundle sharing a held image is held with it); chosen by inspecting a
+  contact sheet of all 20 distinct bundle images.
+- Bundle cards did not say what is inside → a contents line under the name.
+  Found while doing it: the 4-in-1 row's contents had been copied from
+  numaskin.id's ritual bar and were wrong for this product; the row now reads
+  the product's own description and no longer claims "semua langkah".
+- Ritual cards repeated the grid card → the type line is dropped (the step
+  label names the role) and prices are inline.
+- Names wrap with `pretty`, not `balance`.
+- The accordion's "untuk hasil yang lebih cepat dan optimal" (an unsourced
+  outcome claim) removed from the published content of all 42 bundles.
+- Not changed, with reason: the aqua band under the PDP rail at 390 is the
+  mobile sticky bar's clearance (`pb-20`, removed at `lg`).
 
-- "HEMAT" row under every card → the pill is now in the price row and only on
-  bundle cards (category "Paket Hemat"), as numaskin.id does; single products
-  show the struck price alone. In a 170 px column at 390 the pill wraps under
-  the prices inside that row rather than adding a separate row on every card.
-- Gallery badge "SKINCARE SET" vs card "PAKET HEMAT" → the badge now shows the
-  product's category, the same word as its card.
-- Size pills ordered by price, so the cheapest (pre-selected) pill is first.
-- "IDEAL UNTUK" carried a download icon → content labels have no icons; the
-  mono label stands alone. "INFORMASI PENGIRIMAN" and the checkout step
-  headings ("PILIH VARIAN", "DATA PENERIMA", "RINGKASAN PEMESANAN") now use the
-  same mono label, cyan dot kept. My round-2 note that "all PDP labels use the
-  mono label" was not true then; it is now (PDP render above).
-- Hero caption padding tightened.
-- Not changed, with reason: ~100 px under the PDP form is the sticky purchase
-  bar's clearance on mobile (`pb-20`); the duplicate collage on two bundles and
-  the Glow Up "Poin Penting" text naming products outside the bundle are
-  merchant content — owner list.
+Review round 4 of the rebuild (REVISE) — findings and changes:
 
-Round 4 (REVISE) — findings and changes:
+- Two preview images still printed brightening / flek claims → the hold rule
+  now covers every "cerah / flek / tersamarkan / sejak pemakaian pertama /
+  14 hari / instan" image; the preview shows six of the nine clean ones.
+- The 4-in-1 row read as "these four steps in one pack" while its contents
+  differ → labelled "Paket hemat 4-in-1"; contents shown as they are.
+- Identical collages adjacent on `/produk` → spread apart.
+- Not changed, with reason: the checkout's three-up process row (product
+  code, out of scope) and the mobile sticky-bar clearance under the PDP rail.
 
-- Compare-at price in JetBrains Mono read "Rp99.000" as "Rp99.888" (dotted
-  zero) → back to Inter with tabular figures. An intended deviation from
-  numaskin.id, which has the same misread: a misread price defeats the
-  compare-price job.
-- Price rows at different heights when names wrap 2 vs 3 lines, and when a
-  bundle's pill wraps → the name reserves three lines and the price block
-  reserves room for the pill. Measured: price-line offset between the two
-  cards of every visible row is 0 px on `/` and `/produk` at 390.
-- Pills 50ml → 150ml but form radios 150ml → 50ml → the stored variant order
-  was reversed on three bundles (Fresh & Hydrate, Glow Up Adenosine, Lengkap
-  6-in-1). With zero orders on the store, each pair's contents were swapped in
-  live D1 so every product lists its cheapest variant first; pills and radios
-  now run in the same order.
+Review round 5 of the rebuild (REVISE, the cycle's last) — two findings,
+both fixed after it and therefore not independently re-reviewed:
 
-Merged product 1.5.8 before these final renders.
+- The "Brightening, Hydrating & UV Protection" image (Paket Sunscreen & Gloss
+  Gel) → held with the others; eight clean images remain.
+- Identical collages could stack in one grid column → `spreadSameImages` now
+  keeps a repeat out of the two previous positions (same row and same
+  column). Measured: 0 clashes across all 49 and all 42 bundle cards.
 
-Per section (C1–C6):
+Per section:
 
-- Header (C2): `NUMA·SKIN` + `ヌマスキン` centred, marine/teal, official-store
-  strip on the aqua surface. Matches the reference header.
-- Hero (C1): unchanged slider; the caption (mono pill + marine line) sits
-  under the slide so the merchant artwork stays legible.
-- Catalogue heading (C3): mono teal eyebrow → serif uppercase marine title →
-  cyan rule, centred, as "KOLEKSI UNGGULAN" on numaskin.id. Not a generic
-  left-ruled heading any more.
-- Cards (C4): aqua well, teal category, regular tracked uppercase centred
-  name (up to three lines), marine price + grey strike, "HEMAT n%" pill under
-  the price.
-- Landing list and footer: aqua band, white rounded list, marine wordmark.
-- PDP (C6): serif title, 28 px marine price with one "HEMAT" pill, size pills
-  synchronised with the form, one mono label system, skinned checkout form.
+- Top band + header: marine band carries the official-store line; the
+  wordmark sits on white below it.
+- Hero: packshot in water fills the first screen at 390, headline and both
+  actions follow without overlapping the image.
+- Search + chips: one row of chips scrolls sideways; the active chip is filled
+  marine and carries `aria-current="page"`.
+- Ritual: numbered, the third card peeks to show the row scrolls.
+- Grids: names render in full; each row's prices share a line (measured 0 px
+  offset on every row of `/produk`); bundles show the saving inline.
+- PDP: price, sizes and "Pesan Sekarang" sit together under the image;
+  details collapse; related row closes the page on the aqua base.
 
-Measured: no horizontal scroll at 390 or 1440; zero console errors on all six
-renders; keyboard Tab reaches the wordmark, hero dots, search and each card
-with a visible 2 px cyan focus ring. Contrast (`contrast.py`): teal on white
-5.93:1, teal on aqua 5.35–5.58:1, muted 4.97–5.28:1, white on marine 14.56:1;
-cyan 3.31:1 is used only for non-text marks (rules, dots, focus ring).
+Measured: no horizontal scroll at 390 or 1440, zero console errors on all six
+renders. Flows (Playwright, local): chip → `?kategori=Paket Hemat` (42) and
+back to `/`; home search "serum" → 16 results; load-more 10 → 20 with focus in
+the grid and a polite status; size pill by keyboard → price Rp257.000 and
+`aria-pressed`; "Pesan Sekarang" scrolls the form into view; accordion opens.
+Keyboard Tab shows a 2 px cyan ring on every control after its transition.
+Contrast as in the token table.

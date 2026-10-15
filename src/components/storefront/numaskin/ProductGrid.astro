@@ -1,0 +1,91 @@
+---
+// Install-owned (numaskin-adbook, DESIGN.md §UX). One product grid for home and
+// /produk. Each cell is a subgrid wrapper so ProductListItem's four rows align
+// across the row. Long lists show `initial` cards; the rest are in the HTML
+// (crawlable, and reachable without script through `moreHref`) and revealed in
+// steps by the button.
+import ProductListItem from '../shared/ProductListItem.astro';
+import { BUNDLE_CATEGORY, bundleContents } from './catalog-order';
+
+interface Product {
+  slug: string;
+  name: string;
+  category: string;
+  image: string;
+  price: number;
+  comparePrice?: number;
+  variants: Array<{ label?: string; price?: number }>;
+  description?: string;
+  /** Text that names a bundle's contents; falls back to `description`. */
+  contentsText?: string;
+}
+interface Props {
+  products: Product[];
+  id: string;
+  initial?: number;
+  /** Eager-load the first row (above the fold on /produk). */
+  eagerFirstRow?: boolean;
+  /** Where "see more" goes when script is off, or when the list is a preview. */
+  moreHref?: string;
+  moreLabel?: string;
+}
+
+const { products, id, initial = products.length, eagerFirstRow = false, moreHref, moreLabel = 'Lihat Produk Lainnya' } = Astro.props;
+const idr = (n: number) => `Rp${n.toLocaleString('id-ID')}`;
+const hasMore = products.length > initial;
+---
+
+<div>
+  <ul id={id} class="grid grid-cols-2 gap-x-3" aria-label={`${products.length} produk`}>
+    {products.map((product, index) => (
+      <li class="row-span-4 grid grid-rows-subgrid gap-0" hidden={index >= initial} data-grid-item>
+        <ProductListItem
+          product={{
+            slug: product.slug,
+            productName: product.name,
+            heroImage: product.image,
+            category: product.category,
+            price: product.price,
+            comparePrice: product.comparePrice,
+            variants: product.variants,
+          }}
+          formatPrice={idr}
+          eager={eagerFirstRow && index < 2}
+          contents={product.category === BUNDLE_CATEGORY ? bundleContents(product.contentsText ?? product.description ?? '') : undefined}
+        />
+      </li>
+    ))}
+  </ul>
+
+  {hasMore && (
+    <div class="mt-2 flex flex-col items-center gap-2">
+      <p class="text-[11px] text-[var(--nm-muted)]" aria-live="polite" data-grid-status={id}>
+        Menampilkan {initial} dari {products.length} produk
+      </p>
+      <a href={moreHref ?? '#'} class="nm-btn" data-grid-more={id} data-step={initial}>{moreLabel}</a>
+    </div>
+  )}
+</div>
+
+<script>
+  // Progressive: the link works without script (moreHref); with it, the next
+  // step of already-rendered cards is revealed in place and focus moves to the
+  // first new card so a keyboard user continues from where the list grew.
+  document.querySelectorAll<HTMLAnchorElement>('[data-grid-more]').forEach((button) => {
+    const list = document.getElementById(button.dataset.gridMore ?? '');
+    if (!list) return;
+    const status = document.querySelector(`[data-grid-status="${list.id}"]`);
+    const items = [...list.querySelectorAll<HTMLElement>('[data-grid-item]')];
+    const step = Number(button.dataset.step) || 10;
+    button.addEventListener('click', (event) => {
+      event.preventDefault();
+      const hidden = items.filter((item) => item.hidden);
+      const next = hidden.slice(0, step);
+      next.forEach((item) => { item.hidden = false; });
+      next[0]?.querySelector<HTMLElement>('a')?.focus();
+      const shown = items.length - hidden.length + next.length;
+      if (status) status.textContent = `Menampilkan ${shown} dari ${items.length} produk`;
+      if (shown >= items.length) button.hidden = true;
+    });
+  });
+</script>

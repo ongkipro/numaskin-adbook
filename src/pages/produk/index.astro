@@ -1,18 +1,56 @@
 ---
+// Install-owned (numaskin-adbook, DESIGN.md §UX). The catalogue with server-side
+// category filter (?kategori=) and search (?q=): shareable URLs, back/forward
+// keep the result, and nothing depends on script. Canonical stays /produk
+// (BaseLayout uses the pathname); a search result page is noindex.
 import PageIntro from '../../components/storefront/shared/PageIntro.astro';
-import ProductListItem from '../../components/storefront/shared/ProductListItem.astro';
 import Icon from '../../components/storefront/shared/Icon.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { formatIdr } from '../../lib/format-idr';
+import CategoryChips from '../../components/storefront/numaskin/CategoryChips.astro';
+import ProductGrid from '../../components/storefront/numaskin/ProductGrid.astro';
+import { BUNDLE_CATEGORY, spreadSameImages } from '../../components/storefront/numaskin/catalog-order';
 import { getStorefrontProducts } from '../../lib/catalog';
 
-const products = await getStorefrontProducts(Astro.locals);
-const INITIAL_COUNT = 10;
+const catalog = await getStorefrontProducts(Astro.locals);
+const all = catalog.map((p) => ({
+  slug: p.slug,
+  name: p.productName,
+  category: p.category,
+  image: p.heroImage,
+  price: p.price,
+  comparePrice: p.comparePrice,
+  variants: p.variants,
+  description: p.description,
+  // Name, type and tags, plus the description, so "serum" also finds the
+  // bundles that contain one.
+  haystack: `${p.productName} ${p.category} ${p.tag ?? ''} ${(p.relatedTags ?? []).join(' ')} ${p.description ?? ''}`.toLowerCase(),
+}));
+const categories = [...new Set(all.map((p) => p.category))];
+const requested = (Astro.url.searchParams.get('kategori') ?? '').trim();
+const category = categories.includes(requested) ? requested : '';
+const query = (Astro.url.searchParams.get('q') ?? '').trim().slice(0, 80);
+const terms = query.toLowerCase().split(/\s+/).filter(Boolean);
+let results = all
+  .filter((p) => !category || p.category === category)
+  .filter((p) => terms.every((t) => p.haystack.includes(t)));
+// Bundles read best cheapest-first; singles keep the merchant's catalogue order.
+if (category === BUNDLE_CATEGORY) results = [...results].sort((a, b) => a.price - b.price);
+// Bundles that share one merchant collage are kept apart in the grid.
+results = spreadSameImages(results);
+// Ten at first; the "more" control reveals in place with script, and without
+// it links to ?semua=1, which renders the whole list server-side.
+const showAll = Astro.url.searchParams.get('semua') === '1';
+const INITIAL_COUNT = showAll ? results.length : 10;
+const moreParams = new URLSearchParams(Astro.url.searchParams);
+moreParams.set('semua', '1');
+const heading = category || 'Semua Produk';
+const resetHref = category ? `/produk?kategori=${encodeURIComponent(category)}` : '/produk';
 ---
 
 <BaseLayout
-  title={`Produk - ${Astro.locals.tenant.name}`}
-  description={`Pilih produk ${Astro.locals.tenant.name}, lihat varian, stok, dan harga sebelum memesan.`}
+  title={`${category ? `${category} - ` : 'Produk - '}${Astro.locals.tenant.name}`}
+  description={`Pilih produk ${Astro.locals.tenant.name}, lihat varian dan harga sebelum memesan.`}
+  noindex={query.length > 0}
   breadcrumbs={[
     { name: 'Beranda', url: '/' },
     { name: 'Produk', url: '/produk' },
@@ -20,76 +58,59 @@ const INITIAL_COUNT = 10;
 >
   <main id="konten-utama" class="min-h-screen bg-white text-[var(--nm-marine)]">
     <PageIntro
-      badge="Semua Produk"
-      title={`Produk ${Astro.locals.tenant.name}`}
-      description="Pilih produk berdasarkan kebutuhan Anda, lalu lihat varian dan harga sebelum memesan."
-      breadcrumbs={[{ label: 'Beranda', href: '/' }, { label: 'Produk' }]}
+      badge="Katalog"
+      title={heading}
+      description=""
+      breadcrumbs={category
+        ? [{ label: 'Beranda', href: '/' }, { label: 'Produk', href: '/produk' }, { label: category }]
+        : [{ label: 'Beranda', href: '/' }, { label: 'Produk' }]}
     />
 
-    <section aria-label="Daftar produk" class="mx-auto max-w-[480px] px-4 py-8">
-      {products.length > 0 ? (
-        <>
-          <div class="grid grid-cols-2 gap-x-3 gap-y-6" id="product-grid">
-            {products.map((product, index) => (
-              <div class={`product-card-item ${index >= INITIAL_COUNT ? 'hidden' : ''}`} data-index={index}>
-                {/* Two rows, not one: at 390x844 the second row is fully
-                    visible, and a throttled trace on the live store picked
-                    card #3 as the LCP element — still lazy under index < 2. */}
-                <ProductListItem product={product} formatPrice={formatIdr} eager={index < 4} />
-              </div>
-            ))}
-          </div>
+    <section aria-label="Cari dan filter" class="border-b border-[var(--nm-border)] px-4 pb-5">
+      <form action="/produk" method="get" role="search" class="relative">
+        {category && <input type="hidden" name="kategori" value={category} />}
+        <label for="catalog-q" class="sr-only">Cari produk{category ? ` di ${category}` : ''}</label>
+        <input
+          id="catalog-q"
+          name="q"
+          type="search"
+          value={query}
+          placeholder={category ? `Cari di ${category}…` : 'Cari produk, mis. toner, serum…'}
+          class="min-h-12 w-full rounded-full border border-[var(--nm-border)] bg-[var(--nm-surface)] py-3 pl-11 pr-4 text-base text-[var(--nm-marine)] placeholder:text-[var(--nm-muted)] focus:border-[var(--nm-cyan)] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[color:var(--nm-cyan)]"
+        />
+        <Icon name="lucide:search" class="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--nm-teal)]" aria-hidden="true" />
+      </form>
+      <CategoryChips categories={categories} active={category} class="mt-4" />
+    </section>
 
-          {products.length > INITIAL_COUNT && (
-            <div class="mt-8 flex flex-col items-center gap-3" id="load-more-container">
-              <p class="text-[11px] font-normal text-[var(--nm-muted)]">
-                Menampilkan <span id="visible-count" class="font-semibold text-[var(--nm-marine)]">{Math.min(INITIAL_COUNT, products.length)}</span> dari <span id="total-count" class="font-semibold text-[var(--nm-marine)]">{products.length}</span> produk
-              </p>
-              <button
-                id="load-more-btn"
-                type="button"
-                class="nm-btn cursor-pointer active:scale-[0.98]"
-              >
-                <span>Lihat Produk Lainnya</span>
-                <Icon name="lucide:chevron-down" class="h-4 w-4" aria-hidden="true" />
-              </button>
-            </div>
-          )}
-        </>
+    <section aria-labelledby="hasil" class="px-4 pb-10 pt-6">
+      <p id="hasil" class="mb-5 text-[12px] text-[var(--nm-muted)]" role="status">
+        {query
+          ? <>{results.length} hasil untuk “<strong class="text-[var(--nm-marine)]">{query}</strong>”{category && ` di ${category}`}</>
+          : <>{results.length} produk</>}
+      </p>
+
+      {results.length > 0 ? (
+        <ProductGrid
+          id="grid-katalog"
+          products={results}
+          initial={INITIAL_COUNT}
+          eagerFirstRow
+          moreHref={`/produk?${moreParams.toString()}`}
+        />
       ) : (
-        <div class="border-fade-y py-10 text-center">
-          <h2 class="text-lg font-semibold text-[#111111]">Katalog sedang disiapkan</h2>
-          <p class="mt-2 text-sm leading-6 text-[#555555]">Produk akan muncul setelah konten dan varian diterbitkan.</p>
+        <div class="mb-10 rounded-xl border border-[var(--nm-border)] bg-[var(--nm-surface)] px-5 py-10 text-center">
+          <p class="text-[14px] font-semibold">
+            {all.length === 0 ? 'Katalog sedang disiapkan' : 'Belum ada produk yang cocok'}
+          </p>
+          <p class="mx-auto mt-2 max-w-[30ch] text-[13px] leading-6 text-[var(--nm-muted)]">
+            {all.length === 0
+              ? 'Produk akan muncul setelah diterbitkan.'
+              : 'Coba kata lain yang lebih umum, atau lihat semua produk di kategori ini.'}
+          </p>
+          {all.length > 0 && <a href={resetHref} class="nm-btn mt-5">Hapus pencarian</a>}
         </div>
       )}
     </section>
   </main>
-
-  <script>
-    const INITIAL_COUNT = 10;
-    const STEP = 10;
-    let visibleCount = INITIAL_COUNT;
-
-    const items = document.querySelectorAll<HTMLElement>('.product-card-item');
-    const loadMoreBtn = document.getElementById('load-more-btn');
-    const visibleCountEl = document.getElementById('visible-count');
-
-    if (loadMoreBtn && items.length > 0) {
-      loadMoreBtn.addEventListener('click', () => {
-        const nextCount = Math.min(visibleCount + STEP, items.length);
-        for (let i = visibleCount; i < nextCount; i++) {
-          if (items[i]) {
-            items[i].classList.remove('hidden');
-          }
-        }
-        visibleCount = nextCount;
-        if (visibleCountEl) {
-          visibleCountEl.textContent = String(visibleCount);
-        }
-        if (visibleCount >= items.length) {
-          loadMoreBtn.classList.add('hidden');
-        }
-      });
-    }
-  </script>
 </BaseLayout>

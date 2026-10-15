@@ -1,0 +1,45 @@
+---
+// Install-owned (numaskin-adbook, DESIGN.md §UX). The brand hero used when the
+// operator has published no slides of their own: numaskin.id's own water-splash
+// poster (merchant asset, cropped to the compact column) with its headline.
+// The copy restates the merchant's positioning without adding claims.
+interface Props {
+  hasBundles: boolean;
+}
+const { hasBundles } = Astro.props;
+---
+
+<section aria-labelledby="hero-title" class="bg-[var(--nm-surface)]">
+  <img
+    src="/images/numaskin/hero-480.webp"
+    srcset="/images/numaskin/hero-480.webp 480w, /images/numaskin/hero-960.webp 960w"
+    sizes="(max-width: 480px) 100vw, 480px"
+    width="480"
+    height="384"
+    alt="Adenosine Deep Sea Water Moisturizer Numa Skin di atas air laut"
+    class="aspect-[5/4] w-full object-cover"
+    loading="eager"
+    fetchpriority="high"
+    decoding="async"
+  />
+  <div class="px-5 pb-8 pt-6 text-center">
+    <span class="nm-label">Deep Sea Mineral Science</span>
+    <h1 id="hero-title" class="nm-serif mt-3 text-[30px] leading-[1.12] text-[var(--nm-marine)] [text-wrap:balance]">
+      Kemurnian Laut Dalam untuk Kulit Awet Muda
+    </h1>
+    <p class="mx-auto mt-3 max-w-[34ch] text-[14px] leading-6 text-[var(--nm-muted)] [text-wrap:pretty]">
+      Rangkaian skincare dengan Ulleung Deep Sea Water untuk hidrasi mendalam dan skin barrier yang lebih kuat.
+    </p>
+    <div class="mt-6 flex flex-col gap-2.5">
+      <a href="#produk" class="nm-btn w-full">Lihat Produk</a>
+      {hasBundles && (
+        <a
+          href="#paket"
+          class="inline-flex min-h-11 w-full items-center justify-center rounded-full border border-[var(--nm-marine)] bg-white px-6 text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--nm-marine)] transition-colors hover:bg-[var(--nm-surface-2)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--nm-cyan)]"
+        >
+          Paket Hemat
+        </a>
+      )}
+    </div>
+  </div>
+</section>

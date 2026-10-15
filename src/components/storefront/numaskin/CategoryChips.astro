@@ -1,0 +1,41 @@
+---
+// Install-owned (numaskin-adbook, DESIGN.md §UX). Category navigation as plain
+// links to /produk?kategori=…, so a filter is shareable, survives back/forward,
+// and needs no script. Categories come from the live catalogue; the merchant's
+// routine order is applied where a category is known.
+import { orderCategories } from './catalog-order';
+
+interface Props {
+  categories: string[];
+  active?: string;
+  /** Overrides the "Semua" target, e.g. to keep a search term. */
+  allHref?: string;
+  class?: string;
+}
+
+const { categories, active = '', allHref = '/produk', class: className = '' } = Astro.props;
+const ordered = orderCategories(categories);
+const chip =
+  'inline-flex min-h-11 shrink-0 snap-start items-center whitespace-nowrap rounded-full border px-4 text-[13px] font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--nm-cyan)]';
+const on = 'border-[var(--nm-marine)] bg-[var(--nm-marine)] text-white';
+const off = 'border-[var(--nm-border)] bg-white text-[var(--nm-marine)] hover:border-[var(--nm-teal)]';
+---
+
+<nav aria-label="Kategori produk" class={className}>
+  <ul class="-mx-4 flex snap-x scroll-px-4 gap-2 overflow-x-auto px-4 pb-1 [mask-image:linear-gradient(to_right,#000_85%,transparent)] [scrollbar-width:none]">
+    <li>
+      <a href={allHref} class={`${chip} ${active ? off : on}`} aria-current={active ? undefined : 'page'}>Semua</a>
+    </li>
+    {ordered.map((category) => (
+      <li>
+        <a
+          href={`/produk?kategori=${encodeURIComponent(category)}`}
+          class={`${chip} ${category === active ? on : off}`}
+          aria-current={category === active ? 'page' : undefined}
+        >
+          {category}
+        </a>
+      </li>
+    ))}
+  </ul>
+</nav>

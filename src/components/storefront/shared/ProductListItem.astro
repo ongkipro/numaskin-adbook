@@ -26,9 +26,15 @@ interface Props {
    *  touch — under Slow 4G it spent 726ms of a 919ms LCP merely waiting to
    *  be requested. The homepage grid sits below the hero and stays lazy. */
   eager?: boolean;
+  /** Narrow cards (rails): struck price always under the price. */
+  stackPrice?: boolean;
+  /** Where a step label already names the product's role (the ritual). */
+  hideType?: boolean;
+  /** A bundle's contents, shown under its name as numaskin.id does. */
+  contents?: string[];
 }
 
-const { product, formatPrice, eager = false } = Astro.props;
+const { product, formatPrice, eager = false, stackPrice = false, hideType = false, contents = [] } = Astro.props;
 const comparePrice = product.comparePrice ?? 0;
 const hasDiscount = comparePrice > product.price;
 // numaskin.id's category line names type and size ("FACIAL CLEANSER · 100 ML").
@@ -36,23 +42,31 @@ const hasDiscount = comparePrice > product.price;
 // count truncated the line at 390 px), and a bundle's "Paket" says nothing.
 const isBundle = product.category === 'Paket Hemat';
 const onlyLabel = product.variants.length === 1 ? product.variants[0]?.label?.trim() : '';
-const sizeNote = onlyLabel && onlyLabel.toLowerCase() !== 'paket' ? onlyLabel : '';
+const sizeNote = isBundle
+  ? (product.productName.match(/\((\d+\s?ml)\)/i)?.[1] ?? '')
+  : onlyLabel && onlyLabel.toLowerCase() !== 'paket' ? onlyLabel : '';
+// A bundle's category is the section it sits in ("Paket Hemat"); the label says
+// what it is instead, as numaskin.id does ("SKINCARE SET · 150ML").
+const typeLabel = isBundle ? 'Skincare Set' : product.category;
 const discountPercentage = hasDiscount
   ? Math.round((1 - product.price / comparePrice) * 100)
   : 0;
 ---
 
-{/* Install-owned card: numaskin.id's pale aqua image well, mono category,
-    centred uppercase name and a "HEMAT n%" pill (DESIGN.md C4). */}
-<article class="group h-full">
+{/* Install-owned card (DESIGN.md C4, §UX). Four subgrid rows — image,
+    category, name, price — so a row of cards shares one baseline per row:
+    names render in full, and only a row whose name wraps longer grows.
+    The parent grid cell must be `grid grid-rows-subgrid row-span-4`
+    (ProductGrid.astro). */}
+<article class="group row-span-4 grid grid-rows-subgrid gap-0">
   <a
     href={`/produk/${product.slug}`}
-    class="flex h-full flex-col rounded-xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--nm-cyan)]"
+    class="row-span-4 grid grid-rows-subgrid gap-0 rounded-xl text-center focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--nm-cyan)]"
   >
     <div class="relative aspect-square overflow-hidden rounded-xl bg-gradient-to-b from-white to-[var(--nm-surface-2)]">
       <img
         src={cardImageSrc(product.heroImage)}
-        alt={`Foto produk ${product.productName}`}
+        alt=""
         width="320"
         height="320"
         class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
@@ -61,33 +75,29 @@ const discountPercentage = hasDiscount
         decoding="async"
       />
     </div>
-
-    <div class="flex flex-1 flex-col items-center px-1 pt-3 text-center">
-      <span class="nm-label max-w-full truncate !text-[9px]">
-        {product.category}{sizeNote ? ` · ${sizeNote}` : ''}
-      </span>
-      {/* Regular weight, tracked, up to three lines: the distinguishing word
-          ("Moisturizer", "PA++++") usually comes last, and bold capitals cut it.
-          Three lines are always reserved so prices align across a row. */}
-      <h2 class="mt-1.5 line-clamp-3 min-h-[54px] text-[12.5px] font-normal uppercase leading-[18px] tracking-[0.05em] text-[var(--nm-marine)]">
+    <span class="nm-label block px-1 pt-3 !text-[9px] [text-wrap:balance]">
+      {!hideType && <>{typeLabel}{sizeNote && <span class="whitespace-nowrap">{` · ${sizeNote}`}</span>}</>}
+    </span>
+    <div class="px-1 pt-1.5">
+      <h2 class="text-[12.5px] font-normal uppercase leading-[18px] tracking-[0.05em] text-[var(--nm-marine)] [text-wrap:pretty]">
         {product.productName}
       </h2>
-
-      {/* The saving is inline with the price and only on bundle cards, as on
-          numaskin.id; a single product shows the struck price alone. The block
-          keeps room for the wrapped pill on every card, so the price line sits
-          at the same height across a row. */}
-      <div class="mt-auto flex min-h-[54px] flex-wrap content-start items-center justify-center gap-x-2 gap-y-1 pt-2">
-        <p class="text-sm font-bold leading-5 text-[var(--nm-marine)]">{formatPrice(product.price)}</p>
-        {hasDiscount && (
-          <p class="nm-strike text-[11px] leading-4 text-[var(--nm-muted)] line-through">
-            {formatPrice(comparePrice)}
-          </p>
-        )}
-        {isBundle && discountPercentage > 0 && (
-          <span class="nm-label nm-pill !text-[9px]">Hemat {discountPercentage}%</span>
-        )}
-      </div>
+      {contents.length > 0 && (
+        <p class="mt-1 text-[11px] leading-4 text-[var(--nm-muted)]">{contents.join(' + ')}</p>
+      )}
+    </div>
+    {/* The saving sits in the price row and only on bundle cards, as on
+        numaskin.id; a single product shows the struck price alone. */}
+    <div class:list={['flex content-start items-center justify-center gap-x-2 gap-y-1 px-1 pt-2', stackPrice ? 'flex-col pb-2' : 'flex-wrap pb-6']}>
+      <p class="text-sm font-bold leading-5 text-[var(--nm-marine)]">{formatPrice(product.price)}</p>
+      {hasDiscount && (
+        <p class="nm-strike text-[11px] leading-4 text-[var(--nm-muted)] line-through">
+          <span class="sr-only">Harga normal </span>{formatPrice(comparePrice)}
+        </p>
+      )}
+      {isBundle && discountPercentage > 0 && (
+        <span class="nm-label nm-pill !text-[9px]">Hemat {discountPercentage}%</span>
+      )}
     </div>
   </a>
 </article>

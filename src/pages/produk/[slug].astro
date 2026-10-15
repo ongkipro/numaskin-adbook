@@ -3,7 +3,9 @@ import { geoHeadersFromCf } from '../../lib/geo';
 import Breadcrumb from '../../components/storefront/shared/Breadcrumb.astro';
 import MetaLandingTracker from '../../components/storefront/tracking/MetaLandingTracker.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getStorefrontProduct } from '../../lib/catalog';
+import { getStorefrontProduct, getStorefrontProducts } from '../../lib/catalog';
+import { BUNDLE_CATEGORY, orderCategories } from '../../components/storefront/numaskin/catalog-order';
+import ProductRail from '../../components/storefront/numaskin/ProductRail.astro';
 import { getProductPageLanding } from '../../lib/landing-pages';
 import Icon from '../../components/storefront/shared/Icon.astro';
 import RatingStars from '../../components/storefront/shared/RatingStars.astro';
@@ -58,6 +60,15 @@ if (productPageLanding) {
 const socialProofOrders = await recentOrderCount(getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined);
 
 const cheapestVariant = [...product.variants].sort((a, b) => a.price - b.price)[0] ?? null;
+// Install-owned (DESIGN.md §UX): bundle-aware labels, and "complete the
+// routine" picks — the single products other than this one, in routine order.
+const isBundle = product.category === BUNDLE_CATEGORY;
+const allProducts = await getStorefrontProducts(Astro.locals);
+const routineOrder = orderCategories(allProducts.map((p) => p.category));
+const related = allProducts
+  .filter((p) => p.slug !== product.slug && p.category !== BUNDLE_CATEGORY)
+  .sort((a, b) => routineOrder.indexOf(a.category) - routineOrder.indexOf(b.category))
+  .slice(0, 6);
 const displayPrice = cheapestVariant?.price ?? product.price;
 const displayComparePrice = cheapestVariant?.comparePrice ?? product.comparePrice ?? 0;
 const displayDiscount =
@@ -163,7 +174,7 @@ const productSchemaJson = JSON.stringify(productSchema).replace(/</g, '\\u003c')
       `product`, which would emit a second, conflicting Product block. */}
   <script is:inline type="application/ld+json" set:html={productSchemaJson} />
 
-  <main class="mx-auto max-w-[480px] bg-white pb-20">
+  <main class="mx-auto max-w-[480px] bg-[var(--nm-surface)] pb-20 lg:pb-0">
     <Breadcrumb
       items={[
         { label: 'Katalog', href: '/produk' },
@@ -178,7 +189,7 @@ const productSchemaJson = JSON.stringify(productSchema).replace(/</g, '\\u003c')
       <ProductImageGallery
         images={productImages}
         productName={product.productName}
-        badgeText={product.category /* install: one name per product, as on its card */}
+        badgeText={undefined /* install: the breadcrumb already names the category */}
         discountPercentage={0 /* install: the saving shows once, beside the price (DESIGN.md C6) */}
       />
     </div>
@@ -239,7 +250,7 @@ const productSchemaJson = JSON.stringify(productSchema).replace(/</g, '\\u003c')
                 data-price={v.price}
                 data-compare={v.comparePrice ?? 0}
                 aria-pressed={v.id === cheapestVariant?.id ? 'true' : 'false'}
-                class="min-h-11 rounded-full border border-[var(--nm-border)] bg-[var(--nm-surface)] px-5 text-[13px] font-semibold text-[var(--nm-marine)] transition-colors hover:border-[var(--nm-teal)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--nm-cyan)] aria-pressed:border-[var(--nm-marine)] aria-pressed:bg-[var(--nm-marine)] aria-pressed:text-white"
+                class="min-h-11 rounded-full border border-[var(--nm-border)] bg-[var(--nm-surface)] px-5 text-[13px] font-semibold text-[var(--nm-marine)] transition-colors hover:border-[var(--nm-teal)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--nm-cyan)] aria-pressed:border-[var(--nm-marine)] aria-pressed:bg-[var(--nm-marine)] aria-pressed:text-white"
               >
                 {v.label}
               </button>
@@ -247,77 +258,55 @@ const productSchemaJson = JSON.stringify(productSchema).replace(/</g, '\\u003c')
           </div>
         </div>
       )}
+
+      {/* The order form sits below the details; this takes the buyer straight
+          to it once a size is chosen, with the COD rule stated where it applies. */}
+      <a href="#form-pemesanan" class="nm-btn mt-5 w-full">Pesan Sekarang</a>
+      <p class="mt-2.5 text-center text-[12px] leading-5 text-[var(--nm-muted)]">
+        Bisa bayar di tempat (COD) untuk sebagian besar wilayah
+      </p>
     </section>
 
-    <!-- Detailed Specifications -->
-    <section class="border-fade-b bg-white px-5 py-6">
-      <h2 class="nm-label border-b border-[var(--nm-border)] pb-3 !text-[var(--nm-marine)]">Informasi Produk</h2>
-      <div class="mt-4 grid gap-5 text-[14px] leading-6 text-[var(--nm-muted)]">
-        <p>{product.description}</p>
+    <!-- Product details. Install-owned (DESIGN.md §UX): the description reads
+         open; the lists are native <details> disclosures, numaskin.id's
+         accordion pattern without script. The first list starts open so the
+         main benefit is visible without a tap. -->
+    <section aria-labelledby="pdp-detail" class="border-b border-[var(--nm-border)] bg-white px-5 py-6">
+      <h2 id="pdp-detail" class="nm-label !text-[var(--nm-marine)]">Tentang produk ini</h2>
+      <p class="mt-3 text-[14px] leading-6 text-[var(--nm-muted)]">{product.description}</p>
 
-        {product.benefits && product.benefits.length > 0 && (
-          <div class="grid gap-4 border-fade-b pb-4">
-            <div class="flex items-center gap-2">
-              <h3 class="nm-label !text-[var(--nm-marine)]">Manfaat Utama</h3>
-            </div>
-            <div class="space-y-3">
-              {
-                product.benefits.map((b) => (
-                  <div class="grid grid-cols-[8px_1fr] gap-3">
-                    <span
-                      class="mt-3 h-px w-2 bg-[var(--nm-marine)]"
-                      aria-hidden="true"
-                    />
-                    <span class="min-w-0 leading-6">{b}</span>
-                  </div>
-                ))
-              }
-            </div>
-          </div>
-        )}
-
-        {product.keyPoints && product.keyPoints.length > 0 && (
-          <div class="grid gap-4 border-fade-b pb-4">
-            <div class="flex items-center gap-2">
-              <h3 class="nm-label !text-[var(--nm-marine)]">Poin Penting Produk</h3>
-            </div>
-            <div class="space-y-3">
-              {
-                product.keyPoints.map((point) => (
-                  <div class="grid grid-cols-[8px_1fr] gap-3">
-                    <span
-                      class="mt-3 h-px w-2 bg-[var(--nm-marine)]"
-                      aria-hidden="true"
-                    />
-                    <span class="min-w-0 leading-6">{point}</span>
-                  </div>
-                ))
-              }
-            </div>
-          </div>
-        )}
-
-        {product.idealFor && product.idealFor.length > 0 && (
-          <div>
-            <div class="mb-3 flex items-center gap-2">
-              <h3 class="nm-label !text-[var(--nm-marine)]">Ideal Untuk</h3>
-            </div>
-            <div class="flex flex-wrap gap-x-3 gap-y-2">
-              {
-                product.idealFor.map((item) => (
-                  <span class="inline-flex items-center gap-2 text-[12px] font-normal text-[var(--nm-muted)]">
-                    <span
-                      class="h-px w-2 bg-[var(--nm-marine)]"
-                      aria-hidden="true"
-                    />
-                    <span>{item}</span>
-                  </span>
-                ))
-              }
-            </div>
-          </div>
-        )}
+      <div class="mt-5 divide-y divide-[var(--nm-border)] border-y border-[var(--nm-border)]">
+        {[
+          { title: 'Manfaat utama', items: product.benefits ?? [] },
+          { title: isBundle ? 'Urutan pemakaian' : 'Bahan aktif unggulan', items: product.keyPoints ?? [] },
+        ].filter((block) => block.items.length > 0).map((block, index) => (
+          <details class="group" open={index === 0}>
+            <summary class="flex min-h-12 cursor-pointer list-none items-center justify-between gap-3 py-3 text-[14px] font-semibold text-[var(--nm-marine)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--nm-cyan)] [&::-webkit-details-marker]:hidden">
+              {block.title}
+              <Icon name="lucide:chevron-down" class="h-4 w-4 shrink-0 text-[var(--nm-teal)] transition-transform group-open:rotate-180" aria-hidden="true" />
+            </summary>
+            <ul class="space-y-2.5 pb-4 text-[14px] leading-6 text-[var(--nm-muted)]">
+              {block.items.map((item) => (
+                <li class="grid grid-cols-[10px_1fr] gap-2.5">
+                  <span class="mt-[11px] h-1.5 w-1.5 rounded-full bg-[var(--nm-cyan)]" aria-hidden="true" />
+                  <span class="min-w-0">{item}</span>
+                </li>
+              ))}
+            </ul>
+          </details>
+        ))}
       </div>
+
+      {product.idealFor && product.idealFor.length > 0 && (
+        <div class="mt-5">
+          <h3 class="nm-label !text-[var(--nm-marine)]">Cocok untuk</h3>
+          <ul class="mt-2.5 flex flex-wrap gap-2">
+            {product.idealFor.map((item) => (
+              <li class="rounded-full bg-[var(--nm-surface-2)] px-3 py-1.5 text-[12px] text-[var(--nm-marine)]">{item}</li>
+            ))}
+          </ul>
+        </div>
+      )}
     </section>
 
     <!-- Product Reviews -->
@@ -371,21 +360,34 @@ const productSchemaJson = JSON.stringify(productSchema).replace(/</g, '\\u003c')
       )
     }
 
-    <!-- Shipping Information Notice Card -->
-    <section class="border-fade-b bg-white px-5 py-5">
-      <div class="flex items-start gap-3.5 text-[12px] leading-relaxed text-[var(--nm-muted)]">
-        <Icon name="lucide:truck" class="mt-0.5 h-5 w-5 shrink-0" style={`color: ${productAccent}`} aria-hidden="true" />
-        <div>
-          <p class="nm-label !text-[var(--nm-marine)]">Informasi Pengiriman</p>
-          <p class="mt-1 leading-5 text-[var(--nm-muted)]">Biaya pengiriman dihitung otomatis di halaman checkout setelah alamat pengiriman dilengkapi.</p>
-        </div>
-      </div>
-    </section>
+    {/* Install-owned: the product's "ongkir dihitung otomatis" card is gone.
+        Which form renders (full quote or confirmed-by-CS) depends on the
+        buyer's province, and each form states its own shipping rule; a fixed
+        sentence here contradicted one of them (review 2026-10-15). */}
 
-    <!-- Direct Order Form Container -->
-    <section id="form-pemesanan" class="mt-4 scroll-mt-6 overflow-hidden rounded-none bg-white p-2">
+    <!-- Direct Order Form Container. Install-owned heading: the "Pesan
+         Sekarang" jump lands on a titled step, not mid-form. -->
+    <section id="form-pemesanan" aria-labelledby="form-pemesanan-title" class="mt-4 scroll-mt-6 overflow-hidden rounded-none bg-white p-2">
+      <h2 id="form-pemesanan-title" class="nm-serif px-3 pt-5 text-center text-[22px] uppercase leading-tight text-[var(--nm-marine)]">Form Pemesanan</h2>
       <GeoIpResolvedForm mode={formContext.mode} province={formContext.province} productSlug={product.slug} embedded={true} selectedVariantId={cheapestVariant?.id} />
     </section>
+
+    {related.length > 0 && (
+      <section aria-labelledby="pdp-related" class="border-t border-[var(--nm-border)] bg-[var(--nm-surface)] py-8">
+        {/* On a bundle page the row offers the single products, so the buyer can
+            also take one item instead of the set. */}
+        <h2 id="pdp-related" class="nm-serif px-5 text-center text-[22px] uppercase leading-tight text-[var(--nm-marine)]">
+          {isBundle ? 'Beli satuan' : 'Lengkapi rutinitas'}
+        </h2>
+        <span class="nm-rule mt-3" aria-hidden="true"></span>
+        <div class="mt-5">
+          <ProductRail
+            label={isBundle ? 'Produk satuan' : 'Produk untuk melengkapi rutinitas'}
+            items={related.map((p) => ({ product: { slug: p.slug, name: p.productName, category: p.category, image: p.heroImage, price: p.price, comparePrice: p.comparePrice, variants: p.variants } }))}
+          />
+        </div>
+      </section>
+    )}
 
     <SocialProofToast
       orderCount={socialProofOrders}

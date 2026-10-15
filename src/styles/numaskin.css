@@ -153,3 +153,21 @@ html :is([data-hybrid-form-root], [data-middle-form-root]) .section-title {
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
+
+/* The checkout's three-up process row (data pesanan / harga tervalidasi /
+   konfirmasi admin) in the storefront's label system: teal mono label, teal
+   icon, aqua dividers. Wording and behaviour are the product's. */
+html :is([data-hybrid-form-root], [data-middle-form-root]) .trust-strip span {
+  color: #0b6e7d;
+}
+html :is([data-hybrid-form-root], [data-middle-form-root]) .trust-strip span + span {
+  border-left-color: #e2edf0;
+}
+html :is([data-hybrid-form-root], [data-middle-form-root]) .trust-icon {
+  stroke: #0b6e7d;
+}
+html :is([data-hybrid-form-root], [data-middle-form-root]) .trust-strip i {
+  font-family: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+}

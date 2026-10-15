@@ -1,7 +1,17 @@
 ---
+// Install-owned (numaskin-adbook, DESIGN.md §UX). The compact-market home
+// rebuilt as a shopping path inside the same 480 px column: brand hero →
+// search and categories → the four-step ritual → single products → bundles
+// (cheapest six, then the full list on /produk) → landing pages. The template's
+// section switches (hero / catalog / landingPages) are still honoured.
 import HeroSection from '../home/HeroSection.astro';
-import ProductsSection from '../home/ProductsSection.astro';
 import LandingPagesSection from '../home/LandingPagesSection.astro';
+import NumaHero from '../numaskin/NumaHero.astro';
+import CategoryChips from '../numaskin/CategoryChips.astro';
+import RitualSection from '../numaskin/RitualSection.astro';
+import ProductGrid from '../numaskin/ProductGrid.astro';
+import Icon from '../shared/Icon.astro';
+import { BUNDLE_CATEGORY } from '../numaskin/catalog-order';
 import type { TenantHomeContent } from '../../../lib/tenant-content';
 
 interface ProductCard {
@@ -9,6 +19,7 @@ interface ProductCard {
   name: string;
   category: string;
   description: string;
+  contentsText?: string;
   href: string;
   image: string;
   price: number;
@@ -22,38 +33,136 @@ interface ProductCard {
 interface Props {
   content: TenantHomeContent;
   products: ProductCard[];
-  /** Resolved by the page, not here: index.astro preloads the first slide's
-   *  image as the LCP element, so the page and the hero must read the same
-   *  list. The daily-rotation fallback lives with that preload now. */
   heroSlides: Array<{ image: string; alt: string; badge: string; text: string }>;
   sections: {
     hero: boolean;
     catalog: true;
-    // `proofs` is still accepted so a template saved before this change keeps
-    // parsing; the third slot lists landing pages now.
     proofs?: boolean;
     landingPages?: boolean;
   };
 }
 
 const { content, products, heroSlides, sections } = Astro.props;
+const singles = products.filter((p) => p.category !== BUNDLE_CATEGORY);
+const bundles = products
+  .filter((p) => p.category === BUNDLE_CATEGORY)
+  .sort((a, b) => a.price - b.price);
+const BUNDLE_PREVIEW = 6;
+// The home preview is the cheapest bundles whose image is not already shown,
+// so two bundles sharing one merchant collage never sit side by side. Images
+// held here stay on /produk but are kept off the busiest page until the owner
+// replaces them (DESIGN.md owner list); every bundle sharing a held image is
+// held with it. Twin Pack's promises a gift the store does not give; the
+// others print outcome promises ("Dalam 14 Hari Flek Mulai Hilang", "Garis
+// halus tersamarkan", "sejak pemakaian pertama", "efek instan", "menyamarkan
+// flek hitam", "kulit tampak lebih cerah", "brightening"). Eight clean images
+// remain.
+const HELD_IMAGES_OF = new Set([
+  'paket-twin-pack-toner-2x150ml',
+  'paket-adenosine-dan-toner-150ml',
+  'paket-duo-toner-150ml-50ml',
+  'paket-toner-50ml-dan-gloss-gel',
+  'paket-toner-150ml-dan-gloss-gel',
+  'paket-youth-glow-duo-50ml',
+  'paket-adenosine-dan-sunscreen',
+  'paket-sunscreen-dan-toner-50ml',
+  'paket-sunscreen-dan-toner-150ml',
+  'paket-sunscreen-adenosine-toner-50ml',
+  'paket-sunscreen-adenosine-toner-150ml',
+  'paket-sunscreen-dan-gloss-gel',
+]);
+const heldImages = new Set(bundles.filter((p) => HELD_IMAGES_OF.has(p.slug)).map((p) => p.image));
+const seenImages = new Set<string>();
+const bundlePreview = bundles.filter((p) => {
+  if (heldImages.has(p.image) || seenImages.has(p.image)) return false;
+  seenImages.add(p.image);
+  return true;
+}).slice(0, BUNDLE_PREVIEW);
+// numaskin.id closes its ritual with this bundle (wash, toner, NAD+ serum,
+// moisturiser); shown only while the catalogue carries it.
+const ritualBundle = bundles.find((p) => p.slug === 'paket-complete-routine-4-in-1-150ml');
+const operatorSlides = content.heroSlides.length > 0;
+const categories = products.map((p) => p.category);
 ---
 
-<main
-  id="konten-utama"
-  class="relative min-h-screen overflow-x-hidden bg-white font-sans text-[#111111] antialiased"
->
-  <div
-    id="home"
-    class="mx-auto flex min-h-screen w-full max-w-[480px] flex-col bg-white"
-  >
-    {sections.hero && <HeroSection slides={heroSlides} highlights={content.heroHighlights} content={content.hero} />}
-    {sections.catalog && <ProductsSection products={products} heading={content.catalog} />}
+<main id="konten-utama" class="relative min-h-screen overflow-x-hidden bg-white font-sans text-[var(--nm-marine)] antialiased">
+  <div id="home" class="mx-auto flex min-h-screen w-full max-w-[480px] flex-col bg-white">
+    {sections.hero && (operatorSlides
+      ? <HeroSection slides={heroSlides} highlights={content.heroHighlights} content={content.hero} />
+      : <NumaHero hasBundles={bundles.length > 0} />)}
+
+    {sections.catalog && products.length > 0 && (
+      <>
+        <section aria-label="Cari dan pilih kategori" class="border-b border-[var(--nm-border)] px-4 py-5">
+          <form action="/produk" method="get" role="search" class="relative">
+            <label for="home-search" class="sr-only">Cari produk</label>
+            <input
+              id="home-search"
+              name="q"
+              type="search"
+              placeholder="Cari produk, mis. toner, serum…"
+              class="min-h-12 w-full rounded-full border border-[var(--nm-border)] bg-[var(--nm-surface)] py-3 pl-11 pr-4 text-base text-[var(--nm-marine)] placeholder:text-[var(--nm-muted)] focus:border-[var(--nm-cyan)] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[color:var(--nm-cyan)]"
+            />
+            <Icon name="lucide:search" class="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--nm-teal)]" aria-hidden="true" />
+          </form>
+          <CategoryChips categories={categories} class="mt-4" />
+        </section>
+
+        <RitualSection products={singles} ritualBundle={ritualBundle} />
+
+        {singles.length > 0 && (
+          <section id="produk" aria-labelledby="produk-title" class="scroll-mt-4 px-4 pt-10">
+            <div class="mb-6 text-center">
+              <span class="nm-label">{singles.length} produk</span>
+              <h2 id="produk-title" class="nm-serif mt-2 text-[26px] uppercase leading-tight text-[var(--nm-marine)]">Produk Satuan</h2>
+              <span class="nm-rule mt-3" aria-hidden="true"></span>
+            </div>
+            <ProductGrid id="grid-satuan" products={singles} />
+          </section>
+        )}
+
+        {bundles.length > 0 && (
+          <section id="paket" aria-labelledby="paket-title" class="scroll-mt-4 bg-[var(--nm-surface)] px-4 pb-10 pt-10">
+            <div class="mb-6 text-center">
+              <span class="nm-label">Lebih hemat dalam satu paket</span>
+              <h2 id="paket-title" class="nm-serif mt-2 text-[26px] uppercase leading-tight text-[var(--nm-marine)]">Paket Hemat</h2>
+              <span class="nm-rule mt-3" aria-hidden="true"></span>
+              <p class="mx-auto mt-3 max-w-[34ch] text-[13px] leading-6 text-[var(--nm-muted)]">
+                Pilihan paket dengan harga terendah. Semua {bundles.length} paket ada di katalog.
+              </p>
+            </div>
+            <ProductGrid id="grid-paket" products={bundlePreview} />
+            {bundles.length > bundlePreview.length && (
+              <div class="mt-2 text-center">
+                <a href={`/produk?kategori=${encodeURIComponent(BUNDLE_CATEGORY)}`} class="nm-btn">
+                  Lihat semua {bundles.length} paket
+                </a>
+              </div>
+            )}
+          </section>
+        )}
+      </>
+    )}
+
+    {sections.catalog && products.length === 0 && (
+      <section class="px-4 py-10">
+        <div class="rounded-xl border border-[var(--nm-border)] bg-[var(--nm-surface)] px-5 py-10 text-center">
+          <p class="text-[13px] font-semibold">Katalog sedang disiapkan</p>
+          <p class="mx-auto mt-2 max-w-[26rem] text-[12px] leading-6 text-[var(--nm-muted)]">
+            Belum ada produk yang diterbitkan. Produk akan muncul di sini setelah ditambahkan dari dashboard.
+          </p>
+        </div>
+      </section>
+    )}
+
     {sections.landingPages !== false && <LandingPagesSection pages={content.solutions} heading={content.solutionsHeading} />}
   </div>
 </main>
 
 <script>
+  // Operator slides only (the brand hero has no slider): the dots move the
+  // slider; it never advances by itself — the product's HeroSection history
+  // explains the LCP cost that removed autoplay. No-op without the elements.
   const heroTrack = document.getElementById('hero-track');
   const heroDots = document.getElementById('hero-dots');
   const setHeroSlide = (index: number) => {
@@ -66,23 +175,6 @@ const { content, products, heroSlides, sections } = Astro.props;
           : 'h-11 w-4 border-b border-[#5a6e7f]/50 bg-transparent transition-colors hover:border-[#002b49] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#269ba8]';
     });
   };
-
-  // The hero does not advance by itself. It used to, every 4000 ms, and that
-  // was the home page's largest measured cost: each advance paints a new
-  // full-width image, so every one is a fresh LCP candidate. Two Lighthouse
-  // runs of one unchanged build measured LCP 1.8 s and 6.3 s, the slow one
-  // resolving to an off-screen `loading="lazy"` slide.
-  //
-  // Deferring the start to `load` was tried first and did not fix it: LCP
-  // stayed at a 3.2 s median and Speed Index did not move from 6.0 s, because
-  // Speed Index integrates visual completeness over the whole trace and a page
-  // that keeps changing never reaches it. Deferring moves the cost; only
-  // stopping removes it.
-  //
-  // The dots stay, and every slide is still reachable in one tap on a 44px
-  // target. What is gone is the page rearranging itself under a reader who did
-  // not ask it to — which is also the accessible behaviour, and is why
-  // `prefers-reduced-motion` no longer has anything here to suppress.
   [...(heroDots?.children ?? [])].forEach((dot, index) => {
     dot.addEventListener('click', () => setHeroSlide(index));
   });
