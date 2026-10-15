@@ -159,11 +159,6 @@ Tailwind blue focus ring, a card grid that reserves blank lines.
   "kulit glowing". Source the claims or rewrite them in the product data.
 - Bundle images show one size (Paket Glow Up's says "Routine 150ml") while the
   PDP preselects the cheapest variant (50 ml). Supply an image per variant.
-- The Treatment Lotion landing page's meta description (shown on the home
-  row) says "meredakan kemerahan, dan memperkuat skin barrier": an outcome
-  claim; rewrite it in the landing editor.
-- The Treatment Lotion landing page is titled like the product itself, so the
-  home row reads as the product; give it an offer title in the landing editor.
 - numaskin.id's ritual bar says the 4-in-1 holds Facial Wash, Toner, NAD+
   Serum and Moisturizer; its product page says Toner, Adenosine, Sunscreen and
   NAD+ Serum. Confirm which is true.
@@ -500,3 +495,40 @@ screenshots re-opened:
 - Not changed, with reason: the landing row's title equals the product name
   (operator retitles it in the landing editor; Owner list); "Total
   Pembayaran" vs CS-confirmed shipping is product checkout copy.
+
+Cycle 3 round 3: PASS (gate green), deployed as `69cbfe8`. Further polish
+after it (owner: "yang bisa kau sempurnakan, sempurnakan saja"), re-rendered
+and the six screenshots re-opened:
+
+- Live content (D1 `storefront_content`, draft and published, guarded by
+  version; backup kept outside the repo): "Teruji klinis resmi/berizin BPOM
+  RI" in 36 SEO descriptions → "Terdaftar BPOM RI" (BPOM registers, it does
+  not run clinical tests); "samarkan kerutan secara klinis" → "samarkan
+  kerutan"; Adenosine's "teruji klinis … stimulasi kolagen" → "untuk merawat
+  elastisitas kulit"; Gloss Gel's "meredakan iritasi … seketika" → "membantu
+  menenangkan". Cosmetic function claims (anti-aging, mencerahkan, tone-up)
+  are the brand's own and stay.
+- Home no longer lists a landing page that redirects to its product page (the
+  Treatment Lotion one): it repeated ritual step 2 as an "offer".
+- Order summary: the product name takes the full row; size left and price
+  right on the line below (was "Paket Glow / Up Adenosine" in a 52 % column).
+
+Cycle 3 round 4: PASS. Its one suggestion applied after it, re-rendered and
+the six screenshots re-opened: the see-all tile was an aqua slab like an
+empty image well at 1440 → a white card with the border hairline (teal on
+hover), so it reads as a link card.
+
+Cycle 3 round 5 (REVISE) — change made after it, re-rendered and the six
+screenshots re-opened: "Beli satuan" on a bundle PDP showed the first four
+singles of the catalogue → it leads with the bundle's own products
+(`singlesForBundle`, from `bundleContents`; test added), padded with other
+routine singles to an even count (Glow Up: Facial Wash, Toner, Adenosine +
+NAD+ Serum; 6-in-1: all six).
+
+### Polish cycle 4 (2026-10-15)
+
+New review cycle; the previous log is archived as
+`design/review-rounds-2026-10-15-polish3.log`. Starts from the renders above
+(`design/renders/ux-home-390.png`, `design/renders/ux-home-1440.png`,
+`design/renders/ux-produk-390.png`, `design/renders/ux-produk-1440.png`,
+`design/renders/ux-pdp-390.png`, `design/renders/ux-pdp-1440.png`).

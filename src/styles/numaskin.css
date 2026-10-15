@@ -213,3 +213,21 @@ html :is([data-hybrid-form-root], [data-middle-form-root]) .submit-main[data-sta
 html :is([data-hybrid-form-root], [data-middle-form-root]) .trust-strip {
   display: none;
 }
+
+/* Order summary: the product name takes the row's full width and the size and
+   price sit under it. The product's two-column row squeezed a
+   bundle name into a 52 % column ("Paket Glow / Up Adenosine"). Size on the
+   left of the second line, price on the right. */
+html :is([data-hybrid-form-root], [data-middle-form-root]) .summary-row-product {
+  flex-wrap: wrap;
+}
+html :is([data-hybrid-form-root], [data-middle-form-root]) .summary-product-name {
+  flex-basis: 100%;
+  max-width: none;
+}
+html :is([data-hybrid-form-root], [data-middle-form-root]) .summary-row-product .summary-price {
+  flex-basis: 100%;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: space-between;
+}

@@ -4,60 +4,53 @@ Model: unavailable: ai-ask does not report the resolved model/provider
 Screenshots: design/renders/ux-home-1440.png, design/renders/ux-home-390.png, design/renders/ux-pdp-1440.png, design/renders/ux-pdp-390.png, design/renders/ux-produk-1440.png, design/renders/ux-produk-390.png
 References: design/refs/current-home/1440.png, design/refs/current-home/390.png, design/refs/current-produk/1440.png, design/refs/current-produk/390.png, design/refs/numaskin-collection/1440.png, design/refs/numaskin-collection/390.png, design/refs/numaskin-home/1440.png, design/refs/numaskin-home/390.png, design/refs/numaskin-pdp/1440.png, design/refs/numaskin-pdp/390.png
 Prompt-SHA: 4ae0ce2195b477c4
-Context-SHA: 13ba3c87e0629465
-Images-SHA: c0bbca5917f1cd5f
-Output-SHA: d549f3d5f0261e79
+Context-SHA: 1ed71865b4661588
+Images-SHA: a738cda8671339d2
+Output-SHA: f6eef71f7c5c1c2f
 
-Paduka Ongki, saya sudah buka ke-56 slice: render home, PDP, dan /produk di 390 dan 1440, plus referensi numaskin.id dan referensi toko sebelum diubah. Verdict-nya **PASS**: tidak ada cacat desain material yang tersisa. Yang masih terlihat hanya konten owner (sudah ada di Owner list) dan dua catatan kecil.
+Saya sudah membuka dan memeriksa ke-56 gambar. Sesi ini dalam plan mode, jadi tidak ada file repo yang diubah. Satu-satunya file yang ditulis adalah catatan review di file plan.
 
-## Per section (top to bottom)
+## Per section (renders: home, /produk, PDP; 390 and 1440)
 
-**Home** (`ux-home-1440-01..03`, `ux-home-390-01..05`)
-- **Top band + wordmark** | authored | numaskin.id: marine band, centred `NUMA·SKIN` with katakana | none needed. "Official Store" is a self-description on the merchant's own domain, not a third-party certification, and the tick is gone.
-- **Hero** | authored | numaskin.id's water-splash Adenosine poster with a serif headline | none. The h1 "Skincare dengan Air Laut Dalam Ulleung" promises no outcome. At 390 the image, h1, subline and one CTA all fit in the first screen, and search and chips start just below it.
-- **Search + chips** | familiar but justified | commerce search plus category chips | none. The row scrolls sideways, the fade at "Face Serum" shows there is more, and no chip is marked active on home.
-- **Rutinitas 4 Langkah** | authored | numaskin.id's "4-step ritual", with the step labels toned down | none. All four steps are visible 2×2, labelled "1. Bersihkan"… with no mono type line, and prices align within each row.
-- **Lengkapi Rutinitas** | authored | numaskin.id collection card (aqua well, teal mono category, uppercase centred name) | give the "Semua produk" tile some content, e.g. a price floor. Right now it is a 218×370 aqua slab with three short lines, as heavy as a product card.
-- **Paket Hemat** | authored layout, inconsistent imagery (owner) | numaskin.id bundle cards with the "HEMAT" pill | owner supplies packshots. One grid holds the Daily Care model collage, a "Fresh & Hydrate" poster, a "Formulated with 2% Swiss NAD+" lifestyle poster and a 6-in-1 packshot — four visual languages. The layout itself is built for packshots.
-- **Halaman Penawaran row** | plain list row | none | owner retitles the landing page. "Deep Sea Water Treatment Lotion" reads as the product, not as an offer page.
-- **Footer** | plain | numaskin.id's footer, simplified | none. At 390 "Pengiriman & Retur" sits alone on a third line, which is acceptable.
+**Home**
+- Top band + wordmark | authored | numaskin.id's marine band and `NUMA·SKIN` + katakana wordmark (`346ae…-1440-01`, `2592…-390-01`) | Fine as built. "Official Store" here is the brand speaking on its own domain, not a platform badge, and the verification tick is gone.
+- Hero | authored | numaskin.id's water-splash Adenosine poster and serif headline, cut down to one action | No change. The h1 "Skincare dengan Air Laut Dalam Ulleung" makes no outcome claim, and at 390 (`48feb…-01`) the image, headline and "Lihat Paket Hemat" all fit on the first screen.
+- Search + chips | authored | numaskin.id's category order | No change. "Face Serum" fades at the right edge, which shows the row scrolls. No chip is marked active on home.
+- Rutinitas 4 Langkah | authored | numaskin.id's "4-Step Ritual" (`2592…-390-04`), minus its ingredient lines and its "Awet Muda" claim | No change. It is a 2×2 grid with all four steps visible. The numbers are a real sequence, and prices sit on one line across each row.
+- Lengkapi Rutinitas | generic-leaning | merchant collection card | Optional: the "Semua Produk" tile (`7d096…-1440-02`) is a bordered white card next to borderless cards. It reads as a link, but its serif title and pill button are a third style on the page. Consider dropping the button so the whole tile is the link.
+- Paket Hemat | authored layout, owner-limited imagery | merchant bundle cards with the inline "HEMAT" pill | Owner: supply packshots. At 170 px the Fresh & Hydrate, Glow Up and Daily Care posters are unreadable text plus faces (`48feb…-04`). The layout already gives packshots a square well, so this is owner content, not a design defect.
+- Footer | authored | merchant wordmark footer, without its BPOM, Halal or dermatology claims | No change.
 
-**/produk** (`ux-produk-1440-01..02`, `ux-produk-390-01..03`)
-- **Page intro** | authored | numaskin.id's collection page: left-aligned serif "Semua Produk" with a short rule | none.
-- **Grid** | authored | same card as numaskin.id | none. Names render in full and hyphens don't break lines. Where the card beside it has a longer name, a bundle card keeps a short gap above its price ("Paket Fresh & Hydrate Duo" at 1440) so prices align across the row. That is the documented subgrid trade-off.
-- **Load more** | plain | numaskin.id's "Muat lebih banyak", without the mono progress bar | none. "Menampilkan 10 dari 49 produk" and the marine pill are clear.
+**/produk**
+- Title + search + chips + count | authored | merchant collection header (`599f…-1440-01`), without the stock photo or the "resmi … berkualitas tinggi" copy | No change. The serif title with a cyan rule replaced the old "Semua Produk" pill (`717125…-1440-01`).
+- Grid + load-more | authored | merchant card | No change. Singles come first, then bundles. Prices share a baseline in each row (`d1611…-02`). "Menampilkan 10 dari 49" sits above a marine pill that replaced the old black block. The type line "HYDRATING TONER" has no size, which matches numaskin.id for a product with two sizes.
 
-**PDP** (`ux-pdp-1440-01..03`, `ux-pdp-390-01..04`)
-- **Breadcrumb + image** | authored layout, owner image | numaskin.id PDP | owner supplies an image per variant. The image prints "Routine 150ml" while "Toner 50ml" is selected.
-- **Title, price, sizes, COD line** | authored | numaskin.id: serif title, large marine price, "HEMAT" pill, filled marine selected pill | none. "Toner 50ml / Toner 150ml" names the part of the bundle that changes, and the COD line is honest.
-- **Tentang + accordions** | plain, native `<details>` | numaskin.id accordion | owner rewrites "kulit glowing".
-- **Form Pemesanan** | skinned product form | — | out of scope. At 390 the summary squeezes "Paket Glow / Up Adenosine" into two narrow lines, and "Total Pembayaran" sits beside the CS-confirmed shipping line. Both are product checkout code.
-- **Beli Satuan** | authored | shared card 2×2 | none. No rail, so no clipped cards.
-- The 1440-03 slice is just a 33 px empty strip at the page end, not a rendering defect.
+**PDP (bundle: Paket Glow Up Adenosine)**
+- Breadcrumb + image | authored | merchant PDP | Owner: the poster prints "Routine 150ml" and "Complete Anti-aging Ritual", but 50 ml is preselected. This is already on the owner list.
+- Title / price / sizes / COD | authored | merchant PDP (`8ad6…-1440-01`) without the trust strip, the "Garansi Resmi" card and the cart controls | No change. It reads title → large marine price + HEMAT → size pills → one honest COD line.
+- Description + accordions | authored | merchant accordion | Owner: "untuk kulit glowing" is still in the description.
+- Form Pemesanan | authored inside product checkout code | none | Not this install's scope: "Total Pembayaran Rp227.000" sits beside "Ongkir & admin dikonfirmasi via CS", so the "total" leaves out shipping. "Subtotal produk" would be accurate. That has to change in the product's checkout code.
+- Beli Satuan | authored | merchant "Rekomendasi Terkait" (`a7602…-03`) | No change. It leads with the bundle's own three products and adds NAD+ to make an even 2×2.
+- `d393…-1440-03` is an empty strip of page background below the footer. Nothing is clipped.
 
-## Comparison with the references
+## Evidence and transfer
 
-Referensinya yang saya buka: `599f0d…/2055b6…` (numaskin.id collection), `346ae1…/2592db…` (numaskin.id home), `8ad616…/a76024…` (numaskin.id PDP), dan `ff7ddb…/e7d9ab…/717125…/71cbde…` (toko ini sebelum diubah).
+What carried over from the references:
+- **Hierarchy:** serif uppercase titles over a short cyan rule, centred.
+- **Cards:** an aqua image well, the teal mono type line and the uppercase centred name.
+- **Ritual:** the numbered steps.
+- **Bundles:** the inline HEMAT pill.
 
-- **What carried over:** the marine/teal/aqua palette, DM Serif section titles with a cyan rule, the card structure (aqua well → teal mono category → uppercase name → marine price), size pills, and the "HEMAT" pill. The old black square badges and Cinzel "N NUMA SKIN" are all gone.
-- **What was deliberately left out, with a written reason:**
-  - the eyebrows ("THE 4-STEP RITUAL", "DERMATOLOGICAL SCIENCE")
-  - the BPOM/Halal/Uji Dermatologi trust strip, which has no certificate on the page
-  - the "Kerutan & Flek Berkurang Nyata dalam 14 Hari" campaign
-  - the 4-in-1 bar, because its contents conflict
-  - the "Sains Laut Dalam" icon cards
-  - claim-bearing posters such as "Garis Halus Tersamarkan" and "Dalam 14 Hari Flek Mulai Hilang", held from the home preview
-  
-  In other words, the reference's template signals and unsourced claims were not copied.
-- **Order change:** the ritual comes before the singles, unlike numaskin.id where "Koleksi Unggulan" comes first. The direction explains why: it avoids showing the same four products twice.
-- **Template-signal check:**
-  - mono appears only on the card category line, as on the reference
-  - no accent-coloured word, no icon tiles, no arrows on buttons, no fake stats
-  - the small tracked labels ("Pilih ukuran", "Data penerima", "Halaman penawaran") label fields and groups; they don't sit above headings
-  - with the name swapped, this page would still not fit another brand: the palette, ritual, Ulleung copy and imagery all belong to Numa Skin
-- **Research and rationale:** both are present (refs captured at 390/1440, transfer rationale, token table from numaskin.id's CSS). Nothing is missing.
+All of these are taken from `346ae…`, `599f…` and `8ad6…`, and they replace the monochrome before-state (`ff7dd…`, `e7d9…`, `717125…`, `71cbd…`): Cinzel "N NUMA SKIN", black "-30%" badges, a left-ruled eyebrow heading and a black load-more block.
 
-This is visual acceptance only; it is not interaction or accessibility evidence. I saved the review summary in the plan file `~/.claude/plans/you-review-a-web-enumerated-zebra.md`; no repository files were changed.
+What was deliberately dropped from the references: the stat and claim strips ("BPOM RI Resmi", "Uji Dermatologi", "Teruji klinis", "Berkurang Nyata dalam 14 Hari"), the arrow on every button, and the mono eyebrows. None of these had a visible source.
 
-Most important change: Fill the two "Semua …" tiles with real content, such as a starting price, so they don't read as empty card-sized blocks next to the products.
+Density fits the 480 px column: one product type per section, and no row of equal icon cards. The direction document records the references and the reasoning for what was transferred.
+
+No broken or clipped rendering at 390 or 1440. None of the template signals listed in the brief is present without a reason: mono appears only on the card's type line, which is the one place numaskin.id uses it.
+
+Most important change: the owner should supply one packshot per bundle (and per bundle variant). Those images now take up half of the home page and the catalogue, are unreadable at card width, and are the only thing between this page and the reference's visual quality.
+
 Verdict: PASS
+
+The follow-ups that don't block this verdict are recorded in `/home/ongki/.claude/plans/you-review-a-web-glowing-hickey.md`.

@@ -22,7 +22,9 @@ interface Props {
 const { pages, heading, limit = 5 } = Astro.props;
 // Only the ones that go somewhere. A landing page with no href is a row the
 // visitor can read but not open, which is worse than not listing it.
-const linked = pages.filter((page) => Boolean(page.href));
+// Install-owned: a landing page that now redirects to its product page is the
+// product, already on home; listing it here only repeated it as an "offer".
+const linked = pages.filter((page) => Boolean(page.href) && !page.href?.startsWith('/produk/'));
 const visible = linked.slice(0, limit);
 const hasMore = linked.length > visible.length;
 ---

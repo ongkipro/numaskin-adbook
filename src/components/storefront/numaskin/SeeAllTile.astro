@@ -13,7 +13,7 @@ const { href, title, note } = Astro.props;
 <li class="row-span-4 pb-6">
   <a
     href={href}
-    class="flex h-full flex-col items-center justify-center gap-2 rounded-xl bg-[var(--nm-surface-2)] px-4 text-center transition-colors hover:bg-[var(--nm-border)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--nm-cyan)]"
+    class="flex h-full flex-col items-center justify-center gap-2 rounded-xl border border-[var(--nm-border)] bg-white px-4 text-center transition-colors hover:border-[var(--nm-teal)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--nm-cyan)]"
   >
     <span class="nm-serif text-[20px] uppercase leading-tight text-[var(--nm-marine)]">{title}</span>
     <span class="text-[12px] leading-5 text-[var(--nm-muted)]">{note}</span>

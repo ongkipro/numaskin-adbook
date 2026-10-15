@@ -135,3 +135,33 @@ export function bundleLine(name: string): string {
 export function withoutSizes(text: string): string {
   return text.replace(/\s*\(?\b\d+\s?ml\b\)?/gi, '');
 }
+
+// The single product each bundleContents() label stands for, by name.
+const SINGLE_FOR: Readonly<Record<string, RegExp>> = {
+  'Facial Wash': /facial wash/i,
+  Toner: /treatment lotion/i,
+  'NAD+ Serum': /nad\+/i,
+  'Day Cream': /day cream/i,
+  Adenosine: /adenosine/i,
+  'Gloss Gel': /gloss gel/i,
+  Sunscreen: /sunscreen/i,
+};
+
+/** A bundle page's "buy singly" list: the bundle's own products first, then
+ *  other singles (already in routine order) to an even count, so the 2×2 grid
+ *  has no hole: at least `max`, more when the bundle holds more. */
+export function singlesForBundle<T extends { productName: string }>(
+  contents: readonly string[],
+  singles: readonly T[],
+  max = 4,
+): T[] {
+  const own = contents.flatMap((label) => {
+    const re = SINGLE_FOR[label];
+    const hit = re ? singles.find((p) => re.test(p.productName)) : undefined;
+    return hit ? [hit] : [];
+  });
+  const picked = [...new Set(own)];
+  const rest = singles.filter((p) => !picked.includes(p));
+  const target = Math.max(max, picked.length + (picked.length % 2));
+  return [...picked, ...rest].slice(0, target);
+}

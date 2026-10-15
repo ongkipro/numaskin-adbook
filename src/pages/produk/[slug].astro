@@ -4,7 +4,7 @@ import Breadcrumb from '../../components/storefront/shared/Breadcrumb.astro';
 import MetaLandingTracker from '../../components/storefront/tracking/MetaLandingTracker.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getStorefrontProduct, getStorefrontProducts } from '../../lib/catalog';
-import { BUNDLE_CATEGORY, orderCategories, withoutSizes } from '../../components/storefront/numaskin/catalog-order';
+import { BUNDLE_CATEGORY, bundleContents, orderCategories, singlesForBundle, withoutSizes } from '../../components/storefront/numaskin/catalog-order';
 import ProductGrid from '../../components/storefront/numaskin/ProductGrid.astro';
 import { getProductPageLanding } from '../../lib/landing-pages';
 import Icon from '../../components/storefront/shared/Icon.astro';
@@ -66,10 +66,14 @@ const shownDescription = product.variants.length > 1 ? withoutSizes(product.desc
 const isBundle = product.category === BUNDLE_CATEGORY;
 const allProducts = await getStorefrontProducts(Astro.locals);
 const routineOrder = orderCategories(allProducts.map((p) => p.category));
-const related = allProducts
+const otherSingles = allProducts
   .filter((p) => p.slug !== product.slug && p.category !== BUNDLE_CATEGORY)
-  .sort((a, b) => routineOrder.indexOf(a.category) - routineOrder.indexOf(b.category))
-  .slice(0, 4); // a 2×2 grid shows every card whole
+  .sort((a, b) => routineOrder.indexOf(a.category) - routineOrder.indexOf(b.category));
+// A bundle offers its own products singly; a single offers the rest of the
+// routine. Even counts, so the 2×2 grid shows every card whole.
+const related = isBundle
+  ? singlesForBundle(bundleContents(product.description ?? ''), otherSingles)
+  : otherSingles.slice(0, 4);
 const displayPrice = cheapestVariant?.price ?? product.price;
 const displayComparePrice = cheapestVariant?.comparePrice ?? product.comparePrice ?? 0;
 const displayDiscount =
