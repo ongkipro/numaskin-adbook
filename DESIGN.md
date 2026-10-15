@@ -80,6 +80,11 @@ black badges, Tailwind blue focus ring.
 
 ## Not changed / owner list
 
+- "Paket Daily Care Adenosine" and "Paket Daily Glow Duo" use the same
+  collage image; supply a distinct packshot for each.
+- Paket Glow Up's "Poin Penting" (copied from numaskin.id) describes a full
+  routine including products outside the 3-item bundle.
+
 - Hero slides, product photos and copy come from the catalogue as imported.
 - numaskin.id shows trust claims ("Sertifikasi Halal", "Uji Dermatologi");
   they are not added here — only BPOM numbers already on product pages are
@@ -133,6 +138,54 @@ headline Rp227.000 = form "Toner 50ml" = total Rp227.000; tapping the
 "Toner 150ml" pill → headline Rp257.000, form radio 150ml, total Rp257.000;
 choosing "Toner 50ml" in the form → headline and pills follow. No console
 errors.
+
+Round 2 (PASS) left two minor card notes, both taken:
+
+- Compare-at price is mono (`.nm-strike`), as on numaskin.id's cards.
+- The category line repeated "SKINCARE". Single products now carry the
+  merchant's own product type (Facial Cleanser, Hydrating Toner, Face Serum,
+  Day Cream, Moisturizer, Sunscreen — `products.category`, live D1), and a
+  single-size card appends its size ("FACIAL CLEANSER · 100 ML"). A size count
+  for multi-size products truncated at 390 px and was dropped; the PDP pills
+  carry it. Bundles stay "Paket Hemat".
+
+Round 3 (REVISE) — findings and changes:
+
+- "HEMAT" row under every card → the pill is now in the price row and only on
+  bundle cards (category "Paket Hemat"), as numaskin.id does; single products
+  show the struck price alone. In a 170 px column at 390 the pill wraps under
+  the prices inside that row rather than adding a separate row on every card.
+- Gallery badge "SKINCARE SET" vs card "PAKET HEMAT" → the badge now shows the
+  product's category, the same word as its card.
+- Size pills ordered by price, so the cheapest (pre-selected) pill is first.
+- "IDEAL UNTUK" carried a download icon → content labels have no icons; the
+  mono label stands alone. "INFORMASI PENGIRIMAN" and the checkout step
+  headings ("PILIH VARIAN", "DATA PENERIMA", "RINGKASAN PEMESANAN") now use the
+  same mono label, cyan dot kept. My round-2 note that "all PDP labels use the
+  mono label" was not true then; it is now (PDP render above).
+- Hero caption padding tightened.
+- Not changed, with reason: ~100 px under the PDP form is the sticky purchase
+  bar's clearance on mobile (`pb-20`); the duplicate collage on two bundles and
+  the Glow Up "Poin Penting" text naming products outside the bundle are
+  merchant content — owner list.
+
+Round 4 (REVISE) — findings and changes:
+
+- Compare-at price in JetBrains Mono read "Rp99.000" as "Rp99.888" (dotted
+  zero) → back to Inter with tabular figures. An intended deviation from
+  numaskin.id, which has the same misread: a misread price defeats the
+  compare-price job.
+- Price rows at different heights when names wrap 2 vs 3 lines, and when a
+  bundle's pill wraps → the name reserves three lines and the price block
+  reserves room for the pill. Measured: price-line offset between the two
+  cards of every visible row is 0 px on `/` and `/produk` at 390.
+- Pills 50ml → 150ml but form radios 150ml → 50ml → the stored variant order
+  was reversed on three bundles (Fresh & Hydrate, Glow Up Adenosine, Lengkap
+  6-in-1). With zero orders on the store, each pair's contents were swapped in
+  live D1 so every product lists its cheapest variant first; pills and radios
+  now run in the same order.
+
+Merged product 1.5.8 before these final renders.
 
 Per section (C1–C6):
 

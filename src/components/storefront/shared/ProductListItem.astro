@@ -32,12 +32,11 @@ const { product, formatPrice, eager = false } = Astro.props;
 const comparePrice = product.comparePrice ?? 0;
 const hasDiscount = comparePrice > product.price;
 // numaskin.id's category line names type and size ("FACIAL CLEANSER · 100 ML").
-// A single sellable size is shown; several are counted; a bundle's "Paket"
-// label says nothing and is left out.
+// Only a single sellable size is shown: several sizes are the PDP's pills (a
+// count truncated the line at 390 px), and a bundle's "Paket" says nothing.
+const isBundle = product.category === 'Paket Hemat';
 const onlyLabel = product.variants.length === 1 ? product.variants[0]?.label?.trim() : '';
-const sizeNote = product.variants.length > 1
-  ? `${product.variants.length} ukuran`
-  : onlyLabel && onlyLabel.toLowerCase() !== 'paket' ? onlyLabel : '';
+const sizeNote = onlyLabel && onlyLabel.toLowerCase() !== 'paket' ? onlyLabel : '';
 const discountPercentage = hasDiscount
   ? Math.round((1 - product.price / comparePrice) * 100)
   : 0;
@@ -68,23 +67,27 @@ const discountPercentage = hasDiscount
         {product.category}{sizeNote ? ` · ${sizeNote}` : ''}
       </span>
       {/* Regular weight, tracked, up to three lines: the distinguishing word
-          ("Moisturizer", "PA++++") usually comes last, and bold capitals cut it. */}
-      <h2 class="mt-1.5 line-clamp-3 text-[12.5px] font-normal uppercase leading-[18px] tracking-[0.05em] text-[var(--nm-marine)]">
+          ("Moisturizer", "PA++++") usually comes last, and bold capitals cut it.
+          Three lines are always reserved so prices align across a row. */}
+      <h2 class="mt-1.5 line-clamp-3 min-h-[54px] text-[12.5px] font-normal uppercase leading-[18px] tracking-[0.05em] text-[var(--nm-marine)]">
         {product.productName}
       </h2>
 
-      <div class="mt-auto flex flex-wrap items-baseline justify-center gap-x-2 pt-2">
+      {/* The saving is inline with the price and only on bundle cards, as on
+          numaskin.id; a single product shows the struck price alone. The block
+          keeps room for the wrapped pill on every card, so the price line sits
+          at the same height across a row. */}
+      <div class="mt-auto flex min-h-[54px] flex-wrap content-start items-center justify-center gap-x-2 gap-y-1 pt-2">
         <p class="text-sm font-bold leading-5 text-[var(--nm-marine)]">{formatPrice(product.price)}</p>
         {hasDiscount && (
           <p class="nm-strike text-[11px] leading-4 text-[var(--nm-muted)] line-through">
             {formatPrice(comparePrice)}
           </p>
         )}
+        {isBundle && discountPercentage > 0 && (
+          <span class="nm-label nm-pill !text-[9px]">Hemat {discountPercentage}%</span>
+        )}
       </div>
-      {/* The saving sits with the price, as on numaskin.id and the PDP. */}
-      {discountPercentage > 0 && (
-        <span class="nm-label nm-pill mt-1.5 !text-[9px]">Hemat {discountPercentage}%</span>
-      )}
     </div>
   </a>
 </article>

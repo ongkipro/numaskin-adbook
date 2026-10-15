@@ -136,8 +136,20 @@ html :is([data-hybrid-form-root], [data-middle-form-root]) .section-title::befor
   background: #269ba8;
 }
 
-/* Compare-at price in mono, as on numaskin.id's cards. */
+/* Compare-at price: Inter with tabular figures. numaskin.id sets it in
+   JetBrains Mono, whose dotted zero made "Rp99.000" read as "Rp99.888" at
+   11 px (review round 4) — a misread price is not worth the fidelity. */
 .nm-strike {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Checkout step headings ("Pilih Varian", "Data penerima", "Ringkasan
+   Pemesanan") take the storefront's one label style, so the product page has
+   a single heading system from the price to the submit button. */
+html :is([data-hybrid-form-root], [data-middle-form-root]) .section-title {
   font-family: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  font-size: 11px;
   font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
 }

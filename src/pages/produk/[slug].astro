@@ -178,7 +178,7 @@ const productSchemaJson = JSON.stringify(productSchema).replace(/</g, '\\u003c')
       <ProductImageGallery
         images={productImages}
         productName={product.productName}
-        badgeText={product.tag}
+        badgeText={product.category /* install: one name per product, as on its card */}
         discountPercentage={0 /* install: the saving shows once, beside the price (DESIGN.md C6) */}
       />
     </div>
@@ -232,7 +232,7 @@ const productSchemaJson = JSON.stringify(productSchema).replace(/</g, '\\u003c')
         <div class="mt-5">
           <p id="pdp-variant-label" class="nm-label !text-[var(--nm-marine)]">Pilihan ukuran / varian</p>
           <div class="mt-2.5 flex flex-wrap gap-2" role="group" aria-labelledby="pdp-variant-label">
-            {product.variants.map((v) => (
+            {[...product.variants].sort((a, b) => a.price - b.price).map((v) => (
               <button
                 type="button"
                 data-variant-pick={v.id}
@@ -258,7 +258,6 @@ const productSchemaJson = JSON.stringify(productSchema).replace(/</g, '\\u003c')
         {product.benefits && product.benefits.length > 0 && (
           <div class="grid gap-4 border-fade-b pb-4">
             <div class="flex items-center gap-2">
-              <Icon name="lucide:check" class="h-[17px] w-[17px]" style={`color: ${productAccent}`} aria-hidden="true" />
               <h3 class="nm-label !text-[var(--nm-marine)]">Manfaat Utama</h3>
             </div>
             <div class="space-y-3">
@@ -280,7 +279,6 @@ const productSchemaJson = JSON.stringify(productSchema).replace(/</g, '\\u003c')
         {product.keyPoints && product.keyPoints.length > 0 && (
           <div class="grid gap-4 border-fade-b pb-4">
             <div class="flex items-center gap-2">
-              <Icon name="lucide:plus" class="h-[17px] w-[17px]" style={`color: ${productAccent}`} aria-hidden="true" />
               <h3 class="nm-label !text-[var(--nm-marine)]">Poin Penting Produk</h3>
             </div>
             <div class="space-y-3">
@@ -302,12 +300,6 @@ const productSchemaJson = JSON.stringify(productSchema).replace(/</g, '\\u003c')
         {product.idealFor && product.idealFor.length > 0 && (
           <div>
             <div class="mb-3 flex items-center gap-2">
-              <Icon
-                name="lucide:download"
-                class="h-[17px] w-[17px]"
-                style={`color: ${productAccent}`}
-                aria-hidden="true"
-              />
               <h3 class="nm-label !text-[var(--nm-marine)]">Ideal Untuk</h3>
             </div>
             <div class="flex flex-wrap gap-x-3 gap-y-2">
@@ -384,7 +376,7 @@ const productSchemaJson = JSON.stringify(productSchema).replace(/</g, '\\u003c')
       <div class="flex items-start gap-3.5 text-[12px] leading-relaxed text-[var(--nm-muted)]">
         <Icon name="lucide:truck" class="mt-0.5 h-5 w-5 shrink-0" style={`color: ${productAccent}`} aria-hidden="true" />
         <div>
-          <p class="font-bold uppercase tracking-wider text-[var(--nm-marine)]">Informasi Pengiriman</p>
+          <p class="nm-label !text-[var(--nm-marine)]">Informasi Pengiriman</p>
           <p class="mt-1 leading-5 text-[var(--nm-muted)]">Biaya pengiriman dihitung otomatis di halaman checkout setelah alamat pengiriman dilengkapi.</p>
         </div>
       </div>
