@@ -716,3 +716,9 @@ strike still share a line at 360.
 New review cycle; the previous log is archived as
 `design/review-rounds-2026-10-16-polish6.log`. Renders: the ten listed in
 cycle 6 round 4.
+
+Cycle 7 round 1 (REVISE), not acted on: its findings are owner content or
+already-recorded decisions — bundle posters/infographics need packshots
+(Owner list); the merchant's PDP subtitles ("… Anti-Aging & Mencerahkan") are
+their cosmetic function copy, like the on-pack names; "Official Store" is the
+brand's own store on its own domain.
