@@ -1,0 +1,22 @@
+---
+// Install-owned (numaskin-adbook, DESIGN.md §UX). The closing cell of a home
+// grid with an odd count: it completes the row and is the section's "see all"
+// route, so the page has one see-all style and no empty cell.
+interface Props {
+  href: string;
+  title: string;
+  note: string;
+}
+const { href, title, note } = Astro.props;
+---
+
+<li class="row-span-4 pb-6">
+  <a
+    href={href}
+    class="flex h-full flex-col items-center justify-center gap-2 rounded-xl bg-[var(--nm-surface-2)] px-4 text-center transition-colors hover:bg-[var(--nm-border)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--nm-cyan)]"
+  >
+    <span class="nm-serif text-[20px] uppercase leading-tight text-[var(--nm-marine)]">{title}</span>
+    <span class="text-[12px] leading-5 text-[var(--nm-muted)]">{note}</span>
+    <span class="nm-btn mt-2 !px-4" aria-hidden="true">Lihat</span>
+  </a>
+</li>

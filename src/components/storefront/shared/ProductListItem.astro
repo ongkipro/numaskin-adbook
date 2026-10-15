@@ -26,15 +26,13 @@ interface Props {
    *  touch — under Slow 4G it spent 726ms of a 919ms LCP merely waiting to
    *  be requested. The homepage grid sits below the hero and stays lazy. */
   eager?: boolean;
-  /** Narrow cards (rails): struck price always under the price. */
-  stackPrice?: boolean;
   /** Where a step label already names the product's role (the ritual). */
   hideType?: boolean;
   /** A bundle's contents, shown under its name as numaskin.id does. */
   contents?: string[];
 }
 
-const { product, formatPrice, eager = false, stackPrice = false, hideType = false, contents = [] } = Astro.props;
+const { product, formatPrice, eager = false, hideType = false, contents = [] } = Astro.props;
 const comparePrice = product.comparePrice ?? 0;
 const hasDiscount = comparePrice > product.price;
 // numaskin.id's category line names type and size ("FACIAL CLEANSER · 100 ML").
@@ -90,12 +88,12 @@ const discountPercentage = hasDiscount
     </div>
     {/* The saving sits in the price row and only on bundle cards, as on
         numaskin.id; a single product shows the struck price alone. */}
-    {/* A card too narrow for price and struck price on one line (a rail at
-        360 px) stacks them, so a row of cards never mixes the two layouts.
+    {/* A card too narrow for price and struck price on one line (under
+        148 px) stacks them, so a row of cards never mixes the two layouts.
         The wrapper is the size container: containment on the subgridded
         <article> itself breaks the subgrid. */}
     <div class="@container">
-      <div class:list={['flex content-start items-center justify-center gap-x-1.5 gap-y-1 px-1 pt-2', stackPrice ? 'flex-col pb-2' : 'flex-wrap pb-6 @max-[9.25rem]:flex-col @max-[9.25rem]:pb-2']}>
+      <div class="flex flex-wrap content-start items-center justify-center gap-x-1.5 gap-y-1 px-1 pb-6 pt-2 @max-[9.25rem]:flex-col @max-[9.25rem]:pb-2">
         <p class="text-sm font-bold leading-5 text-[var(--nm-marine)]">{formatPrice(product.price)}</p>
         {hasDiscount && (
           <p class="nm-strike text-[11px] leading-4 text-[var(--nm-muted)] line-through">

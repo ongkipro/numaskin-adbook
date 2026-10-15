@@ -89,8 +89,10 @@ export function spreadSameImages<T extends { image: string }>(items: readonly T[
 // does not give; the others print outcome promises ("Dalam 14 Hari Flek Mulai
 // Hilang", "Garis halus tersamarkan", "sejak pemakaian pertama", "efek
 // instan", "menyamarkan flek hitam", "kulit tampak lebih cerah",
-// "brightening"), or a product the bundle lacks (Moist Glow Duo's "UV" tile).
+// "brightening"), or a product the bundle lacks (Moist Glow Duo's "UV" tile;
+// Exclusive's "Travel Size … & Pouch" gift box, not in its contents).
 const HELD_IMAGES_OF = new Set([
+  'paket-exclusive-lotion-gloss-gel',
   'paket-moist-glow-duo',
   'paket-twin-pack-toner-2x150ml',
   'paket-adenosine-dan-toner-150ml',

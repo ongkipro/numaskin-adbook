@@ -10,7 +10,7 @@ import NumaHero from '../numaskin/NumaHero.astro';
 import CategoryChips from '../numaskin/CategoryChips.astro';
 import RitualSection from '../numaskin/RitualSection.astro';
 import ProductGrid from '../numaskin/ProductGrid.astro';
-import ProductRail from '../numaskin/ProductRail.astro';
+import SeeAllTile from '../numaskin/SeeAllTile.astro';
 import Icon from '../shared/Icon.astro';
 import { bundleLine, heldImagesOf, pickRitual, BUNDLE_CATEGORY } from '../numaskin/catalog-order';
 import type { TenantHomeContent } from '../../../lib/tenant-content';
@@ -95,16 +95,18 @@ const categories = products.map((p) => p.category);
         <RitualSection products={singles} />
 
         {singlesGrid.length > 0 && (
-          <section aria-labelledby="produk-title" class="pt-10">
-            <div class="mb-6 px-4 text-center">
+          <section aria-labelledby="produk-title" class="px-4 pb-10 pt-10">
+            <div class="mb-6 text-center">
               <h2 id="produk-title" class="nm-serif text-[26px] uppercase leading-tight text-[var(--nm-marine)]">Lengkapi Rutinitas</h2>
               <span class="nm-rule mt-3" aria-hidden="true"></span>
             </div>
-            {/* A rail, not the grid: three cards in two columns left a hole. */}
-            <ProductRail items={singlesGrid.map((product) => ({ product }))} label="Produk satuan lainnya" />
-            <div class="mt-6 pb-10 text-center">
-              <a href="/produk" class="nm-btn">Lihat semua produk</a>
-            </div>
+            {/* Every card whole: a grid, not a scroller (three items). An odd
+                count is completed by the "all products" tile, so no hole. */}
+            <ProductGrid id="grid-satuan" products={singlesGrid}>
+              {singlesGrid.length % 2 === 1 && (
+                <SeeAllTile href="/produk" title="Semua produk" note={`${products.length} produk dan paket`} />
+              )}
+            </ProductGrid>
           </section>
         )}
 
@@ -117,8 +119,14 @@ const categories = products.map((p) => p.category);
                 Sebagian dari {bundles.length} paket; semuanya ada di katalog.
               </p>
             </div>
-            <ProductGrid id="grid-paket" products={bundlePreview} />
-            {bundles.length > bundlePreview.length && (
+            {/* An odd preview closes with the see-all tile; an even one keeps
+                the button, so a full row is never broken by a tile. */}
+            <ProductGrid id="grid-paket" products={bundlePreview}>
+              {bundles.length > bundlePreview.length && bundlePreview.length % 2 === 1 && (
+                <SeeAllTile href={`/produk?kategori=${encodeURIComponent(BUNDLE_CATEGORY)}`} title="Semua paket" note={`${bundles.length} paket hemat`} />
+              )}
+            </ProductGrid>
+            {bundles.length > bundlePreview.length && bundlePreview.length % 2 === 0 && (
               <div class="mt-2 text-center">
                 <a href={`/produk?kategori=${encodeURIComponent(BUNDLE_CATEGORY)}`} class="nm-btn">
                   Lihat semua {bundles.length} paket

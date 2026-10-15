@@ -55,6 +55,8 @@ const hasMore = products.length > initial;
         />
       </li>
     ))}
+    {/* Optional closing cell (a "see all" tile) that completes an odd row. */}
+    <slot />
   </ul>
 
   {hasMore && (

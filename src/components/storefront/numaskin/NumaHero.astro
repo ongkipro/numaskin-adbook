@@ -29,16 +29,12 @@ const { hasBundles } = Astro.props;
     <p class="mx-auto mt-3 max-w-[34ch] text-[14px] leading-6 text-[var(--nm-muted)] [text-wrap:pretty]">
       Dari pembersih hingga sunscreen, satuan atau dalam paket hemat.
     </p>
-    <div class="mt-6 flex flex-col gap-2.5">
-      <a href="/produk" class="nm-btn w-full">Lihat Semua Produk</a>
-      {hasBundles && (
-        <a
-          href="#paket"
-          class="inline-flex min-h-11 w-full items-center justify-center rounded-full border border-[var(--nm-marine)] bg-white px-6 text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--nm-marine)] transition-colors hover:bg-[var(--nm-surface-2)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--nm-cyan)]"
-        >
-          Paket Hemat
-        </a>
-      )}
+    {/* One action: search, chips and the product sections follow right
+        below, so a second "all products" route here only repeated them. */}
+    <div class="mt-6">
+      {hasBundles
+        ? <a href="#paket" class="nm-btn w-full">Lihat Paket Hemat</a>
+        : <a href="/produk" class="nm-btn w-full">Lihat Produk</a>}
     </div>
   </div>
 </section>

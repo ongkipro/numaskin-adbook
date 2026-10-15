@@ -5,7 +5,7 @@ import MetaLandingTracker from '../../components/storefront/tracking/MetaLanding
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getStorefrontProduct, getStorefrontProducts } from '../../lib/catalog';
 import { BUNDLE_CATEGORY, orderCategories, withoutSizes } from '../../components/storefront/numaskin/catalog-order';
-import ProductRail from '../../components/storefront/numaskin/ProductRail.astro';
+import ProductGrid from '../../components/storefront/numaskin/ProductGrid.astro';
 import { getProductPageLanding } from '../../lib/landing-pages';
 import Icon from '../../components/storefront/shared/Icon.astro';
 import RatingStars from '../../components/storefront/shared/RatingStars.astro';
@@ -69,7 +69,7 @@ const routineOrder = orderCategories(allProducts.map((p) => p.category));
 const related = allProducts
   .filter((p) => p.slug !== product.slug && p.category !== BUNDLE_CATEGORY)
   .sort((a, b) => routineOrder.indexOf(a.category) - routineOrder.indexOf(b.category))
-  .slice(0, 6);
+  .slice(0, 4); // a 2×2 grid shows every card whole
 const displayPrice = cheapestVariant?.price ?? product.price;
 const displayComparePrice = cheapestVariant?.comparePrice ?? product.comparePrice ?? 0;
 const displayDiscount =
@@ -375,10 +375,10 @@ const productSchemaJson = JSON.stringify(productSchema).replace(/</g, '\\u003c')
           {isBundle ? 'Beli satuan' : 'Lengkapi rutinitas'}
         </h2>
         <span class="nm-rule mt-3" aria-hidden="true"></span>
-        <div class="mt-5">
-          <ProductRail
-            label={isBundle ? 'Produk satuan' : 'Produk untuk melengkapi rutinitas'}
-            items={related.map((p) => ({ product: { slug: p.slug, name: p.productName, category: p.category, image: p.heroImage, price: p.price, comparePrice: p.comparePrice, variants: p.variants } }))}
+        <div class="mt-5 px-4">
+          <ProductGrid
+            id="grid-related"
+            products={related.map((p) => ({ slug: p.slug, name: p.productName, category: p.category, image: p.heroImage, price: p.price, comparePrice: p.comparePrice, variants: p.variants }))}
           />
         </div>
       </section>

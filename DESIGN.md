@@ -162,6 +162,8 @@ Tailwind blue focus ring, a card grid that reserves blank lines.
 - The Treatment Lotion landing page's meta description (shown on the home
   row) says "meredakan kemerahan, dan memperkuat skin barrier": an outcome
   claim; rewrite it in the landing editor.
+- The Treatment Lotion landing page is titled like the product itself, so the
+  home row reads as the product; give it an offer title in the landing editor.
 - numaskin.id's ritual bar says the 4-in-1 holds Facial Wash, Toner, NAD+
   Serum and Moisturizer; its product page says Toner, Adenosine, Sunscreen and
   NAD+ Serum. Confirm which is true.
@@ -465,3 +467,36 @@ rendered and the six screenshots re-opened, not re-reviewed:
   every rail card stacks its prices (the container query), uniformly per row;
   at 1440 they sit inline.
 - The bundle subline orphaned a word → `text-wrap: balance`.
+
+### Polish cycle 3 (2026-10-15, owner: "ya lanjutkan")
+
+Deployed as `e32f5c7` (Version 03098636). New review cycle; the previous log
+is archived as `design/review-rounds-2026-10-15-polish2.log`. Starts from the
+renders above (`design/renders/ux-home-390.png`,
+`design/renders/ux-home-1440.png`, `design/renders/ux-produk-390.png`,
+`design/renders/ux-produk-1440.png`, `design/renders/ux-pdp-390.png`,
+`design/renders/ux-pdp-1440.png`), which include the cycle-2 round-5 changes.
+
+Cycle 3 round 1 (REVISE) — findings and changes, re-rendered and the six
+screenshots re-opened:
+
+- Rails of three or four items clipped their last card mid-glyph → no rails:
+  home "Lengkapi Rutinitas" is a 2×2 grid whose odd cell is a "Semua produk"
+  tile (49 produk dan paket); the PDP shows four singles in a 2×2 grid.
+  `ProductRail` and the card's `stackPrice` prop are removed (unused).
+- Hero "Lihat Semua Produk" was a third route to /produk within two screens →
+  one action, "Lihat Paket Hemat" (#paket); search and chips follow.
+- The Exclusive bundle's image shows "Travel Size … & Pouch" in a gift box,
+  beyond its listed contents → held like Twin Pack.
+- Footer "Halaman" did not say where it goes → "Halaman Penawaran".
+
+Cycle 3 round 2 (REVISE) — findings and changes, re-rendered and the six
+screenshots re-opened:
+
+- Holding the Exclusive image left five bundles and an empty cell, followed
+  by a second "see all" style (the pill) → `SeeAllTile` closes any odd home
+  grid ("Semua paket · 42 paket hemat"; "Semua produk · 49 produk dan
+  paket"); an even preview keeps the button, so a full row is never broken.
+- Not changed, with reason: the landing row's title equals the product name
+  (operator retitles it in the landing editor; Owner list); "Total
+  Pembayaran" vs CS-confirmed shipping is product checkout copy.
