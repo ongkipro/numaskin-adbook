@@ -137,10 +137,19 @@ Tailwind blue focus ring, a card grid that reserves blank lines.
 
 ## Owner list
 
-- "Paket Twin Pack Toner" image (from numaskin.id) advertises "Free Ice Water
-  Globe", which this store does not offer — replace the image or add the gift.
-- "Paket Daily Care Adenosine" and "Paket Daily Glow Duo" share one collage;
-  several bundle images are infographics rather than packshots.
+- Resolved 2026-10-19 (owner approved): every bundle but Exclusive shows a
+  packshot composed from the singles' own photos (background removed with
+  rembg, the singles' backdrop, approximate relative sizes read off the
+  merchant's group photos, travel-size toner cut from the Duo Toner photo);
+  one image per size for the four two-size bundles, swapped by the size pills
+  (`VARIANT_IMAGES`). 45 images in R2 (`uploads/2026-10-19/`, with `-sm`);
+  D1 image fields updated with the old URLs kept outside the repo. The posters
+  below (gift, outcome promises, shared collages, one size only) are no longer
+  shown, so the held-image mechanism is removed. A studio flat-lay per
+  best-selling bundle would still beat a composite.
+- (Superseded) "Paket Twin Pack Toner" image advertised "Free Ice Water Globe";
+  "Paket Daily Care Adenosine" and "Paket Daily Glow Duo" shared one collage;
+  several bundle images were infographics rather than packshots.
 - Paket Glow Up's "Urutan pemakaian" (from numaskin.id) names products outside
   the bundle.
 - 26 of the 42 bundles use one of only four images (byte-identical files from
@@ -164,15 +173,15 @@ Tailwind blue focus ring, a card grid that reserves blank lines.
   and not priced or counted, `isGift`), image no longer held. Age Defense
   Trio's description lists Day Cream, Adenosine and Sunscreen: its price
   follows those three.
-- Six bundle images print outcome promises or a gift (held from the home
+- (Superseded 2026-10-19) Six bundle images printed outcome promises or a gift (held from the home
   preview, still on /produk): Twin Pack, Adenosine & Toner 150ml, Duo Toner,
   Toner 50ml & Gloss Gel, Toner 150ml & Gloss Gel, and the "Why PDRN"
   infographic (Youth Glow and the bundles sharing it).
 - "Cocok untuk" chips ("Anti-aging", "Mencerahkan", "Memperkuat skin
   barrier") are hidden on the PDP until sourced; descriptions still say
   "kulit glowing". Source the claims or rewrite them in the product data.
-- Bundle images show one size (Paket Glow Up's says "Routine 150ml") while the
-  PDP preselects the cheapest variant (50 ml). Supply an image per variant.
+- (Resolved 2026-10-19: one packshot per size) Bundle images showed one size
+  while the PDP preselects the cheapest variant (50 ml).
 - numaskin.id's ritual bar says the 4-in-1 holds Facial Wash, Toner, NAD+
   Serum and Moisturizer; its product page says Toner, Adenosine, Sunscreen and
   NAD+ Serum. Confirm which is true.
@@ -839,3 +848,14 @@ Cycle 9 round 4 (REVISE): the outlined submit was the lightest control on the
 page → filled marine in every state but "loading"; with the action label and
 tap-to-validate there is no "not ready" look left to show (re-checked: empty
 tap focuses the name field, 0 requests).
+
+Cycle 9 round 5: PASS.
+
+### Polish cycle 10 (2026-10-19): bundle packshots
+
+New review cycle; the cycle 9 log is archived as
+`design/review-rounds-2026-10-19-polish9.log`. Bundle cards and PDPs now show
+the composed packshots (owner list); the "Foto ilustrasi" caption is gone where
+each size has its own photo. Checked in a browser: 42 of 42 bundle images load
+on /produk, and choosing 150ml on Glow Up swaps the photo to the 150ml one.
+Renders: the ten `design/renders/ux-*.png`, re-taken.

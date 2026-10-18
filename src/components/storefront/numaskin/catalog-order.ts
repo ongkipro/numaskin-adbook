@@ -85,40 +85,20 @@ export function spreadSameImages<T extends { image: string }>(items: readonly T[
   return out;
 }
 
-// Bundle images held back until the owner replaces them (DESIGN.md owner
-// list): kept off the home preview and listed last on /produk, together with
-// every bundle sharing the same image. Twin Pack's promises a gift the store
-// does not give; the others print outcome promises ("Dalam 14 Hari Flek Mulai
-// Hilang", "Garis halus tersamarkan", "sejak pemakaian pertama", "efek
-// instan", "menyamarkan flek hitam", "kulit tampak lebih cerah",
-// "brightening"), or a product the bundle lacks (Moist Glow Duo's "UV" tile).
-// Exclusive's gift box is no longer held: its description lists the travel
-// size and the pouch it shows.
-const HELD_IMAGES_OF = new Set([
-  'paket-moist-glow-duo',
-  'paket-twin-pack-toner-2x150ml',
-  'paket-adenosine-dan-toner-150ml',
-  'paket-duo-toner-150ml-50ml',
-  'paket-toner-50ml-dan-gloss-gel',
-  'paket-toner-150ml-dan-gloss-gel',
-  'paket-youth-glow-duo-50ml',
-  'paket-adenosine-dan-sunscreen',
-  'paket-sunscreen-dan-toner-50ml',
-  'paket-sunscreen-dan-toner-150ml',
-  'paket-sunscreen-adenosine-toner-50ml',
-  'paket-sunscreen-adenosine-toner-150ml',
-  'paket-sunscreen-dan-gloss-gel',
-]);
-
-export function heldImagesOf(products: ReadonlyArray<{ slug: string; image: string }>): Set<string> {
-  return new Set(products.filter((p) => HELD_IMAGES_OF.has(p.slug)).map((p) => p.image));
-}
-
-/** Stable: products with a held image move to the end, order otherwise kept. */
-export function heldLast<T extends { slug: string; image: string }>(products: readonly T[]): T[] {
-  const held = heldImagesOf(products);
-  return [...products.filter((p) => !held.has(p.image)), ...products.filter((p) => held.has(p.image))];
-}
+// A bundle sold in two sizes has one packshot per size; the product row holds
+// the cheapest one. The PDP swaps to the chosen size's photo.
+// lazy: keyed by variant id in code, since variants have no image column.
+// Upgrade path: an image_url column on product_variants.
+export const VARIANT_IMAGES: Readonly<Record<number, string>> = {
+  22: '/assets/uploads/2026-10-19/bd974e4f-70e7-459f-be0f-5816c6a09ee3.webp',
+  23: '/assets/uploads/2026-10-19/225e8322-d184-495c-b45c-d9615f27a852.webp',
+  24: '/assets/uploads/2026-10-19/f5e76689-5116-4247-952d-ff6b805a588c.webp',
+  25: '/assets/uploads/2026-10-19/22e5a513-af64-4ac2-aab7-b2c26e880829.webp',
+  26: '/assets/uploads/2026-10-19/da1c3c56-862b-4e58-a1e2-e3e0f3c0d2a8.webp',
+  27: '/assets/uploads/2026-10-19/9a7029ee-6398-4241-b375-8d8a423bff76.webp',
+  29: '/assets/uploads/2026-10-19/4913fbd0-236b-4d04-96c9-1288ef95187a.webp',
+  30: '/assets/uploads/2026-10-19/aa451e1f-5903-4a76-bdb3-f50786de2a91.webp',
+};
 
 // The merchant names a bundle line by its first two words ("Paket Glow Up
 // Adenosine", "Paket Glow Up Gloss Gel") and gives the line near-identical

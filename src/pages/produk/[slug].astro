@@ -4,7 +4,7 @@ import Breadcrumb from '../../components/storefront/shared/Breadcrumb.astro';
 import MetaLandingTracker from '../../components/storefront/tracking/MetaLandingTracker.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getStorefrontProduct, getStorefrontProducts } from '../../lib/catalog';
-import { BUNDLE_CATEGORY, bundleContents, orderCategories, singlesForBundle, singlesTotal, sizeChoice, withoutSizes } from '../../components/storefront/numaskin/catalog-order';
+import { BUNDLE_CATEGORY, VARIANT_IMAGES, bundleContents, orderCategories, singlesForBundle, singlesTotal, sizeChoice, withoutSizes } from '../../components/storefront/numaskin/catalog-order';
 import ProductGrid from '../../components/storefront/numaskin/ProductGrid.astro';
 import SeeAllTile from '../../components/storefront/numaskin/SeeAllTile.astro';
 import { getProductPageLanding } from '../../lib/landing-pages';
@@ -212,10 +212,10 @@ const productSchemaJson = JSON.stringify(productSchema).replace(/</g, '\\u003c')
         badgeText={undefined /* install: the breadcrumb already names the category */}
         discountPercentage={0 /* install: the saving shows once, beside the price (DESIGN.md C6) */}
       />
-      {/* The merchant's photos show one size of a multi-size bundle (Glow Up's
-          poster says "Routine 150ml"); until each size has its own photo, the
-          caption says which one the order follows. */}
-      {isBundle && product.variants.length > 1 && (
+      {/* A multi-size bundle whose sizes lack their own photo shows one size;
+          the caption says the order follows the chosen size. Sizes with their
+          own packshot (VARIANT_IMAGES) swap the photo instead. */}
+      {isBundle && product.variants.length > 1 && !product.variants.every((v) => VARIANT_IMAGES[Number(v.id)]) && (
         <p class="bg-white px-5 pt-3 text-[13px] font-medium leading-5 text-[var(--nm-marine)]">
           Foto ilustrasi. Isi paket mengikuti ukuran yang dipilih.
         </p>
@@ -293,6 +293,7 @@ const productSchemaJson = JSON.stringify(productSchema).replace(/</g, '\\u003c')
                 data-compare={v.comparePrice ?? 0}
                 data-vs={vsSingles(v)}
                 data-label={v.label}
+                data-image={VARIANT_IMAGES[Number(v.id)]}
                 aria-pressed={v.id === cheapestVariant?.id ? 'true' : 'false'}
                 class="min-h-11 rounded-full border border-[var(--nm-border)] bg-[var(--nm-surface)] px-5 text-[13px] font-semibold text-[var(--nm-marine)] transition-colors hover:border-[var(--nm-teal)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--nm-cyan)] aria-pressed:border-[var(--nm-marine)] aria-pressed:bg-[var(--nm-marine)] aria-pressed:text-white"
               >
@@ -495,6 +496,8 @@ const productSchemaJson = JSON.stringify(productSchema).replace(/</g, '\\u003c')
         const saving = Number(pill.dataset.vs);
         if (vs) { vs.hidden = !(saving > 0); vs.textContent = `${idr(saving)} lebih hemat dibanding beli satuan`; }
         if (contents && pill.dataset.label) contents.textContent = pill.dataset.label;
+        const photo = document.querySelector<HTMLImageElement>('[data-gallery] img');
+        if (photo && pill.dataset.image) photo.src = pill.dataset.image;
       };
       // With the sync running, the pills are the one visible size choice: the
       // form's own variant step (same options, one screen lower) is hidden,

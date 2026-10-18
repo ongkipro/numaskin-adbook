@@ -54,17 +54,6 @@ test("identical images are moved apart, keeping order otherwise", async () => {
   assert.deepEqual(spreadSameImages([{ image: "x" }, { image: "x" }]).map((p) => p.image), ["x", "x"]);
 });
 
-test("bundles with a held image go last, with every bundle sharing that image", async () => {
-  const { heldLast } = await import("../components/storefront/numaskin/catalog-order.ts");
-  const order = heldLast([
-    { slug: "paket-twin-pack-toner-2x150ml", image: "gift" },
-    { slug: "a", image: "clean" },
-    { slug: "b", image: "gift" },
-    { slug: "c", image: "other" },
-  ]).map((p) => p.slug);
-  assert.deepEqual(order, ["a", "c", "paket-twin-pack-toner-2x150ml", "b"]);
-});
-
 test("bundle line is the name's first two words after 'Paket'", async () => {
   const { bundleLine } = await import("../components/storefront/numaskin/catalog-order.ts");
   assert.equal(bundleLine("Paket Glow Up Adenosine"), bundleLine("Paket Glow Up Gloss Gel"));

@@ -12,7 +12,7 @@ import RitualSection from '../numaskin/RitualSection.astro';
 import ProductGrid from '../numaskin/ProductGrid.astro';
 import SeeAllTile from '../numaskin/SeeAllTile.astro';
 import Icon from '../shared/Icon.astro';
-import { bundleLine, heldImagesOf, pickRitual, BUNDLE_CATEGORY } from '../numaskin/catalog-order';
+import { bundleLine, pickRitual, BUNDLE_CATEGORY } from '../numaskin/catalog-order';
 import type { TenantHomeContent } from '../../../lib/tenant-content';
 
 interface ProductCard {
@@ -54,13 +54,12 @@ const bundles = products
   .sort((a, b) => a.price - b.price);
 const BUNDLE_PREVIEW = 6;
 // The home preview is the cheapest bundles whose image is not already shown,
-// so two bundles sharing one merchant collage never sit side by side. Held
-// images (catalog-order.ts) are kept off it; /produk lists them last.
-const heldImages = heldImagesOf(bundles);
+// so two bundles sharing one image never sit side by side, and one bundle per
+// line (bundleLine).
 const seenImages = new Set<string>();
 const seenLines = new Set<string>();
 const bundlePreview = bundles.filter((p) => {
-  if (heldImages.has(p.image) || seenImages.has(p.image) || seenLines.has(bundleLine(p.name))) return false;
+  if (seenImages.has(p.image) || seenLines.has(bundleLine(p.name))) return false;
   seenImages.add(p.image);
   seenLines.add(bundleLine(p.name));
   return true;
