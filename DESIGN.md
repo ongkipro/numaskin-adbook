@@ -69,8 +69,8 @@ evaluate (card: type, size, price, saving) → PDP (size pills, one price) →
 
 **Home** (`templates/CompactMarketHome.astro`, install-owned):
 
-1. Marine top band "Official Store Numa Skin" (no verification tick: nothing
-   on the page backs a platform check); centred wordmark.
+1. Marine top band "COD tersedia untuk sebagian besar wilayah" (was "Official
+   Store Numa Skin": no source on the page; cycle 7 round 3); centred wordmark.
 2. Brand hero (`numaskin/NumaHero.astro`): the merchant's water-splash poster
    cropped to the column, serif h1 "Kemurnian Laut Dalam untuk Kulit Awet
    Muda", one-line positioning, "Lihat Produk" and "Paket Hemat" jumps.
@@ -111,8 +111,8 @@ horizontal subgrid). Names are not clamped: the
 distinguishing word ("Moisturizer", "PA++++", "(150ml)") is usually last, and
 a truncated name was a round-1 review finding; subgrid removes the dead band
 that full names used to cost. The type line wraps rather than truncating. A
-bundle's line says what it is ("SKINCARE SET · 150ML"), not the section it
-sits in, and its contents follow the name ("Facial Wash + Toner"), read from
+bundle's line counts its items ("3 PRODUK · 150ML", from the variant label
+that lists them; "SKINCARE SET" when none does), not the section it sits in, and its contents follow the name ("Facial Wash + Toner"), read from
 the bundle's description (`bundleContents`, tested). The saving pill appears only on bundle cards, in the price block; in
 a 170 px column it wraps under the two prices.
 
@@ -722,3 +722,31 @@ already-recorded decisions — bundle posters/infographics need packshots
 (Owner list); the merchant's PDP subtitles ("… Anti-Aging & Mencerahkan") are
 their cosmetic function copy, like the on-pack names; "Official Store" is the
 brand's own store on its own domain.
+
+Cycle 7 round 1, acted on afterwards: the bundle type line "SKINCARE SET" was
+the same on every bundle → it counts the items ("2 PRODUK", "3 PRODUK · 150ML");
+"Sebagian dari 42 paket; semuanya ada di katalog" → "5 dari 42 paket."; the
+multi-size photo caption was easy to miss → 13 px medium marine. Kept: the
+ritual's white step boxes (they group step label and product on the tinted
+section; the singles grid sits on white); the empty-search gap at 1440 (the
+column's min height). Renders re-taken: the ten `design/renders/ux-*.png`.
+Cycle 7 round 3 (REVISE): "Official Store" had no visible source → the top
+band states the COD fact the PDP already gives.
+Cycle 7 round 4 (REVISE): a wrapped type line ended in a dangling "·"
+("FACIAL CLEANSER ·" / "100 ML") → a line over 16 characters puts the size on
+its own line without the dot. Not changed: the PDP subtitle's "Anti-Aging &
+Mencerahkan". The claim rule is: cosmetic *function* copy the brand prints on
+its packs and on numaskin.id (anti-aging, mencerahkan, tone-up) stays; *outcome
+or suitability* claims with no source (timed results, "Cocok untuk" skin-type
+chips, "Memperkuat skin barrier", "meredakan kemerahan") are held. The chips are
+held as suitability claims, not for the words they share with the subtitle.
+Cycle 7 round 5 (REVISE): the stacked type lines made uneven gaps in rails and
+grids → the card type line uses 0.06em tracking and fits on one line on every
+card at 360, 390 and 1440 (measured); "Facial Cleanser" reads "Cleanser" there,
+the only line that was wider than the column. Over 21 characters still stacks.
+
+### Polish cycle 8 (2026-10-16)
+
+New review cycle; the cycle 7 log is archived as
+`design/review-rounds-2026-10-16-polish7.log`. Renders: the ten
+`design/renders/ux-*.png`, re-taken after the round 5 changes.
