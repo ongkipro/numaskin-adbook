@@ -4,78 +4,70 @@ Model: unavailable: ai-ask does not report the resolved model/provider
 Screenshots: design/renders/ux-empty-1440.png, design/renders/ux-empty-390.png, design/renders/ux-home-1440.png, design/renders/ux-home-390.png, design/renders/ux-pdp-1440.png, design/renders/ux-pdp-390.png, design/renders/ux-pdp-single-1440.png, design/renders/ux-pdp-single-390.png, design/renders/ux-produk-1440.png, design/renders/ux-produk-390.png
 References: design/refs/current-home/1440.png, design/refs/current-home/390.png, design/refs/current-produk/1440.png, design/refs/current-produk/390.png, design/refs/numaskin-collection/1440.png, design/refs/numaskin-collection/390.png, design/refs/numaskin-home/1440.png, design/refs/numaskin-home/390.png, design/refs/numaskin-pdp/1440.png, design/refs/numaskin-pdp/390.png
 Prompt-SHA: 4ae0ce2195b477c4
-Context-SHA: a98e37870e1561b7
-Images-SHA: 10d958f1fb91486b
-Output-SHA: e41217724a4e246f
+Context-SHA: c639e9ab33652aaf
+Images-SHA: 26b49fc98063f790
+Output-SHA: e69ef20fc4f59485
 
-Paduka Ongki, kelima halaman render (65 slice) sudah saya buka semuanya, dan tidak ada yang gagal dibaca. Slice `ff7ddb…`, `e7d9ab…`, `717125…` dan `71cbde…` adalah storefront lama (hitam-putih). `599f0d…`, `2055b6…`, `346ae1…`, `2592db…`, `8ad616…` dan `a76024…` adalah referensi numaskin.id. Saya tidak mengubah file apa pun. Review-nya dalam bahasa Inggris, sesuai format permintaan.
+All 67 images opened and read: the 33 `ux-*` renders of this build and 34 reference or "before" captures. I made no edits and wrote no plan file.
 
-## Section review
+The slice files have no readable names, so I matched them by content:
+- **This build:** `6299…`/`9cd9…` (empty search), `7d09…`/`48fe…` (home), `d393…`/`f28f…` (bundle PDP), `7b5e…`/`c01d…` (single PDP), `cb02…`/`d161…` (/produk).
+- **Pre-change store (monochrome, black badges, Noto):** `ff7d…`, `e7d9…`, `7171…`, `71cb…`.
+- **numaskin.id references:** `599f…`/`2055…` (collection), `346a…`/`2592…` (home), `8ad6…`/`a760…` (PDP).
 
-**Home** (`7d096ae…-1440-01..03`, `48feb52…-390-01..05`)
-- Top band + wordmark | authored | numaskin.id wordmark (NUMA·SKIN + katakana) and marine band | none; the COD line is the same fact the PDP states.
-- Hero | authored | water-splash poster, serif h1 | the single "Lihat Paket Hemat" button is clear at 390; shows no second product, which is fine.
-- Search + chips | authored | rounded search pill, chip row | At 1440 the row is cut at "Face S" with no arrow or scrollbar. A mouse user cannot reach Face Serum, Day Cream or Sunscreen. Wrap the chips or add scroll buttons at `lg`.
-- Rutinitas 4 Langkah | authored | ritual 2×2 with numbered steps | White card around an aqua image well gives a double frame. Drop the white card, or the well's own radius.
-- Perawatan Tambahan + "Semua Produk" tile | authored | aqua wells, mono type line, see-all tile | Nothing material. The tile's 2×2 packshot mosaic fills the odd cell well.
-- Paket Hemat | authored | bundle cards with a HEMAT pill | The contents lines ("Facial Wash + Sunscreen" vs "Facial Wash + Day Cream") sit at different heights when one name wraps and the other doesn't (1440 at y337 vs 319, 390 at y683 vs 665), while prices stay aligned. Put the contents line in its own subgrid row.
-- Footer | generic but appropriate | none | none. It makes no unsourced "resmi" or "halal" claims.
+## Per section
 
-**/produk** (`cb02673…-1440-01..02`, `d16117a…-390-01..03`)
-- Heading, search, chips | authored | left serif h1 with cyan rule, as on numaskin.id | Same chip-reach problem at 1440.
-- Grid, 10 cards | authored | reference card anatomy | Single and bundle cards have different internal rhythm (strike plus pill vs contents line plus rupiah pill). That is legible and I would not change it.
-- Load more + footer | authored | "Menampilkan 10 dari 49" count | none.
+Top band + wordmark header | authored | numaskin.id's marine band and spaced wordmark + katakana, without its nav and cart, which a single-store COD column doesn't need | none. At 1440 the 480 px column sits in wide aqua flanks (owner constraint). The band says only "COD tersedia untuk sebagian besar wilayah", and the PDP states the same COD fact.
 
-**Bundle PDP** (`d393c00…-1440-01..03`, `f28f7bb…-390-01..04`)
-- Image | authored | packshot well | none. The composed packshot carries the three items and has real photos behind it.
-- Title, price, saving, pills, "Isi:" | authored | large marine price, filled-marine selected pill, "PILIH UKURAN TONER" | Clear hierarchy. The arithmetic checks out (226.998 − 204.000 = 22.998).
-- Accordions → order form | authored | skinned fields, serif "Form Pemesanan" with rule | The reference puts the buy button right under the sizes; here the form starts about 1.5 screens down at 390. The owner removed that button on 2026-10-15, so this is a recorded decision, not a defect.
-- Beli satuan | authored | shared card, see-all tile closes the odd cell | none.
+Hero (home) | authored | the water-splash poster from the reference, cropped 5:4 (480×384 at 1440, 390×315 at 390), with the serif headline and one marine pill on a solid aqua ground | none. The headline sits below the image rather than over it, so nothing is lost to the photo. The outcome headline, mono eyebrow and badge row from the reference are correctly not carried over. One fix: "Lihat Paket Hemat" jumps to `#paket`, the last section, about 2,500 px down past singles. Either note that or shorten the path.
 
-**Single PDP** (`7b5ee53…-1440-01..02`, `c01d9d5…-390-01..04`)
-- Image, title, price + "HEMAT 30%", COD line | authored | marine price, teal pill | none.
-- Description | authored | none | "BPOM NA18241203644" is a visible source, which makes the BPOM claim defensible.
-- Lengkapi Rutinitas | authored | even 2×2, no see-all tile | none.
+Search + category chips | authored | the reference's search and pill idiom. The chip row is cut at the edge ("Face S", "Hydrating Ton") so it reads as scrollable, and "Semua" is unfilled on home | none.
 
-**Empty search** (`6299f63…-1440-01..02`, `9cd9871…-390-01..03`)
-- Status line + message card | authored | none | none. The count line, a plain sentence and a "Hapus Pencarian" button; no illustration.
-- Rutinitas Dasar | authored | serif title with cyan rule | none.
+Ritual "Rutinitas 4 Langkah" | authored | the reference ritual, reduced: numbered teal step label, bottle, name, price, pill. The reference's mono "STEP 01 · BERSIHKAN", "DETAIL →" and water-texture band are dropped | at 390 the bottle sits inside a white box and then an aqua well. The two frames cost about 16 px each side, so the bottle is ~60 px wide in a 170 px column. Drop the inner well or the white box.
+
+Perawatan Tambahan + "Semua produk" tile | authored | the unboxed grid on white with the shared card. The see-all tile holds a 2×2 of real packshots and closes the odd cell | none. At 1440 the tile (ends y≈1042) lines up with its neighbours, and the white card with a hairline reads as a link, not an empty image.
+
+Paket Hemat (home) | authored, slightly repetitive | the reference's "HEMAT" pill, here as a rupiah saving. The composed packshots share one backdrop and scale, so the grid reads as one set | at 1440 and 390 four of six packshots lead with the same Facial Wash bottle. Interleave a non-Facial-Wash bundle (Adenosine & Sunscreen) into the first row. The compare-at figures Rp147.998 / 148.498 read as computed, not merchandised. That is a recorded decision, so I'm flagging it only.
+
+Footer | generic but adequate | a centred wordmark and text links. The reference's BPOM, Halal and Dermatologi lines are left out because no source is shown | none. This is correct under the claim rule.
+
+/produk header, filters and grid | authored | left-aligned serif H1 with cyan rule, count line, 2-up cards, load-more with "Menampilkan 10 dari 49 produk". Singles come first and bundles last, and the black badges and Noto of the "before" capture are gone | the H1 is left-aligned while every section title elsewhere is centred. Align them, or accept it as page-title versus section-title.
+
+Empty search | authored | count line, message, "Hapus pencarian" and four routine products so the page doesn't dead-end | none. At 1440 the white message box sits tight under the chips and the page fills; no blank slab remains.
+
+PDP, bundle (photo → title → price → sizes → details) | authored | serif title, large marine price, strike, teal saving line, filled-marine selected size pill, "Isi:" contents line, COD line, closed accordions. This closely matches the reference PDP's hierarchy | the brief's job is "reach the COD order form", but there is no control between the sizes and the form (owner decision, 2026-10-15). At 390 the form is two scrolls below the price. The renders are sound; I can't judge whether that costs orders, so measure it.
+
+PDP, order form + summary | authored | "Form Pemesanan" with cyan rule, summary card with strike and price, "Subtotal / Ongkir & admin dikonfirmasi via CS", one full-width marine "Buat Order Sekarang" | the three inputs are pale aqua fills with a hairline border and a placeholder-as-label, so they read as faint slabs on white at 390. Raise the border to the muted `#5A6E7F` family, or use a stronger 1px border, so the fields are the clear tap targets on the page's key step.
+
+PDP, "Beli satuan" / "Lengkapi rutinitas" | authored | the shared card in a 2×2, using the bundle's own products plus the see-all tile | none.
+
+PDP, single product | authored | one price with "Hemat 30%", no size picker, BPOM number printed in the description (a visible source), two accordions | none.
 
 ## Template signals
 
-- **Absent:** I checked the whole list, and none of these appear in the renders:
-  - a navy dot-grid hero
-  - an accent-word headline
-  - eyebrows over headings
-  - icon-tile card rows
-  - `→` on buttons
-  - checkmark lists
-  - placeholder stats
-- **Present, but sourced:** mono `A · B` type lines ("CLEANSER · 100 ML") appear on the product cards. They are the one place numaskin.id uses mono (`346ae1…-02`, `a76024…-02`), so I accept them.
-- **Swap test:** the page would not survive a brand-name swap. The palette, packshots, water hero, ritual and katakana wordmark are the merchant's own.
+- **Not present:** dark hero, headline accent word, eyebrows, icon-tile card rows, stat figures, checkmark lists, arrows on buttons.
+- **Present, each justified by the reference:** tracked mono type line "CLEANSER · 100 ML" on every card, which is numaskin.id's one use of mono, and a "HEMAT" pill on every card.
+- **Not a template defect, but dense:** at 390 the type line (11 px mono, tracked, uppercase, teal) and the name (13 px uppercase Inter) are close in size. Price weight and colour carry the hierarchy.
+- **Swap test:** with the name changed, the packshots, aqua wells and Ulleung/ritual copy still tie the page to Numa Skin.
 
-## Reference comparison
+## Against the references
 
-I compared the renders against numaskin.id home, collection and PDP, and against the old black/mono store.
+- **Transferred, as `DESIGN.md` claims:**
+  - Palette: marine headings and prices, aqua wells.
+  - Type: uppercase serif titles over a short cyan rule (`346a…`: "KOLEKSI UNGGULAN").
+  - Cards: teal mono category, centred uppercase name, marine price with grey strike, "HEMAT" pill, size pills, accordion.
+  - Rhythm: the ritual ordering and the two-up cards at 390 match `2592…`.
+- **Deliberate mismatches:**
+  - No hero over the image.
+  - No icon-tile science cards, bundle gradient banners or "Kerutan & Flek Berkurang Nyata dalam 14 Hari" campaign. These are outcome claims or placeholder-like.
+  - No trust strip, since there is no source on the page.
+  - No gallery on the PDP.
+  - No buy button under the sizes (owner).
+- **Before-state check:** `ff7d…`, `e7d9…`, `7171…` and `71cb…` show the black badges, Noto sans, left-ruled heading and "OFFICIAL STORE" band. None of that survives in the new renders, and the held-image posters (face collages, infographic) are gone.
+- **Research gap:** the research is the merchant's own site only, with no outside benchmark of single-column COD storefronts. For a brand-continuity brief that is adequate, and the transfer rationale is stated in `DESIGN.md`.
+- **Broken or clipped rendering:** none at 390 or 1440. The clipped words at slice edges ("PAKET HEMAT", "Isi: …30gr") are slice boundaries, not defects.
+- **Not covered by these renders:** pill-driven image swap, open accordions, focus rings, the in-flight button state.
 
-- **Matched:**
-  - serif uppercase section titles over a cyan rule
-  - aqua image wells, mono category line, uppercase name, marine price with grey strike
-  - numbered ritual
-  - filled-marine size pills
-  - a HEMAT pill on cards
-- **Deliberately dropped from the reference:**
-  - mono eyebrows over headings
-  - the trust strip (BPOM / Halal / Uji Dermatologi)
-  - "Direct Checkout Resmi · Gratis Ongkir" microcopy
-  - the "Kerutan & Flek Berkurang Nyata dalam 14 Hari" campaign
-  - the 8-thumbnail PDP gallery, whose infographics print claims
-  - the gradient "Paket Bahan Aktif" banners, whose image slots are empty even on the reference
+Most important change: raise the order-form field borders so the three inputs read as clear tap targets on the page's one conversion step.
 
-  `DESIGN.md` records each drop with a reason (claim rule, template chrome). That is a sound transfer rationale.
-- **Improvement on the old store:** black badges and claim-printing posters are replaced by packshots composed from the singles' own photos.
-- **Structural mismatch (owner-constrained):** the 480 px column leaves 960 px of empty canvas at 1440. This follows the owner's 2026-10-15 constraint, so I count it as scope, not a design failure.
-- **No rendered claim without a visible source:** I found none.
-
-Most important change: put the bundle contents line in its own subgrid row so contents and prices both align across each row of Paket Hemat cards on home and `/produk`.
-Verdict: PASS
+Verdict: PASS. I found no broken rendering, the direction is supported by its references, and the items above are non-blocking polish.

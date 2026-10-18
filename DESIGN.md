@@ -146,7 +146,10 @@ Tailwind blue focus ring, a card grid that reserves blank lines.
   D1 image fields updated with the old URLs kept outside the repo. The posters
   below (gift, outcome promises, shared collages, one size only) are no longer
   shown, so the held-image mechanism is removed. A studio flat-lay per
-  best-selling bundle would still beat a composite.
+  best-selling bundle would still beat a composite. Shopify (numaskin.id): the
+  same packshots added to the 41 bundle products as the first image (older
+  media kept, order backed up outside the repo) and, for the two-size bundles,
+  attached to each size's variant; read back: 41 of 41 featured, 0 duplicates.
 - (Superseded) "Paket Twin Pack Toner" image advertised "Free Ice Water Globe";
   "Paket Daily Care Adenosine" and "Paket Daily Glow Duo" shared one collage;
   several bundle images were infographics rather than packshots.
@@ -859,3 +862,8 @@ the composed packshots (owner list); the "Foto ilustrasi" caption is gone where
 each size has its own photo. Checked in a browser: 42 of 42 bundle images load
 on /produk, and choosing 150ml on Glow Up swaps the photo to the 150ml one.
 Renders: the ten `design/renders/ux-*.png`, re-taken.
+
+Cycle 10 round 2 (REVISE): the PDP breadcrumb said "Facial Cleanser" and
+linked to all products → `categoryLabel` and a link to that category's filter.
+Not changed: the path from the size pills to the order form (owner decision,
+2026-10-15).

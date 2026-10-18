@@ -4,7 +4,7 @@ import Breadcrumb from '../../components/storefront/shared/Breadcrumb.astro';
 import MetaLandingTracker from '../../components/storefront/tracking/MetaLandingTracker.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getStorefrontProduct, getStorefrontProducts } from '../../lib/catalog';
-import { BUNDLE_CATEGORY, VARIANT_IMAGES, bundleContents, orderCategories, singlesForBundle, singlesTotal, sizeChoice, withoutSizes } from '../../components/storefront/numaskin/catalog-order';
+import { BUNDLE_CATEGORY, VARIANT_IMAGES, bundleContents, categoryLabel, orderCategories, singlesForBundle, singlesTotal, sizeChoice, withoutSizes } from '../../components/storefront/numaskin/catalog-order';
 import ProductGrid from '../../components/storefront/numaskin/ProductGrid.astro';
 import SeeAllTile from '../../components/storefront/numaskin/SeeAllTile.astro';
 import { getProductPageLanding } from '../../lib/landing-pages';
@@ -198,7 +198,7 @@ const productSchemaJson = JSON.stringify(productSchema).replace(/</g, '\\u003c')
     <Breadcrumb
       items={[
         { label: 'Produk', href: '/produk' },
-        { label: product.category, href: '/produk' },
+        { label: categoryLabel(product.category), href: `/produk?kategori=${encodeURIComponent(product.category)}` },
         { label: product.productName },
       ]}
     />
