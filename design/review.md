@@ -4,71 +4,67 @@ Model: unavailable: ai-ask does not report the resolved model/provider
 Screenshots: design/renders/ux-empty-1440.png, design/renders/ux-empty-390.png, design/renders/ux-home-1440.png, design/renders/ux-home-390.png, design/renders/ux-pdp-1440.png, design/renders/ux-pdp-390.png, design/renders/ux-pdp-single-1440.png, design/renders/ux-pdp-single-390.png, design/renders/ux-produk-1440.png, design/renders/ux-produk-390.png
 References: design/refs/current-home/1440.png, design/refs/current-home/390.png, design/refs/current-produk/1440.png, design/refs/current-produk/390.png, design/refs/numaskin-collection/1440.png, design/refs/numaskin-collection/390.png, design/refs/numaskin-home/1440.png, design/refs/numaskin-home/390.png, design/refs/numaskin-pdp/1440.png, design/refs/numaskin-pdp/390.png
 Prompt-SHA: 4ae0ce2195b477c4
-Context-SHA: aa9b87b3dc2d2acf
-Images-SHA: c02af30dc1bef5f8
-Output-SHA: 86a8abdbd404f544
+Context-SHA: f9e0708e8bcc1a50
+Images-SHA: a604512ccf1ad76a
+Output-SHA: 8915616412ad2c96
 
-## Section by section (top to bottom)
+## Render review: numaskin storefront (install skin, cycle 8 renders)
 
-**Home (`ux-home-1440-01..03`, `ux-home-390-01..05`)**
-- Top band + wordmark | authored | numaskin.id header (centred `NUMA·SKIN` and katakana) | none. "COD tersedia untuk sebagian besar wilayah" is a checkable fact, not the badge that was there before.
-- Hero | authored | numaskin.id water-splash Adenosine poster | none needed. The headline is a plain statement with no outcome promise, there is one action ("Lihat Paket Hemat"), and the poster crop at 390 leaves the CTA above the fold.
-- Search + chips | authored | merchant routine order, Paket Hemat second | none. The "Fac…" / "Hydrating" chip is cut at the edge at both widths, so the row shows it scrolls. No chip is marked active on home.
-- Rutinitas 4 Langkah | authored | numaskin.id "4-step ritual" without its mono eyebrow and outcome title | none. The numbers mark a real sequence. All four steps sit in a 2×2 grid and prices line up across each row.
-- Lengkapi Rutinitas | authored, but the "Semua produk" tile is a familiar pattern | merchant collection card | the tile's 2×2 holds real packshots and matches the image well's height, which justifies it.
-- Paket Hemat | authored | merchant bundle cards with a rupiah HEMAT pill | the mono line "2 PRODUK" sits directly above "Facial Wash + Adenosine", so the card states the count twice. Cycle 6 round 3 dropped it for this reason and cycle 7 restored it. Pick one; I'd keep the contents line and only show the size, when there is one, in mono.
-- Footer | generic but appropriate | merchant footer without its unsourced trust row | none.
+All 63 images opened and read. No blocker. The last slice of the 1440 PDP (`d393c002372d11b8-ux-pdp-1440-03.png`) is a 13 px remainder strip with nothing in it.
 
-**Catalogue `/produk` (`ux-produk-1440-01..02`, `ux-produk-390-01..03`)**
-- Page intro | authored | merchant "Semua Produk" serif and cyan rule without its claim paragraph | none.
-- Grid | authored | merchant card anatomy | the Treatment Lotion card reads "HYDRATING TONER" with no size, while every other single shows "· 100 ML", "· 30 GR" and so on. On `/produk` row 1 and in every "Lengkapi/Beli satuan" grid, that card is the odd one out. It is a multi-size product, so the line should say "· 50/150 ML" rather than nothing.
-- Load more | authored | merchant count line plus a button, without the mono progress bar | none.
+Reading the set:
+- **Built pages:** `ux-home`, `ux-pdp` (bundle), `ux-pdp-single`, `ux-produk` and `ux-empty`, each at 390 and 1440.
+- **Merchant references:** `346ae…`/`2592db…` (home), `8ad616…`/`a76024…` (PDP), `599f0d…`/`2055b6…` (collection).
+- **Pre-change store:** `ff7ddb…`/`e7d9ab…` (home) and `717125…`/`71cbde…` (/produk), with black badges, Cinzel monogram and a left-ruled heading.
 
-**PDP bundle (`ux-pdp-1440-01..03`, `ux-pdp-390-01..04`)**
-- Breadcrumb | minor | — | the PDP starts at "Produk /" but `/produk` starts at "Beranda /". Use one root.
-- Photo + caption | owner content | merchant poster | "Foto ilustrasi…" now reads clearly at 13 px marine. The poster itself is still on the Owner list.
-- Title/price/saving/size | authored | merchant PDP (serif title, large marine price, pills) | none. "Rp11.498 lebih hemat dibanding beli satuan" matches the strike and the order summary. "Pilih ukuran toner" plus 50ml/150ml says exactly which item changes.
-- Details accordions | authored | merchant accordion, without the icon tiles | none.
-- Form Pemesanan + summary | authored | — | none. The contents label gets its own line, the struck and final prices sit right, and "Subtotal" carries a "via CS" note.
-- Beli satuan | authored | — | lists exactly the bundle's three items and closes with the see-all tile. None.
+### Per section, top to bottom
 
-**PDP single (`ux-pdp-single-1440-01..02`, `ux-pdp-single-390-01..04`)**
-- Single product | authored | merchant PDP | none. One price, "Hemat 30%", no size picker, no "Isi paket". The BPOM number in the description is a sourced claim.
+**Home**
 
-**Empty search (`ux-empty-1440-01`, `ux-empty-390-01..02`)**
-- Empty state | authored | — | about 340 px of blank column before the footer at 1440. This is recorded as kept (column min height), and I'm not reopening it.
+- Top band + wordmark | authored | numaskin.id wordmark and katakana, marine band (`7d096ae…-1440-01`, `48feb52…-390-01`) | None. The band now states a fact the PDP repeats ("COD tersedia…") instead of the unsourced "Official Store" the reference carries.
+- Hero | authored | merchant's water-splash poster, serif h1, one pill CTA (`48feb52…-390-01`) | None. The tube stays whole in the 5:4 crop and the CTA is on the first screen. The CTA jumps to `#paket`, below the ritual and singles, so a label like "Lihat Paket Hemat ↓" would set the expectation.
+- Search + chips | authored | reference chip row, active chip filled marine | None. The chip cut off at the right edge ("Fac…") reads as scrollable at 390 and 1440.
+- Ritual (2×2) | authored | reference's numbered steps and serif uppercase title over a cyan rule | None. The step label is sentence case teal, and all four steps are visible without a scroller. These are real sequence numbers, not template chrome.
+- Lengkapi Rutinitas + see-all tile | authored | reference grid card (aqua well, mono teal type line, uppercase centred name, marine price, grey strike) | None. The tile closes the odd cell with a 2×2 of real packshots and matches the card's height. Ritual cards omit the type line while these show it. That is deliberate, but it is the one visible seam between the two grids.
+- Paket Hemat | authored layout, owner-supplied imagery | reference bundle cards with a "HEMAT" pill | Supply a packshot per bundle. The posters, collage and model photo (`7d096ae…-1440-02/03`) switch image register from the clean packshots above. The Fresh & Hydrate, NAD+ and Glow Up posters print "OFFICIAL STORE", which the page's own top band no longer claims. The layout already has square image wells for these.
+- Footer | authored | reference wordmark, simplified | None. "Halaman Penawaran" and "Hak cipta dilindungi." read cleanly.
 
-## Comparison with the references
+**/produk**
 
-These slices are the merchant references: `599f0d2846f33112` / `2055b62e4f4a29ea` (collection), `346ae10365c6bf1f` / `2592db7c80fb8114` (home), `8ad616f6fc58b4ea` / `a76024c45f13f54c` (PDP). These are the store before the rebuild: `ff7ddb436fdd0d5d` / `e7d9abdedbaea39e` and `717125b768ff5ac2` / `71cbde06cd7989f2`.
+- Intro, search, chips | authored | none beyond the shared system | None. The title and cyan rule are the whole heading, with no eyebrow or intro sentence.
+- Grid + load-more | authored | reference collection grid, minus its claims | Sunscreen shows "HEMAT 55%" and Gloss Gel "HEMAT 50%" against Rp175.000 and Rp159.000. The Owner list records that the Rp79.000 sunscreen is a promo and that bundles elsewhere price it at Rp109.000. The pill is a discount claim with no visible source, so confirm those compare-at figures before they stay on the page.
+- Empty state | authored | none | The white block between the message card and the footer is about 340 px at 1440 (`6299f63…-1440-01`) and about 170 px at 390. This is the documented min-height. A one-line "Lihat semua produk" link under the reset button would use that space.
 
-**What transferred correctly:**
-- marine/teal/aqua palette
-- uppercase serif title over a short cyan rule
-- centred uppercase Inter card names
-- teal mono category line on cards only
-- aqua image wells
-- inline marine price with grey strike
-- numbered ritual
-- size pills with the selected one filled
+**PDP**
 
-**What was dropped from the merchant, correctly:** these are the template signals the brief rejects, and none of them came back:
-- tracked mono eyebrows over every heading ("THE 4-STEP RITUAL", "DERMATOLOGICAL SCIENCE")
-- the four icon-tile trust row and "BPOM RI · TERUJI KLINIS" card footers
-- "Kerutan & Flek Berkurang Nyata dalam 14 Hari" with checkmark bullets
-- `→` on every button
-- claim-printing bundle posters at the top of the collection
+- Bundle PDP, image + caption | authored layout, owner imagery | reference buy box | The poster says "Routine 150ml" while the 50 ml size is preselected and the summary reads "Toner 50ml". The caption "Foto ilustrasi. Isi paket mengikuti ukuran yang dipilih." covers it honestly. A per-size image is owner content.
+- Title, price, saving, size pills, COD line | authored | reference filled-marine size pill, serif title, large price | None. "Rp11.498 lebih hemat dibanding beli satuan" and "Pilih ukuran toner / 50ml · 150ml" are specific and consistent with the summary.
+- Description + accordions | authored | reference accordion | None. Both accordions start closed, so the form follows within about 1.5 screens at 390. There is no button under the sizes by owner decision, which makes this scroll the only route.
+- Form + summary | authored | none (product checkout code) | None. The disabled "Lengkapi nama terlebih dahulu" pill is pale but legible and says what it needs. The summary gives the label its own line and the prices sit right-aligned.
+- Beli satuan / Lengkapi rutinitas | authored | none | None. The bundle PDP lists exactly the bundle's own products plus the see-all tile, and the single PDP lists four others in an even 2×2.
+- Single PDP | authored | reference PDP minus gallery and trust strips | None. The packshot fills the 480 px column, the "HEMAT 30%" pill sits beside the price, and the BPOM number is printed in the description as its own source. It has no thumbnail gallery, which is correct since the merchant's thumbnails are claim infographics.
 
-The before-state's black square badges, Cinzel "N NUMA SKIN" and left-ruled "PRODUK KAMI" eyebrow are fully gone.
+### Template signals
 
-**Where the rebuild differs from the merchant, deliberately:** the 480 px column instead of a 4-up grid, and no gallery thumbnails on the PDP. Both follow from the owner's compact-model constraint. No mismatch goes unexplained.
+None of the listed signals appears in the built pages: no dark hero with texture, no accent-word headline, no eyebrow over headings, no icon-tile card rows, no `→` on buttons, no checkmark lists, no stat figures. The mono category line on each card is the reference's own `.nm-mono`, and the only other mono-style labels are the "· 30 GR" size parts of that line. The merchant refs still carry these signals (`346ae…-1440-02/03`: the "DERMATOLOGICAL SCIENCE" eyebrow, icon-tile cards, the "Kerutan & Flek Berkurang Nyata dalam 14 Hari" campaign), and the build left them out. Swapping the brand name would not leave this page unexplained: the palette, wordmark, packshots and ritual are numaskin.id's.
 
-**Research and rationale:** captured and explained for each section in DESIGN.md. Nothing is missing.
+### Reference fidelity and transfer
 
-**Breakage:** nothing broken or clipped at either width. The only cut is the chip row, and that cut is intentional.
+- **Transferred, and visible:**
+  - Colour: marine, teal and aqua wells.
+  - Type: DM Serif uppercase section titles over a short cyan rule.
+  - Card anatomy: aqua well, mono teal category, uppercase centred name, marine price, grey strike, and a rounded HEMAT pill.
+  - Water hero and wordmark.
+  - Filled-marine size pill on the PDP.
+- **Dropped, with a stated reason in the direction file:**
+  - Trust strip ("BPOM RI Resmi", "Uji Dermatologi") and the "Kerutan & Flek Berkurang Nyata dalam 14 Hari" campaign. Neither has a visible source.
+  - The 4-in-1 bundle bar. Its contents conflict between numaskin.id's ritual bar and its product page.
+  - Desktop gallery and buy box. The owner kept the 480 px column.
+- **Mismatch against the reference that is explained, not hidden:** at 1440 the build is a centred 480 px column with about 480 px of aqua canvas each side, while the merchant's page is full-width. The brief records this as the owner's constraint (2026-10-15), and the canvas was deepened a step so the column reads.
+- **Versus the pre-change store:** the black square badges, left-ruled heading and Cinzel monogram are gone, which is the stated purpose of the skin.
+- **Research:** the direction file names the reference captures, token sources, transfer rationale and per-round dispositions. Nothing is missing there.
 
-**Most important change:** show a size range on a multi-size single's type line ("HYDRATING TONER · 50/150 ML") so it matches every other card in the grids and rails.
+Remaining items are owner content or recorded decisions, not layout defects: bundle packshots, the posters' printed "OFFICIAL STORE", the per-size poster, and the compare-at figures.
 
-**Verdict: PASS**
-
-The bundle-card count repeat and the breadcrumb root are minor and not blocking. This is visual acceptance only; I didn't test interaction or accessibility.
+Most important change: Replace the Paket Hemat posters and collages with one packshot per bundle, and confirm the Rp175.000 and Rp159.000 compare-at prices behind the 55% and 50% pills.
+Verdict: PASS

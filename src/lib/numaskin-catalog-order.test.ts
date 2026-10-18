@@ -104,6 +104,8 @@ test("a bundle variant's singles total prices toner by size and fails closed", a
   assert.equal(singlesTotal("Toner 50ml", ["Facial Wash", "Toner", "Adenosine"], singles), 226998);
   assert.equal(singlesTotal("Toner 50ml + Sunscreen 30ml", [], singles), 0);
   assert.equal(singlesTotal("Paket", ["Toner"], singles), 0);
+  // A pouch comes free: Exclusive is priced on its three products.
+  assert.equal(singlesTotal("Toner 150ml + Toner 50ml + Adenosine 30gr + Pouch", [], singles), 266999);
 });
 
 test("a size choice is found when labels differ in one item's size only", async () => {

@@ -151,12 +151,16 @@ Tailwind blue focus ring, a card grid that reserves blank lines.
 - Twin Pack: compare-at Rp529.000 (numaskin.id) is above 2 × Rp239.000; the
   "2× 150ml" size on the Treatment Lotion page uses Rp478.000.
 - Bundle prices now differ from numaskin.id (owner decision 2026-10-16,
-  below): mirror them in Shopify, or the two stores disagree.
-- Paket Exclusive keeps its numaskin.id price (Rp301.650): its contents
-  (travel size, pouch) are unconfirmed, so no saving is computed or shown.
-- Age Defense Trio and Sunscreen + Adenosine + Toner were priced Rp30.000 /
-  Rp10.000 above their listed contents on numaskin.id; repriced from the
-  listed contents — confirm nothing else is in the box.
+  below): the Shopify update (46 bundle variants, price and compare-at, the
+  "… Saja" add-on variants untouched) is prepared and waits for store access.
+- Shopify's in-bundle "Sunscreen Saja" add-on is Rp109.000 while the Oxydew
+  product is Rp79.000; that gap is what made sunscreen bundles dearer there.
+- Resolved 2026-10-18: Exclusive's contents are in its own description
+  (Treatment Lotion 150ml + 50ml, Gloss Gel 30ml, pouch) → label lists them,
+  priced by the bundle rule (Rp253.500, compare Rp267.000; the pouch is free
+  and not priced or counted, `isGift`), image no longer held. Age Defense
+  Trio's description lists Day Cream, Adenosine and Sunscreen: its price
+  follows those three.
 - Six bundle images print outcome promises or a gift (held from the home
   preview, still on /produk): Twin Pack, Adenosine & Toner 150ml, Duo Toner,
   Toner 50ml & Gloss Gel, Toner 150ml & Gloss Gel, and the "Why PDRN"
@@ -750,3 +754,5 @@ the only line that was wider than the column. Over 21 characters still stacks.
 New review cycle; the cycle 7 log is archived as
 `design/review-rounds-2026-10-16-polish7.log`. Renders: the ten
 `design/renders/ux-*.png`, re-taken after the round 5 changes.
+Round 1 PASS. Then (2026-10-18) Exclusive's image and contents were resolved
+(owner list) and the renders re-taken.

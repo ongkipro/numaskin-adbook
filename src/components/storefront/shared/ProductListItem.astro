@@ -1,5 +1,6 @@
 ---
 import { cardImageSrc } from '../../../lib/image-derivative';
+import { isGift } from '../numaskin/catalog-order';
 
 /** The card only counts these. Requiring the full variant shape made every
  *  caller carry fields the card never reads. */
@@ -49,7 +50,7 @@ const sizeNote = isBundle
 // per bundle. A label that lists nothing keeps numaskin.id's "Skincare Set".
 const firstLabel = product.variants[0]?.label?.trim() ?? '';
 const itemCount = firstLabel.includes(' + ') || /^\d+×/.test(firstLabel)
-  ? firstLabel.split(' + ').reduce((n, part) => n + Number(part.match(/^(\d+)×/)?.[1] ?? 1), 0)
+  ? firstLabel.split(' + ').filter((part) => !isGift(part)).reduce((n, part) => n + Number(part.match(/^(\d+)×/)?.[1] ?? 1), 0)
   : 0;
 // "Facial Cleanser · 100 ml" is the one line wider than a 360 px card column
 // (174 of 158 px); "Cleanser" keeps it on one line like the rest.

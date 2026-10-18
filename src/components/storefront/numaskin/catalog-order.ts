@@ -86,10 +86,10 @@ export function spreadSameImages<T extends { image: string }>(items: readonly T[
 // does not give; the others print outcome promises ("Dalam 14 Hari Flek Mulai
 // Hilang", "Garis halus tersamarkan", "sejak pemakaian pertama", "efek
 // instan", "menyamarkan flek hitam", "kulit tampak lebih cerah",
-// "brightening"), or a product the bundle lacks (Moist Glow Duo's "UV" tile;
-// Exclusive's "Travel Size … & Pouch" gift box, not in its contents).
+// "brightening"), or a product the bundle lacks (Moist Glow Duo's "UV" tile).
+// Exclusive's gift box is no longer held: its description lists the travel
+// size and the pouch it shows.
 const HELD_IMAGES_OF = new Set([
-  'paket-exclusive-lotion-gloss-gel',
   'paket-moist-glow-duo',
   'paket-twin-pack-toner-2x150ml',
   'paket-adenosine-dan-toner-150ml',
@@ -164,6 +164,10 @@ interface PricedSingle {
   variants: ReadonlyArray<{ label: string; price: number }>;
 }
 
+/** A part of a bundle label that comes free with it ("Pouch"): not a product,
+ *  so it is neither priced nor counted. */
+export const isGift = (part: string) => /^pouch$/i.test(part.trim());
+
 /** What a bundle variant's items cost bought singly, or 0 when any item cannot
  *  be priced (then no saving is claimed). Items come from the variant label
  *  when it lists them ("Facial Wash 100ml + Adenosine 30gr", "2× Toner
@@ -182,6 +186,7 @@ export function singlesTotal(variantLabel: string, contents: readonly string[], 
     : contents.map((name) => ({ name, ml: name === 'Toner' ? tonerOnly?.[1] : undefined, n: 1 }));
   let total = 0;
   for (const item of items) {
+    if (isGift(item.name)) continue;
     const re = SINGLE_FOR[item.name];
     const single = re ? singles.find((p) => re.test(p.productName)) : undefined;
     if (!single) return 0;
