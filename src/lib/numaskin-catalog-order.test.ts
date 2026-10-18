@@ -116,3 +116,11 @@ test("a size choice is found when labels differ in one item's size only", async 
   assert.equal(sizeChoice(["Toner 50ml + Sunscreen 30ml", "Toner 150ml + Gloss Gel 30ml"]), null);
   assert.equal(sizeChoice(["Paket"]), null);
 });
+
+test("a card's contents come from a listing variant label, repeats counted", async () => {
+  const { labelContents } = await import("../components/storefront/numaskin/catalog-order.ts");
+  assert.deepEqual(labelContents("Toner 150ml + Toner 50ml + Gloss Gel 30ml + Pouch"), ["2× Toner", "Gloss Gel", "Pouch"]);
+  assert.deepEqual(labelContents("Facial Wash 100ml + NAD+ Serum 20ml"), ["Facial Wash", "NAD+ Serum"]);
+  assert.deepEqual(labelContents("2× Toner 150ml"), ["2× Toner"]);
+  assert.deepEqual(labelContents("Paket"), []);
+});

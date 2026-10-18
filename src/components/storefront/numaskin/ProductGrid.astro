@@ -5,7 +5,7 @@
 // (crawlable, and reachable without script through `moreHref`) and revealed in
 // steps by the button.
 import ProductListItem from '../shared/ProductListItem.astro';
-import { BUNDLE_CATEGORY, bundleContents } from './catalog-order';
+import { BUNDLE_CATEGORY, bundleContents, labelContents } from './catalog-order';
 
 interface Product {
   slug: string;
@@ -33,6 +33,12 @@ interface Props {
 const { products, id, initial = products.length, eagerFirstRow = false, moreHref, moreLabel = 'Lihat Produk Lainnya' } = Astro.props;
 const idr = (n: number) => `Rp${n.toLocaleString('id-ID')}`;
 const hasMore = products.length > initial;
+// The variant label's item list when it has one (it is what the order ships
+// and what the item count reads), else the contents named in the copy.
+const cardContents = (p: { variants: Array<{ label?: string }>; contentsText?: string; description?: string }) => {
+  const listed = labelContents(p.variants[0]?.label ?? '');
+  return listed.length > 0 ? listed : bundleContents(p.contentsText ?? p.description ?? '');
+};
 ---
 
 <div>
@@ -51,7 +57,7 @@ const hasMore = products.length > initial;
           }}
           formatPrice={idr}
           eager={eagerFirstRow && index < 2}
-          contents={product.category === BUNDLE_CATEGORY ? bundleContents(product.contentsText ?? product.description ?? '') : undefined}
+          contents={product.category === BUNDLE_CATEGORY ? cardContents(product) : undefined}
         />
       </li>
     ))}

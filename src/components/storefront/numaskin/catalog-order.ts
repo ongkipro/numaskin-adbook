@@ -15,6 +15,11 @@ const ROUTINE: readonly string[] = [
   'Sunscreen',
 ];
 
+/** A category as chips, headings and cards show it. "Facial Cleanser · 100 ml"
+ *  is the one card line wider than a 360 px column, so the label is
+ *  "Cleanser" everywhere; the filter value stays the merchant's category. */
+export const categoryLabel = (category: string) => category.replace(/^Facial Cleanser$/, 'Cleanser');
+
 export function orderCategories(categories: readonly string[]): string[] {
   const unique = [...new Set(categories.filter(Boolean))];
   const rank = (c: string) =>
@@ -162,6 +167,23 @@ export function singlesForBundle<T extends { productName: string }>(
 interface PricedSingle {
   productName: string;
   variants: ReadonlyArray<{ label: string; price: number }>;
+}
+
+/** A card's contents line from a variant label that lists the items, sizes
+ *  dropped and repeats counted ("Toner 150ml + Toner 50ml + Gloss Gel 30ml +
+ *  Pouch" → "2× Toner", "Gloss Gel", "Pouch"), so it agrees with the card's
+ *  item count. Empty when the label lists nothing (then the description's
+ *  `bundleContents` is used). */
+export function labelContents(label: string): string[] {
+  const l = label.trim();
+  if (!l.includes(' + ') && !/^\d+×/.test(l)) return [];
+  const counts = new Map<string, number>();
+  for (const part of l.split(' + ')) {
+    const m = part.trim().match(/^(?:(\d+)×\s*)?(.+?)(?:\s+\d+\s?(?:ml|gr|g))?$/i);
+    if (!m) continue;
+    counts.set(m[2], (counts.get(m[2]) ?? 0) + Number(m[1] ?? 1));
+  }
+  return [...counts].map(([name, n]) => (n > 1 ? `${n}× ${name}` : name));
 }
 
 /** A part of a bundle label that comes free with it ("Pouch"): not a product,

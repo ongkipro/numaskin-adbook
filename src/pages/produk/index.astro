@@ -8,7 +8,7 @@ import Icon from '../../components/storefront/shared/Icon.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import CategoryChips from '../../components/storefront/numaskin/CategoryChips.astro';
 import ProductGrid from '../../components/storefront/numaskin/ProductGrid.astro';
-import { BUNDLE_CATEGORY, heldLast, spreadSameImages } from '../../components/storefront/numaskin/catalog-order';
+import { BUNDLE_CATEGORY, categoryLabel, heldLast, pickRitual, spreadSameImages } from '../../components/storefront/numaskin/catalog-order';
 import { getStorefrontProducts } from '../../lib/catalog';
 
 const catalog = await getStorefrontProducts(Astro.locals);
@@ -44,12 +44,15 @@ const showAll = Astro.url.searchParams.get('semua') === '1';
 const INITIAL_COUNT = showAll ? results.length : 10;
 const moreParams = new URLSearchParams(Astro.url.searchParams);
 moreParams.set('semua', '1');
-const heading = category || 'Semua Produk';
+const heading = category ? categoryLabel(category) : 'Semua Produk';
+// A search that finds nothing still offers a way on: the routine's four
+// products (the same pick as the home ritual), so the page is not a dead end.
+const suggestions = results.length === 0 ? pickRitual(all.filter((p) => p.category !== BUNDLE_CATEGORY)).map(({ product }) => product) : [];
 const resetHref = category ? `/produk?kategori=${encodeURIComponent(category)}` : '/produk';
 ---
 
 <BaseLayout
-  title={`${category ? `${category} - ` : 'Produk - '}${Astro.locals.tenant.name}`}
+  title={`${category ? `${categoryLabel(category)} - ` : 'Produk - '}${Astro.locals.tenant.name}`}
   description={`Pilih produk ${Astro.locals.tenant.name}, lihat varian dan harga sebelum memesan.`}
   noindex={query.length > 0}
   breadcrumbs={[
@@ -62,20 +65,20 @@ const resetHref = category ? `/produk?kategori=${encodeURIComponent(category)}` 
       title={heading}
       description=""
       breadcrumbs={category
-        ? [{ label: 'Beranda', href: '/' }, { label: 'Produk', href: '/produk' }, { label: category }]
+        ? [{ label: 'Beranda', href: '/' }, { label: 'Produk', href: '/produk' }, { label: categoryLabel(category) }]
         : [{ label: 'Beranda', href: '/' }, { label: 'Produk' }]}
     />
 
     <section aria-label="Cari dan filter" class="border-b border-[var(--nm-border)] px-4 pb-5">
       <form action="/produk" method="get" role="search" class="relative">
         {category && <input type="hidden" name="kategori" value={category} />}
-        <label for="catalog-q" class="sr-only">Cari produk{category ? ` di ${category}` : ''}</label>
+        <label for="catalog-q" class="sr-only">Cari produk{category ? ` di ${categoryLabel(category)}` : ''}</label>
         <input
           id="catalog-q"
           name="q"
           type="search"
           value={query}
-          placeholder={category ? `Cari di ${category}…` : 'Cari produk, mis. toner, serum…'}
+          placeholder={category ? `Cari di ${categoryLabel(category)}…` : 'Cari produk, mis. toner, serum…'}
           class="min-h-12 w-full rounded-full border border-[var(--nm-border)] bg-[var(--nm-surface)] py-3 pl-11 pr-4 text-base text-[var(--nm-marine)] placeholder:text-[var(--nm-muted)] focus:border-[var(--nm-cyan)] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[color:var(--nm-cyan)]"
         />
         <Icon name="lucide:search" class="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--nm-teal)]" aria-hidden="true" />
@@ -86,7 +89,7 @@ const resetHref = category ? `/produk?kategori=${encodeURIComponent(category)}` 
     <section aria-labelledby="hasil" class="px-4 pb-10 pt-6">
       <p id="hasil" class="mb-5 text-[12px] text-[var(--nm-muted)]" role="status">
         {query
-          ? <>{results.length} hasil untuk “<strong class="text-[var(--nm-marine)]">{query}</strong>”{category && ` di ${category}`}</>
+          ? <>{results.length} hasil untuk “<strong class="text-[var(--nm-marine)]">{query}</strong>”{category && ` di ${categoryLabel(category)}`}</>
           : <>{results.length} produk</>}
       </p>
 
@@ -109,6 +112,15 @@ const resetHref = category ? `/produk?kategori=${encodeURIComponent(category)}` 
               : category ? 'Coba kata lain yang lebih umum, atau lihat semua produk di kategori ini.' : 'Coba kata lain yang lebih umum, misalnya toner atau serum.'}
           </p>
           {all.length > 0 && <a href={resetHref} class="nm-btn mt-5">Hapus pencarian</a>}
+        </div>
+      )}
+      {suggestions.length > 0 && (
+        <div aria-labelledby="saran-title">
+          <div class="mb-6 text-center">
+            <h2 id="saran-title" class="nm-serif text-[22px] uppercase leading-tight text-[var(--nm-marine)]">Rutinitas Dasar</h2>
+            <span class="nm-rule mt-3" aria-hidden="true"></span>
+          </div>
+          <ProductGrid id="grid-saran" products={suggestions} />
         </div>
       )}
     </section>

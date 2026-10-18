@@ -289,7 +289,7 @@ Per section:
   actions follow without overlapping the image.
 - Search + chips: one row of chips scrolls sideways; the active chip is filled
   marine and carries `aria-current="page"`.
-- Ritual: numbered, the third card peeks to show the row scrolls.
+- Ritual: numbered, all four steps at once in a 2×2 grid (a scroller hid step 4).
 - Grids: names render in full; each row's prices share a line (measured 0 px
   offset on every row of `/produk`); bundles show the saving inline.
 - PDP: price, sizes and "Pesan Sekarang" sit together under the image;
@@ -734,7 +734,7 @@ brand's own store on its own domain.
 
 Cycle 7 round 1, acted on afterwards: the bundle type line "SKINCARE SET" was
 the same on every bundle → it counts the items ("2 PRODUK", "3 PRODUK · 150ML");
-"Sebagian dari 42 paket; semuanya ada di katalog" → "5 dari 42 paket."; the
+"Sebagian dari 42 paket; semuanya ada di katalog" → "N dari 42 paket." (N is the preview size: 6 once Exclusive's image stopped being held); the
 multi-size photo caption was easy to miss → 13 px medium marine. Kept: the
 ritual's white step boxes (they group step label and product on the tinted
 section; the singles grid sits on white); the empty-search gap at 1440 (the
@@ -771,3 +771,71 @@ Round 1 PASS. Then (2026-10-18) Exclusive's image and contents were resolved
   guarded by version: bundles "Hemat RpX dibanding beli satuan." ("Hemat mulai
   RpX" when sizes differ), singles "Hemat N% dari harga normal." rounded as the
   card pill rounds; 47 rows. Recompute it whenever prices change.
+
+### Claim pass (2026-10-19)
+
+The claim rule held "efek instan" images but the text still made timed
+promises → removed in D1 (product content draft + published, guarded by
+version; product descriptions) and mirrored in Shopify (46 products, read back:
+nothing left to change): "cerah seketika", "hidrasi seketika", "mencerahkan
+kulit seketika", "hidrasi instan", "Pencerah Instan" (the Day Cream PDP
+subtitle), "pencerah instan"; the last "Teruji resmi BPOM RI" → "Terdaftar BPOM
+RI". Shopify's SEO descriptions now use page.numaskin.id's corrected ones (no
+"Teruji klinis … BPOM"), and its Adenosine ("teruji klinis … stimulasi
+kolagen") and Gloss Gel ("Meredakan iritasi … seketika") copy matches D1.
+Kept as function copy: "Samarkan flek hitam" in the Day Cream SEO title and
+description. Backups of the prior Shopify copy and D1 rows are kept outside the
+repo.
+
+Cycle 8 round 4 (REVISE), acted on: the incomplete submit ("Lengkapi Nama
+Terlebih Dahulu") read as switched off though tapping it names the missing
+field → white pill, marine outline and text; the chip said "Facial Cleanser"
+while its cards say "Cleanser" → one label (`categoryLabel`) on chips, the
+/produk heading, breadcrumb and placeholder (the filter value is unchanged),
+with chip padding re-measured so a cut chip still shows 56–123 px at
+360–1440; "Lengkapi Rutinitas" right under "Rutinitas 4 Langkah" →
+"Perawatan Tambahan"; an empty search ended in blank space → the routine's
+four products follow it ("Rutinitas Dasar"). Not acted on: the saving pill on
+single cards (C6) and the photo caption (round 3 asked for it louder, round 4
+quieter).
+
+Cycle 8 round 5 (REVISE): a bundle's size pills named only the toner size →
+the full contents of the chosen size ("Isi: Facial Wash 100ml + Toner 150ml +
+Adenosine 30gr") sit under the pills and change with them (checked in a
+browser: pill, form radio and contents move together).
+
+### Polish cycle 9 (2026-10-19)
+
+New review cycle; the cycle 8 log is archived as
+`design/review-rounds-2026-10-19-polish8.log`. Renders: the ten
+`design/renders/ux-*.png`, re-taken after the round 5 change.
+
+Cycle 9 round 1 (REVISE), acted on: "Rutinitas Dasar" (empty search) lacked
+the cyan rule every serif section title has → added; two stale lines above
+(the ritual "peek", "5 dari 42") brought up to date. Not acted on: one shared
+frame for the bundle posters (cropping does not make a poster a packshot; the
+packshots are on the owner list), the photo caption and the ritual boxes
+(recorded decisions above).
+
+Cycle 9 round 2 (REVISE), acted on: Exclusive's card said "3 PRODUK" over
+"Toner + Gloss Gel" (the copy names toner once) → a bundle card's contents
+line comes from its variant label when that lists the items, sizes dropped and
+repeats counted ("2× Toner + Gloss Gel + Pouch"; `labelContents`, tested),
+else from the copy. Not acted on: rounding the compare-at prices (Rp147.998):
+they are the exact sum of today's single prices, and a rounded figure would
+state a price nobody pays.
+
+Cycle 9 round 3 (REVISE), acted on: the order button said "LENGKAPI NAMA
+TERLEBIH DAHULU" → it always says "Buat Order Sekarang"; an incomplete form
+keeps the outline look, a tap moves focus to the first missing field with its
+message and sends nothing, and `aria-disabled` is set only while an order is in
+flight (`src/scripts/form-middle.ts`, install change; checked in a browser:
+empty tap → focus on name, "Maaf, nama Anda belum terisi.", 0 order requests;
+filled → ready). Not acted on: moving bundles above singles on home (the hero
+action already goes straight to them), building the see-all tile from bundle
+posters, and the poster frame (owner packshots).
+
+Cycle 9 round 4 (REVISE): the outlined submit was the lightest control on the
+page → filled marine in every state but "loading"; with the action label and
+tap-to-validate there is no "not ready" look left to show (re-checked: empty
+tap focuses the name field, 0 requests).

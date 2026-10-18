@@ -1,6 +1,6 @@
 ---
 import { cardImageSrc } from '../../../lib/image-derivative';
-import { isGift } from '../numaskin/catalog-order';
+import { categoryLabel, isGift } from '../numaskin/catalog-order';
 
 /** The card only counts these. Requiring the full variant shape made every
  *  caller carry fields the card never reads. */
@@ -52,11 +52,9 @@ const firstLabel = product.variants[0]?.label?.trim() ?? '';
 const itemCount = firstLabel.includes(' + ') || /^\d+×/.test(firstLabel)
   ? firstLabel.split(' + ').filter((part) => !isGift(part)).reduce((n, part) => n + Number(part.match(/^(\d+)×/)?.[1] ?? 1), 0)
   : 0;
-// "Facial Cleanser · 100 ml" is the one line wider than a 360 px card column
-// (174 of 158 px); "Cleanser" keeps it on one line like the rest.
 const typeLabel = isBundle
   ? (itemCount > 1 ? `${itemCount} Produk` : 'Skincare Set')
-  : product.category.replace(/^Facial Cleanser$/, 'Cleanser');
+  : categoryLabel(product.category);
 // lazy: character count, not measured width; the column is fixed (≤480 px).
 const stackSize = Boolean(sizeNote) && typeLabel.length + 3 + sizeNote.length > 21;
 ---

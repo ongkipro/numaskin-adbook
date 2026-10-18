@@ -481,12 +481,11 @@ function initMiddleOrderFormInstance(
       address: addressInput?.value || "",
     });
 
-    if (missing === "name")
-      return { disabled: true, label: "Lengkapi Nama Terlebih Dahulu" };
-    if (missing === "phone")
-      return { disabled: true, label: "Lengkapi No. WA Terlebih Dahulu" };
-    if (missing === "address")
-      return { disabled: true, label: "Lengkapi Alamat Terlebih Dahulu" };
+    // install (numaskin-adbook, DESIGN.md cycle 9): the button always says
+    // what it does; an incomplete form only changes its look (outline), and a
+    // tap still names the missing field. "Lengkapi Nama Terlebih Dahulu" on
+    // the page's one action read as a switched-off button.
+    if (missing) return { disabled: true, label: "Buat Order Sekarang" };
 
     return { disabled: false, label: "Buat Order Sekarang" };
   };
@@ -499,7 +498,9 @@ function initMiddleOrderFormInstance(
     // the tap whenever autofill filled a field without an `input` event, so a
     // complete-looking form had a dead button until the buyer tapped elsewhere.
     submitButton.disabled = submitting;
-    submitButton.setAttribute("aria-disabled", String(next.disabled));
+    // install: an incomplete form is still actionable (the tap names the
+    // missing field), so assistive tech is not told the button is disabled.
+    submitButton.setAttribute("aria-disabled", String(submitting));
     submitButton.dataset.state = submitting
       ? "loading"
       : next.disabled

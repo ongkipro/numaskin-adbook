@@ -192,8 +192,9 @@ html :is([data-hybrid-form-root], [data-middle-form-root]) .section-title::befor
 }
 
 /* The submit is the storefront's button: a marine pill like every .nm-btn,
-   without the product's blue drop shadow. Not ready yet → an aqua pill with
-   muted marine text (4.6:1), not the product's grey block. */
+   without the product's blue drop shadow. An incomplete form looks the same:
+   the button always says "Buat Order Sekarang" and a tap names the missing
+   field (form-middle.ts), so there is no "not ready" look to show. */
 html :is([data-hybrid-form-root], [data-middle-form-root]) .submit-main {
   min-height: 48px;
   border-radius: 9999px;
@@ -204,9 +205,13 @@ html :is([data-hybrid-form-root], [data-middle-form-root]) .submit-main {
   text-transform: uppercase;
 }
 html :is([data-hybrid-form-root], [data-middle-form-root]) .submit-main[data-state='disabled'] {
-  background: var(--nm-surface-2) !important;
-  border-color: var(--nm-border) !important;
-  color: var(--nm-muted) !important;
+  background: var(--sf-accent) !important;
+  border-color: var(--sf-accent) !important;
+  color: #fff !important;
+  cursor: pointer;
+}
+html :is([data-hybrid-form-root], [data-middle-form-root]) .submit-main[data-state='disabled'] .submit-main-icon {
+  opacity: 1;
 }
 /* The product's three-up process row repeats the notice above the submit,
    and "Harga tervalidasi" reads as a claim; the install does not show it. */
