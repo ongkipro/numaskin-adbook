@@ -150,14 +150,17 @@ Tailwind blue focus ring, a card grid that reserves blank lines.
   can show distinct images); supply a packshot per bundle.
 - Twin Pack: compare-at Rp529.000 (numaskin.id) is above 2 × Rp239.000; the
   "2× 150ml" size on the Treatment Lotion page uses Rp478.000.
-- Bundle prices now differ from numaskin.id (owner decision 2026-10-16,
-  below): the Shopify update (46 bundle variants, price and compare-at, the
-  "… Saja" add-on variants untouched) is prepared and waits for store access.
-- Shopify's in-bundle "Sunscreen Saja" add-on is Rp109.000 while the Oxydew
-  product is Rp79.000; that gap is what made sunscreen bundles dearer there.
+- Done 2026-10-18 (owner approved): Shopify (numaskin.id) mirrors these bundle
+  prices — 46 bundle variants, price and compare-at, then the 10% prices (45
+  variants), each read back from the Admin API with 0 mismatches. The
+  numaskin.id storefront (Hydrogen, not in this repo) still served the
+  pre-sync prices hours later: its product cache needs a refresh there. The "… Saja" add-on variants now match their single
+  products too ("Sunscreen Saja" Rp109.000 → Rp79.000, "Adenosine Moisturizer
+  Saja" Rp79.000 → Rp78.999; 5 variants). A later change to a single's price
+  means recomputing bundle price and compare-at in both stores.
 - Resolved 2026-10-18: Exclusive's contents are in its own description
   (Treatment Lotion 150ml + 50ml, Gloss Gel 30ml, pouch) → label lists them,
-  priced by the bundle rule (Rp253.500, compare Rp267.000; the pouch is free
+  priced by the bundle rule (now Rp240.000, compare Rp267.000; the pouch is free
   and not priced or counted, `isGift`), image no longer held. Age Defense
   Trio's description lists Day Cream, Adenosine and Sunscreen: its price
   follows those three.
@@ -579,7 +582,9 @@ singles are on promo at Rp79.000; bundles price them at the Rp109.000 list
 price). Only Twin Pack saved. Applied (live D1, guarded by old price; backup
 outside the repo): each bundle variant = today's singles total × 0.95, rounded
 down to Rp500, never above its old price (Twin Pack unchanged); 44 variants.
-Compare-at prices stay numaskin.id's. Fixed on the way: `bundleContents`
+Compare-at prices stay numaskin.id's. Superseded 2026-10-18 (owner: "diskon
+kau sesuaikan"): × 0.90, same rounding and ceiling, 45 variants — 5% read as
+no saving next to the singles' 20–55% pills; Twin Pack (30%) unchanged. Fixed on the way: `bundleContents`
 missed "tabir surya" (Ultimate Anti-Aging 50ml holds Sunscreen; its label now
 lists five items, matching numaskin.id's price exactly).
 
@@ -756,3 +761,13 @@ New review cycle; the cycle 7 log is archived as
 `design/renders/ux-*.png`, re-taken after the round 5 changes.
 Round 1 PASS. Then (2026-10-18) Exclusive's image and contents were resolved
 (owner list) and the renders re-taken.
+
+### Pricing pass (2026-10-18)
+
+- Bundle discount 5% → 10% of the singles total (D1 and Shopify, above).
+- `storefront_content.offerText` (served by `/api/v1/products/{slug}`, not
+  rendered on pages) still held "Hemat N% dari harga normal" from the old
+  compare-at prices → recomputed from current prices, draft and published,
+  guarded by version: bundles "Hemat RpX dibanding beli satuan." ("Hemat mulai
+  RpX" when sizes differ), singles "Hemat N% dari harga normal." rounded as the
+  card pill rounds; 47 rows. Recompute it whenever prices change.
