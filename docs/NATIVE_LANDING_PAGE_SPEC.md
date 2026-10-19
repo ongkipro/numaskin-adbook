@@ -8,6 +8,7 @@ Reference implementation on disk:
 - Route: [src/pages/deep-sea-water-treatment-lotion.astro](../src/pages/deep-sea-water-treatment-lotion.astro)
 - Stylesheet: [src/styles/landing-pages/deep-sea-water-treatment-lotion.css](../src/styles/landing-pages/deep-sea-water-treatment-lotion.css)
 - Assets: `public/images/landing/deep-sea-water-treatment-lotion/`
+- Brand, Market & Buyer Persona Research: [docs/NUMASKIN-MARKET-PERSONA-RESEARCH.md](./NUMASKIN-MARKET-PERSONA-RESEARCH.md)
 
 ---
 
