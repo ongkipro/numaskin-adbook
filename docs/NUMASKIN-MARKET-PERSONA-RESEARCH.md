@@ -732,3 +732,39 @@ In addition to the 45 custom-composited product/bundle packshots and 163 Berdu i
 | **2. Official SKU & Bundle Commercial Videos (`type: "product"`)** | **39 MP4s** | `10s – 60s` *(60s on Adenosine; 18s on PDRN; 19s on NAD+; 20–34s on Toner/Gloss/Sunscreen)* | `shopee/numaskin/public/videos/products/*/product-video.mp4` | Ready-made B-roll and hero video blocks for new CMS landing pages (`/adenosine-moisturizer`, `/pdrn-day-cream`, `/serum-nad-pdrn`). |
 | **3. Verified Customer Unboxing & Texture UGC Videos (`type: "review"`)** | **32 MP4s** *(downloaded from top Shopee reviews across 15 core SKUs/bundles)* | `8s – 35s` | `shopee/numaskin/public/videos/products/*/review-video-01..03.mp4` | Authentic social-proof UGC reels for Meta Ads 3-second hooks and landing page testimonial carousels (`3` UGC videos each on *Toner 50ml*, *Gloss Gel*, *Oxydew Sunscreen*, and *Adenosine+Sunscreen Duo*; `2` each on *Toner 150ml*, *Adenosine 30g*, *PDRN Day Cream*, *NAD+ Serum*, and top bundles). |
 
+---
+
+## 17. Direct-Response Market Positioning & "Brutal Soft Overclaim" Research: *Deep Sea Water Treatment Lotion*
+
+To power the native direct-response landing page ([src/pages/deep-sea-water-treatment-lotion.astro](../src/pages/deep-sea-water-treatment-lotion.astro)), external Indonesian market intelligence (Google Search, Female Daily reviews, Shopee/Tokopedia hydrating toner buyer reviews, and TikTok/Meta skincare ad hooks) was synthesized into the **Brutal Pain vs. Soft Overclaim Transformation** positioning below.
+
+### 17.1 Four Core Indonesian Buyer Pain Points (Why Cold Traffic Stops Scrolling)
+
+| Pain Rank | Verbatim Indonesian Buyer Complaint | Underlying Dermatological Reality | Direct-Response Agitation Hook ("Brutal Pain") |
+| :---: | :--- | :--- | :--- |
+| **#1** | *"Habis cuci muka pipi langsung kaku, kering ketarik, bahkan mengelupas putih dan perih."* | High-pH cleansers + tap water strip surface lipids; within 60 seconds after washing, rapid transepidermal water loss shrinks corneocytes. | **Post-Wash Tightness & Peeling:** *"Wajah terasa kaku, perih, dan mengelupas putih setiap habis cuci muka."* |
+| **#2** | *"Sudah beli serum & krim malam ratusan ribu, tapi kok cuma numpuk di atas kulit dan muka tetap kusam?"* | Parched, compacted stratum corneum acts like a dry sponge—viscous creams and serums cannot penetrate and sit on the surface. | **Wasted Expensive Skincare ("90% Krim Gagal Meresap"):** *"Percuma beli skincare mahal kalau kulit masih kering & ketarik — 90% krim gagal meresap dan hanya menggumpal di permukaan pori!"* |
+| **#3** | *"Pakai bedak atau cushion selalu retak (cakey) dan garis halus bawah mata/senyum makin kelihatan."* | Dehydrated micro-fissures pull water out of foundation/powder, causing makeup to crack along expression lines within 1–2 hours in AC rooms. | **Cracked Makeup & Dehydration Creases:** *"Pelembap & bedak menggumpal retak di luar dan memperjelas garis halus."* |
+| **#4** | *"Kulit rasanya kering ketarik di dalam, tapi bagian luarnya malah kilap berminyak dan gampang jerawatan."* | Classic tropical **dehydrated-oily skin**: sebaceous glands overproduce oil to compensate for missing water in air-conditioned or hot environments. | **Dry Inside, Oily Outside:** *"Kulit terasa kering ketarik di dalam, tapi berminyak di luar karena kekurangan air."* |
+
+### 17.2 Product Positioning & "Soft Overclaim" Mechanism (BPOM-Safe Cosmetic Framing)
+
+Rather than selling *Deep Sea Water Treatment Lotion* as a passive "refreshing toner", direct-response positioning frames it as the **Mandatory 10-Second Hydration Opener (*Pembuka Jalur Penyerapan Pori*)**:
+1. **The 10-Second Sponge Mechanism:** Applied in the first 10 seconds after washing the face (`3–4 tetes ditepuk tangan`), Ulleung Island Deep Sea Water (`>200m` depth, 72+ natural minerals with smaller particle size than regular water) unlocks tight pores so subsequent serums and creams absorb **3x more effectively** instead of sitting on top.
+2. **The 3-Minute Cotton Compress (*Kompres Kapas 3 Menit*):** When skin is red, stinging, or peeling from AC/sun exposure, soaking a thin cotton pad for 3 minutes calms redness immediately (`0% Alkohol, Tanpa Parfum Buatan, BPOM NA18220101400, Halal RI`).
+3. **6-in-1 Barrier Matrix at Rp 79k–109k:** Combines **Ulleung Deep Sea Water + Brown Algae + Galactomyces + Niacinamide + Hyaluronic Acid + Ceramide**—delivering the J-Beauty fermented essence experience at a fraction of department-store counter prices.
+
+### 17.3 Indonesian Local-Market Vocabulary Map (Replacing Malay & Confusing Jargon)
+
+To maximize conversion across mass-market Indonesian buyers (Age 23–50, Tier-1 to Tier-3 cities), copywriting strictly uses everyday Indonesian skincare phrasing rather than Bahasa Melayu (Malaysia), stiff literal translations, or niche beauty/medical jargon:
+
+| Avoid (Malay / Stiff Translation / Confusing Jargon) | Use Instead (Natural Indonesian Market Phrasing) | Why It Converts Better in Indonesia |
+| :--- | :--- | :--- |
+| *Kesan / Berkesan / Sapukan / Pencuci muka* | *Hasil / Ampuh / Tepuk atau Usapkan / Sabun cuci muka* | Prevents foreign Malay ad distrust among Indonesian shoppers. |
+| *Bersisik / Menganga / Air suling / Sensasi* | *Mengelupas putih / Terlihat jelas / Air biasa / Rasa* | Uses natural spoken Indonesian instead of stiff textbook translations. |
+| *CSM (Chizu Saeki Method)* (unexplained acronym) | *Kompres Kapas (3 Menit)* | Immediately understood by 100% of buyers without beauty-forum background. |
+| *Glass-mochi skin / Plumping / Dewy finish* | *Langsung kenyal, halus, & lembap / Bening bercahaya* | Concrete sensory outcome every Indonesian woman recognizes. |
+| *Bebas sumuk* (narrow regional Javanese slang) | *Tidak gerah & tidak lengket* | Understandable nationwide across Java, Sumatra, Kalimantan, and Sulawesi. |
+| *Molekul ion mineral mikro / TEWL / Epidermis* | *Partikel mineral alaminya lebih kecil dari air biasa, cepat meresap ke pori* | Explains the scientific mechanism in plain, visual everyday language. |
+
+
