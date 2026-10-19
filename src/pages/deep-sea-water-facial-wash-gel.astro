@@ -1,0 +1,690 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import GeoIpResolvedForm from '../components/storefront/forms/GeoIpResolvedForm.astro';
+import MetaLandingTracker from '../components/storefront/tracking/MetaLandingTracker.astro';
+import Icon from '../components/storefront/shared/Icon.astro';
+import RatingStars from '../components/storefront/shared/RatingStars.astro';
+import { getStorefrontProduct } from '../lib/catalog';
+import { nativeLandingCanonicalPath } from '../lib/landing-pages';
+import { defaultCatalogContentId } from '../lib/catalog-feed';
+import { getRuntimeEnv } from '../lib/env';
+import { loadStoreCodDisabledProvinceCodes } from '../lib/form-mode';
+import { getStoreAdsConfig } from '../lib/store-ads';
+import '../styles/form-hybrid.css';
+import '../styles/landing-pages/deep-sea-water-facial-wash-gel.css';
+
+export const prerender = false;
+
+const PRODUCT_SLUG = 'deep-sea-water-facial-wash-gel';
+const LANDING_SLUG = 'deep-sea-water-facial-wash-gel';
+const PAGE_TITLE =
+  'Deep Sea Water Facial Wash Gel — Pembersih Wajah pH Seimbang 5% Niacinamide BPOM';
+const PAGE_DESC =
+  'Pembersih wajah gel non-stripping dengan Ulleung Island Deep Sea Water, 5% Niacinamide, Vitamin E, dan Glycerin. Bersihkan pori tanpa rasa ketarik (BPOM NA18261203408).';
+const IMG_BASE = '/images/landing/deep-sea-water-facial-wash-gel';
+const HERO_IMAGE = `${IMG_BASE}/hero-facial-wash-gel.webp`;
+
+const database = getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined;
+const claimedProductSlug = Astro.request.headers.get('x-adsbook-product-page');
+const [product, canonicalPath, codDisabledProvinceCodes] = await Promise.all([
+  getStorefrontProduct(Astro.locals, PRODUCT_SLUG),
+  claimedProductSlug
+    ? Promise.resolve(`/produk/${claimedProductSlug}`)
+    : nativeLandingCanonicalPath(Astro.locals, LANDING_SLUG),
+  loadStoreCodDisabledProvinceCodes(database),
+  getStoreAdsConfig(Astro.locals),
+]);
+if (!product) {
+  return Astro.rewrite('/404');
+}
+
+const canonical = `${Astro.locals.tenant.siteUrl}${canonicalPath}`;
+
+const variants = product.variants || [];
+const cheapestVariant = variants.reduce(
+  (min: any, v: any) => (!min || v.price < min.price ? v : min),
+  variants[0]
+);
+const defaultVariant = cheapestVariant || {
+  id: '3',
+  label: '100 ml',
+  price: 68999,
+  comparePrice: 99000,
+};
+---
+
+<BaseLayout
+  title={PAGE_TITLE}
+  description={PAGE_DESC}
+  image={HERO_IMAGE}
+  preloadImages={HERO_IMAGE}
+  canonical={canonical}
+  hideHeader={true}
+  hideFooter={true}
+>
+  <MetaLandingTracker
+    slug={LANDING_SLUG}
+    contentId={defaultCatalogContentId(product)}
+    contentName={product.contentName}
+    price={defaultVariant.price}
+  />
+
+  <div class="dsw-shell">
+    <main class="dsw-canvas">
+      <!-- Section 1: Hero -->
+      <section id="hero-section" class="dsw-hero">
+        <div class="dsw-hero-head">
+          <h1 class="dsw-h1">
+            <span class="dsw-hl-tilt">Wajah Ketarik</span> & Kering Kusam Tiap Kali Habis Cuci Muka?
+          </h1>
+          <p class="dsw-sub" style="max-width: 390px; margin: 14px auto 0; font-weight: 700;">
+            Sabun muka berbusa keras mengikis minyak alami pelindung kulit.<br />
+            <span class="dsw-underline-teal">Bersihkan pori dengan lembut lewat 5% Niacinamide + Air Laut Dalam!</span>
+          </p>
+        </div>
+
+        <div class="dsw-hero-stage">
+          <div class="dsw-hero-top-tag">
+            <div class="dsw-hero-top-pill">
+              <Icon name="lucide:droplets" class="size-3.5" aria-hidden="true" />
+              <span>Non-Stripping Gel Cleanser • 1.279+ Terjual</span>
+            </div>
+          </div>
+
+          <img
+            src={HERO_IMAGE}
+            alt="Perbandingan kulit wajah kering ketarik vs kulit bersih kenyal lembap dengan Numa Skin Deep Sea Water Facial Wash Gel 100ml"
+            width="720"
+            height="480"
+            class="dsw-hero-img"
+            fetchpriority="high"
+            loading="eager"
+            decoding="async"
+          />
+
+          <div class="dsw-hero-overlap">
+            <div class="dsw-hero-overlap-inner">
+              <h2 class="dsw-hero-overlap-title">Sensasi "Kesat" Itu Tanda Barrier Rusak!</h2>
+              <p class="dsw-hero-overlap-text">
+                Saat sabun cuci muka membuat kulit terasa kaku ketarik, <strong style="color: #be123c;">seramide alami terkikis sehingga wajah makin berminyak, kusam, dan cepat keriput</strong>.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="dsw-trust-row">
+          <div class="dsw-trust-item">
+            <span class="dsw-trust-icon">
+              <Icon name="lucide:shield-check" class="size-4" aria-hidden="true" />
+            </span>
+            <div>
+              <span class="dsw-trust-label">BPOM Resmi</span>
+              <span class="dsw-trust-sub">NA18261203408</span>
+            </div>
+          </div>
+          <div class="dsw-trust-item">
+            <span class="dsw-trust-icon">
+              <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+            </span>
+            <div>
+              <span class="dsw-trust-label">Halal RI</span>
+              <span class="dsw-trust-sub">pH 5.5 Lembut</span>
+            </div>
+          </div>
+          <div class="dsw-trust-item">
+            <span class="dsw-trust-icon">
+              <Icon name="lucide:truck" class="size-4" aria-hidden="true" />
+            </span>
+            <div>
+              <span class="dsw-trust-label">Bisa COD</span>
+              <span class="dsw-trust-sub">Bayar Kurir</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: Solusi Singkat + Visual -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Angkat debu & minyak hingga ke pori <span class="dsw-hl-aqua">tanpa rasa kaku</span>
+        </h2>
+        <p class="dsw-sub">Formula gel bening ber-pH seimbang yang menjaga kelembapan alami kulit.</p>
+
+        <div class="dsw-photo-stack">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/solusi-busa-lembut-lembap.webp`}
+              alt="Wanita Indonesia membilas wajah dengan busa mikro lembut Numa Skin Deep Sea Water Facial Wash Gel"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+        </div>
+
+        <div class="dsw-list">
+          <div class="dsw-list-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:sparkles" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a;">5% Niacinamide Murni</strong> membantu mencerahkan kulit kusam dan merawat tampilan pori sejak tahap mencuci muka.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:droplets" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a;">Ulleung Island Deep Sea Water</strong> kaya 70+ mineral ionik alami yang menyejukkan kulit lelah terpapar polusi.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:shield-check" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a;">Vitamin E & Glycerin</strong> mengunci kelembapan sehingga kulit terasa kenyal, halus, dan siap menyerap serum.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Tanda Masalah Kulit + Visual Grid -->
+      <section class="dsw-section dsw-section--warn">
+        <h2 class="dsw-h2">
+          Ciri sabun cuci muka Anda <span class="dsw-underline-warn">terlalu keras bagi barrier</span>:
+        </h2>
+
+        <div class="dsw-photo-grid-2">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/masalah-sabun-bikin-ketarik.webp`}
+              alt="Kulit pipi terasa kaku ketarik dan mengelupas kering setelah mencuci muka dengan sabun biasa"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #be123c; display: block;">Kaku & Ketarik</strong>
+              Pipi terasa kencang kering seperti tertarik saat tersenyum habis cuci muka.
+            </p>
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/masalah-pori-kotor-minyak.webp`}
+              alt="Area T-zone tampak berminyak berlebih dan kusam akibat dehidrasi lapisan kulit"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #be123c; display: block;">Minyak Berlebih & Kusam</strong>
+              Kulit memproduksi minyak darurat lebih banyak karena lapisan airnya terkikis.
+            </p>
+          </div>
+        </div>
+
+        <div class="dsw-list">
+          <div class="dsw-list-row">
+            <span class="dsw-icon-warn">
+              <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              Wajah terasa <strong style="color: #be123c;">kesat berlebihan di 5 menit pertama</strong>, lalu berubah sangat berminyak dan kusam 1 jam kemudian.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-warn">
+              <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              Sudut hidung dan pinggir bibir <strong style="color: #be123c;">sering mengelupas halus atau terasa perih</strong> saat memakai toner/serum.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-warn">
+              <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              Skincare mahal yang dipakai setelahnya <strong style="color: #be123c;">sulit meresap maksimal</strong> karena pH kulit terganggu.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Perbandingan Visual Sebelum vs Sesudah -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Perbandingan kulit <span class="dsw-hl-aqua">sebelum vs sesudah beralih</span>
+        </h2>
+        <p class="dsw-sub">Perbedaan nyata saat mencuci wajah dengan pembersih gel Non-Stripping ber-pH seimbang.</p>
+
+        <div class="dsw-photo-stack">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/kondisi-ketarik-kering-kusam.webp`}
+              alt="Kondisi pori tampak kasar, berminyak di luar namun kering mengelupas akibat sabun keras"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <span class="dsw-photo-badge dsw-photo-badge--before">Sabun Biasa</span>
+            <p class="dsw-photo-caption">
+              Lapisan lipid alami terkikis: pori tampak menganga, permukaan kulit kering kasar, dan warna wajah terlihat kusam.
+            </p>
+          </div>
+
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/kondisi-pori-bersih-kenyal.webp`}
+              alt="Kondisi kulit wajah tampak bersih segar, pori halus, dan tetap lembap kenyal setelah memakai Deep Sea Water Facial Wash Gel"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <span class="dsw-photo-badge dsw-photo-badge--after">Numa Facial Wash Gel</span>
+            <p class="dsw-photo-caption">
+              Kotoran dan sisa sunscreen terangkat tuntas, pori tampak bersih ringkas, dan kulit tetap lembap kenyal tanpa rasa ketarik.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: Dark Marine Section — Cara Pakai Praktis -->
+      <section class="dsw-section dsw-section--dark">
+        <h2 class="dsw-h2">
+          Ritual Cuci Muka <span style="color: #99e2ec;">60 Detik Bebas Ketarik</span>
+        </h2>
+        <p class="dsw-sub">Cukup sebiji jagung untuk membersihkan seluruh wajah dan leher.</p>
+
+        <div class="dsw-photo-stack">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/cara-pakai-tuang-gel-tangan.webp`}
+              alt="Menuangkan gel pembersih bening Numa Skin Deep Sea Water Facial Wash Gel 100ml ke telapak tangan basah"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #ffffff;">Langkah 1 (Busakan di Tangan):</strong> Tuang gel secukupnya ke telapak tangan basah, gosok lembut hingga berbusa halus.
+            </p>
+          </div>
+
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/cara-pakai-pijat-busa-wajah.webp`}
+              alt="Memijat lembut busa mikro pembersih wajah dengan gerakan memutar di area pipi dan hidung"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #ffffff;">Langkah 2 (Pijat & Bilas):</strong> Pijat memutar selama 30–60 detik lalu bilas dengan air bersih dan tepuk kering.
+            </p>
+          </div>
+        </div>
+
+        <div class="dsw-list">
+          <div class="dsw-list-row">
+            <span class="dsw-step-num">1</span>
+            <p class="dsw-step-text">
+              Gunakan <strong style="color: #ffffff;">2 kali sehari (pagi & malam)</strong> sebagai langkah pertama perawatan kulit.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-step-num">2</span>
+            <p class="dsw-step-text">
+              Fokuskan pijatan lembut di <strong style="color: #ffffff; background: #104452; padding: 1px 6px; border-radius: 4px;">area T-zone dan lipatan hidung</strong> tempat komedo menumpuk.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-step-num">3</span>
+            <p class="dsw-step-text">
+              Saat kulit masih lembap segar, lanjutkan dengan <strong style="color: #ffffff;">Deep Sea Water Treatment Lotion</strong> untuk mengunci hidrasi.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 6: Ulasan Pelanggan -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Pengalaman mereka yang <span class="dsw-hl-aqua">sudah beralih ke Gel Cleanser</span>
+        </h2>
+        <p class="dsw-sub">Dipercaya oleh 1.270+ pengguna dengan kulit normal, kering, sensitif, hingga kombinasi.</p>
+
+        <div class="dsw-reviews-divide">
+          <div class="dsw-review-row">
+            <div class="dsw-review-head">
+              <div>
+                <p class="dsw-review-author">
+                  Ibu Rina S.
+                  <span style="color: #0b6e7d; display: inline-flex;">
+                    <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+                  </span>
+                </p>
+                <p class="dsw-review-meta">Jakarta Selatan • Usia 38 Tahun</p>
+              </div>
+              <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
+            </div>
+            <p class="dsw-review-quote">
+              "Biasanya habis cuci muka pipi langsung kaku ketarik kalau belum buru-buru pakai krim. Pakai Facial Wash Gel Numa Skin ini <span class="dsw-hl-aqua">lembut banget, bersih tuntas tapi kulit tetap kenyal</span> dan gak perih sama sekali."
+            </p>
+          </div>
+
+          <div class="dsw-review-row">
+            <div class="dsw-review-head">
+              <div>
+                <p class="dsw-review-author">
+                  Kak Nadia P.
+                  <span style="color: #0b6e7d; display: inline-flex;">
+                    <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+                  </span>
+                </p>
+                <p class="dsw-review-meta">Semarang • Kulit Kombinasi Sensitif</p>
+              </div>
+              <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
+            </div>
+            <p class="dsw-review-quote">
+              "Jarang banget ada sabun cuci muka yang <strong style="color: #0f172a;">kandungan Niacinamide-nya 5%</strong> tapi tetap ringan. <span class="dsw-hl-aqua">Muka kelihatan lebih cerah segar habis mandi</span> dan minyak di hidung jauh lebih terkontrol."
+            </p>
+          </div>
+
+          <div class="dsw-review-row">
+            <div class="dsw-review-head">
+              <div>
+                <p class="dsw-review-author">
+                  Ibu Maya L.
+                  <span style="color: #0b6e7d; display: inline-flex;">
+                    <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+                  </span>
+                </p>
+                <p class="dsw-review-meta">Sidoarjo • Tube 100ml Awet 2 Bulan</p>
+              </div>
+              <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
+            </div>
+            <p class="dsw-review-quote">
+              "Ukurannya 100ml gede dan isinya gel kental, <span class="dsw-hl-rose">pakai sedikit aja udah cukup satu muka</span>. Sejak ganti sabun muka ke Numa Skin, <span class="dsw-hl-aqua">serum dan pelembap jadi lebih gampang meresap</span>."
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 7: Galeri Bukti Visual -->
+      <section class="dsw-section dsw-section--tint">
+        <h2 class="dsw-h2">
+          Bersih segar, lembut, dan <span style="color: #0b6e7d;">ramah skin barrier</span>
+        </h2>
+        <p class="dsw-sub">Tanpa busa deterjen keras yang mengiritasi mata maupun lapisan pelindung kulit.</p>
+
+        <div class="dsw-photo-grid-2">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-tekstur-clear-gel.webp`}
+              alt="Tekstur clear gel lembut Numa Skin Deep Sea Water Facial Wash Gel dengan busa mikro halus"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-wajah-segar-habis-cuci.webp`}
+              alt="Potret wanita Indonesia dengan kulit wajah segar bercahaya setelah mencuci muka"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-kulit-lembut-tanpa-kesat.webp`}
+              alt="Close-up kulit pipi yang lembut kenyal dan bebas kering ketarik setelah dibilas"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-wastafel-facial-wash.webp`}
+              alt="Kemasan tube Numa Skin Deep Sea Water Facial Wash Gel 100ml di meja wastafel"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 8: Product Knowledge (Full-Bleed Figures) -->
+      <section class="dsw-section dsw-section--knowledge">
+        <h2 class="dsw-h2">
+          Mengapa <span class="dsw-hl-aqua">Facial Wash Gel</span> ini berbeda dari sabun biasa?
+        </h2>
+        <p class="dsw-sub">
+          Memadukan pembersih surfaktan ringan dengan konsentrasi bahan aktif pencerah dan mineral laut dalam Korea.
+        </p>
+
+        <div class="dsw-figure-stack">
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/formulasi-ulleung-cleanser.webp`}
+                alt="Formulasi air laut dalam Pulau Ulleung Korea dengan teknologi pembersih Non-Stripping"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">Ulleung Island Deep Sea Water & Non-Stripping Gel</h3>
+              <p class="dsw-figcaption-desc">
+                Air laut dalam murni dari Pulau Ulleung Korea yang kaya mineral alami untuk membersihkan residu polusi sekaligus menjaga keseimbangan pH mantel asam kulit.
+              </p>
+            </figcaption>
+          </figure>
+
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/kandungan-niacinamide-vit-e.webp`}
+                alt="Kombinasi 5% Niacinamide, Vitamin E, dan Glycerin dalam basis gel pembersih"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">5% Niacinamide + Vitamin E + Glycerin</h3>
+              <p class="dsw-figcaption-desc">
+                Diperkaya 5% Niacinamide untuk mencerahkan wajah kusam, antioksidan Vitamin E untuk menangkal radikal bebas, serta humektan Glycerin yang menahan kelembapan kulit.
+              </p>
+            </figcaption>
+          </figure>
+
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/kemasan-facial-wash-100ml.webp`}
+                alt="Kemasan tube flip-top Numa Skin Deep Sea Water Facial Wash Gel 100ml"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">Tube Flip-Top 100 ml (Awet 6–8 Minggu)</h3>
+              <p class="dsw-figcaption-desc">
+                Ukuran penuh 100 ml dengan tutup flip-top rapat yang praktis dibawa bepergian maupun disimpan di kamar mandi.
+              </p>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- Section 9: Garansi 100% Resmi -->
+      <section class="dsw-section" style="text-align: center; background: #f8fafc;">
+        <div style="margin: 0 auto 14px; display: flex; width: 52px; height: 52px; align-items: center; justify-content: center; color: #0b6e7d;">
+          <Icon name="lucide:shield-check" class="size-12" aria-hidden="true" />
+        </div>
+        <h2 class="dsw-h2" style="font-size: 32px;">GARANSI RESMI 100%</h2>
+        <p class="dsw-sub" style="max-width: 320px; margin: 8px auto 0;">
+          Pesanan dikirim langsung dari gudang resmi Numa Skin Indonesia.
+        </p>
+
+        <div class="dsw-guarantee-list">
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:badge-check" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">100% Produk Asli Tersegel</strong>
+              Terdaftar resmi di BPOM (NA18261203408) dan bersertifikat Halal Indonesia.
+            </p>
+          </div>
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:truck" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">Bisa Bayar di Tempat (COD)</strong>
+              Pesan hari ini, bayar langsung ke kurir saat paket tiba di alamat Anda.
+            </p>
+          </div>
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:package-check" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">Garansi Ganti Baru</strong>
+              Kami ganti baru tanpa biaya tambahan bila tube diterima rusak atau bocor.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 10: Checkout Form -->
+      <section id="form-pemesanan" class="dsw-section--checkout">
+        <div style="padding: 0 20px 14px; text-align: center;">
+          <h2 class="dsw-h2" style="font-size: 28px;">
+            Lengkapi Data <span class="dsw-hl-aqua">Pengiriman</span>
+          </h2>
+          <p class="dsw-sub" style="max-width: 340px; margin: 8px auto 0;">
+            Isi nama, nomor WhatsApp aktif, dan kecamatan tujuan untuk cek ongkir otomatis.
+          </p>
+        </div>
+
+        <GeoIpResolvedForm
+          mode="hybrid"
+          productSlug={product.slug}
+          embedded={true}
+          selectedVariantId={String(defaultVariant.id)}
+          codDisabledProvinceCodes={codDisabledProvinceCodes}
+        />
+      </section>
+    </main>
+
+    <!-- Floating Centered Sticky Button (hidden on Hero and Form) -->
+    <div id="floating-cta" data-sticky-cta class="dsw-float-wrap">
+      <a
+        href="#form-pemesanan"
+        class="dsw-float-btn"
+        data-scroll-to-form
+        aria-label="Pesan Deep Sea Water Facial Wash Gel"
+      >
+        <span>Pesan Sekarang</span>
+        <span class="dsw-float-divider" aria-hidden="true"></span>
+        <span class="dsw-float-sub">Promo Rp68.999</span>
+        <Icon name="lucide:arrow-down" class="size-3.5 dsw-float-arrow" aria-hidden="true" />
+      </a>
+    </div>
+  </div>
+
+  <script is:inline>
+    (function () {
+      const heroSection = document.getElementById('hero-section');
+      const formSection = document.getElementById('form-pemesanan');
+      const floatingCta = document.getElementById('floating-cta');
+
+      document.querySelectorAll('[data-scroll-to-form]').forEach((link) => {
+        link.addEventListener('click', (e) => {
+          if (!formSection) return;
+          e.preventDefault();
+          formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+
+      if (!floatingCta || !formSection || !('IntersectionObserver' in window)) return;
+
+      let isHeroVisible = true;
+      let isFormVisible = false;
+
+      function syncVisibility() {
+        const shouldShow = !isHeroVisible && !isFormVisible;
+        floatingCta.classList.toggle('is-visible', shouldShow);
+      }
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.target === heroSection) {
+              isHeroVisible = entry.isIntersecting;
+            } else if (entry.target === formSection) {
+              isFormVisible = entry.isIntersecting;
+            }
+          });
+          syncVisibility();
+        },
+        { root: null, threshold: 0.05 }
+      );
+
+      if (heroSection) observer.observe(heroSection);
+      observer.observe(formSection);
+    })();
+  </script>
+</BaseLayout>

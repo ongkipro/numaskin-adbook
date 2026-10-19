@@ -48,6 +48,141 @@ export const nativeLandingPages: NativeLandingPage[] = [
     image:
       '/images/landing/deep-sea-water-treatment-lotion/hero-treatment-lotion.webp',
   },
+  {
+    slug: 'adenosine-deep-sea-water-moisturizer',
+    title: 'Adenosine Deep Sea Water Moisturizer',
+    productSlug: 'adenosine-deep-sea-water-moisturizer',
+    description:
+      'Skin Communicator Anti-Aging Gel-Cream dengan Ulleung Island Deep Sea Water, Adenosine, Actiporine 8G, 11X Hyaluronic Acid, dan Alpha-Arbutin (BPOM NA18250109281).',
+    image:
+      '/images/landing/adenosine-deep-sea-water-moisturizer/hero-adenosine-moisturizer.webp',
+  },
+  {
+    slug: 'pdrn-alpha-arbutin-tone-up-day-cream',
+    title: 'PDRN + Alpha-Arbutin Tone-Up Day Cream',
+    productSlug: 'pdrn-alpha-arbutin-tone-up-day-cream',
+    description:
+      'Natural Beige Tone-Up Day Cream dengan 1% Encapsulated PDRN, Alpha-Arbutin, Niacinamide, dan 4X UV Defense tanpa efek abu-abu di kulit sawo matang (BPOM NA18262000246).',
+    image:
+      '/images/landing/pdrn-alpha-arbutin-tone-up-day-cream/hero-pdrn-day-cream.webp',
+  },
+  {
+    slug: 'nad-booster-anti-aging-serum',
+    title: 'NAD+ Booster Anti-Aging Serum',
+    productSlug: 'nad-booster-anti-aging-serum',
+    description:
+      'Cellular Energy Anti-Aging Serum dengan RejuveNAD™ (Swiss Mibelle Biochemistry), 6X Biomimetic Peptide, Niacinamide, dan Cica Complex (BPOM NA18262000245).',
+    image:
+      '/images/landing/nad-booster-anti-aging-serum/hero-nad-booster-serum.webp',
+  },
+  {
+    slug: 'oxydew-sunscreen-luceane-spf50-pa',
+    title: 'Oxydew Anti-Aging Sunscreen SPF 50+ PA++++',
+    productSlug: 'oxydew-sunscreen-luceane-spf50-pa',
+    description:
+      'Breathable Cellular Sunscreen SPF 50+ PA++++ dengan 3% Luceane™ (Sederma France), Galactomyces, Niacinamide, dan 4X UV Filter tanpa whitecast (BPOM NA18251703709).',
+    image:
+      '/images/landing/oxydew-sunscreen-luceane-spf50-pa/hero-oxydew-sunscreen.webp',
+  },
+  {
+    slug: 'calming-barrier-gloss-gel-moisturizer',
+    title: 'Calming Barrier Gloss Gel Moisturizer',
+    productSlug: 'calming-barrier-gloss-gel-moisturizer',
+    description:
+      'Cooling Water-Jelly Barrier Moisturizer dengan Meadowestolide®, Astragalus Extract, Ceramide NP, dan 3X Probiotic Ferment untuk kulit kemerahan & bruntusan (BPOM NA18230107056).',
+    image:
+      '/images/landing/calming-barrier-gloss-gel-moisturizer/hero-calming-gloss-gel.webp',
+  },
+  {
+    slug: 'deep-sea-water-facial-wash-gel',
+    title: 'Deep Sea Water Facial Wash Gel',
+    productSlug: 'deep-sea-water-facial-wash-gel',
+    description:
+      'Pembersih wajah gel non-stripping dengan Ulleung Island Deep Sea Water, 5% Niacinamide, Vitamin E, dan Glycerin untuk pori bersih tanpa rasa ketarik (BPOM NA18261203408).',
+    image:
+      '/images/landing/deep-sea-water-facial-wash-gel/hero-facial-wash-gel.webp',
+  },
+  {
+    slug: 'paket-adenosine-dan-sunscreen',
+    title: 'Paket Adenosine & Sunscreen',
+    productSlug: 'paket-adenosine-dan-sunscreen',
+    description:
+      'Paket bundling #1 terlaris: Adenosine Deep Sea Water Moisturizer 30g + Oxydew Sunscreen 3% Luceane SPF 50+ PA++++ 30ml untuk merawat flek hitam 24 jam (BPOM Resmi).',
+    image:
+      '/images/landing/paket-adenosine-dan-sunscreen/hero-paket-adenosine-sunscreen.webp',
+  },
+  {
+    slug: 'paket-nad-youth-boost-set',
+    title: 'Paket NAD+ Youth Boost Set',
+    productSlug: 'paket-nad-youth-boost-set',
+    description:
+      'Duo intensif anti-kerutan: NAD+ Booster Serum (2% RejuveNAD + 6X Peptide) & Adenosine Moisturizer 30g (11X Hyaluronic Acid) untuk mengencangkan kontur pipi (BPOM Resmi).',
+    image:
+      '/images/landing/paket-nad-youth-boost-set/hero-paket-nad-youth-boost.webp',
+  },
+  {
+    slug: 'paket-protection-duo-pdrn',
+    title: 'Paket Protection Duo PDRN',
+    productSlug: 'paket-protection-duo-pdrn',
+    description:
+      'Duo glowing pagi tanpa dempul: PDRN + Alpha Arbutin Tone-Up Day Cream 30g (1% Encapsulated PDRN) & Oxydew Sunscreen SPF 50+ PA++++ 30ml bebas whitecast (BPOM Resmi).',
+    image:
+      '/images/landing/paket-protection-duo-pdrn/hero-paket-protection-pdrn.webp',
+  },
+  {
+    slug: 'paket-complete-routine-4-in-1-150ml',
+    title: 'Paket Complete Routine 4-in-1 (150ml)',
+    productSlug: 'paket-complete-routine-4-in-1-150ml',
+    description:
+      'Rangkaian lengkap 4-in-1 ukuran penuh: Treatment Lotion 150ml, NAD+ Booster Serum, Adenosine Moisturizer 30g, dan Oxydew Sunscreen SPF 50+ PA++++ 30ml (4 BPOM Resmi).',
+    image:
+      '/images/landing/paket-complete-routine-4-in-1-150ml/hero-paket-complete-4in1.webp',
+  },
+  {
+    slug: 'paket-anti-aging-trio',
+    title: 'Paket Anti-Aging Trio',
+    productSlug: 'paket-anti-aging-trio',
+    description:
+      'Trio anti-aging terlaris 3-in-1: NAD+ Booster Serum 20ml, Adenosine Moisturizer 30g, dan Oxydew Sunscreen SPF 50+ PA++++ 30ml untuk perawatan kerutan & flek 24 jam (3 BPOM Resmi).',
+    image:
+      '/images/landing/paket-anti-aging-trio/hero-paket-anti-aging-trio.webp',
+  },
+  {
+    slug: 'paket-fresh-and-hydrate',
+    title: 'Paket Fresh & Hydrate Duo',
+    productSlug: 'paket-fresh-and-hydrate',
+    description:
+      'Duo fondasi kulit sehat: Deep Sea Water Facial Wash Gel 100ml + Treatment Lotion Toner (50ml / 150ml) untuk pori bersih segar tanpa rasa ketarik (2 BPOM Resmi).',
+    image:
+      '/images/landing/paket-fresh-and-hydrate/hero-paket-fresh-hydrate.webp',
+  },
+  {
+    slug: 'paket-daily-care-adenosine',
+    title: 'Paket Daily Care Adenosine',
+    productSlug: 'paket-daily-care-adenosine',
+    description:
+      'Ritual simpel 2 langkah: Deep Sea Water Facial Wash Gel 100ml (5% Niacinamide) + Adenosine Moisturizer 30g (Skin Communicator + 11X HA) untuk wajah bersih & kenyal (2 BPOM Resmi).',
+    image:
+      '/images/landing/paket-daily-care-adenosine/hero-paket-daily-care-adenosine.webp',
+  },
+  {
+    slug: 'paket-luminous-duo',
+    title: 'Paket Luminous Duo',
+    productSlug: 'paket-luminous-duo',
+    description:
+      'Duet aktif sultan: NAD+ Booster Serum 20ml (2% RejuveNAD + 6X Peptide) + PDRN Tone-Up Day Cream 30g (10.000 PPM Salmon DNA, Warm Beige bebas abu-abu) (2 BPOM Resmi).',
+    image:
+      '/images/landing/paket-luminous-duo/hero-paket-luminous-duo.webp',
+  },
+  {
+    slug: 'paket-lengkap-6-in-1-routine',
+    title: 'Paket Lengkap 6-in-1 Routine',
+    productSlug: 'paket-lengkap-6-in-1-routine',
+    description:
+      'Koleksi VIP terlengkap 6-in-1 Numa Skin: Facial Wash 100ml, Toner (50ml/150ml), NAD+ Serum 20ml, PDRN Day Cream 30g, Adenosine Moisturizer 30g, dan Oxydew Sunscreen 30ml (6 BPOM Resmi).',
+    image:
+      '/images/landing/paket-lengkap-6-in-1-routine/hero-paket-lengkap-6in1.webp',
+  },
 ];
 
 /**
