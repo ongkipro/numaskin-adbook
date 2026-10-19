@@ -54,17 +54,31 @@ Before writing copy or generating any image for a landing page, perform external
 
 ---
 
-## 4. Hero Image Standard ("Brutal Soft Overclaim")
+## 4. "Brutal Soft Overclaim" Visual & Copywriting Standard
 
-The Hero image (`hero-<slug>.webp`) is the primary conversion lever and LCP element. It must follow the **Brutal Pain vs. Soft Overclaim Transformation** concept derived from market research:
+Every native direct-response landing page must apply the **Brutal Pain vs. Soft Overclaim Transformation** framework across **both the Hero and the supporting body sections** (grounded in market & buyer persona research while staying within BPOM cosmetic claim boundaries — zero medical/drug cure claims):
 
+### 4.1 Hero Image Standard (`hero-<slug>.webp`)
+The Hero image is the primary conversion lever and LCP element:
 1. **Single-subject split or direct macro contrast:** Show a relatable Indonesian woman (`kuning langsat` skin tone, natural features) in a single centered composition split by a clean water stream or light transition:
-   - **Left side (Brutal Pain):** Visibly parched, tight, flaky skin with mild barrier redness, fine dehydration lines, and unabsorbed white cream sitting cakey on the surface.
+   - **Left side (Brutal Pain):** Visibly parched, tight, flaky skin with barrier redness, fine dehydration lines, and unabsorbed white cream sitting cakey on the surface.
    - **Right side (Soft Overclaim Transformation):** Ultra-plump, bouncy, translucent J-Beauty glass/mochi skin drenched in fresh micro-droplets with the authentic Numa Skin bottle held beside her glowing cheek.
 2. **HTML/CSS framing around the Hero image:**
    - Top floating pill badge (`.dsw-hero-top-pill`) naming the hero ingredient/origin.
-   - Bottom overlapping white/rose callout card (`.dsw-hero-overlap`) agitating why existing creams/serums fail without this product.
+   - Bottom overlapping white/rose callout card (`.dsw-hero-overlap`) agitating why existing expensive creams/serums fail (`90% krim mahal gagal meresap`) without this hydration opener.
    - 3-column compact trust bar (`.dsw-trust-row`) immediately below: `BPOM Resmi`, `Halal RI`, and `Bisa COD`.
+
+### 4.2 Supporting Pain & Transformation Macro Photography (Sections 3 & 4)
+Supporting images must never use polite/distant stock-style portraits where skin texture is invisible on a `390px` mobile screen:
+1. **Section 3 Pain Grid (`315×210` each):** Use extreme dermatological macro close-ups of real skin pain — e.g., post-wash peeling white dead-skin flakes with stinging red barrier irritation (`masalah-kulit-kering.webp`), and cakey/cracked foundation or cream pilling inside deep dehydration lines (`masalah-kulit-kusam.webp`).
+2. **Section 4 Before vs. After Stack (`648×432` each):**
+   - **Before (`Tanpa Treatment Lotion`):** High-contrast macro shot of rough, scaly, reddened skin with thick white moisturizer sitting unabsorbed on top of dry flakes (`kondisi-kulit-dehidrasi-kasar.webp`).
+   - **After (`Sesudah Rutin Pakai`):** High-contrast J-Beauty macro shot of the same warm Indonesian skin tone transformed into ultra-plump, poreless, translucent *glass-mochi skin* with delicate micro-mineral droplets (`kondisi-kulit-lembap-seimbang.webp`).
+
+### 4.3 Direct-Response Copywriting Rules ("Brutal Soft Overclaim")
+1. **Agitate the wasted-money pain:** Open by calling out why the buyer's current expensive routine is failing (*"Percuma Beli Skincare Mahal Kalau Kulit Masih Kering & Ketarik!"* / *"90% krim mahal gagal meresap dan hanya menggumpal di permukaan pori"*).
+2. **Concrete sensory & time-bound hooks:** Use specific, tactile Indonesian phrasing (*"Tepuk 10 detik — langsung kenyal selembut mochi!"*, *"serum & krim langsung tersedot masuk ke pori"*, *"kompres 3 menit setara perawatan klinik"*).
+3. **BPOM-compliant cosmetic framing:** Frame all dramatic claims around hydration, skin barrier comfort, plumping appearance, and skincare absorption — never claim to cure medical skin diseases (eczema, psoriasis, cystic acne infection).
 
 ---
 
@@ -72,14 +86,14 @@ The Hero image (`hero-<slug>.webp`) is the primary conversion lever and LCP elem
 
 Use the 10-section flow implemented in [src/pages/deep-sea-water-treatment-lotion.astro](../src/pages/deep-sea-water-treatment-lotion.astro):
 
-1. **Section 1 — Hero (`#hero-section .dsw-hero`):** Problem H1 with tilted yellow highlight + 10-second promise subheadline + *Brutal Soft Overclaim* Hero image (`720×480`) + overlapping callout card + 3 trust badges.
-2. **Section 2 — Instant Solution (`.dsw-section`):** Benefit H2 + 1-column macro skin absorption photo (`648×432`) + 3 icon-list rows.
-3. **Section 3 — Pain Agitation Grid (`.dsw-section--warn`):** Warning H2 + 2-column photo grid (`315×210` each) showing real dehydration symptoms + 3 warning triangle rows.
-4. **Section 4 — Visual Before vs. After Routine (`.dsw-section`):** 2 stacked 1-column comparison cards (`648×432`) with `.dsw-photo-badge--before` (`Sebelum`) and `.dsw-photo-badge--after` (`Sesudah Rutin`) overlays.
+1. **Section 1 — Hero (`#hero-section .dsw-hero`):** Brutal wasted-skincare H1 with tilted yellow highlight + 10-second glass-mochi promise subheadline + *Brutal Soft Overclaim* Hero image (`720×480`) + overlapping callout card + 3 trust badges.
+2. **Section 2 — Instant Absorption Mechanism (`.dsw-section`):** *"Sekali tepuk 10 detik, serum & krim langsung tersedot masuk ke pori"* H2 + 1-column macro skin absorption photo (`648×432`) + 3 icon-list rows.
+3. **Section 3 — Brutal Pain Agitation Grid (`.dsw-section--warn`):** *"Awas! Ini tanda skin barrier rusak & menolak semua skincare Anda"* H2 + 2-column macro pain grid (`315×210` each: peeling flakes & cakey cracked cream) + 3 warning triangle rows.
+4. **Section 4 — Visual Before vs. After Transformation (`.dsw-section`):** 2 stacked 1-column macro comparison cards (`648×432`) with `.dsw-photo-badge--before` (`Tanpa Treatment Lotion`) and `.dsw-photo-badge--after` (`Sesudah Rutin Pakai`) overlays.
 5. **Section 5 — Dark Marine Practical Usage (`.dsw-section--dark`):** Deep marine background (`#08333e`) + 2 stacked usage photos (`648×432`, daily 10-second tap vs. 3-minute CSM cotton compress) + 3 numbered steps.
-6. **Section 6 — Customer Reviews (`.dsw-section`):** 3 scannable customer reviews with verified badge, city + usage context, 5-star rating, and highlighted 2-sentence quote.
-7. **Section 7 — Visual Proof Gallery (`.dsw-section--tint`):** 2×2 visual grid (`315×210` each) showing tropical skin finish, watery texture on hand, daily/hijab comfort, and vanity bottle setup.
-8. **Section 8 — Product Knowledge Full-Bleed Figures (`.dsw-section--knowledge`):** 3 full-bleed `<figure>` blocks (`720×480` each) with `<figcaption>` covering origin/source, active ingredients flat-lay, and bottle size comparison (`50 ml` vs `150 ml`).
+6. **Section 6 — Customer Reviews (`.dsw-section`):** 3 scannable customer reviews with verified badge, city + skin/repeat-order context, 5-star rating, and highlighted 2-sentence transformation quote.
+7. **Section 7 — Tropical Proof Gallery (`.dsw-section--tint`):** 2×2 visual grid (`315×210` each) showing tropical skin finish, watery texture on hand, daily/hijab comfort, and vanity bottle setup.
+8. **Section 8 — Product Knowledge Full-Bleed Figures (`.dsw-section--knowledge`):** 3 full-bleed `<figure>` blocks (`720×480` each) with `<figcaption>` covering 200m Ulleung deep-sea micro-minerals, 6 active ingredients flat-lay, and bottle size comparison (`50 ml` trial vs `150 ml` value size).
 9. **Section 9 — 100% Official Guarantee (`.dsw-section`):** Shield icon + `GARANSI RESMI 100%` + 3 guarantee cards (`100% Produk Asli Tersegel`, `Bisa Bayar di Tempat (COD)`, `Garansi Ganti Baru`).
 10. **Section 10 — Embedded Checkout Form + Floating Pill CTA (`#form-pemesanan`):**
     - `<GeoIpResolvedForm mode="hybrid" productSlug={product.slug} embedded={true} selectedVariantId={String(defaultVariant.id)} codDisabledProvinceCodes={codDisabledProvinceCodes} />`
@@ -97,11 +111,11 @@ All route images live in `public/images/landing/<slug>/` as `.webp` files (`qual
 
 | Tier | Layout Container | CSS Display Size (`412px` viewport) | Required WebP Dimensions (`width` × `height`) | Target File Size |
 | :--- | :--- | :--- | :--- | :--- |
-| **Tier 1** | Hero & Section 8 Full-Bleed Figures (`.dsw-hero-img`, `.dsw-figure-img`) | `412 × 275 px` | **`720 × 480`** | `11–24 KB` |
-| **Tier 2** | Single-Column Photo Cards (`.dsw-photo-stack .dsw-photo-img`) | `370 × 247 px` | **`648 × 432`** | `12–19 KB` |
-| **Tier 3** | Two-Column Grid Cards (`.dsw-photo-grid-2 .dsw-photo-img`) | `179 × 119 px` | **`315 × 210`** | `4–8 KB` |
+| **Tier 1** | Hero & Section 8 Full-Bleed Figures (`.dsw-hero-img`, `.dsw-figure-img`) | `412 × 275 px` | **`720 × 480`** | `11–25 KB` |
+| **Tier 2** | Single-Column Photo Cards (`.dsw-photo-stack .dsw-photo-img`) | `370 × 247 px` | **`648 × 432`** | `12–43 KB` |
+| **Tier 3** | Two-Column Grid Cards (`.dsw-photo-grid-2 .dsw-photo-img`) | `179 × 119 px` | **`315 × 210`** | `4–14 KB` |
 
-- **Total image budget:** Keep all 15 images combined under **`180 KB`**.
+- **Total image budget:** Keep all 15 images combined under **`240 KB`**.
 - **Explicit dimensions:** Every `<img>` tag must declare `width` and `height` matching its exact Tier dimensions (`720`/`480`, `648`/`432`, or `315`/`210`) so `unsized-images` and `image-delivery-insight` both score `100` (`CLS = 0`).
 
 ### 6.2 Preload & Fetch Priority Discipline
