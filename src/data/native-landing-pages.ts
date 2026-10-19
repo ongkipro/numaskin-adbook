@@ -39,13 +39,15 @@ export type NativeLandingPage = {
 };
 
 export const nativeLandingPages: NativeLandingPage[] = [
-  // Example, and the only entry that ships with the product:
-  // {
-  //   slug: 'promo-lebaran',
-  //   title: 'Promo Lebaran',
-  //   productSlug: 'pupuk-organik-cair',
-  //   description: 'Landing khusus kampanye Lebaran.',
-  // },
+  {
+    slug: 'deep-sea-water-treatment-lotion',
+    title: 'Deep Sea Water Treatment Lotion',
+    productSlug: 'deep-sea-water-treatment-lotion',
+    description:
+      '2-in-1 Hydrating Toner & First Essence dengan Ulleung Island Deep Sea Water, Galactomyces, Ceramide, dan Hyaluronic Acid (BPOM NA18220101400).',
+    image:
+      '/images/landing/deep-sea-water-treatment-lotion/hero-treatment-lotion.webp',
+  },
 ];
 
 /**

@@ -1,0 +1,1068 @@
+/* Numa Skin — Deep Sea Water Treatment Lotion Native Landing Page
+ * Built on Numa Skin design tokens (--nm-marine, --nm-teal, --nm-cyan, --nm-surface)
+ * with direct-response conversion structure adapted from petanisejahtera.com.
+ */
+
+.dsw-page {
+  --dsw-ink: var(--nm-marine, #002b49);
+  --dsw-ink-hover: var(--nm-marine-hover, #081b2b);
+  --dsw-body: #1f3347;
+  --dsw-muted: var(--nm-muted, #5a6e7f);
+  --dsw-teal: var(--nm-teal, #0b6e7d);
+  --dsw-cyan: var(--nm-cyan, #269ba8);
+  --dsw-surface: var(--nm-surface, #f4f9fa);
+  --dsw-surface-2: var(--nm-surface-2, #ebf5f8);
+  --dsw-border: var(--nm-border, #e2edf0);
+  --dsw-star: var(--nm-star, #e59819);
+  --dsw-warn-bg: #fdf3f2;
+  --dsw-warn-border: #f2d0cc;
+  --dsw-warn-ink: #8c2d25;
+
+  color: var(--dsw-body);
+  background: #ffffff;
+  font-family: var(--font-sans, 'Inter', -apple-system, BlinkMacSystemFont, sans-serif);
+  font-size: 1.03125rem;
+  line-height: 1.68;
+  padding-bottom: 6.75rem;
+  overflow-x: clip;
+}
+
+.dsw-shell {
+  width: 100%;
+  max-width: 44rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.125rem;
+  padding-right: 1.125rem;
+}
+
+@media (min-width: 640px) {
+  .dsw-shell {
+    padding-left: 1.75rem;
+    padding-right: 1.75rem;
+  }
+}
+
+/* Distraction-Free Numa Skin Brand Strip (no exit navigation links) */
+.dsw-top-band {
+  background: var(--dsw-ink);
+  color: #ffffff;
+  font-size: 0.75rem;
+  padding: 0.42rem 1rem;
+  text-align: center;
+  line-height: 1.35;
+}
+
+.dsw-top-band strong {
+  color: #8ce3ee;
+  font-weight: 600;
+}
+
+.dsw-brand-header {
+  border-bottom: 1px solid var(--dsw-border);
+  background: #ffffff;
+  padding: 0.8rem 1rem;
+}
+
+.dsw-brand-header-inner {
+  max-width: 44rem;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.dsw-wordmark {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+
+.dsw-wordmark-main {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: 1.25rem;
+  letter-spacing: 0.14em;
+  color: var(--dsw-ink);
+}
+
+.dsw-wordmark-jp {
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  color: var(--dsw-teal);
+  margin-top: 0.18rem;
+}
+
+.dsw-bpom-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--dsw-ink);
+  background: var(--dsw-surface);
+  border: 1px solid var(--dsw-border);
+  border-radius: 9999px;
+  padding: 0.28rem 0.68rem;
+}
+
+/* Typography & Brush Accent (no colored child span text class inside h1/h2) */
+.dsw-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--dsw-teal);
+  background: var(--dsw-surface-2);
+  border: 1px solid #cde4ea;
+  border-radius: 9999px;
+  padding: 0.28rem 0.75rem;
+  margin-bottom: 0.85rem;
+}
+
+.dsw-kicker-dot {
+  width: 0.42rem;
+  height: 0.42rem;
+  border-radius: 9999px;
+  background: var(--dsw-cyan);
+}
+
+.dsw-hero-title {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(1.85rem, 4.8vw, 2.55rem);
+  line-height: 1.17;
+  letter-spacing: -0.01em;
+  color: var(--dsw-ink);
+  margin: 0 0 0.9rem;
+}
+
+.dsw-section-title {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(1.45rem, 3.6vw, 1.95rem);
+  line-height: 1.23;
+  letter-spacing: -0.01em;
+  color: var(--dsw-ink);
+  margin: 0 0 0.65rem;
+}
+
+.dsw-brush {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 12' preserveAspectRatio='none'><path d='M2 8.5 C 58 2.5, 162 2.5, 218 7.5' stroke='%23269BA8' stroke-width='4' fill='none' stroke-linecap='round' opacity='0.55'/></svg>");
+  background-repeat: no-repeat;
+  background-size: 100% 0.42em;
+  background-position: 0 94%;
+  padding-bottom: 0.06em;
+}
+
+.dsw-rule {
+  display: block;
+  width: 2.25rem;
+  height: 2px;
+  background: var(--dsw-cyan);
+  margin: 0.65rem 0 1.15rem;
+}
+
+.dsw-lead {
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: var(--dsw-muted);
+  margin: 0 0 1.25rem;
+}
+
+/* Hero Section */
+.dsw-hero {
+  padding-top: 1.35rem;
+  padding-bottom: 2.25rem;
+}
+
+.dsw-hero-figure {
+  position: relative;
+  margin: 1.25rem 0 1rem;
+  border-radius: 0.85rem;
+  overflow: hidden;
+  border: 1px solid var(--dsw-border);
+  background: var(--dsw-surface);
+  box-shadow: 0 12px 32px -12px rgba(0, 43, 73, 0.14);
+}
+
+.dsw-hero-figure img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+}
+
+.dsw-hero-caption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  padding: 0.7rem 1rem;
+  background: var(--dsw-ink);
+  color: #ffffff;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+
+.dsw-hero-caption strong {
+  color: #8ce3ee;
+  font-weight: 600;
+}
+
+.dsw-pill-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.55rem;
+  margin: 0.9rem 0 1.35rem;
+}
+
+.dsw-pill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0.65rem 0.45rem;
+  border-radius: 0.65rem;
+  background: var(--dsw-surface);
+  border: 1px solid var(--dsw-border);
+}
+
+.dsw-pill-title {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--dsw-ink);
+  line-height: 1.25;
+}
+
+.dsw-pill-sub {
+  font-size: 0.72rem;
+  color: var(--dsw-muted);
+  margin-top: 0.15rem;
+  line-height: 1.25;
+}
+
+.dsw-callout {
+  background: var(--dsw-surface);
+  border: 1px solid var(--dsw-border);
+  border-left: 3.5px solid var(--dsw-teal);
+  border-radius: 0 0.65rem 0.65rem 0;
+  padding: 1rem 1.15rem;
+  font-size: 0.975rem;
+  color: var(--dsw-body);
+}
+
+.dsw-callout p {
+  margin: 0;
+}
+
+.dsw-callout strong {
+  color: var(--dsw-ink);
+}
+
+/* Section dividers */
+.dsw-section {
+  padding-top: 2.35rem;
+  padding-bottom: 2.35rem;
+  border-top: 1px solid var(--dsw-border);
+}
+
+.dsw-section--tinted {
+  background: var(--dsw-surface);
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  padding-left: max(1.125rem, calc(50vw - 22rem + 1.125rem));
+  padding-right: max(1.125rem, calc(50vw - 22rem + 1.125rem));
+}
+
+/* Section 2: Pain Points */
+.dsw-pain-list {
+  list-style: none;
+  padding: 0;
+  margin: 1.25rem 0 0;
+  display: grid;
+  gap: 0.9rem;
+}
+
+.dsw-pain-item {
+  display: grid;
+  grid-template-columns: 2.65rem 1fr;
+  gap: 0.9rem;
+  align-items: start;
+  padding: 1.05rem 1.1rem;
+  border-radius: 0.75rem;
+  background: #ffffff;
+  border: 1px solid var(--dsw-border);
+}
+
+.dsw-pain-icon {
+  width: 2.65rem;
+  height: 2.65rem;
+  border-radius: 0.6rem;
+  background: var(--dsw-surface-2);
+  color: var(--dsw-teal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.dsw-pain-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--dsw-ink);
+  margin: 0 0 0.25rem;
+  line-height: 1.35;
+}
+
+.dsw-pain-desc {
+  font-size: 0.9375rem;
+  color: var(--dsw-muted);
+  margin: 0;
+  line-height: 1.58;
+}
+
+/* Section 3: 2x2 Physical Comparison Grid */
+.dsw-compare-pair {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-top: 1.15rem;
+}
+
+@media (min-width: 520px) {
+  .dsw-compare-pair {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.dsw-compare-card {
+  margin: 0;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border: 1px solid var(--dsw-border);
+}
+
+.dsw-compare-card--warn {
+  background: var(--dsw-warn-bg);
+  border-color: var(--dsw-warn-border);
+}
+
+.dsw-compare-card--good {
+  background: var(--dsw-surface-2);
+  border-color: #bce0e8;
+}
+
+.dsw-compare-media {
+  position: relative;
+  aspect-ratio: 3 / 2;
+  background: #e9f1f4;
+  overflow: hidden;
+}
+
+.dsw-compare-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.dsw-compare-tag {
+  position: absolute;
+  top: 0.6rem;
+  left: 0.6rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.22rem 0.6rem;
+  border-radius: 0.35rem;
+  font-size: 0.74rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.dsw-compare-tag--warn {
+  background: rgba(140, 45, 37, 0.92);
+  color: #ffffff;
+}
+
+.dsw-compare-tag--good {
+  background: rgba(0, 43, 73, 0.92);
+  color: #ffffff;
+}
+
+.dsw-compare-body {
+  padding: 0.9rem 1rem 1rem;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--dsw-body);
+}
+
+.dsw-compare-body strong {
+  display: block;
+  font-size: 0.96rem;
+  color: var(--dsw-ink);
+  margin-bottom: 0.25rem;
+}
+
+.dsw-compare-card--warn .dsw-compare-body strong {
+  color: var(--dsw-warn-ink);
+}
+
+/* Section 4: Full-Bleed Marine Timeline (within 480px BaseLayout column) */
+.dsw-marine-band {
+  background: var(--dsw-ink);
+  color: #ffffff;
+  margin-left: -1.125rem;
+  margin-right: -1.125rem;
+  padding: 2.5rem 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .dsw-marine-band {
+    margin-left: -1.75rem;
+    margin-right: -1.75rem;
+    padding: 2.75rem 1.75rem;
+  }
+}
+
+.dsw-marine-band .dsw-section-title {
+  color: #ffffff;
+}
+
+.dsw-marine-band .dsw-lead {
+  color: #c7dde6;
+}
+
+.dsw-timeline {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0 0;
+  position: relative;
+}
+
+.dsw-timeline::before {
+  content: '';
+  position: absolute;
+  top: 0.75rem;
+  bottom: 0.75rem;
+  left: 1.05rem;
+  width: 2px;
+  background: rgba(38, 155, 168, 0.45);
+}
+
+.dsw-timeline-step {
+  position: relative;
+  padding-left: 3rem;
+  padding-bottom: 1.45rem;
+}
+
+.dsw-timeline-step:last-child {
+  padding-bottom: 0;
+}
+
+.dsw-timeline-node {
+  position: absolute;
+  left: 0;
+  top: 0.1rem;
+  width: 2.15rem;
+  height: 2.15rem;
+  border-radius: 9999px;
+  background: #083b5e;
+  border: 2px solid var(--dsw-cyan);
+  color: #8ce3ee;
+  font-weight: 700;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dsw-timeline-time {
+  display: inline-block;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: #8ce3ee;
+  margin-bottom: 0.18rem;
+}
+
+.dsw-timeline-title {
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 0.25rem;
+}
+
+.dsw-timeline-desc {
+  font-size: 0.92rem;
+  color: #cde0e8;
+  margin: 0;
+  line-height: 1.58;
+}
+
+.dsw-marine-note {
+  margin-top: 1.5rem;
+  padding: 0.95rem 1.1rem;
+  border-radius: 0.65rem;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(140, 227, 238, 0.24);
+  font-size: 0.9rem;
+  color: #e3f2f6;
+}
+
+/* Section 5: Symptoms & Self-Check */
+.dsw-symptom-list {
+  list-style: none;
+  padding: 0;
+  margin: 1.1rem 0 1.35rem;
+  display: grid;
+  gap: 0.7rem;
+}
+
+.dsw-symptom-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+  border-radius: 0.65rem;
+  background: var(--dsw-surface);
+  border: 1px solid var(--dsw-border);
+  font-size: 0.94rem;
+}
+
+.dsw-symptom-bullet {
+  width: 1.45rem;
+  height: 1.45rem;
+  border-radius: 9999px;
+  background: var(--dsw-surface-2);
+  color: var(--dsw-teal);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.8rem;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+.dsw-check-box {
+  background: var(--dsw-surface-2);
+  border: 1px solid #bfe0e8;
+  border-radius: 0.75rem;
+  padding: 1.1rem 1.2rem;
+}
+
+.dsw-check-title {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--dsw-ink);
+  margin: 0 0 0.35rem;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+/* Section 6: Wide Banner & Formulation Specs */
+.dsw-wide-figure {
+  margin: 1.15rem 0 1.35rem;
+  border-radius: 0.8rem;
+  overflow: hidden;
+  border: 1px solid var(--dsw-border);
+  background: var(--dsw-surface);
+}
+
+.dsw-wide-figure img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.dsw-wide-caption {
+  padding: 0.65rem 0.95rem;
+  font-size: 0.8125rem;
+  color: var(--dsw-muted);
+  background: var(--dsw-surface);
+  border-top: 1px solid var(--dsw-border);
+}
+
+.dsw-ingredient-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.85rem;
+  margin: 1.15rem 0 1.4rem;
+}
+
+.dsw-ingredient-card {
+  padding: 1rem 1.1rem;
+  border-radius: 0.75rem;
+  background: var(--dsw-surface);
+  border: 1px solid var(--dsw-border);
+}
+
+.dsw-ingredient-badge {
+  display: inline-block;
+  font-size: 0.73rem;
+  font-weight: 700;
+  color: var(--dsw-teal);
+  background: var(--dsw-surface-2);
+  padding: 0.18rem 0.55rem;
+  border-radius: 0.35rem;
+  margin-bottom: 0.45rem;
+}
+
+.dsw-ingredient-title {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--dsw-ink);
+  margin: 0 0 0.3rem;
+  line-height: 1.32;
+}
+
+.dsw-ingredient-desc {
+  font-size: 0.9rem;
+  color: var(--dsw-muted);
+  margin: 0;
+  line-height: 1.56;
+}
+
+.dsw-spec-dl {
+  margin: 0;
+  border-radius: 0.75rem;
+  border: 1px solid var(--dsw-border);
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.dsw-spec-row {
+  display: grid;
+  grid-template-columns: 8.75rem 1fr;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--dsw-border);
+  font-size: 0.88rem;
+}
+
+.dsw-spec-row:last-child {
+  border-bottom: 0;
+}
+
+.dsw-spec-row:nth-child(odd) {
+  background: var(--dsw-surface);
+}
+
+.dsw-spec-row dt {
+  font-weight: 600;
+  color: var(--dsw-muted);
+}
+
+.dsw-spec-row dd {
+  margin: 0;
+  font-weight: 600;
+  color: var(--dsw-ink);
+}
+
+/* Section 7: 4-Step Usage Ritual */
+.dsw-step-list {
+  list-style: none;
+  padding: 0;
+  margin: 1.15rem 0 0;
+  display: grid;
+  gap: 0.8rem;
+}
+
+.dsw-step-card {
+  display: grid;
+  grid-template-columns: 2.35rem 1fr;
+  gap: 0.85rem;
+  align-items: start;
+  padding: 0.95rem 1.05rem;
+  border-radius: 0.75rem;
+  background: var(--dsw-surface);
+  border: 1px solid var(--dsw-border);
+}
+
+.dsw-step-num {
+  width: 2.35rem;
+  height: 2.35rem;
+  border-radius: 0.55rem;
+  background: var(--dsw-ink);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.92rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dsw-step-title {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--dsw-ink);
+  margin: 0 0 0.2rem;
+}
+
+.dsw-step-desc {
+  font-size: 0.91rem;
+  color: var(--dsw-muted);
+  margin: 0;
+  line-height: 1.56;
+}
+
+/* Section 8: Verified Reviews (VoC) */
+.dsw-rating-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.95rem 1.1rem;
+  border-radius: 0.75rem;
+  background: var(--dsw-surface-2);
+  border: 1px solid #c5e2ea;
+  margin: 1rem 0 1.15rem;
+}
+
+.dsw-rating-score {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.dsw-rating-num {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: 1.85rem;
+  line-height: 1;
+  color: var(--dsw-ink);
+}
+
+.dsw-stars {
+  color: var(--dsw-star);
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+}
+
+.dsw-review-list {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.dsw-review-card {
+  padding: 1.05rem 1.15rem;
+  border-radius: 0.75rem;
+  background: #ffffff;
+  border: 1px solid var(--dsw-border);
+}
+
+.dsw-review-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+  margin-bottom: 0.45rem;
+}
+
+.dsw-review-user {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--dsw-ink);
+}
+
+.dsw-review-meta {
+  font-size: 0.78rem;
+  color: var(--dsw-teal);
+  background: var(--dsw-surface-2);
+  padding: 0.15rem 0.55rem;
+  border-radius: 9999px;
+  font-weight: 600;
+}
+
+.dsw-review-quote {
+  font-size: 0.93rem;
+  color: var(--dsw-body);
+  margin: 0.35rem 0 0;
+  line-height: 1.58;
+}
+
+/* Section 9: Guarantee & Packaging */
+.dsw-guarantee-box {
+  border-radius: 0.8rem;
+  border: 1px solid #bfe0e8;
+  background: linear-gradient(180deg, #f4f9fa 0%, #ebf5f8 100%);
+  padding: 1.25rem 1.15rem;
+}
+
+.dsw-guarantee-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+  margin-top: 0.95rem;
+}
+
+.dsw-guarantee-item {
+  background: #ffffff;
+  border: 1px solid var(--dsw-border);
+  border-radius: 0.65rem;
+  padding: 0.85rem 0.95rem;
+}
+
+.dsw-guarantee-item strong {
+  display: block;
+  font-size: 0.92rem;
+  color: var(--dsw-ink);
+  margin-bottom: 0.2rem;
+}
+
+.dsw-guarantee-item span {
+  font-size: 0.85rem;
+  color: var(--dsw-muted);
+  line-height: 1.48;
+  display: block;
+}
+
+/* Section 10: Interactive Size Picker + Embedded Order Form */
+.dsw-order-card {
+  border-radius: 0.9rem;
+  border: 1.5px solid var(--dsw-ink);
+  background: #ffffff;
+  box-shadow: 0 16px 38px -16px rgba(0, 43, 73, 0.16);
+  overflow: hidden;
+}
+
+.dsw-order-header {
+  background: var(--dsw-ink);
+  color: #ffffff;
+  padding: 1.15rem 1.15rem;
+}
+
+.dsw-order-header h2 {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-weight: 400;
+  font-size: 1.4rem;
+  color: #ffffff;
+  margin: 0 0 0.25rem;
+}
+
+.dsw-order-header p {
+  margin: 0;
+  font-size: 0.86rem;
+  color: #cde0e8;
+}
+
+.dsw-size-selector-wrap {
+  padding: 1.1rem 1rem 0.35rem;
+  background: var(--dsw-surface);
+  border-bottom: 1px solid var(--dsw-border);
+}
+
+.dsw-size-label {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--dsw-ink);
+  margin: 0 0 0.65rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dsw-size-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+
+.dsw-size-btn {
+  position: relative;
+  text-align: left;
+  padding: 0.8rem 0.95rem;
+  border-radius: 0.65rem;
+  border: 1.5px solid var(--dsw-border);
+  background: #ffffff;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.dsw-size-btn:hover {
+  border-color: var(--dsw-cyan);
+}
+
+.dsw-size-btn[aria-pressed='true'] {
+  border-color: var(--dsw-ink);
+  background: var(--dsw-surface-2);
+  box-shadow: 0 0 0 1px var(--dsw-ink);
+}
+
+.dsw-size-badge {
+  display: inline-block;
+  align-self: flex-start;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.12rem 0.45rem;
+  border-radius: 0.3rem;
+  background: var(--dsw-ink);
+  color: #ffffff;
+  margin-bottom: 0.2rem;
+}
+
+.dsw-size-btn[aria-pressed='true'] .dsw-size-badge {
+  background: var(--dsw-teal);
+}
+
+.dsw-size-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--dsw-ink);
+}
+
+.dsw-size-price {
+  font-size: 1.02rem;
+  font-weight: 800;
+  color: var(--dsw-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.dsw-size-compare {
+  font-size: 0.76rem;
+  color: var(--dsw-muted);
+  text-decoration: line-through;
+  font-variant-numeric: tabular-nums;
+}
+
+.dsw-size-note {
+  font-size: 0.76rem;
+  color: var(--dsw-teal);
+  font-weight: 600;
+  margin-top: 0.15rem;
+}
+
+/* Override FormHybrid accents inside .dsw-page so form matches Numa Skin Marine */
+.dsw-page [data-hybrid-form-root] {
+  --sf-accent: var(--dsw-teal, #0b6e7d);
+  --sf-accent-strong: var(--dsw-ink, #002b49);
+  --sf-accent-soft: var(--dsw-surface-2, #ebf5f8);
+  --sf-accent-ring: rgba(38, 155, 168, 0.28);
+  --sf-field-empty: var(--dsw-surface, #f4f9fa);
+  --sf-field-border: #8fa9b5;
+  --sf-surface-alt: var(--dsw-surface, #f4f9fa);
+  --sf-line: var(--dsw-border, #e2edf0);
+}
+
+/* Hide duplicate native variant list visually while keeping its radio inputs in DOM for form-hybrid.ts */
+.dsw-order-card .form-block-first {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.dsw-order-card .form-block {
+  margin-top: 0.75rem;
+}
+
+.dsw-page .submit-main {
+  background: var(--dsw-ink) !important;
+  color: #ffffff !important;
+}
+
+.dsw-page .submit-main:hover {
+  background: var(--dsw-ink-hover) !important;
+}
+
+/* Sticky Bottom Purchase Bar (constrained to 480px column on desktop) */
+.dsw-sticky-bar {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 480px;
+  bottom: 0;
+  z-index: 40;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(8px);
+  border-top: 1px solid var(--dsw-border);
+  box-shadow: 0 -8px 24px rgba(0, 43, 73, 0.1);
+  padding: 0.65rem 1rem calc(0.65rem + env(safe-area-inset-bottom, 0px));
+  transition: transform 0.22s ease, opacity 0.22s ease;
+}
+
+.dsw-sticky-bar.is-hidden {
+  transform: translate(-50%, 110%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.dsw-sticky-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.dsw-sticky-meta {
+  min-width: 0;
+}
+
+.dsw-sticky-label {
+  font-size: 0.74rem;
+  color: var(--dsw-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dsw-sticky-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem;
+}
+
+.dsw-sticky-price {
+  font-size: 1.08rem;
+  font-weight: 800;
+  color: var(--dsw-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.dsw-sticky-compare {
+  font-size: 0.76rem;
+  color: var(--dsw-muted);
+  text-decoration: line-through;
+  font-variant-numeric: tabular-nums;
+}
+
+.dsw-sticky-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  background: var(--dsw-ink);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 0.72rem 1.15rem;
+  border-radius: 0.55rem;
+  text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background-color 0.15s ease;
+}
+
+.dsw-sticky-cta:hover {
+  background: var(--dsw-ink-hover);
+}
