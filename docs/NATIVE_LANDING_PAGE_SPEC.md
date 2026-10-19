@@ -77,8 +77,16 @@ Supporting images must never use polite/distant stock-style portraits where skin
 
 ### 4.3 Direct-Response Copywriting Rules ("Brutal Soft Overclaim")
 1. **Agitate the wasted-money pain:** Open by calling out why the buyer's current expensive routine is failing (*"Percuma Beli Skincare Mahal Kalau Kulit Masih Kering & Ketarik!"* / *"90% krim mahal gagal meresap dan hanya menggumpal di permukaan pori"*).
-2. **Concrete sensory & time-bound hooks:** Use specific, tactile Indonesian phrasing (*"Tepuk 10 detik — langsung kenyal selembut mochi!"*, *"serum & krim langsung tersedot masuk ke pori"*, *"kompres 3 menit setara perawatan klinik"*).
-3. **BPOM-compliant cosmetic framing:** Frame all dramatic claims around hydration, skin barrier comfort, plumping appearance, and skincare absorption — never claim to cure medical skin diseases (eczema, psoriasis, cystic acne infection).
+2. **Concrete sensory & time-bound hooks:** Use specific, tactile Indonesian phrasing (*"Tepuk 10 detik — langsung kenyal, halus, & lembap!"*, *"serum & krim langsung meresap masuk ke pori"*, *"kompres kapas 3 menit agar langsung adem"*).
+3. **BPOM-compliant cosmetic framing:** Frame all dramatic claims around hydration, skin barrier comfort, smooth/supple appearance, and skincare absorption — never claim to cure medical skin diseases (eczema, psoriasis, cystic acne infection).
+
+### 4.4 Indonesian Local-Market Language Discipline (No Malay Phrasing, No Confusing Jargon)
+All landing page copy must read like natural, everyday Indonesian ecommerce/skincare speech tailored to Indonesian buyers:
+1. **Use familiar Indonesian market phrasing:** Use words Indonesian buyers actually say in reviews and comments (*kering & ketarik*, *mengelupas*, *krim numpuk*, *bedak retak*, *langsung adem*, *tidak lengket*, *tidak gerah*, *cepat meresap*, *halus dan mulus*).
+2. **Strictly NO Bahasa Melayu (Malaysia) or stiff machine-translated vocabulary:** Never use Malay terms or awkward literal translations such as *kesan / berkesan*, *sapukan*, *pencuci muka*, *pelembap yang sesuai*, *air suling*, *bersisik*, *menganga*, or *sensasi*.
+3. **Strictly NO confusing technical jargon, niche beauty acronyms, or narrow regional slang:**
+   - Avoid unexplained acronyms or foreign beauty buzzwords that confuse mass-market Indonesian buyers (e.g., use *"Kompres Kapas (3 Menit)"* instead of *"CSM"*, use *"kenyal, halus, & lembap"* instead of *"plumping"* or *"glass-mochi skin"*, use *"partikel mineral alami lebih kecil dari air biasa"* instead of *"molekul ion mineral mikro / TEWL / epidermis"*).
+   - Avoid narrow regional slang (e.g., use *"tidak gerah"* instead of Javanese-only *"bebas sumuk"*).
 
 ---
 
@@ -86,11 +94,11 @@ Supporting images must never use polite/distant stock-style portraits where skin
 
 Use the 10-section flow implemented in [src/pages/deep-sea-water-treatment-lotion.astro](../src/pages/deep-sea-water-treatment-lotion.astro):
 
-1. **Section 1 — Hero (`#hero-section .dsw-hero`):** Brutal wasted-skincare H1 with tilted yellow highlight + 10-second glass-mochi promise subheadline + *Brutal Soft Overclaim* Hero image (`720×480`) + overlapping callout card + 3 trust badges.
-2. **Section 2 — Instant Absorption Mechanism (`.dsw-section`):** *"Sekali tepuk 10 detik, serum & krim langsung tersedot masuk ke pori"* H2 + 1-column macro skin absorption photo (`648×432`) + 3 icon-list rows.
+1. **Section 1 — Hero (`#hero-section .dsw-hero`):** Brutal wasted-skincare H1 with tilted yellow highlight + 10-second supple/hydrated promise subheadline + *Brutal Soft Overclaim* Hero image (`720×480`) + overlapping callout card + 3 trust badges.
+2. **Section 2 — Instant Absorption Mechanism (`.dsw-section`):** *"Sekali tepuk 10 detik, serum & krim langsung meresap masuk ke pori"* H2 + 1-column macro skin absorption photo (`648×432`) + 3 icon-list rows.
 3. **Section 3 — Brutal Pain Agitation Grid (`.dsw-section--warn`):** *"Awas! Ini tanda skin barrier rusak & menolak semua skincare Anda"* H2 + 2-column macro pain grid (`315×210` each: peeling flakes & cakey cracked cream) + 3 warning triangle rows.
 4. **Section 4 — Visual Before vs. After Transformation (`.dsw-section`):** 2 stacked 1-column macro comparison cards (`648×432`) with `.dsw-photo-badge--before` (`Tanpa Treatment Lotion`) and `.dsw-photo-badge--after` (`Sesudah Rutin Pakai`) overlays.
-5. **Section 5 — Dark Marine Practical Usage (`.dsw-section--dark`):** Deep marine background (`#08333e`) + 2 stacked usage photos (`648×432`, daily 10-second tap vs. 3-minute CSM cotton compress) + 3 numbered steps.
+5. **Section 5 — Dark Marine Practical Usage (`.dsw-section--dark`):** Deep marine background (`#08333e`) + 2 stacked usage photos (`648×432`, daily 10-second tap vs. 3-minute cotton pad compress) + 3 numbered steps.
 6. **Section 6 — Customer Reviews (`.dsw-section`):** 3 scannable customer reviews with verified badge, city + skin/repeat-order context, 5-star rating, and highlighted 2-sentence transformation quote.
 7. **Section 7 — Tropical Proof Gallery (`.dsw-section--tint`):** 2×2 visual grid (`315×210` each) showing tropical skin finish, watery texture on hand, daily/hijab comfort, and vanity bottle setup.
 8. **Section 8 — Product Knowledge Full-Bleed Figures (`.dsw-section--knowledge`):** 3 full-bleed `<figure>` blocks (`720×480` each) with `<figcaption>` covering 200m Ulleung deep-sea micro-minerals, 6 active ingredients flat-lay, and bottle size comparison (`50 ml` trial vs `150 ml` value size).
