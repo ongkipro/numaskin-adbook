@@ -3,11 +3,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import GeoIpResolvedForm from '../components/storefront/forms/GeoIpResolvedForm.astro';
 import MetaLandingTracker from '../components/storefront/tracking/MetaLandingTracker.astro';
 import Icon from '../components/storefront/shared/Icon.astro';
+import RatingStars from '../components/storefront/shared/RatingStars.astro';
 import { getStorefrontProduct } from '../lib/catalog';
 import { nativeLandingCanonicalPath } from '../lib/landing-pages';
 import { defaultCatalogContentId } from '../lib/catalog-feed';
-import { formatIdr } from '../lib/format-idr';
-import '../styles/numaskin.css';
 import '../styles/form-hybrid.css';
 import '../styles/landing-pages/deep-sea-water-treatment-lotion.css';
 
@@ -15,11 +14,11 @@ export const prerender = false;
 
 const PRODUCT_SLUG = 'deep-sea-water-treatment-lotion';
 const LANDING_SLUG = 'deep-sea-water-treatment-lotion';
-const PAGE_TITLE = 'Deep Sea Water Treatment Lotion — Hydrating Toner & First Essence | Numa Skin';
+const PAGE_TITLE = 'Deep Sea Water Treatment Lotion - Toner Hidrasi Air Laut Numa Skin';
 const PAGE_DESC =
-  '2-in-1 Hydrating Toner & First Essence dengan Ulleung Island Deep Sea Water, Galactomyces, Ceramide, dan Hyaluronic Acid. Melembapkan sejak langkah pertama, menenangkan kemerahan, dan merawat skin barrier. BPOM NA18220101400.';
-const HERO_IMAGE =
-  '/images/landing/deep-sea-water-treatment-lotion/hero-treatment-lotion.webp';
+  'Toner-essence air laut dalam Pulau Ulleung 200m dengan 6 bahan aktif untuk melembapkan kulit kering, menenangkan kemerahan, dan menjaga skin barrier.';
+const IMG_BASE = '/images/landing/deep-sea-water-treatment-lotion';
+const HERO_IMAGE = `${IMG_BASE}/hero-treatment-lotion.webp`;
 
 const product = await getStorefrontProduct(Astro.locals, PRODUCT_SLUG);
 if (!product) {
@@ -39,21 +38,6 @@ const defaultVariant = cheapestVariant || {
   price: 79000,
   comparePrice: 125000,
 };
-
-const sizeMetaByLabel: Record<string, { badge: string; note: string }> = {
-  '50ml': {
-    badge: 'Ukuran Coba & Travel',
-    note: 'Praktis dibawa bepergian (±3–4 minggu pemakaian)',
-  },
-  '150ml': {
-    badge: 'Paling Laris · Best Value',
-    note: 'Ukuran favorit untuk kompres kapas CSM (±2–3 bulan)',
-  },
-  '2× 150ml': {
-    badge: 'Paket Stok Hemat',
-    note: 'Lebih hemat Rp36.200/botol untuk pemakaian rutin pagi & malam',
-  },
-};
 ---
 
 <BaseLayout
@@ -72,713 +56,587 @@ const sizeMetaByLabel: Record<string, { badge: string; note: string }> = {
     price={defaultVariant.price}
   />
 
-  <main class="dsw-page">
-    <!-- Distraction-free Numa Skin Brand Strip -->
-    <div class="dsw-top-band">
-      COD tersedia untuk sebagian besar wilayah · Terdaftar BPOM <strong>NA18220101400</strong>
-    </div>
-    <header class="dsw-brand-header">
-      <div class="dsw-brand-header-inner">
-        <div class="dsw-wordmark" aria-label="Numa Skin">
-          <span class="dsw-wordmark-main">NUMA·SKIN</span>
-          <span class="dsw-wordmark-jp" lang="ja">ヌマスキン</span>
-        </div>
-        <span class="dsw-bpom-chip">
-          <Icon name="lucide:shield-check" class="size-3.5 text-[#0b6e7d]" aria-hidden="true" />
-          Dermatologically Tested
-        </span>
-      </div>
-    </header>
-
-    <div class="dsw-shell">
-      <!-- SECTION 1: HERO -->
-      <section class="dsw-hero">
-        <div class="dsw-kicker">
-          <span class="dsw-kicker-dot" aria-hidden="true"></span>
-          <span>2-in-1 Hydrating Toner &amp; First Essence · pH Balance Formula</span>
+  <div class="dsw-shell">
+    <main class="dsw-canvas">
+      <!-- Section 1: Hero -->
+      <section id="hero-section" class="dsw-hero">
+        <div class="dsw-hero-head">
+          <h1 class="dsw-h1">
+            Wajah Terasa <span class="dsw-hl-tilt">Kering & Ketarik</span> Setiap Habis Cuci Muka?
+          </h1>
+          <p class="dsw-sub" style="max-width: 390px; margin: 14px auto 0; font-weight: 700;">
+            Jangan langsung tumpuk krim di atas kulit dehidrasi.<br />
+            <span class="dsw-underline-teal">Kunci hidrasi pertama dalam 10 detik!</span>
+          </p>
         </div>
 
-        <h1 class="dsw-hero-title">
-          Kulit Terasa Ketarik Setelah Cuci Muka dan Skincare Sulit Meresap? Rawat <span class="dsw-brush">Hidrasi Skin Barrier</span> Sejak Langkah Pertama.
-        </h1>
+        <div class="dsw-hero-stage">
+          <div class="dsw-hero-top-tag">
+            <div class="dsw-hero-top-pill">
+              <Icon name="lucide:droplets" class="size-3.5" aria-hidden="true" />
+              <span>72+ Mineral Laut Dalam Ulleung</span>
+            </div>
+          </div>
 
-        <p class="dsw-lead">
-          Kombinasi <strong>Ulleung Island Deep Sea Water</strong> yang kaya 72+ mineral alami, <strong>Galactomyces Ferment Filtrate</strong>, <strong>Ceramide</strong>, dan <strong>Hyaluronic Acid</strong> untuk membantu menjaga kelembapan kulit setelah mencuci wajah—tanpa rasa lengket, tanpa alkohol pengering, dan tanpa pewangi menyengat.
-        </p>
-
-        <figure class="dsw-hero-figure">
           <img
-            src="/images/landing/deep-sea-water-treatment-lotion/hero-treatment-lotion.webp"
-            alt="Botol Numa Skin Deep Sea Water Treatment Lotion di atas permukaan air mineral laut dalam yang jernih"
-            width="1000"
-            height="667"
+            src={HERO_IMAGE}
+            alt="Perbandingan wajah kulit kering mengelupas dan krim menumpuk vs kulit kenyal lembap bercahaya dengan Numa Skin Deep Sea Water Treatment Lotion"
+            width="720"
+            height="480"
+            class="dsw-hero-img"
             fetchpriority="high"
             loading="eager"
             decoding="async"
           />
-          <figcaption class="dsw-hero-caption">
-            <span><strong>Deep Sea Water Treatment Lotion</strong> · pH 5.5 Seimbang</span>
-            <span>4,93/5 dari <strong>2.990+ Botol Terjual</strong></span>
-          </figcaption>
-        </figure>
 
-        <div class="dsw-pill-grid" role="list" aria-label="Keunggulan utama produk">
-          <div class="dsw-pill" role="listitem">
-            <span class="dsw-pill-title">Ulleung Deep Sea</span>
-            <span class="dsw-pill-sub">Mineral Laut Dalam</span>
-          </div>
-          <div class="dsw-pill" role="listitem">
-            <span class="dsw-pill-title">BPOM &amp; Halal</span>
-            <span class="dsw-pill-sub">NA18220101400</span>
-          </div>
-          <div class="dsw-pill" role="listitem">
-            <span class="dsw-pill-title">Bisa COD</span>
-            <span class="dsw-pill-sub">Bayar Saat Tiba</span>
-          </div>
-        </div>
-
-        <aside class="dsw-callout" aria-label="Ringkasan manfaat">
-          <p>
-            <strong>Mengapa langkah pertama setelah cuci muka menentukan hasil skincare Anda?</strong> Sabun pembersih wajah sering kali ikut mengangkat kelembapan alami kulit. Memakai serum atau krim langsung di atas kulit yang kering dan ketarik membuat bahan aktif sulit meresap. <strong>Deep Sea Water Treatment Lotion</strong> bekerja sebagai <em>jalur pembuka hidrasi (first essence)</em> yang menyiapkan kulit agar kembali lembap, tenang, dan siap menyerap nutrisi berikutnya.
-          </p>
-        </aside>
-      </section>
-
-      <!-- SECTION 2: KELUHAN KULIT (PAIN POINTS) -->
-      <section class="dsw-section">
-        <h2 class="dsw-section-title">
-          Mengapa Wajah Masih Kusam, Kemerahan, atau Bruntusan Meski Sudah Pakai Serum dan Krim?
-        </h2>
-        <span class="dsw-rule" aria-hidden="true"></span>
-        <p class="dsw-lead">
-          Banyak perempuan Indonesia berusia 25–45 tahun mengira masalah kulitnya butuh krim yang lebih mahal—padahal akar masalahnya ada pada <strong>dehidrasi lapisan permukaan (skin barrier)</strong> tepat setelah mencuci wajah:
-        </p>
-
-        <ul class="dsw-pain-list">
-          <li class="dsw-pain-item">
-            <div class="dsw-pain-icon" aria-hidden="true">
-              <Icon name="lucide:droplets" class="size-5" />
-            </div>
-            <div>
-              <h3 class="dsw-pain-title">Kulit Terasa Kencang Ketarik &amp; Mengelupas Halus Setelah Cuci Muka</h3>
-              <p class="dsw-pain-desc">
-                Saat pH kulit bergeser menjadi terlalu basa habis mencuci wajah, kelembapan menguap dengan cepat. Akibatnya area pipi dan sekitar mulut terasa kering, kasar, dan riasan mudah <em>crack</em> atau menggumpal.
+          <div class="dsw-hero-overlap">
+            <div class="dsw-hero-overlap-inner">
+              <h2 class="dsw-hero-overlap-title">Kulit Kering Menolak Serum Mahal!</h2>
+              <p class="dsw-hero-overlap-text">
+                Tanpa hidrasi pembuka, <strong style="color: #be123c;">krim dan serum hanya menumpuk di permukaan</strong> tanpa meresap ke dalam kulit.
               </p>
             </div>
-          </li>
-
-          <li class="dsw-pain-item">
-            <div class="dsw-pain-icon" aria-hidden="true">
-              <Icon name="lucide:shield-alert" class="size-5" />
-            </div>
-            <div>
-              <h3 class="dsw-pain-title">Mudah Kemerahan, Perih di Ruangan Ber-AC, atau Reaktif Saat Ganti Cuaca</h3>
-              <p class="dsw-pain-desc">
-                Paparan AC seharian, terik matahari tropis, atau pemakaian bahan aktif eksfoliasi/retinol membuat <em>skin barrier</em> menipis. Kulit menjadi gampang memerah, terasa panas, dan muncul bruntusan halus akibat dehidrasi.
-              </p>
-            </div>
-          </li>
-
-          <li class="dsw-pain-item">
-            <div class="dsw-pain-icon" aria-hidden="true">
-              <Icon name="lucide:layers" class="size-5" />
-            </div>
-            <div>
-              <h3 class="dsw-pain-title">Serum &amp; Pelembap Hanya Mengambang di Permukaan Wajah</h3>
-              <p class="dsw-pain-desc">
-                Ibarat meneteskan air ke atas spons yang kering kerontang, krim dan serum yang dioleskan ke kulit yang belum terhidrasi cenderung menumpuk di permukaan, terasa lengket atau berminyak di luar, namun tetap kering di bagian dalam.
-              </p>
-            </div>
-          </li>
-        </ul>
-      </section>
-
-      <!-- SECTION 3: 2x2 PHYSICAL COMPARISON GRID -->
-      <section class="dsw-section">
-        <h2 class="dsw-section-title">
-          Perbedaan Nyata Kulit yang Langsung Diberi Krim vs Kulit yang Disiapkan dengan <span class="dsw-brush">Treatment Lotion</span>
-        </h2>
-        <span class="dsw-rule" aria-hidden="true"></span>
-        <p class="dsw-lead">
-          Perhatikan bagaimana tekstur permukaan kulit dan daya serap nutrisi berubah ketika Anda mengembalikan hidrasi mineral terlebih dahulu setelah mencuci wajah:
-        </p>
-
-        <!-- Row 1: Skin Surface Condition -->
-        <div class="dsw-compare-pair">
-          <figure class="dsw-compare-card dsw-compare-card--warn">
-            <div class="dsw-compare-media">
-              <img
-                src="/images/landing/deep-sea-water-treatment-lotion/kondisi-kulit-dehidrasi-kasar.webp"
-                alt="Tekstur kulit pipi yang kering, ketarik, mengelupas halus, dan kemerahan akibat dehidrasi"
-                width="760"
-                height="507"
-                loading="lazy"
-                decoding="async"
-              />
-              <span class="dsw-compare-tag dsw-compare-tag--warn">Tanpa First Essence</span>
-            </div>
-            <figcaption class="dsw-compare-body">
-              <strong>Tekstur Kering, Ketarik &amp; Kemerahan</strong>
-              Setelah cuci muka, kelembapan menguap. Garis dehidrasi halus terlihat jelas, pori tampak kasar, dan kulit mudah memerah saat terkena udara dingin AC atau panas matahari.
-            </figcaption>
-          </figure>
-
-          <figure class="dsw-compare-card dsw-compare-card--good">
-            <div class="dsw-compare-media">
-              <img
-                src="/images/landing/deep-sea-water-treatment-lotion/kondisi-kulit-lembap-seimbang.webp"
-                alt="Tekstur kulit wajah yang lembap, kenyal, tenang, dan bercahaya sehat setelah memakai Deep Sea Water Treatment Lotion"
-                width="760"
-                height="507"
-                loading="lazy"
-                decoding="async"
-              />
-              <span class="dsw-compare-tag dsw-compare-tag--good">Dengan Treatment Lotion</span>
-            </div>
-            <figcaption class="dsw-compare-body">
-              <strong>Terasa Lembap, Kenyal &amp; Tenang</strong>
-              Tetesan air laut dalam Ulleung dan Ceramide membantu menenangkan kulit yang ketarik. Permukaan kulit terasa sejuk, halus, kenyal (<em>plumpy</em>), dan siap menerima perawatan berikutnya.
-            </figcaption>
-          </figure>
-        </div>
-
-        <!-- Row 2: Cellular Absorption Pathway -->
-        <div class="dsw-compare-pair">
-          <figure class="dsw-compare-card dsw-compare-card--warn">
-            <div class="dsw-compare-media">
-              <img
-                src="/images/landing/deep-sea-water-treatment-lotion/daya-serap-tanpa-toner.webp"
-                alt="Ilustrasi lapisan kulit kering di mana krim pelembap mengendap di permukaan tanpa meresap optimal"
-                width="760"
-                height="507"
-                loading="lazy"
-                decoding="async"
-              />
-              <span class="dsw-compare-tag dsw-compare-tag--warn">Krim Mengendap di Atas</span>
-            </div>
-            <figcaption class="dsw-compare-body">
-              <strong>Jalur Serap Tertutup Sel Kulit Kering</strong>
-              Sel epidermis yang mengering rapat membuat molekul serum dan pelembap tertahan di luar. Wajah terasa berat dan kusam, sementara lapisan dalam tetap kehausan.
-            </figcaption>
-          </figure>
-
-          <figure class="dsw-compare-card dsw-compare-card--good">
-            <div class="dsw-compare-media">
-              <img
-                src="/images/landing/deep-sea-water-treatment-lotion/daya-serap-dengan-treatment-lotion.webp"
-                alt="Ilustrasi lapisan kulit terhidrasi di mana molekul mineral air laut dalam dan hyaluronic acid meresap hingga ke sela lapisan epidermis"
-                width="760"
-                height="507"
-                loading="lazy"
-                decoding="async"
-              />
-              <span class="dsw-compare-tag dsw-compare-tag--good">Jalur Hidrasi Terbuka</span>
-            </div>
-            <figcaption class="dsw-compare-body">
-              <strong>Ion Mineral Membuka Jalur Penyerapan</strong>
-              Ukuran molekul air mineral laut dalam yang ringan meresap tanpa rasa lengket, mengisi celah kelembapan dan membantu serum serta krim malam bekerja lebih optimal.
-            </figcaption>
-          </figure>
-        </div>
-      </section>
-
-      <!-- SECTION 4: DARK MARINE TIMELINE (BIOLOGICAL HYDRATION SEQUENCE) -->
-      <section class="dsw-marine-band" aria-labelledby="heading-fase-hidrasi">
-        <h2 id="heading-fase-hidrasi" class="dsw-section-title">
-          4 Tahap Kerja Formulasi Hidrasi &amp; Perawatan Skin Barrier
-        </h2>
-        <span class="dsw-rule" aria-hidden="true"></span>
-        <p class="dsw-lead">
-          Bukan sekadar penyegar biasa. Setiap tetes Numa Skin Deep Sea Water Treatment Lotion dirancang bekerja secara sinergis dari permukaan hingga ke lapisan epidermis:
-        </p>
-
-        <ol class="dsw-timeline">
-          <li class="dsw-timeline-step">
-            <span class="dsw-timeline-node" aria-hidden="true">1</span>
-            <span class="dsw-timeline-time">Tahap 1 · Keseimbangan pH Pasca-Cuci Wajah</span>
-            <h3 class="dsw-timeline-title">Menyeimbangkan Kembali pH &amp; Meredakan Sensasi Ketarik</h3>
-            <p class="dsw-timeline-desc">
-              Begitu ditepuk lembut ke wajah, ion mineral <em>Ulleung Island Deep Sea Water</em> dan <em>Allantoin</em> membantu mengurangi sensasi kencang ketarik pasca-cuci muka serta menjaga pH fisiologis kulit pada kisaran seimbang.
-            </p>
-          </li>
-
-          <li class="dsw-timeline-step">
-            <span class="dsw-timeline-node" aria-hidden="true">2</span>
-            <span class="dsw-timeline-time">Tahap 2 · Fungsi First Treatment Essence</span>
-            <h3 class="dsw-timeline-title">Membuka Jalur Serap untuk Serum &amp; Moisturizer</h3>
-            <p class="dsw-timeline-desc">
-              <em>Hyaluronic Acid</em> dan <em>Galactomyces Ferment Filtrate</em> mengikat molekul air di lapisan tanduk kulit (<em>stratum corneum</em>), menjadikan kulit lembap kenyal sehingga serum dan krim selanjutnya meresap merata tanpa meninggalkan residu lengket.
-            </p>
-          </li>
-
-          <li class="dsw-timeline-step">
-            <span class="dsw-timeline-node" aria-hidden="true">3</span>
-            <span class="dsw-timeline-time">Tahap 3 · Kompres Hidrasi Intensif (Metode CSM)</span>
-            <h3 class="dsw-timeline-title">Menyejukkan Kulit Kering &amp; Merawat Tekstur Kasar</h3>
-            <p class="dsw-timeline-desc">
-              Saat digunakan sebagai kompres kapas 3 menit (<em>Chizu Saeki Method</em>) pada area pipi atau dahi yang kering dan bertekstur, kombinasi ekstrak alga cokelat (<em>Sargassum Muticum</em>) dan <em>Chamomile</em> membantu menyejukkan dan melembutkan permukaan kulit.
-            </p>
-          </li>
-
-          <li class="dsw-timeline-step">
-            <span class="dsw-timeline-node" aria-hidden="true">4</span>
-            <span class="dsw-timeline-time">Tahap 4 · Perawatan Rutin Pagi &amp; Malam</span>
-            <h3 class="dsw-timeline-title">Merawat Pertahanan Skin Barrier &amp; Kecerahan Alami</h3>
-            <p class="dsw-timeline-desc">
-              Kandungan <em>Ceramide</em> dan <em>Niacinamide</em> merawat keutuhan barier kelembapan kulit. Kulit terjaga hidrasinya meski beraktivitas di ruang ber-AC, tampak lebih cerah merata, halus, dan terawat.
-            </p>
-          </li>
-        </ol>
-
-        <div class="dsw-marine-note">
-          <strong>Catatan Formulasi:</strong> Tekstur <em>watery-essence</em> yang ringan dibuat khusus untuk iklim tropis Indonesia—cepat meresap di kulit berminyak/kombinasi, namun cukup kaya nutrisi untuk mengunci hidrasi pada kulit kering dan dewasa (<em>mature skin</em>).
-        </div>
-      </section>
-
-      <!-- SECTION 5: SYMPTOMS & SELF-CHECK GUIDE -->
-      <section class="dsw-section">
-        <h2 class="dsw-section-title">
-          4 Tanda Kulit Anda Sedang Mengalami Dehidrasi Lapisan Dalam
-        </h2>
-        <span class="dsw-rule" aria-hidden="true"></span>
-        <p class="dsw-lead">
-          Kulit dehidrasi berbeda dengan kulit kering biasa—bahkan kulit berminyak sekalipun sering mengalami dehidrasi tanpa disadari. Kenali tanda-tandanya:
-        </p>
-
-        <ul class="dsw-symptom-list">
-          <li class="dsw-symptom-item">
-            <span class="dsw-symptom-bullet" aria-hidden="true">1</span>
-            <div>
-              <strong>Berminyak di T-Zone tapi Terasa Kering Ketarik di Pipi:</strong> Kelenjar minyak memproduksi sebum berlebih karena kulit berusaha mengompensasi kurangnya kadar air di lapisan dalam.
-            </div>
-          </li>
-          <li class="dsw-symptom-item">
-            <span class="dsw-symptom-bullet" aria-hidden="true">2</span>
-            <div>
-              <strong>Garis Halus Muncul Saat Tersenyum atau Di Bawah Mata:</strong> Garis dehidrasi tampak jelas terutama di siang hari setelah berjam-jam terpapar AC ruangan.
-            </div>
-          </li>
-          <li class="dsw-symptom-item">
-            <span class="dsw-symptom-bullet" aria-hidden="true">3</span>
-            <div>
-              <strong>Bedak dan Cushion Mudah Pecah (Cakey/Crack):</strong> Riasan tidak mau menempel mulus di hidung, dagu, atau lipatan senyum karena permukaan kulit mengelupas halus.
-            </div>
-          </li>
-          <li class="dsw-symptom-item">
-            <span class="dsw-symptom-bullet" aria-hidden="true">4</span>
-            <div>
-              <strong>Kulit Terasa Perih Saat Memakai Bahan Aktif:</strong> Saat <em>skin barrier</em> kekurangan air dan Ceramide, pemakaian vitamin C, AHA/BHA, atau retinol terasa mudah menyengat dan memicu kemerahan.
-            </div>
-          </li>
-        </ul>
-
-        <div class="dsw-check-box">
-          <p class="dsw-check-title">
-            <Icon name="lucide:sparkles" class="size-4 text-[#0b6e7d]" aria-hidden="true" />
-            Cara Cek Mandiri 5 Detik di Rumah (Pinch &amp; Smile Test)
-          </p>
-          <p class="dsw-pain-desc">
-            Cuci wajah Anda dan keringkan dengan tisu lembut. Tunggu 2 menit tanpa mengoleskan apa pun, lalu dorong perlahan kulit pipi ke arah atas di depan cermin. Jika muncul <strong>garis-garis silang tipis seperti kertas krep</strong> atau kulit terasa kaku saat tersenyum, artinya kulit Anda membutuhkan hidrasi air mineral &amp; humektan sebelum memakai krim.
-          </p>
-        </div>
-      </section>
-
-      <!-- SECTION 6: FORMULATION & SPECIFICATIONS -->
-      <section class="dsw-section">
-        <h2 class="dsw-section-title">
-          Formulasi <span class="dsw-brush">J-Beauty Clinical</span>: Sinergi Air Laut Dalam Ulleung &amp; 8 Bahan Aktif Pilihan
-        </h2>
-        <span class="dsw-rule" aria-hidden="true"></span>
-        <p class="dsw-lead">
-          Numa Skin memadukan kemurnian sumber air laut dalam Pulau Ulleung dengan bahan aktif teruji dermatologis untuk memberikan fungsi ganda: <strong>Hydrating Toner + First Essence</strong> dalam satu botol praktis.
-        </p>
-
-        <figure class="dsw-wide-figure">
-          <img
-            src="/images/landing/deep-sea-water-treatment-lotion/formulasi-ulleung-deep-sea-water.webp"
-            alt="Komposisi Numa Skin Deep Sea Water Treatment Lotion dengan air mineral laut dalam Ulleung, ekstrak alga cokelat, Galactomyces, dan Hyaluronic Acid"
-            width="1000"
-            height="563"
-            loading="lazy"
-            decoding="async"
-          />
-          <figcaption class="dsw-wide-caption">
-            Diperkaya Ulleung Island Deep Sea Water, Sargassum Muticum (Brown Algae), Galactomyces, Ceramide, Hyaluronic Acid, Niacinamide, Chamomile, dan Allantoin.
-          </figcaption>
-        </figure>
-
-        <div class="dsw-ingredient-grid">
-          <article class="dsw-ingredient-card">
-            <span class="dsw-ingredient-badge">Hidrasi Mineral</span>
-            <h3 class="dsw-ingredient-title">Ulleung Island Deep Sea Water &amp; Hyaluronic Acid</h3>
-            <p class="dsw-ingredient-desc">
-              Air laut dalam dari kedalaman Pulau Ulleung yang bebas polutan dan kaya 72+ ion mineral alami (Magnesium, Kalsium, Kalium), dipadukan dengan Hyaluronic Acid untuk menarik dan mengunci cadangan air di sel kulit.
-            </p>
-          </article>
-
-          <article class="dsw-ingredient-card">
-            <span class="dsw-ingredient-badge">First Essence &amp; Nutrisi</span>
-            <h3 class="dsw-ingredient-title">Galactomyces Ferment &amp; Brown Algae Extract</h3>
-            <p class="dsw-ingredient-desc">
-              Fermentasi ragi Galactomyces dan ekstrak rumput laut cokelat (<em>Sargassum Muticum</em>) kaya antioksidan yang membantu menghaluskan tekstur kulit, menyamarkan tampilan pori, dan merawat elastisitas alami.
-            </p>
-          </article>
-
-          <article class="dsw-ingredient-card">
-            <span class="dsw-ingredient-badge">Barrier &amp; Calming</span>
-            <h3 class="dsw-ingredient-title">Ceramide, Niacinamide, Chamomile &amp; Allantoin</h3>
-            <p class="dsw-ingredient-desc">
-              Memperkuat dinding pelindung <em>skin barrier</em>, mencerahkan warna kulit yang kusam tidak merata, sekaligus menenangkan kemerahan serta iritasi ringan dengan lembut.
-            </p>
-          </article>
-        </div>
-
-        <dl class="dsw-spec-dl" aria-label="Spesifikasi Produk">
-          <div class="dsw-spec-row">
-            <dt>Nama Produk</dt>
-            <dd>Numa Skin Deep Sea Water Treatment Lotion</dd>
-          </div>
-          <div class="dsw-spec-row">
-            <dt>Kategori &amp; Fungsi</dt>
-            <dd>2-in-1 Hydrating Toner &amp; First Treatment Essence</dd>
-          </div>
-          <div class="dsw-spec-row">
-            <dt>Nomor Izin BPOM</dt>
-            <dd>NA18220101400 (Terdaftar Resmi BPOM RI)</dd>
-          </div>
-          <div class="dsw-spec-row">
-            <dt>Sertifikasi &amp; Uji</dt>
-            <dd>Halal Indonesia &amp; Dermatologically Tested</dd>
-          </div>
-          <div class="dsw-spec-row">
-            <dt>Karakter Tekstur</dt>
-            <dd>Cair-ringan (Watery Essence), cepat meresap, tidak lengket, tanpa pewangi menyengat</dd>
-          </div>
-          <div class="dsw-spec-row">
-            <dt>Tipe Kulit</dt>
-            <dd>Semua jenis kulit (Kering, Dehidrasi, Sensitif/Kemerahan, Kombinasi, Berminyak, &amp; Kulit Dewasa)</dd>
-          </div>
-          <div class="dsw-spec-row">
-            <dt>Pilihan Ukuran</dt>
-            <dd>50 ml (Travel/Trial) · 150 ml (Full Size) · Paket 2× 150 ml</dd>
-          </div>
-        </dl>
-      </section>
-
-      <!-- SECTION 7: 2 APPLICATION METHODS (TAP-IN & CSM COMPRESS) -->
-      <section class="dsw-section">
-        <h2 class="dsw-section-title">
-          2 Cara Pakai Praktis: Metode Tepuk Harian &amp; Kompres Kapas <span class="dsw-brush">CSM 3 Menit</span>
-        </h2>
-        <span class="dsw-rule" aria-hidden="true"></span>
-        <p class="dsw-lead">
-          Gunakan setiap pagi dan malam setelah mencuci wajah. Untuk kulit yang sedang sangat kering, mengelupas, atau kemerahan, gunakan metode kompres kapas <em>Chizu Saeki Method (CSM)</em> yang menjadi favorit pelanggan Numa Skin:
-        </p>
-
-        <figure class="dsw-wide-figure">
-          <img
-            src="/images/landing/deep-sea-water-treatment-lotion/ritual-cara-pakai-csm.webp"
-            alt="Wanita Indonesia mengaplikasikan Numa Skin Deep Sea Water Treatment Lotion dengan metode kompres kapas CSM di pipi"
-            width="1000"
-            height="563"
-            loading="lazy"
-            decoding="async"
-          />
-          <figcaption class="dsw-wide-caption">
-            Metode CSM (Chizu Saeki Method): kompres kapas tipis yang dibasahi Treatment Lotion selama 3 menit pada area pipi dan dahi untuk hidrasi intensif.
-          </figcaption>
-        </figure>
-
-        <ol class="dsw-step-list">
-          <li class="dsw-step-card">
-            <span class="dsw-step-num" aria-hidden="true">1</span>
-            <div>
-              <h3 class="dsw-step-title">Bersihkan Wajah &amp; Tepuk Kering dengan Lembut</h3>
-              <p class="dsw-step-desc">
-                Cuci wajah dengan pembersih yang lembut. Tepuk wajah menggunakan tisu atau handuk bersih hingga setengah lembap—jangan tunggu sampai kulit telanjur kering ketarik.
-              </p>
-            </div>
-          </li>
-
-          <li class="dsw-step-card">
-            <span class="dsw-step-num" aria-hidden="true">2</span>
-            <div>
-              <h3 class="dsw-step-title">Metode Harian (Tap-In): Tuang 3–5 Tetes ke Telapak Tangan</h3>
-              <p class="dsw-step-desc">
-                Tutup botol dilengkapi <em>inner stopper</em> anti-tumpah sehingga takaran tetesan selalu pas. Tepuk-tepuk lembut ke seluruh wajah dan leher hingga meresap sempurna. Bisa diulang 2 lapis (<em>layering</em>) untuk kelembapan ekstra.
-              </p>
-            </div>
-          </li>
-
-          <li class="dsw-step-card">
-            <span class="dsw-step-num" aria-hidden="true">3</span>
-            <div>
-              <h3 class="dsw-step-title">Metode Intensif (CSM): Kompres Kapas 3–5 Menit Saat Kulit Reaktif</h3>
-              <p class="dsw-step-desc">
-                Tuangkan Treatment Lotion pada 2–3 lembar kapas tipis, lalu tempelkan di area pipi, dahi, atau dagu yang sedang kemerahan, mengelupas, atau bruntusan selama 3–5 menit seperti memakai <em>sheet mask</em> kilat.
-              </p>
-            </div>
-          </li>
-
-          <li class="dsw-step-card">
-            <span class="dsw-step-num" aria-hidden="true">4</span>
-            <div>
-              <h3 class="dsw-step-title">Lanjutkan dengan Serum, Moisturizer &amp; Sunscreen</h3>
-              <p class="dsw-step-desc">
-                Saat kulit masih terasa lembap kenyal, aplikasikan serum (seperti <em>Ageless Brightening Serum</em>) dan pelembap (<em>Barrier Care</em> atau <em>Brightening Day Cream</em>) untuk mengunci hidrasi sepanjang hari.
-              </p>
-            </div>
-          </li>
-        </ol>
-      </section>
-
-      <!-- SECTION 8: VERIFIED CUSTOMER REVIEWS (REAL SHOPEE VOC) -->
-      <section class="dsw-section">
-        <h2 class="dsw-section-title">
-          Apa Kata Pelanggan yang Sudah Memakai Hingga Botol ke-3 sampai ke-7?
-        </h2>
-        <span class="dsw-rule" aria-hidden="true"></span>
-        <p class="dsw-lead">
-          Disarikan langsung dari ulasan pelanggan terverifikasi Numa Skin Official Store untuk produk <strong>Deep Sea Water Treatment Lotion</strong> (50 ml &amp; 150 ml):
-        </p>
-
-        <div class="dsw-rating-summary" aria-label="Ringkasan rating pelanggan">
-          <div class="dsw-rating-score">
-            <span class="dsw-rating-num">4,93</span>
-            <div>
-              <div class="dsw-stars" aria-label="5 dari 5 bintang">★★★★★</div>
-              <span class="dsw-pill-sub">Berdasarkan 945+ penilaian terverifikasi</span>
-            </div>
-          </div>
-          <div class="dsw-bpom-chip">
-            <Icon name="lucide:check-circle-2" class="size-4 text-[#0b6e7d]" aria-hidden="true" />
-            <span>2.996+ Botol Terjual</span>
           </div>
         </div>
 
-        <div class="dsw-review-list">
-          <article class="dsw-review-card">
-            <div class="dsw-review-head">
-              <div>
-                <span class="dsw-review-user">d*****a</span>
-                <span class="dsw-stars ml-2" aria-hidden="true">★★★★★</span>
-              </div>
-              <span class="dsw-review-meta">Varian 150 ml · Repeat Order Botol ke-7</span>
-            </div>
-            <p class="dsw-review-quote">
-              “Udah botol ketujuh, sesuka itu sama toner ini. Teksturnya cair tapi bener-bener bikin lembap tanpa rasa lengket sama sekali. Paling enak dipakai buat metode CSM kompres kapas kalau muka lagi kemerahan atau kering habis kena panas, besok paginya kulit langsung tenang dan kenyal.”
-            </p>
-          </article>
-
-          <article class="dsw-review-card">
-            <div class="dsw-review-head">
-              <div>
-                <span class="dsw-review-user">r*****n</span>
-                <span class="dsw-stars ml-2" aria-hidden="true">★★★★★</span>
-              </div>
-              <span class="dsw-review-meta">Varian 150 ml · Kulit Sensitif &amp; Kering</span>
-            </div>
-            <p class="dsw-review-quote">
-              “Awalnya coba yang 50 ml karena kulitku sensitif gampang merah dan perih kalau salah pakai toner. Ternyata di kulit adem banget, nggak ada wangi menyengat, dan habis cuci muka langsung ilang rasa ketariknya. Sekarang langsung stok yang 150 ml karena lebih awet.”
-            </p>
-          </article>
-
-          <article class="dsw-review-card">
-            <div class="dsw-review-head">
-              <div>
-                <span class="dsw-review-user">s*****i</span>
-                <span class="dsw-stars ml-2" aria-hidden="true">★★★★★</span>
-              </div>
-              <span class="dsw-review-meta">Varian 50 ml &amp; 150 ml · Kulit Kombinasi</span>
-            </div>
-            <p class="dsw-review-quote">
-              “Suka banget sama kemasan barunya yang ada penyekat tutup dalam (inner stopper), jadi kalau dituang ke tangan atau dibawa traveling nggak gampang tumpah. Dipakai sebelum serum dan moisturizer bikin skincare selanjutnya cepet banget meresap dan makeup nggak crack.”
-            </p>
-          </article>
-        </div>
-      </section>
-
-      <!-- SECTION 9: OFFICIAL GUARANTEE & PACKAGING SECURITY -->
-      <section class="dsw-section">
-        <div class="dsw-guarantee-box">
-          <h2 class="dsw-section-title">
-            Jaminan Produk Resmi Numa Skin Indonesia
-          </h2>
-          <p class="dsw-pain-desc">
-            Setiap pesanan dikirim langsung dari gudang resmi Numa Skin dengan standar pengemasan berlapis yang aman hingga ke tangan Anda:
-          </p>
-
-          <div class="dsw-guarantee-grid">
-            <div class="dsw-guarantee-item">
-              <strong>100% Original &amp; Terdaftar BPOM RI</strong>
-              <span>Nomor registrasi resmi BPOM NA18220101400 dan bersertifikat Halal Indonesia. Aman untuk pemakaian jangka panjang.</span>
-            </div>
-            <div class="dsw-guarantee-item">
-              <strong>Kemasan Botol dengan Inner Stopper</strong>
-              <span>Dilengkapi penyekat tetes di mulut botol agar cairan tidak mudah tumpah dan higienis saat dituang ke telapak tangan maupun kapas.</span>
-            </div>
-            <div class="dsw-guarantee-item">
-              <strong>Bisa Bayar di Tempat (COD) &amp; Non-COD</strong>
-              <span>Mendukung pembayaran COD (bayar ke kurir saat paket tiba) maupun transfer/QRIS dengan pengecekan ongkir otomatis ke seluruh kecamatan.</span>
-            </div>
-            <div class="dsw-guarantee-item">
-              <strong>Garansi Pengiriman Aman</strong>
-              <span>Setiap botol dikemas dengan segel utuh dan pelindung ekstra. Jika produk diterima dalam keadaan rusak/bocor, tim CS kami siap mengganti.</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- SECTION 10: INTERACTIVE SIZE PICKER & EMBEDDED HYBRID ORDER FORM -->
-      <section id="form-pemesanan" class="dsw-section">
-        <div class="dsw-order-card">
-          <div class="dsw-order-header">
-            <h2>Formulir Pemesanan Resmi Numa Skin</h2>
-            <p>Pilih ukuran botol di bawah ini, lalu lengkapi alamat pengiriman untuk melihat ongkos kirim otomatis.</p>
-          </div>
-
-          <div class="dsw-size-selector-wrap">
-            <div class="dsw-size-label">
-              <span>Pilih Ukuran Cepat:</span>
-              <span class="text-[#0b6e7d]">Stok Tersedia · Siap Kirim</span>
-            </div>
-
-            <div class="dsw-size-grid" role="group" aria-label="Pilih ukuran Deep Sea Water Treatment Lotion">
-              {
-                variants.map((v: any) => {
-                  const comparePrice = v.comparePrice ?? v.price;
-                  const hasDiscount = comparePrice > v.price;
-                  const meta = sizeMetaByLabel[v.label] || {
-                    badge: 'Pilihan Resmi',
-                    note: 'Tersedia pengiriman COD & Reguler',
-                  };
-                  const isDefault = String(v.id) === String(defaultVariant.id);
-                  return (
-                    <button
-                      type="button"
-                      class="dsw-size-btn"
-                      data-size-pill
-                      data-variant-id={v.id}
-                      data-variant-label={v.label}
-                      data-variant-price={formatIdr(v.price)}
-                      data-variant-compare={hasDiscount ? formatIdr(comparePrice) : ''}
-                      aria-pressed={isDefault ? 'true' : 'false'}
-                    >
-                      <span class="dsw-size-badge">{meta.badge}</span>
-                      <span class="dsw-size-name">Ukuran {v.label}</span>
-                      <div class="flex items-baseline gap-2">
-                        <span class="dsw-size-price">{formatIdr(v.price)}</span>
-                        {hasDiscount && (
-                          <span class="dsw-size-compare">{formatIdr(comparePrice)}</span>
-                        )}
-                      </div>
-                      <span class="dsw-size-note">{meta.note}</span>
-                    </button>
-                  );
-                })
-              }
-            </div>
-          </div>
-
-          <GeoIpResolvedForm
-            mode="hybrid"
-            productSlug={product.slug}
-            embedded={true}
-            selectedVariantId={String(defaultVariant.id)}
-          />
-        </div>
-      </section>
-    </div>
-
-    <!-- STICKY MOBILE / BOTTOM PURCHASE BAR -->
-    <aside
-      id="sticky-purchase-bar"
-      class="dsw-sticky-bar"
-      aria-label="Pintasan pemesanan cepat"
-    >
-      <div class="dsw-sticky-inner">
-        <div class="dsw-sticky-meta">
-          <div class="dsw-sticky-label">
-            Deep Sea Water Treatment Lotion · <strong id="sticky-variant-label">{defaultVariant.label}</strong>
-          </div>
-          <div class="dsw-sticky-price-row">
-            <span id="sticky-variant-price" class="dsw-sticky-price">
-              {formatIdr(defaultVariant.price)}
+        <div class="dsw-trust-row">
+          <div class="dsw-trust-item">
+            <span class="dsw-trust-icon">
+              <Icon name="lucide:shield-check" class="size-4" aria-hidden="true" />
             </span>
-            {
-              (defaultVariant.comparePrice ?? defaultVariant.price) > defaultVariant.price && (
-                <span id="sticky-variant-compare" class="dsw-sticky-compare">
-                  {formatIdr(defaultVariant.comparePrice)}
-                </span>
-              )
-            }
+            <div>
+              <span class="dsw-trust-label">BPOM Resmi</span>
+              <span class="dsw-trust-sub">NA18220101400</span>
+            </div>
+          </div>
+          <div class="dsw-trust-item">
+            <span class="dsw-trust-icon">
+              <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+            </span>
+            <div>
+              <span class="dsw-trust-label">Halal RI</span>
+              <span class="dsw-trust-sub">0% Alkohol</span>
+            </div>
+          </div>
+          <div class="dsw-trust-item">
+            <span class="dsw-trust-icon">
+              <Icon name="lucide:truck" class="size-4" aria-hidden="true" />
+            </span>
+            <div>
+              <span class="dsw-trust-label">Bisa COD</span>
+              <span class="dsw-trust-sub">Bayar di Rumah</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: Solusi Singkat + Visual -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Buka <span class="dsw-hl-aqua">jalur penyerapan kulit</span> sejak tetes pertama
+        </h2>
+        <p class="dsw-sub">Hidrasi cair yang langsung meresap tanpa rasa lengket.</p>
+
+        <div class="dsw-photo-stack">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/penyerapan-cepat-meresap.webp`}
+              alt="Kulit wajah tampak lembap, kenyal, dan segar saat mengaplikasikan Deep Sea Water Treatment Lotion"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
           </div>
         </div>
 
-        <a href="#form-pemesanan" class="dsw-sticky-cta" data-scroll-to-form>
-          <span>Pesan Sekarang</span>
-          <Icon name="lucide:arrow-right" class="size-4" aria-hidden="true" />
-        </a>
-      </div>
-    </aside>
-  </main>
+        <div class="dsw-list">
+          <div class="dsw-list-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:droplets" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              Kembalikan <strong style="color: #0f172a;">kelembapan kulit yang hilang</strong> sehabis mencuci wajah dengan sabun.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:layers" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              Bantu <strong style="color: #0f172a;">serum dan pelembap meresap lebih dalam</strong>, bukan sekadar mengambang di pori.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:shield-plus" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              Formula <strong style="color: #0f172a;">0% alkohol dan tanpa parfum buatan</strong> yang tenang untuk kulit sensitif.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Tanda Masalah Kulit + Visual Grid -->
+      <section class="dsw-section dsw-section--warn">
+        <h2 class="dsw-h2">
+          Tanda kulit sedang <span class="dsw-underline-warn">dehidrasi berat</span> dan butuh pertolongan:
+        </h2>
+
+        <div class="dsw-photo-grid-2">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/masalah-kulit-kering.webp`}
+              alt="Wajah terasa kaku, kering, dan ketarik setelah mencuci muka"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #be123c; display: block;">Kering & Ketarik</strong>
+              Pipi terasa kaku sehabis cuci muka atau di ruang AC.
+            </p>
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/masalah-kulit-kusam.webp`}
+              alt="Kulit tampak kusam dengan garis halus dehidrasi di area pipi dan bawah mata"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #be123c; display: block;">Kusam & Garis Halus</strong>
+              Riasan mudah retak dan garis lipatan makin terlihat.
+            </p>
+          </div>
+        </div>
+
+        <div class="dsw-list">
+          <div class="dsw-list-row">
+            <span class="dsw-icon-warn">
+              <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              Wajah terasa <strong style="color: #be123c;">kencang, perih, atau memerah</strong> setiap berganti cuaca maupun terkena AC.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-warn">
+              <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              Permukaan kulit <strong style="color: #be123c;">kasar dari dalam namun berminyak di luar</strong> akibat kurang air.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-warn">
+              <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              Sudah ganti berbagai krim malam, tetapi <strong style="color: #be123c;">wajah tetap tampak lelah dan kusam</strong>.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Perbandingan Visual Sebelum vs Sesudah -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Perbandingan visual <span class="dsw-hl-aqua">hidrasi kulit</span>
+        </h2>
+        <p class="dsw-sub">Perbedaan nyata tekstur kulit saat kecukupan airnya terpenuhi.</p>
+
+        <div class="dsw-photo-stack">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/kondisi-kulit-dehidrasi-kasar.webp`}
+              alt="Tekstur kulit kering, kemerahan, dan garis halus terlihat jelas saat kekurangan hidrasi"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <span class="dsw-photo-badge dsw-photo-badge--before">Sebelum</span>
+            <p class="dsw-photo-caption">
+              Kulit kering, mudah kemerahan, dan garis dehidrasi tampak jelas karena langsung memakai krim tanpa hidrasi pembuka.
+            </p>
+          </div>
+
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/kondisi-kulit-lembap-seimbang.webp`}
+              alt="Tekstur kulit tampak lembap, kenyal, tenang, dan bercahaya sehat setelah rutin memakai Deep Sea Water Treatment Lotion"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <span class="dsw-photo-badge dsw-photo-badge--after">Sesudah Rutin</span>
+            <p class="dsw-photo-caption">
+              Permukaan kulit tampak kenyal, tenang, dan lembap merata sehingga siap menyerap rangkaian skincare berikutnya.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: Dark Marine Section — Cara Pakai Praktis -->
+      <section class="dsw-section dsw-section--dark">
+        <h2 class="dsw-h2">
+          Cara Pakai <span style="color: #99e2ec;">Sangat Praktis</span>
+        </h2>
+        <p class="dsw-sub">Bisa ditepuk langsung 10 detik atau dikompres kapas saat kulit ekstra kering.</p>
+
+        <div class="dsw-photo-stack">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/cara-pakai-tetes-tap.webp`}
+              alt="Menuangkan 3 sampai 4 tetes Numa Skin Deep Sea Water Treatment Lotion ke telapak tangan"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #ffffff;">Metode Harian (10 Detik):</strong> Tuang 3–4 tetes ke telapak tangan lalu tepuk lembut ke wajah.
+            </p>
+          </div>
+
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/ritual-cara-pakai-csm.webp`}
+              alt="Mengompres pipi dengan kapas tipis yang dibasahi Deep Sea Water Treatment Lotion selama 3 menit"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #ffffff;">Kompres Kapas CSM (3 Menit):</strong> Tempelkan kapas basah di area pipi yang kering atau kemerahan.
+            </p>
+          </div>
+        </div>
+
+        <div class="dsw-list">
+          <div class="dsw-list-row">
+            <span class="dsw-step-num">1</span>
+            <p class="dsw-step-text">
+              Gunakan <strong style="color: #ffffff;">segera setelah cuci muka</strong> saat kulit masih terasa sedikit lembap.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-step-num">2</span>
+            <p class="dsw-step-text">
+              Tepuk rata dengan <strong style="color: #ffffff; background: #104452; padding: 1px 6px; border-radius: 4px;">3–4 tetes di telapak tangan</strong> tanpa perlu digosok kasar.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-step-num">3</span>
+            <p class="dsw-step-text">
+              Tunggu <strong style="color: #ffffff;">5–10 detik hingga meresap</strong>, lalu lanjutkan dengan serum atau pelembap harian Anda.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 6: Ulasan Pelanggan -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Apa kata pelanggan yang <span class="dsw-hl-aqua">sudah cocok?</span>
+        </h2>
+        <p class="dsw-sub">Dipakai ribuan wanita Indonesia untuk menjaga kelembapan kulit setiap hari.</p>
+
+        <div class="dsw-reviews-divide">
+          <div class="dsw-review-row">
+            <div class="dsw-review-head">
+              <div>
+                <p class="dsw-review-author">
+                  Fitri A.
+                  <span style="color: #0b6e7d; display: inline-flex;">
+                    <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+                  </span>
+                </p>
+                <p class="dsw-review-meta">Jakarta • Ukuran 150 ml</p>
+              </div>
+              <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
+            </div>
+            <p class="dsw-review-quote">
+              "Teksturnya <span class="dsw-hl-aqua">cair segar dan cepat meresap</span> tanpa rasa berat. Dulu habis cuci muka pipi selalu ketarik, sekarang <strong style="color: #0f172a;">langsung adem dan lembap</strong>."
+            </p>
+          </div>
+
+          <div class="dsw-review-row">
+            <div class="dsw-review-head">
+              <div>
+                <p class="dsw-review-author">
+                  Lilyana S.
+                  <span style="color: #0b6e7d; display: inline-flex;">
+                    <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+                  </span>
+                </p>
+                <p class="dsw-review-meta">Bandung • Kulit Sensitif</p>
+              </div>
+              <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
+            </div>
+            <p class="dsw-review-quote">
+              "Kulitku <span class="dsw-hl-rose">gampang merah kalau salah toner</span>. Pakai Numa Skin ini <span class="dsw-hl-aqua">tenang banget karena 0% alkohol</span> dan bikin krim malam jauh lebih gampang nempel."
+            </p>
+          </div>
+
+          <div class="dsw-review-row">
+            <div class="dsw-review-head">
+              <div>
+                <p class="dsw-review-author">
+                  Trisna K.
+                  <span style="color: #0b6e7d; display: inline-flex;">
+                    <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+                  </span>
+                </p>
+                <p class="dsw-review-meta">Surabaya • Pembelian Botol ke-4</p>
+              </div>
+              <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
+            </div>
+            <p class="dsw-review-quote">
+              "Sudah <span class="dsw-hl-aqua">botol keempat di meja rias</span>. Paling suka dipakai kompres kapas 3 menit sebelum makeup, <strong style="color: #0f172a;">bedak langsung halus seharian</strong>."
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 7: Galeri Bukti Visual -->
+      <section class="dsw-section dsw-section--tint">
+        <h2 class="dsw-h2">
+          Tekstur ringan untuk <span style="color: #0b6e7d;">kulit tropis Indonesia</span>
+        </h2>
+        <p class="dsw-sub">Segar seperti air, melembapkan seperti essence tanpa rasa berminyak.</p>
+
+        <div class="dsw-photo-grid-2">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-wajah-lembap.webp`}
+              alt="Tampilan kulit wajah wanita Indonesia yang lembap dan bercahaya sehat"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-tekstur-tangan.webp`}
+              alt="Tetesan tekstur cair Deep Sea Water Treatment Lotion di punggung tangan"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-kulit-sehat-hijab.webp`}
+              alt="Kulit wajah tampak tenang, halus, dan terhidrasi sepanjang hari"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-meja-rias.webp`}
+              alt="Kemasan botol Numa Skin Deep Sea Water Treatment Lotion dan kapas di meja rias"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 8: Product Knowledge (Full-Bleed Figures) -->
+      <section class="dsw-section dsw-section--knowledge">
+        <h2 class="dsw-h2">
+          Mengapa <span class="dsw-hl-aqua">Deep Sea Water</span> Numa Skin berbeda?
+        </h2>
+        <p class="dsw-sub">
+          Bukan sekadar air biasa, melainkan perpaduan air laut dalam Pulau Ulleung dengan 6 bahan aktif penjaga skin barrier.
+        </p>
+
+        <div class="dsw-figure-stack">
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/formulasi-ulleung-deep-sea-water.webp`}
+                alt="Formulasi air laut dalam Pulau Ulleung dan ekstrak rumput laut cokelat Numa Skin"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">Air Laut Dalam Pulau Ulleung (&gt;200 Meter)</h3>
+              <p class="dsw-figcaption-desc">
+                Diambil dari kedalaman laut bebas polusi yang kaya mineral alami Magnesium, Kalsium, dan Zinc untuk menenangkan kulit.
+              </p>
+            </figcaption>
+          </figure>
+
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/kandungan-6-bahan-aktif.webp`}
+                alt="Kombinasi 6 bahan aktif Deep Sea Water, Brown Algae, Galactomyces, Niacinamide, Hyaluronic Acid, dan Ceramide"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">6 Bahan Aktif Pengunci Hidrasi</h3>
+              <p class="dsw-figcaption-desc">
+                Perpaduan Deep Sea Water, Brown Algae, Galactomyces, Niacinamide, Hyaluronic Acid, dan Ceramide dalam satu botol.
+              </p>
+            </figcaption>
+          </figure>
+
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/ukuran-50ml-dan-150ml.webp`}
+                alt="Perbandingan kemasan Numa Skin Deep Sea Water Treatment Lotion ukuran 150 ml dan 50 ml"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">Tersedia Ukuran 50 ml & 150 ml</h3>
+              <p class="dsw-figcaption-desc">
+                Pilih ukuran 50 ml untuk coba pertama kali atau dibawa bepergian, dan ukuran 150 ml untuk pemakaian rutin 6–8 minggu.
+              </p>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- Section 9: Garansi 100% Resmi -->
+      <section class="dsw-section" style="text-align: center; background: #f8fafc;">
+        <div style="margin: 0 auto 14px; display: flex; width: 52px; height: 52px; align-items: center; justify-content: center; color: #0b6e7d;">
+          <Icon name="lucide:shield-check" class="size-12" aria-hidden="true" />
+        </div>
+        <h2 class="dsw-h2" style="font-size: 32px;">GARANSI RESMI 100%</h2>
+        <p class="dsw-sub" style="max-width: 320px; margin: 8px auto 0;">
+          Pesanan dikirim langsung dari gudang resmi Numa Skin Indonesia.
+        </p>
+
+        <div class="dsw-guarantee-list">
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:badge-check" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">100% Produk Asli Tersegel</strong>
+              Terdaftar resmi di BPOM (NA18220101400) dan bersertifikat Halal Indonesia.
+            </p>
+          </div>
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:truck" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">Bisa Bayar di Tempat (COD)</strong>
+              Pesan hari ini, bayar langsung ke kurir saat paket tiba di alamat Anda.
+            </p>
+          </div>
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:package-check" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">Garansi Ganti Baru</strong>
+              Kami ganti baru tanpa biaya tambahan bila botol diterima pecah atau bocor.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 10: Checkout Form -->
+      <section id="form-pemesanan" class="dsw-section--checkout">
+        <div style="padding: 0 20px 14px; text-align: center;">
+          <h2 class="dsw-h2" style="font-size: 28px;">
+            Lengkapi Data <span class="dsw-hl-aqua">Pengiriman</span>
+          </h2>
+          <p class="dsw-sub" style="max-width: 340px; margin: 8px auto 0;">
+            Pilih ukuran kemasan lalu isi data penerima di bawah ini.
+          </p>
+        </div>
+
+        <GeoIpResolvedForm
+          mode="hybrid"
+          productSlug={product.slug}
+          embedded={true}
+          selectedVariantId={String(defaultVariant.id)}
+        />
+      </section>
+    </main>
+
+    <!-- Floating Centered Sticky Button (hidden on Hero and Form) -->
+    <div id="floating-cta" data-sticky-cta class="dsw-float-wrap">
+      <a
+        href="#form-pemesanan"
+        class="dsw-float-btn"
+        data-scroll-to-form
+        aria-label="Pesan Deep Sea Water Treatment Lotion"
+      >
+        <span>Pesan Sekarang</span>
+        <span class="dsw-float-divider" aria-hidden="true"></span>
+        <span class="dsw-float-sub">Mulai Rp79rb</span>
+        <Icon name="lucide:arrow-down" class="size-3.5 dsw-float-arrow" aria-hidden="true" />
+      </a>
+    </div>
+  </div>
 
   <script is:inline>
     (function () {
+      const heroSection = document.getElementById('hero-section');
       const formSection = document.getElementById('form-pemesanan');
-      const stickyBar = document.getElementById('sticky-purchase-bar');
-      const stickyLabel = document.getElementById('sticky-variant-label');
-      const stickyPrice = document.getElementById('sticky-variant-price');
-      const stickyCompare = document.getElementById('sticky-variant-compare');
-      const sizePills = Array.from(document.querySelectorAll('[data-size-pill]'));
+      const floatingCta = document.getElementById('floating-cta');
 
-      function updateStickyAndPills(variantId) {
-        sizePills.forEach((btn) => {
-          const isMatch = String(btn.getAttribute('data-variant-id')) === String(variantId);
-          btn.setAttribute('aria-pressed', isMatch ? 'true' : 'false');
-          if (isMatch) {
-            const label = btn.getAttribute('data-variant-label') || '';
-            const price = btn.getAttribute('data-variant-price') || '';
-            const compare = btn.getAttribute('data-variant-compare') || '';
-            if (stickyLabel && label) stickyLabel.textContent = label;
-            if (stickyPrice && price) stickyPrice.textContent = price;
-            if (stickyCompare) {
-              stickyCompare.textContent = compare;
-              stickyCompare.style.display = compare ? '' : 'none';
-            }
-          }
-        });
-      }
-
-      // Sync clicks on top size pills -> form radio inputs
-      sizePills.forEach((btn) => {
-        btn.addEventListener('click', () => {
-          const variantId = btn.getAttribute('data-variant-id');
-          if (!variantId) return;
-          updateStickyAndPills(variantId);
-          if (formSection) {
-            const radio = formSection.querySelector(
-              'input[name="variant"][value="' + CSS.escape(variantId) + '"]'
-            );
-            if (radio && !radio.checked) {
-              radio.checked = true;
-              radio.dispatchEvent(new Event('change', { bubbles: true }));
-            }
-          }
-        });
-      });
-
-      // Sync clicks on form radio inputs -> top size pills & sticky bar
-      if (formSection) {
-        formSection.addEventListener('change', (e) => {
-          const target = e.target;
-          if (target && target.name === 'variant' && target.value) {
-            updateStickyAndPills(target.value);
-          }
-        });
-      }
-
-      // Smooth scroll CTA buttons & hide sticky bar when form is visible
       document.querySelectorAll('[data-scroll-to-form]').forEach((link) => {
         link.addEventListener('click', (e) => {
           if (!formSection) return;
@@ -787,17 +645,32 @@ const sizeMetaByLabel: Record<string, { badge: string; note: string }> = {
         });
       });
 
-      if (formSection && stickyBar && 'IntersectionObserver' in window) {
-        const observer = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              stickyBar.classList.toggle('is-hidden', entry.isIntersecting);
-            });
-          },
-          { threshold: 0.12 }
-        );
-        observer.observe(formSection);
+      if (!floatingCta || !formSection || !('IntersectionObserver' in window)) return;
+
+      let isHeroVisible = true;
+      let isFormVisible = false;
+
+      function syncVisibility() {
+        const shouldShow = !isHeroVisible && !isFormVisible;
+        floatingCta.classList.toggle('is-visible', shouldShow);
       }
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.target === heroSection) {
+              isHeroVisible = entry.isIntersecting;
+            } else if (entry.target === formSection) {
+              isFormVisible = entry.isIntersecting;
+            }
+          });
+          syncVisibility();
+        },
+        { root: null, threshold: 0.05 }
+      );
+
+      if (heroSection) observer.observe(heroSection);
+      observer.observe(formSection);
     })();
   </script>
 </BaseLayout>

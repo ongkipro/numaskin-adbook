@@ -22,7 +22,7 @@ The [Modules](#modules) section is the same book read from the other side.
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | `/` | GET | public | — | `src/pages/index.astro` | `catalog` `daily-rotation` `env` `storefront-template` `tenant-content` | `product_variants` `products` `storefront_templates` `stores` | `catalog.test.ts` `daily-rotation.test.ts` `env.test.ts` `storefront-template.test.ts` `tenant-content.test.ts` |
 | `/404` | GET | public | — | `src/pages/404.astro` | `catalog` `image-derivative` | `product_variants` `products` | `catalog.test.ts` `image-derivative.test.ts` |
-| `/deep-sea-water-treatment-lotion` | GET | public | — | `src/pages/deep-sea-water-treatment-lotion.astro` | `catalog` `catalog-feed` `format-idr` `landing-pages` | `landing_pages` `landing_sections` `product_variants` `products` | `catalog.test.ts` `catalog-feed.test.ts` `format-idr.test.ts` `landing-pages.test.ts` |
+| `/deep-sea-water-treatment-lotion` | GET | public | — | `src/pages/deep-sea-water-treatment-lotion.astro` | `catalog` `catalog-feed` `landing-pages` | `landing_pages` `landing_sections` `product_variants` `products` | `catalog.test.ts` `catalog-feed.test.ts` `landing-pages.test.ts` |
 | `/payment` | GET | public | — | `src/pages/payment.astro` | `format-idr` `payment-brand` | — | `format-idr.test.ts` `payment-brand.test.ts` |
 | `/produk` | GET | public | — | `src/pages/produk/index.astro` | `catalog` | `product_variants` `products` | `catalog.test.ts` |
 | `/produk/[slug]` | GET | public | — | `src/pages/produk/[slug].astro` | `catalog` `catalog-feed` `env` `form-mode` `geo` `landing-pages` `social-proof` | `landing_pages` `landing_sections` `orders` `product_variants` `products` `stores` | `catalog.test.ts` `catalog-feed.test.ts` `env.test.ts` `form-mode.test.ts` `geo.test.ts` `landing-pages.test.ts` |
@@ -230,7 +230,7 @@ is either transitive (imported by another lib) or dead, and only reading tells w
 | `excluded-area` | 1 | — | ✓ | `/api/submit-middle-order` |
 | `form-config` | 6 | — | ✓ | `/embed/form` `/full-form` `/hybrid-form` `/middle-form` `/api/form-config` |
 | `form-mode` | 8 | `stores` | ✓ | `/produk/[slug]` `/geoipform` `/hybrid-form` `/api/form-config` `/api/geo-province` `/api/submit-middle-order` `/api/submit-order` `/api/v1/checkout` `/api/v1/storefront` `/api/admin/abandoned-orders` |
-| `format-idr` | 1 | — | ✓ | `/deep-sea-water-treatment-lotion` `/payment` |
+| `format-idr` | 1 | — | ✓ | `/payment` |
 | `geo` | 3 | — | ✓ | `/produk/[slug]` `/api/submit-middle-order` |
 | `google-ads-offline` | 15 | `google_ads_conversion_outbox` `order_items` `orders` | ✓ | — |
 | `gtm` | 4 | — | ✓ | — |
