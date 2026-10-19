@@ -1,9 +1,12 @@
 # Building a landing page
 
-> Verified against disk: 2026-10-07 @ `515e81b` + autolaris-readiness/landing-thumbnail working tree
+> Verified against disk: 2026-10-19 @ `72adba2` (`src/pages/deep-sea-water-treatment-lotion.astro`)
 
 There are two kinds of landing page in this CMS and they are not
-interchangeable. Pick the right one before writing anything.
+interchangeable. Pick the right one before writing anything. For the Numa Skin
+visual-first direct-response architecture, *Brutal Soft Overclaim* hero image
+rules, 10-section flow, and Google PageSpeed Insights / CWV (95–100) asset &
+TTFB standards, see [docs/NATIVE_LANDING_PAGE_SPEC.md](./NATIVE_LANDING_PAGE_SPEC.md).
 
 | | CMS landing page | Native Astro landing page |
 | --- | --- | --- |
