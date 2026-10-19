@@ -1,6 +1,6 @@
 # Native Direct-Response Landing Page Standard
 
-> Verified against disk: 2026-10-19 @ `72adba2` (`src/pages/deep-sea-water-treatment-lotion.astro`)
+> Verified against disk: 2026-10-19 @ `97f527f` (`src/pages/deep-sea-water-treatment-lotion.astro`)
 
 This document is the implementation standard for native Astro direct-response product landing pages in this repository (`page.numaskin.id`). [docs/LANDING-PAGES.md](./LANDING-PAGES.md) remains the canonical owner of CMS/native routing, registry reconciliation, product-page takeover, and canonical-URL mechanics.
 
