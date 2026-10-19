@@ -1,0 +1,683 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import GeoIpResolvedForm from '../components/storefront/forms/GeoIpResolvedForm.astro';
+import MetaLandingTracker from '../components/storefront/tracking/MetaLandingTracker.astro';
+import Icon from '../components/storefront/shared/Icon.astro';
+import RatingStars from '../components/storefront/shared/RatingStars.astro';
+import { getStorefrontProduct } from '../lib/catalog';
+import { nativeLandingCanonicalPath } from '../lib/landing-pages';
+import { defaultCatalogContentId } from '../lib/catalog-feed';
+import { getRuntimeEnv } from '../lib/env';
+import { loadStoreCodDisabledProvinceCodes } from '../lib/form-mode';
+import { getStoreAdsConfig } from '../lib/store-ads';
+import '../styles/form-hybrid.css';
+import '../styles/landing-pages/paket-fresh-and-hydrate.css';
+
+export const prerender = false;
+
+const PRODUCT_SLUG = 'paket-fresh-and-hydrate';
+const LANDING_SLUG = 'paket-fresh-and-hydrate';
+const PAGE_TITLE = 'Paket Fresh & Hydrate Duo — Sabun Gel pH 5.5 + Toner Air Laut Dalam Ulleung BPOM';
+const PAGE_DESC = 'Paket fondasi hidrasi terlaris Numa Skin: Deep Sea Water Facial Wash Gel 100ml + Treatment Lotion Toner (50ml / 150ml) untuk membersihkan pori tanpa ketarik & mengembalikan hidrasi barrier (BPOM Resmi).';
+const IMG_BASE = '/images/landing/paket-fresh-and-hydrate';
+const HERO_IMAGE = `${IMG_BASE}/hero-paket-fresh-hydrate.webp`;
+
+const database = getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined;
+const claimedProductSlug = Astro.request.headers.get('x-adsbook-product-page');
+const [product, canonicalPath, codDisabledProvinceCodes] = await Promise.all([
+  getStorefrontProduct(Astro.locals, PRODUCT_SLUG),
+  claimedProductSlug
+    ? Promise.resolve(`/produk/${claimedProductSlug}`)
+    : nativeLandingCanonicalPath(Astro.locals, LANDING_SLUG),
+  loadStoreCodDisabledProvinceCodes(database),
+  getStoreAdsConfig(Astro.locals),
+]);
+if (!product) {
+  return Astro.rewrite('/404');
+}
+
+const canonical = `${Astro.locals.tenant.siteUrl}${canonicalPath}`;
+
+const variants = product.variants || [];
+const cheapestVariant = variants.reduce(
+  (min: any, v: any) => (!min || v.price < min.price ? v : min),
+  variants[0]
+);
+const defaultVariant = cheapestVariant || {
+  id: '22',
+  label: 'Facial Wash 100ml + Toner 50ml',
+  price: 133000,
+  comparePrice: 147999,
+};
+---
+
+<BaseLayout
+  title={PAGE_TITLE}
+  description={PAGE_DESC}
+  image={HERO_IMAGE}
+  preloadImages={HERO_IMAGE}
+  canonical={canonical}
+  hideHeader={true}
+  hideFooter={true}
+>
+  <MetaLandingTracker
+    slug={LANDING_SLUG}
+    contentId={defaultCatalogContentId(product)}
+    contentName={product.contentName}
+    price={defaultVariant.price}
+  />
+
+  <div class="dsw-shell">
+    <main class="dsw-canvas">
+      <!-- Section 1: Hero -->
+      <section id="hero-section" class="dsw-hero">
+        <div class="dsw-hero-head">
+          <h1 class="dsw-h1">
+            <span class="dsw-hl-tilt">Wajah Ketarik</span> & Kusam Sehabis Cuci Muka Lalu Skincare Susah Meresap?
+          </h1>
+          <p class="dsw-sub" style="max-width: 390px; margin: 14px auto 0; font-weight: 700;">
+            Sabun keras merusak pH kulit dan pori yang kering menolak menyerap serum.<br />
+            <span class="dsw-underline-teal">Bersihkan lembut & buka jalur hidrasi dengan Fresh & Hydrate Duo!</span>
+          </p>
+        </div>
+
+        <div class="dsw-hero-stage">
+          <div class="dsw-hero-top-tag">
+            <div class="dsw-hero-top-pill">
+              <Icon name="lucide:droplets" class="size-3.5" aria-hidden="true" />
+              <span>Duo Fondasi Kulit Sehat • Mulai Rp133.000</span>
+            </div>
+          </div>
+
+          <img
+            src={HERO_IMAGE}
+            alt="Perbandingan wajah kusam kering ketarik vs kulit bersih segar lembap dengan Paket Fresh & Hydrate Duo Numa Skin"
+            width="720"
+            height="480"
+            class="dsw-hero-img"
+            fetchpriority="high"
+            loading="eager"
+            decoding="async"
+          />
+
+          <div class="dsw-hero-overlap">
+            <div class="dsw-hero-overlap-inner">
+              <h2 class="dsw-hero-overlap-title">80% Kegagalan Skincare Dimulai dari Tahap Cuci Muka!</h2>
+              <p class="dsw-hero-overlap-text">
+                Sabun berbusa keras mengikis seramide pelindung, lalu <strong style="color: #be123c;">kulit yang dehidrasi gagal menyerap nutrisi krim di tahap berikutnya</strong>.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="dsw-trust-row">
+          <div class="dsw-trust-item">
+            <span class="dsw-trust-icon">
+              <Icon name="lucide:shield-check" class="size-4" aria-hidden="true" />
+            </span>
+            <div>
+              <span class="dsw-trust-label">BPOM Resmi</span>
+              <span class="dsw-trust-sub">2 Izin Edar</span>
+            </div>
+          </div>
+          <div class="dsw-trust-item">
+            <span class="dsw-trust-icon">
+              <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+            </span>
+            <div>
+              <span class="dsw-trust-label">Halal RI</span>
+              <span class="dsw-trust-sub">pH 5.5 Seimbang</span>
+            </div>
+          </div>
+          <div class="dsw-trust-item">
+            <span class="dsw-trust-icon">
+              <Icon name="lucide:truck" class="size-4" aria-hidden="true" />
+            </span>
+            <div>
+              <span class="dsw-trust-label">Bisa COD</span>
+              <span class="dsw-trust-sub">Bayar di Rumah</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: Solusi Singkat + Visual -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Sinergi <span class="dsw-hl-aqua">pembersih lembut & infus mineral</span> dalam 1 paket
+        </h2>
+        <p class="dsw-sub">Dua langkah dasar wajib agar pori bersih tuntas sekaligus langsung terhidrasi kenyal.</p>
+
+        <div class="dsw-photo-stack">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/solusi-fondasi-cuci-dan-toner.webp`}
+              alt="Wanita Indonesia dengan kulit wajah bersih, segar, dan lembap bercahaya sehabis mencuci muka dan memakai toner Numa Skin"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+        </div>
+
+        <div class="dsw-list">
+          <div class="dsw-list-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:droplets" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a;">Deep Sea Water Facial Wash Gel (100 ml):</strong> Membersihkan minyak, sisa sunscreen, dan debu pori tanpa rasa kaku ketarik berkat formula Non-Stripping pH 5.5 & 5% Niacinamide.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:sparkles" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a;">Deep Sea Water Treatment Lotion (50 ml / 150 ml):</strong> Mengisi ulang 72+ mineral ionik Pulau Ulleung, 4D Hyaluronic Acid, dan Panthenol dalam 3 detik sehabis cuci muka.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:shield-check" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a;">Tersedia 2 Pilihan Ukuran Hemat:</strong> Pilih paket dengan Toner 50 ml (Rp133.000) untuk percobaan atau Toner 150 ml Full Size (Rp160.000) untuk pemakaian ekstra awet.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Tanda Masalah Kulit + Visual Grid -->
+      <section class="dsw-section dsw-section--warn">
+        <h2 class="dsw-h2">
+          Tanda tahapan dasar cuci muka Anda <span class="dsw-underline-warn">sedang merusak skin barrier</span>
+        </h2>
+
+        <div class="dsw-photo-grid-2">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/masalah-sabun-keras-tanpa-toner.webp`}
+              alt="Wanita memegang pipi yang terasa kaku kering dan mengelupas sehabis mencuci muka dengan sabun biasa"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #be123c; display: block;">Efek Ketarik & Mengelupas</strong>
+              Sabun alkali menguras lipid alami sehingga wajah terasa kaku dan perih.
+            </p>
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/masalah-minyak-berlebih-dehidrasi.webp`}
+              alt="Kulit tampak mengkilap berminyak di T-zone namun kusam dan berpori besar akibat dehidrasi"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #be123c; display: block;">Berminyak Tapi Dehidrasi</strong>
+              Kulit yang kehausan sehabis cuci muka memproduksi minyak berlebih pemicu komedo.
+            </p>
+          </div>
+        </div>
+
+        <div class="dsw-list">
+          <div class="dsw-list-row">
+            <span class="dsw-icon-warn">
+              <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              Setiap habis cuci muka, <strong style="color: #be123c;">kulit terasa kaku ketarik di area pipi dan mulut</strong> jika tidak segera dipakaikan pelembap.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-warn">
+              <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              Siang hari wajah <strong style="color: #be123c;">cepat mengkilap berminyak dan tampak kusam gelap</strong> karena pH kulit tidak seimbang.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-warn">
+              <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              Serum dan krim malam yang dipakai <strong style="color: #be123c;">hanya menempel di permukaan dan lambat meresap</strong> karena pori kering.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Perbandingan Visual Sebelum vs Sesudah -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Perbandingan hasil <span class="dsw-hl-aqua">ritual pembersihan berhidrasi</span>
+        </h2>
+        <p class="dsw-sub">Ketika kotoran pori terangkat bersih sambil langsung dikunci 72+ mineral laut dalam.</p>
+
+        <div class="dsw-photo-stack">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/kondisi-pori-kusam-ketarik.webp`}
+              alt="Kondisi kulit kusam, pori tampak kasar, dan kering ketarik akibat sabun pencuci muka keras"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <span class="dsw-photo-badge dsw-photo-badge--before">Sabun Biasa Tanpa Toner</span>
+            <p class="dsw-photo-caption">
+              Permukaan kulit tampak kusam kasar, pori terlihat jelas, dan mudah memerah sehabis membilas wajah.
+            </p>
+          </div>
+
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/kondisi-kulit-segar-terhidrasi.webp`}
+              alt="Kondisi kulit bersih, pori halus, dan kenyal lembap setelah rutin memakai Paket Fresh & Hydrate Duo"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <span class="dsw-photo-badge dsw-photo-badge--after">Rutin Fresh & Hydrate Duo</span>
+            <p class="dsw-photo-caption">
+              Wajah bersih segar tanpa rasa ketarik, pH langsung stabil, dan kulit tampak bening kenyal siap menerima nutrisi.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: Dark Marine Section — Cara Pakai Praktis -->
+      <section class="dsw-section dsw-section--dark">
+        <h2 class="dsw-h2">
+          Urutan Pakai <span style="color: #99e2ec;">Aturan 3 Detik Sehabis Bilas</span>
+        </h2>
+        <p class="dsw-sub">Kunci kelembapan air di pori tepat setelah mencuci wajah pagi dan malam.</p>
+
+        <div class="dsw-photo-stack">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/cara-pakai-step1-cuci-gel.webp`}
+              alt="Langkah 1: Busakan lembut Deep Sea Water Facial Wash Gel di wajah basah selama 30 detik"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #ffffff;">Langkah 1 (Cuci Muka Non-Stripping):</strong> Pijat lembut gel pembersih pada wajah basah selama 30 detik lalu bilas air bersih.
+            </p>
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/cara-pakai-step2-tap-toner.webp`}
+              alt="Langkah 2: Tuangkan Deep Sea Water Treatment Lotion ke telapak tangan dan tepuk lembut ke wajah"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #ffffff;">Langkah 2 (Tepuk Toner Dalam 3 Detik):</strong> Saat wajah masih setengah lembap, tepukkan 3–4 tetes Treatment Lotion hingga meresap.
+            </p>
+          </div>
+        </div>
+
+        <div class="dsw-list">
+          <div class="dsw-list-row">
+            <span class="dsw-step-num">1</span>
+            <p class="dsw-step-text">
+              <strong style="color: #ffffff;">Langkah 1 (Facial Wash Gel):</strong> Angkat debu & minyak berlebih tanpa mengikis pelindung alami kulit.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-step-num">2</span>
+            <p class="dsw-step-text">
+              <strong style="color: #ffffff;">Langkah 2 (Treatment Lotion):</strong> Langsung <strong style="color: #ffffff; background: #104452; padding: 1px 6px; border-radius: 4px;">tepukkan toner tanpa kapas</strong> agar mineral laut dalam meresap 100%.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-step-num">3</span>
+            <p class="dsw-step-text">
+              Kulit kini berada pada pH 5.5 ideal sehingga serum atau pelembap selanjutnya menyerap 3× lebih optimal.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 6: Ulasan Pelanggan -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Alasan paket dasar ini <span class="dsw-hl-aqua">wajib ada di kamar mandi</span>
+        </h2>
+        <p class="dsw-sub">Cocok untuk semua jenis kulit, termasuk kulit sensitif, berjerawat, maupun usia dewasa.</p>
+
+        <div class="dsw-reviews-divide">
+          <div class="dsw-review-row">
+            <div class="dsw-review-head">
+              <div>
+                <p class="dsw-review-author">
+                  Kak Nabila R.
+                  <span style="color: #0b6e7d; display: inline-flex;">
+                    <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+                  </span>
+                </p>
+                <p class="dsw-review-meta">Bekasi • Kulit Kombinasi Sensitif</p>
+              </div>
+              <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
+            </div>
+            <p class="dsw-review-quote">
+              "Dulu habis cuci muka pasti buru-buru lari cari pelembap saking ketariknya. <span class="dsw-hl-aqua">Pakai Facial Wash Numa lanjut tap-tap tonernya langsung adem kenyal banget!</span>"
+            </p>
+          </div>
+          <div class="dsw-review-row">
+            <div class="dsw-review-head">
+              <div>
+                <p class="dsw-review-author">
+                  Ibu Maya K.
+                  <span style="color: #0b6e7d; display: inline-flex;">
+                    <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+                  </span>
+                </p>
+                <p class="dsw-review-meta">Surabaya • Ambil Varian 150ml</p>
+              </div>
+              <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
+            </div>
+            <p class="dsw-review-quote">
+              "Sengaja ambil paket yang Toner 150ml biar puas dipakai CSM-an. <strong style="color: #0f172a;">Muka jauh lebih bersih cerah</strong> dan <span class="dsw-hl-aqua">beruntusan di dahi hilang dalam 2 minggu</span>."
+            </p>
+          </div>
+          <div class="dsw-review-row">
+            <div class="dsw-review-head">
+              <div>
+                <p class="dsw-review-author">
+                  Kak Ririn P.
+                  <span style="color: #0b6e7d; display: inline-flex;">
+                    <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+                  </span>
+                </p>
+                <p class="dsw-review-meta">Medan • Hemat & Praktis</p>
+              </div>
+              <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
+            </div>
+            <p class="dsw-review-quote">
+              "Sabunnya ada 5% Niacinamide, tonernya full mineral laut dalam. <span class="dsw-hl-rose">Harga paket mulai 133 ribu udah dapet 2 produk BPOM</span> yang <span class="dsw-hl-aqua">bikin skincare lain jadi gampang nyerap</span>."
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 7: Galeri Bukti Visual -->
+      <section class="dsw-section dsw-section--tint">
+        <h2 class="dsw-h2">
+          Fondasi bersih & lembap untuk <span style="color: #0b6e7d;">iklim lembap Indonesia</span>
+        </h2>
+        <p class="dsw-sub">Bebas SLS keras, bebas alkohol pengering, dan nyaman dipakai pagi maupun malam.</p>
+
+        <div class="dsw-photo-grid-2">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-tekstur-gel-dan-lotion.webp`}
+              alt="Tekstur bening Facial Wash Gel dan cair segar Treatment Lotion di punggung tangan"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-wajah-segar-habis-cuci.webp`}
+              alt="Potret wanita Indonesia tersenyum dengan wajah bersih segar dan lembap bercahaya"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-pori-bersih-halus.webp`}
+              alt="Close-up pipi bersih dengan tampilan pori halus dan lembap sehat"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-meja-wastafel-fresh-duo.webp`}
+              alt="Kemasan Paket Fresh & Hydrate Duo Numa Skin di tepi wastafel kamar mandi"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 8: Product Knowledge (Full-Bleed Figures) -->
+      <section class="dsw-section dsw-section--knowledge">
+        <h2 class="dsw-h2">
+          Mengapa <span class="dsw-hl-aqua">Fresh & Hydrate Duo</span> menyehatkan skin barrier?
+        </h2>
+        <p class="dsw-sub">
+          Menggabungkan surfaktan ramah-barrier dengan 72+ mineral laut dalam Pulau Ulleung.
+        </p>
+
+        <div class="dsw-figure-stack">
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/formulasi-ph-balance-mineral.webp`}
+                alt="Gelombang air laut dalam Pulau Ulleung yang jernih dan kaya mineral alami"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">pH 5.5 Non-Stripping + Ionic Mineral Prep</h3>
+              <p class="dsw-figcaption-desc">
+                Menjaga mantel asam alami kulit tetap utuh saat pembersihan sekaligus mengisi pori dengan elektrolit laut dalam.
+              </p>
+            </figcaption>
+          </figure>
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/kandungan-niacinamide-ceramide-ha.webp`}
+                alt="Kombinasi 5% Niacinamide, 4D Hyaluronic Acid, Ceramide NP, dan Cica"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">5% Niacinamide + 4D Hyaluronic + Ceramide NP</h3>
+              <p class="dsw-figcaption-desc">
+                Mencerahkan kusam sejak tahap cuci muka dan mengunci hidrasi multi-kedalaman bersama Panthenol & Allantoin.
+              </p>
+            </figcaption>
+          </figure>
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/kemasan-fresh-hydrate-duo.webp`}
+                alt="Kemasan resmi Paket Fresh & Hydrate Duo: Facial Wash Gel 100ml dan Treatment Lotion Toner"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">Pilihan Fleksibel: Toner 50 ml atau 150 ml Full Size</h3>
+              <p class="dsw-figcaption-desc">
+                Anda dapat memilih varian Toner 50 ml (Rp133.000) atau Toner 150 ml (Rp160.000) langsung pada formulir pemesanan di bawah.
+              </p>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- Section 9: Garansi 100% Resmi -->
+      <section class="dsw-section" style="text-align: center; background: #f8fafc;">
+        <div style="margin: 0 auto 14px; display: flex; width: 52px; height: 52px; align-items: center; justify-content: center; color: #0b6e7d;">
+          <Icon name="lucide:shield-check" class="size-12" aria-hidden="true" />
+        </div>
+        <h2 class="dsw-h2" style="font-size: 32px;">GARANSI RESMI 100%</h2>
+        <p class="dsw-sub" style="max-width: 320px; margin: 8px auto 0;">
+          Pesanan dikirim langsung dari gudang resmi Numa Skin Indonesia.
+        </p>
+
+        <div class="dsw-guarantee-list">
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:badge-check" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">2 Produk Asli Tersegel BPOM</strong>
+              Terdaftar resmi di BPOM (NA18261203408 & NA18251210485) serta Halal Indonesia.
+            </p>
+          </div>
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:truck" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">Bisa Bayar di Tempat (COD)</strong>
+              Pesan hari ini, bayar langsung ke kurir saat paket tiba di alamat Anda.
+            </p>
+          </div>
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:package-check" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">Garansi Ganti Baru</strong>
+              Kami ganti baru tanpa biaya tambahan bila ada kemasan yang diterima rusak/bocor.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 10: Checkout Form -->
+      <section id="form-pemesanan" class="dsw-section--checkout">
+        <div style="padding: 0 20px 14px; text-align: center;">
+          <h2 class="dsw-h2" style="font-size: 28px;">
+            Lengkapi Data <span class="dsw-hl-aqua">Pengiriman</span>
+          </h2>
+          <p class="dsw-sub" style="max-width: 340px; margin: 8px auto 0;">
+            Isi nama, nomor WhatsApp aktif, dan kecamatan tujuan untuk cek ongkir otomatis.
+          </p>
+        </div>
+
+        <GeoIpResolvedForm
+          mode="hybrid"
+          productSlug={product.slug}
+          embedded={true}
+          selectedVariantId={String(defaultVariant.id)}
+          codDisabledProvinceCodes={codDisabledProvinceCodes}
+        />
+      </section>
+    </main>
+
+    <!-- Floating Centered Sticky Button (hidden on Hero and Form) -->
+    <div id="floating-cta" data-sticky-cta class="dsw-float-wrap">
+      <a
+        href="#form-pemesanan"
+        class="dsw-float-btn"
+        data-scroll-to-form
+        aria-label="Pesan Paket Fresh & Hydrate Duo — Sabun Gel pH 5.5 + Toner Air Laut Dalam Ulleung BPOM"
+      >
+        <span>Ambil Paket Hemat</span>
+        <span class="dsw-float-divider" aria-hidden="true"></span>
+        <span class="dsw-float-sub">Mulai Rp133.000</span>
+        <Icon name="lucide:arrow-down" class="size-3.5 dsw-float-arrow" aria-hidden="true" />
+      </a>
+    </div>
+  </div>
+
+  <script is:inline>
+    (function () {
+      const heroSection = document.getElementById('hero-section');
+      const formSection = document.getElementById('form-pemesanan');
+      const floatingCta = document.getElementById('floating-cta');
+
+      document.querySelectorAll('[data-scroll-to-form]').forEach((link) => {
+        link.addEventListener('click', (e) => {
+          if (!formSection) return;
+          e.preventDefault();
+          formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+
+      if (!floatingCta || !formSection || !('IntersectionObserver' in window)) return;
+
+      let isHeroVisible = true;
+      let isFormVisible = false;
+
+      function syncVisibility() {
+        const shouldShow = !isHeroVisible && !isFormVisible;
+        floatingCta.classList.toggle('is-visible', shouldShow);
+      }
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.target === heroSection) {
+              isHeroVisible = entry.isIntersecting;
+            } else if (entry.target === formSection) {
+              isFormVisible = entry.isIntersecting;
+            }
+          });
+          syncVisibility();
+        },
+        { root: null, threshold: 0.05 }
+      );
+
+      if (heroSection) observer.observe(heroSection);
+      observer.observe(formSection);
+    })();
+  </script>
+</BaseLayout>

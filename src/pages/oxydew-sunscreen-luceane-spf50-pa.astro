@@ -1,0 +1,690 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import GeoIpResolvedForm from '../components/storefront/forms/GeoIpResolvedForm.astro';
+import MetaLandingTracker from '../components/storefront/tracking/MetaLandingTracker.astro';
+import Icon from '../components/storefront/shared/Icon.astro';
+import RatingStars from '../components/storefront/shared/RatingStars.astro';
+import { getStorefrontProduct } from '../lib/catalog';
+import { nativeLandingCanonicalPath } from '../lib/landing-pages';
+import { defaultCatalogContentId } from '../lib/catalog-feed';
+import { getRuntimeEnv } from '../lib/env';
+import { loadStoreCodDisabledProvinceCodes } from '../lib/form-mode';
+import { getStoreAdsConfig } from '../lib/store-ads';
+import '../styles/form-hybrid.css';
+import '../styles/landing-pages/oxydew-sunscreen-luceane-spf50-pa.css';
+
+export const prerender = false;
+
+const PRODUCT_SLUG = 'oxydew-sunscreen-luceane-spf50-pa';
+const LANDING_SLUG = 'oxydew-sunscreen-luceane-spf50-pa';
+const PAGE_TITLE =
+  'Oxydew Sunscreen 3% Luceane SPF 50+ PA++++ — Tabir Surya Anti-Aging BPOM';
+const PAGE_DESC =
+  'Sunscreen anti-aging ringan tanpa white cast dengan SPF 50+ PA++++, 3% Luceane, 9 Probiotik, Rice Bran, dan Ulleung Deep Sea Water untuk cegah flek UV (BPOM NA18251703709).';
+const IMG_BASE = '/images/landing/oxydew-sunscreen-luceane-spf50-pa';
+const HERO_IMAGE = `${IMG_BASE}/hero-oxydew-sunscreen.webp`;
+
+const database = getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined;
+const claimedProductSlug = Astro.request.headers.get('x-adsbook-product-page');
+const [product, canonicalPath, codDisabledProvinceCodes] = await Promise.all([
+  getStorefrontProduct(Astro.locals, PRODUCT_SLUG),
+  claimedProductSlug
+    ? Promise.resolve(`/produk/${claimedProductSlug}`)
+    : nativeLandingCanonicalPath(Astro.locals, LANDING_SLUG),
+  loadStoreCodDisabledProvinceCodes(database),
+  getStoreAdsConfig(Astro.locals),
+]);
+if (!product) {
+  return Astro.rewrite('/404');
+}
+
+const canonical = `${Astro.locals.tenant.siteUrl}${canonicalPath}`;
+
+const variants = product.variants || [];
+const cheapestVariant = variants.reduce(
+  (min: any, v: any) => (!min || v.price < min.price ? v : min),
+  variants[0]
+);
+const defaultVariant = cheapestVariant || {
+  id: '7',
+  label: '30 ml',
+  price: 79000,
+  comparePrice: 145000,
+};
+---
+
+<BaseLayout
+  title={PAGE_TITLE}
+  description={PAGE_DESC}
+  image={HERO_IMAGE}
+  preloadImages={HERO_IMAGE}
+  canonical={canonical}
+  hideHeader={true}
+  hideFooter={true}
+>
+  <MetaLandingTracker
+    slug={LANDING_SLUG}
+    contentId={defaultCatalogContentId(product)}
+    contentName={product.contentName}
+    price={defaultVariant.price}
+  />
+
+  <div class="dsw-shell">
+    <main class="dsw-canvas">
+      <!-- Section 1: Hero -->
+      <section id="hero-section" class="dsw-hero">
+        <div class="dsw-hero-head">
+          <h1 class="dsw-h1">
+            <span class="dsw-hl-tilt">Flek Hitam Muncul Lagi</span> Setiap Kena Panas Matahari Siang?
+          </h1>
+          <p class="dsw-sub" style="max-width: 390px; margin: 14px auto 0; font-weight: 700;">
+            Serum pencerah semahal apa pun percuma tanpa proteksi UV.<br />
+            <span class="dsw-underline-teal">Kunci dengan SPF 50+ PA++++ & 3% Luceane™ tanpa whitecast!</span>
+          </p>
+        </div>
+
+        <div class="dsw-hero-stage">
+          <div class="dsw-hero-top-tag">
+            <div class="dsw-hero-top-pill">
+              <Icon name="lucide:sun" class="size-3.5" aria-hidden="true" />
+              <span>SPF 50+ PA++++ • 3% Luceane™ Sederma France</span>
+            </div>
+          </div>
+
+          <img
+            src={HERO_IMAGE}
+            alt="Perbandingan wajah kemerahan berflek akibat sinar UV vs kulit segar terlindungi tanpa whitecast dengan Numa Skin Oxydew Sunscreen SPF 50+ PA++++"
+            width="720"
+            height="480"
+            class="dsw-hero-img"
+            fetchpriority="high"
+            loading="eager"
+            decoding="async"
+          />
+
+          <div class="dsw-hero-overlap">
+            <div class="dsw-hero-overlap-inner">
+              <h2 class="dsw-hero-overlap-title">15 Menit Tanpa Sunscreen = Flek Kambuh!</h2>
+              <p class="dsw-hero-overlap-text">
+                Sinar UVA menembus kaca dan awan, <strong style="color: #be123c;">mengaktifkan kembali pigmen melanin gelap di bawah kulit dalam hitungan menit</strong>.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="dsw-trust-row">
+          <div class="dsw-trust-item">
+            <span class="dsw-trust-icon">
+              <Icon name="lucide:shield-check" class="size-4" aria-hidden="true" />
+            </span>
+            <div>
+              <span class="dsw-trust-label">BPOM Resmi</span>
+              <span class="dsw-trust-sub">NA18251703709</span>
+            </div>
+          </div>
+          <div class="dsw-trust-item">
+            <span class="dsw-trust-icon">
+              <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+            </span>
+            <div>
+              <span class="dsw-trust-label">0% Whitecast</span>
+              <span class="dsw-trust-sub">Tanpa Abu-Abu</span>
+            </div>
+          </div>
+          <div class="dsw-trust-item">
+            <span class="dsw-trust-icon">
+              <Icon name="lucide:truck" class="size-4" aria-hidden="true" />
+            </span>
+            <div>
+              <span class="dsw-trust-label">Bisa COD</span>
+              <span class="dsw-trust-sub">Bayar di Rumah</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: Solusi Singkat + Visual -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Tabir surya yang <span class="dsw-hl-aqua">seringan pelembap air</span>
+        </h2>
+        <p class="dsw-sub">Bening menyatu di kulit sawo matang, bebas lengket, dan tidak menggumpal di bawah bedak.</p>
+
+        <div class="dsw-photo-stack">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/solusi-tanpa-whitecast.webp`}
+              alt="Wanita Indonesia meratakan Numa Skin Oxydew Sunscreen dengan hasil bening bebas whitecast"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+        </div>
+
+        <div class="dsw-list">
+          <div class="dsw-list-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:sun" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a;">4X Broad-Spectrum UV Filter (SPF 50+ PA++++)</strong> menangkal radiasi UVA pemicu flek/kerutan dan UVB penyebab kulit terbakar.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:sparkles" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a;">3% Luceane™ (Sederma France)</strong> mendukung respirasi oksigen sel kulit dan membantu menunda tanda penuaan dini akibat UV.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:shield-plus" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a;">9 Probiotik + Galactomyces + Rice Bran</strong> menjaga keseimbangan mikrobioma agar wajah tidak kusam maupun berminyak di siang hari.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Tanda Masalah Kulit + Visual Grid -->
+      <section class="dsw-section dsw-section--warn">
+        <h2 class="dsw-h2">
+          Alasan banyak orang malas pakai sunscreen hingga <span class="dsw-underline-warn">flek makin parah</span>:
+        </h2>
+
+        <div class="dsw-photo-grid-2">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/masalah-panas-terik-flek.webp`}
+              alt="Kulit wajah memerah dan muncul bintik flek hitam akibat terik matahari tropis"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #be123c; display: block;">Flek Matahari Baru</strong>
+              Paparan UV harian memicu bercak kecokelatan di tulang pipi.
+            </p>
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/masalah-sunscreen-lengket-abu.webp`}
+              alt="Wajah tampak berminyak, lengket, dan keabuan akibat sunscreen konvensional yang berat"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #be123c; display: block;">Lengket & Whitecast</strong>
+              Sunscreen lama terasa pengap dan bikin wajah tampak kusam berminyak.
+            </p>
+          </div>
+        </div>
+
+        <div class="dsw-list">
+          <div class="dsw-list-row">
+            <span class="dsw-icon-warn">
+              <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              Sudah pakai krim malam dan serum rutin, tetapi <strong style="color: #be123c;">flek hitam tetap kembali gelap setiap habis keluar siang</strong>.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-warn">
+              <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              Sunscreen biasa terasa <strong style="color: #be123c;">berat, menyumbat pori (muncul bruntusan), dan pedih di mata</strong> saat berkeringat.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-warn">
+              <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              Saat ditimpa bedak atau cushion, <strong style="color: #be123c;">sunscreen menggumpal seperti daki (pilling)</strong> dan merusak riasan.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Perbandingan Visual Sebelum vs Sesudah -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Perbandingan visual <span class="dsw-hl-aqua">di bawah sinar matahari</span>
+        </h2>
+        <p class="dsw-sub">Beda kulit tanpa proteksi / memakai sunscreen berat vs memakai Oxydew Sunscreen Numa Skin.</p>
+
+        <div class="dsw-photo-stack">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/kondisi-sunburn-flek-kusam.webp`}
+              alt="Kulit pipi tampak kemerahan, berminyak, dan muncul noda flek matahari akibat kurang proteksi UV"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <span class="dsw-photo-badge dsw-photo-badge--before">Sebelum</span>
+            <p class="dsw-photo-caption">
+              Kulit mudah memerah saat kena panas, tampak kilap berminyak, dan noda hitam makin tegas.
+            </p>
+          </div>
+
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/kondisi-kulit-terlindungi-segar.webp`}
+              alt="Kulit pipi tampak tenang, segar, bebas kilap minyak, dan terlindungi tanpa whitecast dengan Oxydew Sunscreen"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <span class="dsw-photo-badge dsw-photo-badge--after">Sesudah Rutin</span>
+            <p class="dsw-photo-caption">
+              Wajah tampak tenang, segar bernapas tanpa whitecast, dan terlindungi dari penggelapan noda UV.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: Dark Marine Section — Cara Pakai Praktis -->
+      <section class="dsw-section dsw-section--dark">
+        <h2 class="dsw-h2">
+          Takaran <span style="color: #99e2ec;">2 Ruas Jari Tanpa Dempul</span>
+        </h2>
+        <p class="dsw-sub">Mudah diratakan dalam hitungan detik dan nyaman di-reapply setelah wudhu.</p>
+
+        <div class="dsw-photo-stack">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/cara-pakai-dua-ruas-jari.webp`}
+              alt="Menuangkan Numa Skin Oxydew Sunscreen sepanjang dua ruas jari telunjuk dan jari tengah"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #ffffff;">Langkah 1 (2 Ruas Jari):</strong> Tuang lotion sunscreen sepanjang jari telunjuk dan jari tengah.
+            </p>
+          </div>
+
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/cara-pakai-oles-merata-pagi.webp`}
+              alt="Meratakan Oxydew Sunscreen ke seluruh wajah dan leher di pagi hari"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #ffffff;">Langkah 2 (Wajah & Leher):</strong> Oleskan merata 15 menit sebelum beraktivitas di luar ruangan.
+            </p>
+          </div>
+        </div>
+
+        <div class="dsw-list">
+          <div class="dsw-list-row">
+            <span class="dsw-step-num">1</span>
+            <p class="dsw-step-text">
+              Gunakan sebagai <strong style="color: #ffffff;">langkah terakhir skincare pagi</strong> setelah pelembap atau day cream.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-step-num">2</span>
+            <p class="dsw-step-text">
+              Tunggu <strong style="color: #ffffff; background: #104452; padding: 1px 6px; border-radius: 4px;">30–60 detik hingga nge-set</strong> sebelum menimpa dengan bedak atau cushion.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-step-num">3</span>
+            <p class="dsw-step-text">
+              Ulangi pemakaian <strong style="color: #ffffff;">setiap 3–4 jam atau setelah wudhu</strong> bila banyak beraktivitas di bawah matahari.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 6: Ulasan Pelanggan -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Apa kata pelanggan yang <span class="dsw-hl-aqua">pakai setiap hari?</span>
+        </h2>
+        <p class="dsw-sub">Menjadi sunscreen harian andalan karena ringan seperti tidak memakai apa-apa.</p>
+
+        <div class="dsw-reviews-divide">
+          <div class="dsw-review-row">
+            <div class="dsw-review-head">
+              <div>
+                <p class="dsw-review-author">
+                  Kak Dinda R.
+                  <span style="color: #0b6e7d; display: inline-flex;">
+                    <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+                  </span>
+                </p>
+                <p class="dsw-review-meta">Surabaya • Kulit Kombinasi</p>
+              </div>
+              <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
+            </div>
+            <p class="dsw-review-quote">
+              "Cuaca Surabaya panas terik, tapi pakai Oxydew Sunscreen ini <span class="dsw-hl-aqua">sama sekali gak lengket dan gak perih di mata</span> pas keringetan. Dipakai 2 jari penuh juga <strong style="color: #0f172a;">langsung bening tanpa whitecast</strong>."
+            </p>
+          </div>
+
+          <div class="dsw-review-row">
+            <div class="dsw-review-head">
+              <div>
+                <p class="dsw-review-author">
+                  Ibu Meilani S.
+                  <span style="color: #0b6e7d; display: inline-flex;">
+                    <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+                  </span>
+                </p>
+                <p class="dsw-review-meta">Medan • Usia 37 Tahun</p>
+              </div>
+              <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
+            </div>
+            <p class="dsw-review-quote">
+              "Sejak rutin pakai ini bareng Adenosine Moisturizer, <span class="dsw-hl-aqua">flek di pipi gak pernah kambuh menghitam lagi</span> walau sering antar jemput anak sekolah siang-siang."
+            </p>
+          </div>
+
+          <div class="dsw-review-row">
+            <div class="dsw-review-head">
+              <div>
+                <p class="dsw-review-author">
+                  Kak Putri A.
+                  <span style="color: #0b6e7d; display: inline-flex;">
+                    <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+                  </span>
+                </p>
+                <p class="dsw-review-meta">Bekasi • Pembelian Tube ke-3</p>
+              </div>
+              <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
+            </div>
+            <p class="dsw-review-quote">
+              "Paling sebel kalau sunscreen bikin bedak ngegumpal. Oxydew ini <span class="dsw-hl-aqua">dipakai di bawah makeup cakep banget</span>, hasilnya dewy sehat dan gak bikin bruntusan."
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 7: Galeri Bukti Visual -->
+      <section class="dsw-section dsw-section--tint">
+        <h2 class="dsw-h2">
+          Perlindungan maksimal tanpa <span style="color: #0b6e7d;">rasa gerah di wajah</span>
+        </h2>
+        <p class="dsw-sub">Tekstur fluid-lotion yang langsung menyatu tanpa meninggalkan residu keabuan.</p>
+
+        <div class="dsw-photo-grid-2">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-tekstur-lotion-ringan.webp`}
+              alt="Tekstur watery-lotion Oxydew Sunscreen yang menyatu transparan di kulit tangan"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-hijab-outdoor-cerah.webp`}
+              alt="Wanita berhijab tersenyum nyaman di bawah sinar matahari pagi dengan kulit wajah segar"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-nyaman-bawah-makeup.webp`}
+              alt="Permukaan kulit pipi tampak halus mulus bebas pilling di bawah riasan pagi"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-meja-rias-oxydew.webp`}
+              alt="Kemasan tube Numa Skin Oxydew Sunscreen SPF 50+ PA++++ 30ml di meja rias"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 8: Product Knowledge (Full-Bleed Figures) -->
+      <section class="dsw-section dsw-section--knowledge">
+        <h2 class="dsw-h2">
+          Mengapa <span class="dsw-hl-aqua">Oxydew 3% Luceane™</span> lebih dari sekadar sunscreen?
+        </h2>
+        <p class="dsw-sub">
+          Menggabungkan filter UV spektrum luas dengan bio-fermentasi laut Prancis dan probiotik pencerah.
+        </p>
+
+        <div class="dsw-figure-stack">
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/formulasi-luceane-marine.webp`}
+                alt="Formulasi 3% Luceane marine bio-ferment Sederma France dan Ulleung Deep Sea Water"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">3% Luceane™ (Sederma, Prancis) & Deep Sea Water</h3>
+              <p class="dsw-figcaption-desc">
+                Aktif bio-fermentasi laut <em>Pseudoalteromonas</em> yang meningkatkan oksigenasi sel kulit, melindungi dari polusi udara (PM2.5), dan membantu menunda penuaan dini akibat sinar matahari.
+              </p>
+            </figcaption>
+          </figure>
+
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/kandungan-luceane-probiotik.webp`}
+                alt="Kombinasi 9 Probiotik, Galactomyces, Rice Bran, dan ekstrak Meniran di laboratorium"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">9 Probiotik + Galactomyces + Rice Bran Oil</h3>
+              <p class="dsw-figcaption-desc">
+                Kombinasi fermentasi probiotik, Niacinamide, dan ekstrak <em>Phyllanthus niruri</em> yang merawat skin barrier serta mencegah wajah kusam saat terpapar terik siang.
+              </p>
+            </figcaption>
+          </figure>
+
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/kemasan-oxydew-30ml.webp`}
+                alt="Kemasan tube ramping Numa Skin Oxydew Sunscreen SPF 50+ PA++++ 30ml"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">Kemasan Sleek Tube 30 ml Mudah Dibawa</h3>
+              <p class="dsw-figcaption-desc">
+                Ujung nozzle presisi memudahkan penakaran 2 ruas jari dan praktis diselipkan di tas untuk reapply kapan saja.
+              </p>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- Section 9: Garansi 100% Resmi -->
+      <section class="dsw-section" style="text-align: center; background: #f8fafc;">
+        <div style="margin: 0 auto 14px; display: flex; width: 52px; height: 52px; align-items: center; justify-content: center; color: #0b6e7d;">
+          <Icon name="lucide:shield-check" class="size-12" aria-hidden="true" />
+        </div>
+        <h2 class="dsw-h2" style="font-size: 32px;">GARANSI RESMI 100%</h2>
+        <p class="dsw-sub" style="max-width: 320px; margin: 8px auto 0;">
+          Pesanan dikirim langsung dari gudang resmi Numa Skin Indonesia.
+        </p>
+
+        <div class="dsw-guarantee-list">
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:badge-check" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">100% Produk Asli Tersegel</strong>
+              Terdaftar resmi di BPOM (NA18251703709) dan teruji SPF 50+ PA++++.
+            </p>
+          </div>
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:truck" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">Bisa Bayar di Tempat (COD)</strong>
+              Pesan hari ini, bayar langsung ke kurir saat paket tiba di alamat Anda.
+            </p>
+          </div>
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:package-check" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">Garansi Ganti Baru</strong>
+              Kami ganti baru tanpa biaya tambahan bila tube diterima rusak atau bocor.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 10: Checkout Form -->
+      <section id="form-pemesanan" class="dsw-section--checkout">
+        <div style="padding: 0 20px 14px; text-align: center;">
+          <h2 class="dsw-h2" style="font-size: 28px;">
+            Lengkapi Data <span class="dsw-hl-aqua">Pengiriman</span>
+          </h2>
+          <p class="dsw-sub" style="max-width: 340px; margin: 8px auto 0;">
+            Isi nama, nomor WhatsApp aktif, dan kecamatan tujuan untuk cek ongkir otomatis.
+          </p>
+        </div>
+
+        <GeoIpResolvedForm
+          mode="hybrid"
+          productSlug={product.slug}
+          embedded={true}
+          selectedVariantId={String(defaultVariant.id)}
+          codDisabledProvinceCodes={codDisabledProvinceCodes}
+        />
+      </section>
+    </main>
+
+    <!-- Floating Centered Sticky Button (hidden on Hero and Form) -->
+    <div id="floating-cta" data-sticky-cta class="dsw-float-wrap">
+      <a
+        href="#form-pemesanan"
+        class="dsw-float-btn"
+        data-scroll-to-form
+        aria-label="Pesan Oxydew Sunscreen Luceane SPF 50+ PA++++"
+      >
+        <span>Pesan Sekarang</span>
+        <span class="dsw-float-divider" aria-hidden="true"></span>
+        <span class="dsw-float-sub">Promo Rp79.000</span>
+        <Icon name="lucide:arrow-down" class="size-3.5 dsw-float-arrow" aria-hidden="true" />
+      </a>
+    </div>
+  </div>
+
+  <script is:inline>
+    (function () {
+      const heroSection = document.getElementById('hero-section');
+      const formSection = document.getElementById('form-pemesanan');
+      const floatingCta = document.getElementById('floating-cta');
+
+      document.querySelectorAll('[data-scroll-to-form]').forEach((link) => {
+        link.addEventListener('click', (e) => {
+          if (!formSection) return;
+          e.preventDefault();
+          formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+
+      if (!floatingCta || !formSection || !('IntersectionObserver' in window)) return;
+
+      let isHeroVisible = true;
+      let isFormVisible = false;
+
+      function syncVisibility() {
+        const shouldShow = !isHeroVisible && !isFormVisible;
+        floatingCta.classList.toggle('is-visible', shouldShow);
+      }
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.target === heroSection) {
+              isHeroVisible = entry.isIntersecting;
+            } else if (entry.target === formSection) {
+              isFormVisible = entry.isIntersecting;
+            }
+          });
+          syncVisibility();
+        },
+        { root: null, threshold: 0.05 }
+      );
+
+      if (heroSection) observer.observe(heroSection);
+      observer.observe(formSection);
+    })();
+  </script>
+</BaseLayout>

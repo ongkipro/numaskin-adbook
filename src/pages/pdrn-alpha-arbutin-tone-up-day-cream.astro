@@ -1,0 +1,690 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import GeoIpResolvedForm from '../components/storefront/forms/GeoIpResolvedForm.astro';
+import MetaLandingTracker from '../components/storefront/tracking/MetaLandingTracker.astro';
+import Icon from '../components/storefront/shared/Icon.astro';
+import RatingStars from '../components/storefront/shared/RatingStars.astro';
+import { getStorefrontProduct } from '../lib/catalog';
+import { nativeLandingCanonicalPath } from '../lib/landing-pages';
+import { defaultCatalogContentId } from '../lib/catalog-feed';
+import { getRuntimeEnv } from '../lib/env';
+import { loadStoreCodDisabledProvinceCodes } from '../lib/form-mode';
+import { getStoreAdsConfig } from '../lib/store-ads';
+import '../styles/form-hybrid.css';
+import '../styles/landing-pages/pdrn-alpha-arbutin-tone-up-day-cream.css';
+
+export const prerender = false;
+
+const PRODUCT_SLUG = 'pdrn-alpha-arbutin-tone-up-day-cream';
+const LANDING_SLUG = 'pdrn-alpha-arbutin-tone-up-day-cream';
+const PAGE_TITLE =
+  'PDRN Alpha Arbutin Tone-Up Day Cream — Krim Pagi Anti-Flek BPOM';
+const PAGE_DESC =
+  'Day cream rasa treatment dengan 10.000 ppm Encapsulated PDRN, Alpha Arbutin, 5% Niacinamide, dan warna natural beige bebas abu-abu di kulit sawo matang (BPOM NA18262000246).';
+const IMG_BASE = '/images/landing/pdrn-alpha-arbutin-tone-up-day-cream';
+const HERO_IMAGE = `${IMG_BASE}/hero-pdrn-day-cream.webp`;
+
+const database = getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined;
+const claimedProductSlug = Astro.request.headers.get('x-adsbook-product-page');
+const [product, canonicalPath, codDisabledProvinceCodes] = await Promise.all([
+  getStorefrontProduct(Astro.locals, PRODUCT_SLUG),
+  claimedProductSlug
+    ? Promise.resolve(`/produk/${claimedProductSlug}`)
+    : nativeLandingCanonicalPath(Astro.locals, LANDING_SLUG),
+  loadStoreCodDisabledProvinceCodes(database),
+  getStoreAdsConfig(Astro.locals),
+]);
+if (!product) {
+  return Astro.rewrite('/404');
+}
+
+const canonical = `${Astro.locals.tenant.siteUrl}${canonicalPath}`;
+
+const variants = product.variants || [];
+const cheapestVariant = variants.reduce(
+  (min: any, v: any) => (!min || v.price < min.price ? v : min),
+  variants[0]
+);
+const defaultVariant = cheapestVariant || {
+  id: '54',
+  label: '30 gr',
+  price: 79499,
+  comparePrice: 165000,
+};
+---
+
+<BaseLayout
+  title={PAGE_TITLE}
+  description={PAGE_DESC}
+  image={HERO_IMAGE}
+  preloadImages={HERO_IMAGE}
+  canonical={canonical}
+  hideHeader={true}
+  hideFooter={true}
+>
+  <MetaLandingTracker
+    slug={LANDING_SLUG}
+    contentId={defaultCatalogContentId(product)}
+    contentName={product.contentName}
+    price={defaultVariant.price}
+  />
+
+  <div class="dsw-shell">
+    <main class="dsw-canvas">
+      <!-- Section 1: Hero -->
+      <section id="hero-section" class="dsw-hero">
+        <div class="dsw-hero-head">
+          <h1 class="dsw-h1">
+            Wajah Kusam Berflek, Tapi Pakai Krim Pagi Malah <span class="dsw-hl-tilt">Abu-Abu Dempul?</span>
+          </h1>
+          <p class="dsw-sub" style="max-width: 390px; margin: 14px auto 0; font-weight: 700;">
+            Bukan tone-up putih kapur biasa.<br />
+            <span class="dsw-underline-teal">Warna Natural Beige yang menyatu di kulit sawo matang!</span>
+          </p>
+        </div>
+
+        <div class="dsw-hero-stage">
+          <div class="dsw-hero-top-tag">
+            <div class="dsw-hero-top-pill">
+              <Icon name="lucide:sun" class="size-3.5" aria-hidden="true" />
+              <span>10.000 ppm Encapsulated PDRN + Alpha-Arbutin</span>
+            </div>
+          </div>
+
+          <img
+            src={HERO_IMAGE}
+            alt="Perbandingan wajah kusam dengan krim putih abu-abu dempul vs wajah cerah alami menyatu dengan Numa Skin PDRN Alpha Arbutin Tone-Up Day Cream"
+            width="720"
+            height="480"
+            class="dsw-hero-img"
+            fetchpriority="high"
+            loading="eager"
+            decoding="async"
+          />
+
+          <div class="dsw-hero-overlap">
+            <div class="dsw-hero-overlap-inner">
+              <h2 class="dsw-hero-overlap-title">Jangan Tutupi Flek dengan Krim Putih Kapur!</h2>
+              <p class="dsw-hero-overlap-text">
+                Krim tone-up putih biasa <strong style="color: #be123c;">mengendap di pori dan membuat kulit sawo matang terlihat belang keabuan</strong> saat berkeringat.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="dsw-trust-row">
+          <div class="dsw-trust-item">
+            <span class="dsw-trust-icon">
+              <Icon name="lucide:shield-check" class="size-4" aria-hidden="true" />
+            </span>
+            <div>
+              <span class="dsw-trust-label">BPOM Resmi</span>
+              <span class="dsw-trust-sub">NA18262000246</span>
+            </div>
+          </div>
+          <div class="dsw-trust-item">
+            <span class="dsw-trust-icon">
+              <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+            </span>
+            <div>
+              <span class="dsw-trust-label">Natural Beige</span>
+              <span class="dsw-trust-sub">Anti Abu-Abu</span>
+            </div>
+          </div>
+          <div class="dsw-trust-item">
+            <span class="dsw-trust-icon">
+              <Icon name="lucide:truck" class="size-4" aria-hidden="true" />
+            </span>
+            <div>
+              <span class="dsw-trust-label">Bisa COD</span>
+              <span class="dsw-trust-sub">Bayar di Rumah</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: Solusi Singkat + Visual -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Cerah instan di luar, <span class="dsw-hl-aqua">rawat flek dari dalam</span>
+        </h2>
+        <p class="dsw-sub">Pigmen warm natural beige yang menyatu mulus dalam 15 detik tanpa bedak tebal.</p>
+
+        <div class="dsw-photo-stack">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/solusi-tone-up-natural-beige.webp`}
+              alt="Wanita Indonesia meratakan krim pagi berwarna natural beige di pipi dengan hasil cerah menyatu"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+        </div>
+
+        <div class="dsw-list">
+          <div class="dsw-list-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:sparkles" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a;">10.000 ppm (1%) Encapsulated Vegan PDRN</strong> dengan daya serap 330,3% lebih dalam untuk merawat elastisitas kulit.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:sun" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a;">Alpha-Arbutin + 5% Niacinamide</strong> menghambat pembentukan noda hitam hingga 9x lebih efektif dibanding Beta-Arbutin.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:shield-plus" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a;">4X UV Filter & Natural Beige Tint</strong> meratakan warna kulit seketika tanpa rasa lengket maupun efek topeng.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Tanda Masalah Kulit + Visual Grid -->
+      <section class="dsw-section dsw-section--warn">
+        <h2 class="dsw-h2">
+          Mengapa krim pagi biasa sering <span class="dsw-underline-warn">bikin wajah terlihat kusam</span> di siang hari:
+        </h2>
+
+        <div class="dsw-photo-grid-2">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/masalah-muka-abu-topeng.webp`}
+              alt="Wajah tampak belang keabuan dan dempul akibat krim pemutih instan berwarna putih kapur"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #be123c; display: block;">Belang & Abu-Abu</strong>
+              Krim putih tampak seperti topeng di kulit sawo matang.
+            </p>
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/masalah-flek-kusam-pagi.webp`}
+              alt="Noda flek hitam dan warna kulit tidak merata saat bangun pagi sebelum beraktivitas"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #be123c; display: block;">Flek & Pori Kasar</strong>
+              Bedak menggumpal di garis halus saat wajah mulai berminyak.
+            </p>
+          </div>
+        </div>
+
+        <div class="dsw-list">
+          <div class="dsw-list-row">
+            <span class="dsw-icon-warn">
+              <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              Terpaksa menumpuk <strong style="color: #be123c;">foundation tebal setiap pagi</strong> demi menutupi noda hitam di tulang pipi.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-warn">
+              <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              Baru jam 11 siang, riasan sudah <strong style="color: #be123c;">luntur, cakey di garis senyum, dan menggelap (oksidasi)</strong>.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-warn">
+              <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              Krim siang biasa hanya memberi warna sementara <strong style="color: #be123c;">tanpa bahan aktif yang benar-benar memudarkan flek</strong>.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Perbandingan Visual Sebelum vs Sesudah -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Perbandingan visual <span class="dsw-hl-aqua">di kulit Indonesia</span>
+        </h2>
+        <p class="dsw-sub">Beda hasil krim tone-up putih kapur vs pigmen Natural Beige PDRN Numa Skin.</p>
+
+        <div class="dsw-photo-stack">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/kondisi-kusam-abu-dempul.webp`}
+              alt="Kulit pipi tampak kusam berflek dengan sisa krim putih yang menggumpal abu-abu di pori"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <span class="dsw-photo-badge dsw-photo-badge--before">Sebelum</span>
+            <p class="dsw-photo-caption">
+              Noda hitam masih membayang keabuan dan residu krim putih mengendap jelas di pori-pori pipi.
+            </p>
+          </div>
+
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/kondisi-cerah-alami-menyatu.webp`}
+              alt="Kulit sawo matang tampak cerah merata, halus, dan glowing alami setelah memakai PDRN Tone-Up Day Cream"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <span class="dsw-photo-badge dsw-photo-badge--after">Sesudah Rutin</span>
+            <p class="dsw-photo-caption">
+              Warna kulit tampak setingkat lebih cerah merata, noda tersamarkan halus, dan menyatu alami dengan leher.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: Dark Marine Section — Cara Pakai Praktis -->
+      <section class="dsw-section dsw-section--dark">
+        <h2 class="dsw-h2">
+          Siap Berangkat <span style="color: #99e2ec;">Dalam 30 Detik</span>
+        </h2>
+        <p class="dsw-sub">Praktis untuk Bunda dan wanita aktif yang tidak sempat dandan lama di pagi hari.</p>
+
+        <div class="dsw-photo-stack">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/cara-pakai-ambil-krim-beige.webp`}
+              alt="Mengambil krim pagi berwarna warm natural beige dari jar kaca frosted Numa Skin PDRN Day Cream"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #ffffff;">Langkah 1 (Ambil Seukuran Mutiara):</strong> Totolkan krim beige di dahi, kedua pipi, hidung, dan dagu.
+            </p>
+          </div>
+
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/cara-pakai-ratakan-pagi.webp`}
+              alt="Meratakan PDRN Tone-Up Day Cream dengan jari di depan cermin meja rias pagi hari"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #ffffff;">Langkah 2 (Baurkan Merata):</strong> Tepuk dan ratakan lembut ke seluruh wajah hingga menyatu sempurna.
+            </p>
+          </div>
+        </div>
+
+        <div class="dsw-list">
+          <div class="dsw-list-row">
+            <span class="dsw-step-num">1</span>
+            <p class="dsw-step-text">
+              Gunakan <strong style="color: #ffffff;">setiap pagi hari</strong> setelah mencuci wajah dan memakai toner/serum.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-step-num">2</span>
+            <p class="dsw-step-text">
+              Bisa dipakai langsung <strong style="color: #ffffff; background: #104452; padding: 1px 6px; border-radius: 4px;">tanpa foundation atau bedak padat</strong> untuk tampilan segar harian.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-step-num">3</span>
+            <p class="dsw-step-text">
+              Untuk aktivitas luar ruangan di bawah terik matahari, lapisi dengan <strong style="color: #ffffff;">Oxydew Sunscreen SPF 50+</strong>.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 6: Ulasan Pelanggan -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Apa kata pelanggan yang <span class="dsw-hl-aqua">sudah beralih?</span>
+        </h2>
+        <p class="dsw-sub">Disukai karena warnanya menyatu di kulit sawo matang maupun kuning langsat.</p>
+
+        <div class="dsw-reviews-divide">
+          <div class="dsw-review-row">
+            <div class="dsw-review-head">
+              <div>
+                <p class="dsw-review-author">
+                  Kak Nadia P.
+                  <span style="color: #0b6e7d; display: inline-flex;">
+                    <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+                  </span>
+                </p>
+                <p class="dsw-review-meta">Jakarta Selatan • Kulit Sawo Matang</p>
+              </div>
+              <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
+            </div>
+            <p class="dsw-review-quote">
+              "Akhirnya nemu day cream tone-up yang <span class="dsw-hl-aqua">warnanya beige natural, bukan putih tembok!</span> Di kulitku yang sawo matang langsung nyatu, <strong style="color: #0f172a;">gak bikin muka abu-abu sama sekali</strong>."
+            </p>
+          </div>
+
+          <div class="dsw-review-row">
+            <div class="dsw-review-head">
+              <div>
+                <p class="dsw-review-author">
+                  Ibu Rini H.
+                  <span style="color: #0b6e7d; display: inline-flex;">
+                    <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+                  </span>
+                </p>
+                <p class="dsw-review-meta">Semarang • Guru Usia 41 Tahun</p>
+              </div>
+              <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
+            </div>
+            <p class="dsw-review-quote">
+              "Pagi-pagi buru-buru ngajar tinggal oles krim PDRN ini aja udah kelihatan rapi dan segar. Setelah habis 1 jar, <span class="dsw-hl-aqua">bekas flek di pipi juga kelihatan makin tipis</span>."
+            </p>
+          </div>
+
+          <div class="dsw-review-row">
+            <div class="dsw-review-head">
+              <div>
+                <p class="dsw-review-author">
+                  Ibu Maya L.
+                  <span style="color: #0b6e7d; display: inline-flex;">
+                    <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+                  </span>
+                </p>
+                <p class="dsw-review-meta">Tangerang • Pembelian Jar ke-2</p>
+              </div>
+              <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
+            </div>
+            <p class="dsw-review-quote">
+              "Biasanya kalau pakai krim pagi, siang dikit langsung <span class="dsw-hl-rose">mengkilap dan luntur di sekitar hidung</span>. Pakai Numa Skin ini <span class="dsw-hl-aqua">tetap halus satin sampai sore</span>."
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 7: Galeri Bukti Visual -->
+      <section class="dsw-section dsw-section--tint">
+        <h2 class="dsw-h2">
+          Warna <span style="color: #0b6e7d;">Natural Beige</span> untuk kulit tropis
+        </h2>
+        <p class="dsw-sub">Menyamarkan tampilan pori dan noda gelap tanpa menutup napas kulit.</p>
+
+        <div class="dsw-photo-grid-2">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-swatch-warm-beige.webp`}
+              alt="Swatch tekstur krim berwarna warm natural beige yang menyatu di kulit tangan sawo matang"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-wanita-kerja-cerah.webp`}
+              alt="Wanita Indonesia berhijab tampil segar dan cerah alami di pagi hari"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-glow-tanpa-bedak.webp`}
+              alt="Hasil akhir kulit satin-dewy yang halus merata tanpa bedak tebal"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-meja-rias-pdrn.webp`}
+              alt="Kemasan jar kaca frosted Numa Skin PDRN Alpha Arbutin Tone-Up Day Cream 30g di meja rias"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 8: Product Knowledge (Full-Bleed Figures) -->
+      <section class="dsw-section dsw-section--knowledge">
+        <h2 class="dsw-h2">
+          Mengapa <span class="dsw-hl-aqua">Encapsulated PDRN</span> jauh lebih unggul?
+        </h2>
+        <p class="dsw-sub">
+          Perpaduan teknologi mikro-enkapsulasi Korea dengan pencerah klinis dan pelindung UV harian.
+        </p>
+
+        <div class="dsw-figure-stack">
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/formulasi-encapsulated-pdrn.webp`}
+                alt="Teknologi mikro-enkapsulasi 10.000 ppm Vegan PDRN dalam Ulleung Island Deep Sea Water"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">10.000 ppm Encapsulated Vegan PDRN (330,3% Penetrasi)</h3>
+              <p class="dsw-figcaption-desc">
+                Teknologi enkapsulasi berukuran lebih kecil dari pori membantu PDRN menembus hingga 330,3% lebih efektif untuk merawat regenerasi dan kekenyalan kulit.
+              </p>
+            </figcaption>
+          </figure>
+
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/kandungan-pdrn-alpha-arbutin.webp`}
+                alt="Kombinasi Alpha-Arbutin murni, 5% Niacinamide, dan krim natural beige di laboratorium"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">Alpha-Arbutin + 5% Niacinamide + 4X UV Defense</h3>
+              <p class="dsw-figcaption-desc">
+                Sinergi penghambat tirosinase Alpha-Arbutin (9x lebih kuat dari Beta-Arbutin) dan 5% Niacinamide untuk menyamarkan flek hitam sekaligus mencegah kusam akibat sinar UV.
+              </p>
+            </figcaption>
+          </figure>
+
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/kemasan-pdrn-jar-30g.webp`}
+                alt="Kemasan jar frosted Numa Skin PDRN Alpha Arbutin Tone-Up Day Cream 30g"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">Kemasan Frosted Jar 30 gr (Awet 6–8 Minggu)</h3>
+              <p class="dsw-figcaption-desc">
+                Cukup seukuran biji mutiara setiap pagi untuk meratakan warna kulit sekaligus merawat noda hitam sepanjang hari.
+              </p>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- Section 9: Garansi 100% Resmi -->
+      <section class="dsw-section" style="text-align: center; background: #f8fafc;">
+        <div style="margin: 0 auto 14px; display: flex; width: 52px; height: 52px; align-items: center; justify-content: center; color: #0b6e7d;">
+          <Icon name="lucide:shield-check" class="size-12" aria-hidden="true" />
+        </div>
+        <h2 class="dsw-h2" style="font-size: 32px;">GARANSI RESMI 100%</h2>
+        <p class="dsw-sub" style="max-width: 320px; margin: 8px auto 0;">
+          Pesanan dikirim langsung dari gudang resmi Numa Skin Indonesia.
+        </p>
+
+        <div class="dsw-guarantee-list">
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:badge-check" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">100% Produk Asli Tersegel</strong>
+              Terdaftar resmi di BPOM (NA18262000246) dan bersertifikat Halal Indonesia.
+            </p>
+          </div>
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:truck" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">Bisa Bayar di Tempat (COD)</strong>
+              Pesan hari ini, bayar langsung ke kurir saat paket tiba di alamat Anda.
+            </p>
+          </div>
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:package-check" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">Garansi Ganti Baru</strong>
+              Kami ganti baru tanpa biaya tambahan bila jar diterima pecah atau rusak.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 10: Checkout Form -->
+      <section id="form-pemesanan" class="dsw-section--checkout">
+        <div style="padding: 0 20px 14px; text-align: center;">
+          <h2 class="dsw-h2" style="font-size: 28px;">
+            Lengkapi Data <span class="dsw-hl-aqua">Pengiriman</span>
+          </h2>
+          <p class="dsw-sub" style="max-width: 340px; margin: 8px auto 0;">
+            Isi nama, nomor WhatsApp aktif, dan kecamatan tujuan untuk cek ongkir otomatis.
+          </p>
+        </div>
+
+        <GeoIpResolvedForm
+          mode="hybrid"
+          productSlug={product.slug}
+          embedded={true}
+          selectedVariantId={String(defaultVariant.id)}
+          codDisabledProvinceCodes={codDisabledProvinceCodes}
+        />
+      </section>
+    </main>
+
+    <!-- Floating Centered Sticky Button (hidden on Hero and Form) -->
+    <div id="floating-cta" data-sticky-cta class="dsw-float-wrap">
+      <a
+        href="#form-pemesanan"
+        class="dsw-float-btn"
+        data-scroll-to-form
+        aria-label="Pesan PDRN Alpha Arbutin Tone-Up Day Cream"
+      >
+        <span>Pesan Sekarang</span>
+        <span class="dsw-float-divider" aria-hidden="true"></span>
+        <span class="dsw-float-sub">Promo Rp79.499</span>
+        <Icon name="lucide:arrow-down" class="size-3.5 dsw-float-arrow" aria-hidden="true" />
+      </a>
+    </div>
+  </div>
+
+  <script is:inline>
+    (function () {
+      const heroSection = document.getElementById('hero-section');
+      const formSection = document.getElementById('form-pemesanan');
+      const floatingCta = document.getElementById('floating-cta');
+
+      document.querySelectorAll('[data-scroll-to-form]').forEach((link) => {
+        link.addEventListener('click', (e) => {
+          if (!formSection) return;
+          e.preventDefault();
+          formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+
+      if (!floatingCta || !formSection || !('IntersectionObserver' in window)) return;
+
+      let isHeroVisible = true;
+      let isFormVisible = false;
+
+      function syncVisibility() {
+        const shouldShow = !isHeroVisible && !isFormVisible;
+        floatingCta.classList.toggle('is-visible', shouldShow);
+      }
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.target === heroSection) {
+              isHeroVisible = entry.isIntersecting;
+            } else if (entry.target === formSection) {
+              isFormVisible = entry.isIntersecting;
+            }
+          });
+          syncVisibility();
+        },
+        { root: null, threshold: 0.05 }
+      );
+
+      if (heroSection) observer.observe(heroSection);
+      observer.observe(formSection);
+    })();
+  </script>
+</BaseLayout>

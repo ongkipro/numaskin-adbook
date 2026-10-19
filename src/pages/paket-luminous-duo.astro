@@ -1,0 +1,683 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import GeoIpResolvedForm from '../components/storefront/forms/GeoIpResolvedForm.astro';
+import MetaLandingTracker from '../components/storefront/tracking/MetaLandingTracker.astro';
+import Icon from '../components/storefront/shared/Icon.astro';
+import RatingStars from '../components/storefront/shared/RatingStars.astro';
+import { getStorefrontProduct } from '../lib/catalog';
+import { nativeLandingCanonicalPath } from '../lib/landing-pages';
+import { defaultCatalogContentId } from '../lib/catalog-feed';
+import { getRuntimeEnv } from '../lib/env';
+import { loadStoreCodDisabledProvinceCodes } from '../lib/form-mode';
+import { getStoreAdsConfig } from '../lib/store-ads';
+import '../styles/form-hybrid.css';
+import '../styles/landing-pages/paket-luminous-duo.css';
+
+export const prerender = false;
+
+const PRODUCT_SLUG = 'paket-luminous-duo';
+const LANDING_SLUG = 'paket-luminous-duo';
+const PAGE_TITLE = 'Paket Luminous Duo — NAD+ Booster Serum + PDRN Tone-Up Day Cream BPOM';
+const PAGE_DESC = 'Paket pengencang & pencerah instan Numa Skin: NAD+ Booster Serum 20ml (2% RejuveNAD™ + 6X Peptide) + PDRN Alpha Arbutin Tone-Up Day Cream 30g (10.000 PPM Salmon DNA, Warm Beige bebas abu-abu).';
+const IMG_BASE = '/images/landing/paket-luminous-duo';
+const HERO_IMAGE = `${IMG_BASE}/hero-paket-luminous-duo.webp`;
+
+const database = getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined;
+const claimedProductSlug = Astro.request.headers.get('x-adsbook-product-page');
+const [product, canonicalPath, codDisabledProvinceCodes] = await Promise.all([
+  getStorefrontProduct(Astro.locals, PRODUCT_SLUG),
+  claimedProductSlug
+    ? Promise.resolve(`/produk/${claimedProductSlug}`)
+    : nativeLandingCanonicalPath(Astro.locals, LANDING_SLUG),
+  loadStoreCodDisabledProvinceCodes(database),
+  getStoreAdsConfig(Astro.locals),
+]);
+if (!product) {
+  return Astro.rewrite('/404');
+}
+
+const canonical = `${Astro.locals.tenant.siteUrl}${canonicalPath}`;
+
+const variants = product.variants || [];
+const cheapestVariant = variants.reduce(
+  (min: any, v: any) => (!min || v.price < min.price ? v : min),
+  variants[0]
+);
+const defaultVariant = cheapestVariant || {
+  id: '31',
+  label: 'NAD+ Serum 20ml + Day Cream 30gr',
+  price: 169500,
+  comparePrice: 188498,
+};
+---
+
+<BaseLayout
+  title={PAGE_TITLE}
+  description={PAGE_DESC}
+  image={HERO_IMAGE}
+  preloadImages={HERO_IMAGE}
+  canonical={canonical}
+  hideHeader={true}
+  hideFooter={true}
+>
+  <MetaLandingTracker
+    slug={LANDING_SLUG}
+    contentId={defaultCatalogContentId(product)}
+    contentName={product.contentName}
+    price={defaultVariant.price}
+  />
+
+  <div class="dsw-shell">
+    <main class="dsw-canvas">
+      <!-- Section 1: Hero -->
+      <section id="hero-section" class="dsw-hero">
+        <div class="dsw-hero-head">
+          <h1 class="dsw-h1">
+            <span class="dsw-hl-tilt">Wajah Kendur</span> & Kusam Saat Mau Pergi Tapi Bedak Malah Masuk Kerutan?
+          </h1>
+          <p class="dsw-sub" style="max-width: 390px; margin: 14px auto 0; font-weight: 700;">
+            Menutupi kulit menua dengan foundation tebal justru memperjelas garis senyum.<br />
+            <span class="dsw-underline-teal">Kencangkan seluler & cerahkan natural dengan Luminous Duo NAD+ & PDRN!</span>
+          </p>
+        </div>
+
+        <div class="dsw-hero-stage">
+          <div class="dsw-hero-top-tag">
+            <div class="dsw-hero-top-pill">
+              <Icon name="lucide:sparkles" class="size-3.5" aria-hidden="true" />
+              <span>Duo Sultan NAD+ & PDRN • Hemat Rp19.000</span>
+            </div>
+          </div>
+
+          <img
+            src={HERO_IMAGE}
+            alt="Perbandingan wajah kusam kendur dempul vs kulit kencang cerah natural warm-beige dengan Paket Luminous Duo Numa Skin"
+            width="720"
+            height="480"
+            class="dsw-hero-img"
+            fetchpriority="high"
+            loading="eager"
+            decoding="async"
+          />
+
+          <div class="dsw-hero-overlap">
+            <div class="dsw-hero-overlap-inner">
+              <h2 class="dsw-hero-overlap-title">Jangan Tutupi Kulit Lelah dengan Dempul Putih Abu-Abu!</h2>
+              <p class="dsw-hero-overlap-text">
+                Di usia 35+, kulit membutuhkan <strong style="color: #be123c;">serum pengangkat kontur sekaligus krim pagi warna Warm Beige yang menyatu di kulit sawo matang tanpa menyumbat garis halus</strong>.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="dsw-trust-row">
+          <div class="dsw-trust-item">
+            <span class="dsw-trust-icon">
+              <Icon name="lucide:shield-check" class="size-4" aria-hidden="true" />
+            </span>
+            <div>
+              <span class="dsw-trust-label">BPOM Resmi</span>
+              <span class="dsw-trust-sub">2 Izin Edar</span>
+            </div>
+          </div>
+          <div class="dsw-trust-item">
+            <span class="dsw-trust-icon">
+              <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+            </span>
+            <div>
+              <span class="dsw-trust-label">Halal RI</span>
+              <span class="dsw-trust-sub">10.000 PPM PDRN</span>
+            </div>
+          </div>
+          <div class="dsw-trust-item">
+            <span class="dsw-trust-icon">
+              <Icon name="lucide:truck" class="size-4" aria-hidden="true" />
+            </span>
+            <div>
+              <span class="dsw-trust-label">Bisa COD</span>
+              <span class="dsw-trust-sub">Bayar di Rumah</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: Solusi Singkat + Visual -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Perpaduan <span class="dsw-hl-aqua">2 bahan aktif termahal klinik</span> dalam 1 paket
+        </h2>
+        <p class="dsw-sub">Menggabungkan teknologi Longevity NAD+ Swiss dengan 10.000 PPM Encapsulated Salmon DNA (PDRN).</p>
+
+        <div class="dsw-photo-stack">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/solusi-lifting-dan-toneup-alami.webp`}
+              alt="Wanita Indonesia usia 38 tahun dengan kulit wajah kencang, mulus, dan cerah merata natural tanpa bedak tebal"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+        </div>
+
+        <div class="dsw-list">
+          <div class="dsw-list-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:sparkles" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a;">NAD+ Booster Anti-Aging Serum (20 ml):</strong> Mengencangkan kontur pipi & menghaluskan kerutan dengan 2% Swiss RejuveNAD™, 6X Peptide Complex, & 4% Niacinamide.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:sun-dim" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a;">PDRN + Alpha Arbutin Tone-Up Day Cream (30 gr):</strong> Meremajakan kulit dengan 1% Encapsulated PDRN (10.000 PPM) + 2% Alpha-Arbutin serta efek cerah instan Warm Beige bebas abu-abu.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a;">Hemat Rp18.998 (Cuma Rp169.500):</strong> Perawatan setara <em>treatment</em> klinik dengan 2 produk ukuran penuh ber-BPOM.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Tanda Masalah Kulit + Visual Grid -->
+      <section class="dsw-section dsw-section--warn">
+        <h2 class="dsw-h2">
+          Mengapa riasan pagi sering <span class="dsw-underline-warn">terlihat retak & tua</span> di usia 35+?
+        </h2>
+
+        <div class="dsw-photo-grid-2">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/masalah-bedak-masuk-kerutan.webp`}
+              alt="Close-up bedak atau foundation yang menggumpal dan retak di garis senyum serta bawah mata"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #be123c; display: block;">Cakey di Garis Senyum</strong>
+              Saat elastisitas pipi menurun, bedak tebal mudah terjebak di lipatan kerutan.
+            </p>
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/masalah-wajah-lelah-kusam-pagi.webp`}
+              alt="Wanita bercermin di pagi hari melihat wajah tampak kusam, lelah, dan bernoda hitam"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #be123c; display: block;">Kusam & Noda Flek Tampak Jelas</strong>
+              Tanpa pencerah aktif Alpha-Arbutin & Niacinamide, warna kulit tampak belang dan tua.
+            </p>
+          </div>
+        </div>
+
+        <div class="dsw-list">
+          <div class="dsw-list-row">
+            <span class="dsw-icon-warn">
+              <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              Saat memakai bedak atau <em>foundation</em> pagi hari, <strong style="color: #be123c;">garis senyum dan kerutan bawah mata justru makin terlihat retak (cakey)</strong>.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-warn">
+              <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              Krim <em>tone-up</em> putih biasa membuat <strong style="color: #be123c;">kulit sawo matang/kuning langsat terlihat abu-abu seperti topeng</strong>.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-warn">
+              <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              Ingin tampil rapi dan segar setiap pagi dalam 2 menit <strong style="color: #be123c;">tanpa harus memakai riasan berlapis-lapis</strong>.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Perbandingan Visual Sebelum vs Sesudah -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Perbandingan hasil <span class="dsw-hl-aqua">Luminous Duo NAD+ & PDRN</span>
+        </h2>
+        <p class="dsw-sub">Perbaikan kekencangan dari dalam berpadu dengan efek cerah sehat seketika di permukaan.</p>
+
+        <div class="dsw-photo-stack">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/kondisi-kendur-kusam-retak.webp`}
+              alt="Kondisi pipi kendur, kusam bernoda, dan riasan tampak retak di garis halus"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <span class="dsw-photo-badge dsw-photo-badge--before">Dempul Biasa Tanpa Serum</span>
+            <p class="dsw-photo-caption">
+              Garis lipatan tampak dalam, noda hitam membayang, dan warna krim tidak menyatu dengan kulit asli.
+            </p>
+          </div>
+
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/kondisi-kencang-glowing-natural.webp`}
+              alt="Kondisi pipi tampak kencang, halus, dan cerah satin-dewy merata berkat Paket Luminous Duo"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <span class="dsw-photo-badge dsw-photo-badge--after">Rutin NAD+ Serum + PDRN Cream</span>
+            <p class="dsw-photo-caption">
+              Permukaan kulit lembap terangkat oleh NAD+ Serum, lalu PDRN Warm Beige meratakan rona wajah menjadi cerah segar tanpa bedak.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: Dark Marine Section — Cara Pakai Praktis -->
+      <section class="dsw-section dsw-section--dark">
+        <h2 class="dsw-h2">
+          Urutan Pakai <span style="color: #99e2ec;">Siap Tampil Cerah Kencang</span>
+        </h2>
+        <p class="dsw-sub">Serum menyiapkan kanvas kulit yang kenyal agar Day Cream menyatu sehalus sutra.</p>
+
+        <div class="dsw-photo-stack">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/cara-pakai-luminous-step1-nad.webp`}
+              alt="Langkah 1 meneteskan NAD+ Booster Serum dan memijat ke arah atas"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #ffffff;">Langkah 1 (Pagi & Malam — NAD+ Serum):</strong> Teteskan 3–4 tetes serum, pijat ke arah atas di garis senyum dan tulang pipi.
+            </p>
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/cara-pakai-luminous-step2-pdrn.webp`}
+              alt="Langkah 2 meratakan PDRN Tone-Up Day Cream berwarna warm beige di pagi hari"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #ffffff;">Langkah 2 (Pagi Hari — PDRN Tone-Up Cream):</strong> Ambil seujung jari krim Warm Beige, totolkan tipis dan baurkan merata ke wajah.
+            </p>
+          </div>
+        </div>
+
+        <div class="dsw-list">
+          <div class="dsw-list-row">
+            <span class="dsw-step-num">1</span>
+            <p class="dsw-step-text">
+              <strong style="color: #ffffff;">Langkah 1 (NAD+ Serum):</strong> Dipakai pagi & malam untuk memadatkan kontur dan menghidrasi garis halus.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-step-num">2</span>
+            <p class="dsw-step-text">
+              <strong style="color: #ffffff;">Langkah 2 (PDRN Day Cream):</strong> Dipakai pagi hari setelah serum meresap untuk <strong style="color: #ffffff; background: #104452; padding: 1px 6px; border-radius: 4px;">efek cerah natural tanpa foundation</strong>.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-step-num">3</span>
+            <p class="dsw-step-text">
+              Krim berwarna <em>Warm Natural Beige</em> langsung menyatu di kulit sawo matang dalam 10 detik.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 6: Ulasan Pelanggan -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Alasan paket ini jadi <span class="dsw-hl-aqua">favorit wanita karier & Bunda</span>
+        </h2>
+        <p class="dsw-sub">Wajah tampak kencang terawat sekaligus langsung cerah rapi setiap pagi.</p>
+
+        <div class="dsw-reviews-divide">
+          <div class="dsw-review-row">
+            <div class="dsw-review-head">
+              <div>
+                <p class="dsw-review-author">
+                  Ibu Clarissa T.
+                  <span style="color: #0b6e7d; display: inline-flex;">
+                    <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+                  </span>
+                </p>
+                <p class="dsw-review-meta">Jakarta Barat • Usia 39 Tahun</p>
+              </div>
+              <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
+            </div>
+            <p class="dsw-review-quote">
+              "Kombinasi paling mewah! <span class="dsw-hl-aqua">NAD+ Serumnya bikin kulit kenyal kencang, pas ditimpa PDRN Day Cream langsung nempel mulus</span> kayak gak pakai dempul tapi cerah banget."
+            </p>
+          </div>
+          <div class="dsw-review-row">
+            <div class="dsw-review-head">
+              <div>
+                <p class="dsw-review-author">
+                  Bunda Rina M.
+                  <span style="color: #0b6e7d; display: inline-flex;">
+                    <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+                  </span>
+                </p>
+                <p class="dsw-review-meta">Depok • Kulit Sawo Matang</p>
+              </div>
+              <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
+            </div>
+            <p class="dsw-review-quote">
+              "Biasanya pakai krim pagi suka ngumpul di garis senyum. <strong style="color: #0f172a;">Karena pakai NAD+ Serum dulu sebelumnya</strong>, <span class="dsw-hl-aqua">krim PDRN-nya nyatu sempurna dan bebas abu-abu</span>."
+            </p>
+          </div>
+          <div class="dsw-review-row">
+            <div class="dsw-review-head">
+              <div>
+                <p class="dsw-review-author">
+                  Kak Yuni S.
+                  <span style="color: #0b6e7d; display: inline-flex;">
+                    <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+                  </span>
+                </p>
+                <p class="dsw-review-meta">Makassar • Hemat Rp19.000</p>
+              </div>
+              <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
+            </div>
+            <p class="dsw-review-quote">
+              "Dapet <span class="dsw-hl-rose">NAD+ plus Salmon DNA PDRN 10.000 PPM cuma 169 ribuan</span> itu murah banget. <span class="dsw-hl-aqua">Flek memudar dan gak perlu beli foundation lagi</span>."
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 7: Galeri Bukti Visual -->
+      <section class="dsw-section dsw-section--tint">
+        <h2 class="dsw-h2">
+          Kombinasi aktif sultan untuk <span style="color: #0b6e7d;">tampilan muda bercahaya</span>
+        </h2>
+        <p class="dsw-sub">Perawatan anti-aging seluler malam hari dan pencerah regeneratif di pagi hari.</p>
+
+        <div class="dsw-photo-grid-2">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-tekstur-nad-dan-pdrn.webp`}
+              alt="Perbandingan tekstur emulsi NAD+ Serum dan krim warm-beige PDRN Day Cream di tangan"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-wanita-cerah-kencang-pagi.webp`}
+              alt="Potret wanita Indonesia tersenyum anggun dengan wajah cerah natural dan kencang"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-kulit-mulus-tanpa-cakey.webp`}
+              alt="Close-up pipi halus bercahaya satin-dewy tanpa riasan retak"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-meja-rias-luminous-duo.webp`}
+              alt="Kemasan Paket Luminous Duo NAD+ Serum dan PDRN Day Cream di meja rias"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 8: Product Knowledge (Full-Bleed Figures) -->
+      <section class="dsw-section dsw-section--knowledge">
+        <h2 class="dsw-h2">
+          Mengapa <span class="dsw-hl-aqua">NAD+ & PDRN</span> disebut duet regenerasi terbaik?
+        </h2>
+        <p class="dsw-sub">
+          Menggabungkan bioteknologi Swiss Mibelle dan enkapsulasi polinukleotida Korea.
+        </p>
+
+        <div class="dsw-figure-stack">
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/formulasi-nad-pdrn-biotech.webp`}
+                alt="Ilustrasi mikro-enkapsulasi emas PDRN dan tunas bunga matahari RejuveNAD dalam air laut dalam"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">2% Swiss RejuveNAD™ + 10.000 PPM Encapsulated PDRN</h3>
+              <p class="dsw-figcaption-desc">
+                RejuveNAD™ mengisi ulang koenzim energi seluler, sementara Encapsulated Sodium DNA (PDRN) mempercepat pembaruan jaringan kulit yang menua.
+              </p>
+            </figcaption>
+          </figure>
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/kandungan-peptide-arbutin-niacinamide.webp`}
+                alt="Kombinasi 6X Peptide Complex, 2% Alpha-Arbutin, dan 4% Niacinamide"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">6X Peptide Complex + 2% Alpha-Arbutin + 4% Niacinamide</h3>
+              <p class="dsw-figcaption-desc">
+                Enam jenis peptida biomimetik merawat kekencangan pipi, sedangkan duet Alpha-Arbutin dan Niacinamide memudarkan flek hitam membandel.
+              </p>
+            </figcaption>
+          </figure>
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/kemasan-luminous-duo-nad-pdrn.webp`}
+                alt="Kemasan resmi Paket Luminous Duo: NAD+ Booster Serum 20ml dan PDRN Tone-Up Day Cream 30gr"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">Botol Pipet Kaca (20 ml) + Jar Frosted (30 gr)</h3>
+              <p class="dsw-figcaption-desc">
+                Anda mendapatkan NAD+ Booster Serum (NA18262000245) dan PDRN Tone-Up Day Cream (NA18262000246) dengan penghematan Rp18.998.
+              </p>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- Section 9: Garansi 100% Resmi -->
+      <section class="dsw-section" style="text-align: center; background: #f8fafc;">
+        <div style="margin: 0 auto 14px; display: flex; width: 52px; height: 52px; align-items: center; justify-content: center; color: #0b6e7d;">
+          <Icon name="lucide:shield-check" class="size-12" aria-hidden="true" />
+        </div>
+        <h2 class="dsw-h2" style="font-size: 32px;">GARANSI RESMI 100%</h2>
+        <p class="dsw-sub" style="max-width: 320px; margin: 8px auto 0;">
+          Pesanan dikirim langsung dari gudang resmi Numa Skin Indonesia.
+        </p>
+
+        <div class="dsw-guarantee-list">
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:badge-check" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">2 Produk Asli Tersegel BPOM</strong>
+              Terdaftar resmi di BPOM (NA18262000245 & NA18262000246) serta Halal Indonesia.
+            </p>
+          </div>
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:truck" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">Bisa Bayar di Tempat (COD)</strong>
+              Pesan hari ini, bayar langsung ke kurir saat paket tiba di alamat Anda.
+            </p>
+          </div>
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:package-check" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">Garansi Ganti Baru</strong>
+              Kami ganti baru tanpa biaya tambahan bila ada kemasan yang diterima rusak/bocor.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 10: Checkout Form -->
+      <section id="form-pemesanan" class="dsw-section--checkout">
+        <div style="padding: 0 20px 14px; text-align: center;">
+          <h2 class="dsw-h2" style="font-size: 28px;">
+            Lengkapi Data <span class="dsw-hl-aqua">Pengiriman</span>
+          </h2>
+          <p class="dsw-sub" style="max-width: 340px; margin: 8px auto 0;">
+            Isi nama, nomor WhatsApp aktif, dan kecamatan tujuan untuk cek ongkir otomatis.
+          </p>
+        </div>
+
+        <GeoIpResolvedForm
+          mode="hybrid"
+          productSlug={product.slug}
+          embedded={true}
+          selectedVariantId={String(defaultVariant.id)}
+          codDisabledProvinceCodes={codDisabledProvinceCodes}
+        />
+      </section>
+    </main>
+
+    <!-- Floating Centered Sticky Button (hidden on Hero and Form) -->
+    <div id="floating-cta" data-sticky-cta class="dsw-float-wrap">
+      <a
+        href="#form-pemesanan"
+        class="dsw-float-btn"
+        data-scroll-to-form
+        aria-label="Pesan Paket Luminous Duo — NAD+ Booster Serum + PDRN Tone-Up Day Cream BPOM"
+      >
+        <span>Ambil Paket Hemat</span>
+        <span class="dsw-float-divider" aria-hidden="true"></span>
+        <span class="dsw-float-sub">Promo Rp169.500</span>
+        <Icon name="lucide:arrow-down" class="size-3.5 dsw-float-arrow" aria-hidden="true" />
+      </a>
+    </div>
+  </div>
+
+  <script is:inline>
+    (function () {
+      const heroSection = document.getElementById('hero-section');
+      const formSection = document.getElementById('form-pemesanan');
+      const floatingCta = document.getElementById('floating-cta');
+
+      document.querySelectorAll('[data-scroll-to-form]').forEach((link) => {
+        link.addEventListener('click', (e) => {
+          if (!formSection) return;
+          e.preventDefault();
+          formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+
+      if (!floatingCta || !formSection || !('IntersectionObserver' in window)) return;
+
+      let isHeroVisible = true;
+      let isFormVisible = false;
+
+      function syncVisibility() {
+        const shouldShow = !isHeroVisible && !isFormVisible;
+        floatingCta.classList.toggle('is-visible', shouldShow);
+      }
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.target === heroSection) {
+              isHeroVisible = entry.isIntersecting;
+            } else if (entry.target === formSection) {
+              isFormVisible = entry.isIntersecting;
+            }
+          });
+          syncVisibility();
+        },
+        { root: null, threshold: 0.05 }
+      );
+
+      if (heroSection) observer.observe(heroSection);
+      observer.observe(formSection);
+    })();
+  </script>
+</BaseLayout>

@@ -1,0 +1,690 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import GeoIpResolvedForm from '../components/storefront/forms/GeoIpResolvedForm.astro';
+import MetaLandingTracker from '../components/storefront/tracking/MetaLandingTracker.astro';
+import Icon from '../components/storefront/shared/Icon.astro';
+import RatingStars from '../components/storefront/shared/RatingStars.astro';
+import { getStorefrontProduct } from '../lib/catalog';
+import { nativeLandingCanonicalPath } from '../lib/landing-pages';
+import { defaultCatalogContentId } from '../lib/catalog-feed';
+import { getRuntimeEnv } from '../lib/env';
+import { loadStoreCodDisabledProvinceCodes } from '../lib/form-mode';
+import { getStoreAdsConfig } from '../lib/store-ads';
+import '../styles/form-hybrid.css';
+import '../styles/landing-pages/paket-complete-routine-4-in-1-150ml.css';
+
+export const prerender = false;
+
+const PRODUCT_SLUG = 'paket-complete-routine-4-in-1-150ml';
+const LANDING_SLUG = 'paket-complete-routine-4-in-1-150ml';
+const PAGE_TITLE =
+  'Paket Complete Routine 4-in-1 (150ml) — Rangkaian Lengkap Anti-Aging & Flek BPOM';
+const PAGE_DESC =
+  'Paket perawatan lengkap 4-in-1 Numa Skin: Deep Sea Water Treatment Lotion 150ml, NAD+ Booster Serum, Adenosine Moisturizer 30g, dan Oxydew Sunscreen SPF 50+ PA++++ 30ml (BPOM Resmi).';
+const IMG_BASE = '/images/landing/paket-complete-routine-4-in-1-150ml';
+const HERO_IMAGE = `${IMG_BASE}/hero-paket-complete-4in1.webp`;
+
+const database = getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined;
+const claimedProductSlug = Astro.request.headers.get('x-adsbook-product-page');
+const [product, canonicalPath, codDisabledProvinceCodes] = await Promise.all([
+  getStorefrontProduct(Astro.locals, PRODUCT_SLUG),
+  claimedProductSlug
+    ? Promise.resolve(`/produk/${claimedProductSlug}`)
+    : nativeLandingCanonicalPath(Astro.locals, LANDING_SLUG),
+  loadStoreCodDisabledProvinceCodes(database),
+  getStoreAdsConfig(Astro.locals),
+]);
+if (!product) {
+  return Astro.rewrite('/404');
+}
+
+const canonical = `${Astro.locals.tenant.siteUrl}${canonicalPath}`;
+
+const variants = product.variants || [];
+const cheapestVariant = variants.reduce(
+  (min: any, v: any) => (!min || v.price < min.price ? v : min),
+  variants[0]
+);
+const defaultVariant = cheapestVariant || {
+  id: '14',
+  label: 'Toner 150ml + NAD+ Serum 20ml + Adenosine 30gr + Sunscreen 30ml',
+  price: 338000,
+  comparePrice: 375998,
+};
+---
+
+<BaseLayout
+  title={PAGE_TITLE}
+  description={PAGE_DESC}
+  image={HERO_IMAGE}
+  preloadImages={HERO_IMAGE}
+  canonical={canonical}
+  hideHeader={true}
+  hideFooter={true}
+>
+  <MetaLandingTracker
+    slug={LANDING_SLUG}
+    contentId={defaultCatalogContentId(product)}
+    contentName={product.contentName}
+    price={defaultVariant.price}
+  />
+
+  <div class="dsw-shell">
+    <main class="dsw-canvas">
+      <!-- Section 1: Hero -->
+      <section id="hero-section" class="dsw-hero">
+        <div class="dsw-hero-head">
+          <h1 class="dsw-h1">
+            <span class="dsw-hl-tilt">Skincare Campur</span> Beda Merek Bikin Wajah Kusam, Flek & Gak Ada Hasil?
+          </h1>
+          <p class="dsw-sub" style="max-width: 390px; margin: 14px auto 0; font-weight: 700;">
+            Hentikan coba-coba produk terpisah yang bahan aktifnya saling bertabrakan.<br />
+            <span class="dsw-underline-teal">Tuntaskan dengan 4 Langkah Sinergis Complete Routine Numa Skin!</span>
+          </p>
+        </div>
+
+        <div class="dsw-hero-stage">
+          <div class="dsw-hero-top-tag">
+            <div class="dsw-hero-top-pill">
+              <Icon name="lucide:sparkles" class="size-3.5" aria-hidden="true" />
+              <span>Flagship 4-in-1 Full Size • Hemat Rp38.000</span>
+            </div>
+          </div>
+
+          <img
+            src={HERO_IMAGE}
+            alt="Perbandingan wajah kusam berflek dan berkerut vs kulit kenyal bercahaya dengan Paket Complete Routine 4-in-1 150ml Numa Skin"
+            width="720"
+            height="480"
+            class="dsw-hero-img"
+            fetchpriority="high"
+            loading="eager"
+            decoding="async"
+          />
+
+          <div class="dsw-hero-overlap">
+            <div class="dsw-hero-overlap-inner">
+              <h2 class="dsw-hero-overlap-title">Mencampur Merek Acak Merusak pH Kulit!</h2>
+              <p class="dsw-hero-overlap-text">
+                Saat toner, serum, pelembap, dan sunscreen berasal dari basis pelarut berbeda, <strong style="color: #be123c;">nutrisi gagal meresap dan justru memicu iritasi serta penuaan dini</strong>.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="dsw-trust-row">
+          <div class="dsw-trust-item">
+            <span class="dsw-trust-icon">
+              <Icon name="lucide:shield-check" class="size-4" aria-hidden="true" />
+            </span>
+            <div>
+              <span class="dsw-trust-label">BPOM Resmi</span>
+              <span class="dsw-trust-sub">4 Izin Edar</span>
+            </div>
+          </div>
+          <div class="dsw-trust-item">
+            <span class="dsw-trust-icon">
+              <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+            </span>
+            <div>
+              <span class="dsw-trust-label">Halal RI</span>
+              <span class="dsw-trust-sub">Toner 150 ml</span>
+            </div>
+          </div>
+          <div class="dsw-trust-item">
+            <span class="dsw-trust-icon">
+              <Icon name="lucide:truck" class="size-4" aria-hidden="true" />
+            </span>
+            <div>
+              <span class="dsw-trust-label">Bisa COD</span>
+              <span class="dsw-trust-sub">Bayar di Rumah</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: Solusi Singkat + Visual -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Ekosistem <span class="dsw-hl-aqua">4 tahap perawatan klinik</span> dari rumah Anda
+        </h2>
+        <p class="dsw-sub">Mulai dari pembuka jalur hidrasi, serum pengencang, pengunci flek, hingga tameng UV.</p>
+
+        <div class="dsw-photo-stack">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/solusi-ritual-klinik-di-rumah.webp`}
+              alt="Wanita Indonesia usia 39 tahun dengan kulit wajah kencang, lembap bercahaya, dan bebas flek hitam"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+        </div>
+
+        <div class="dsw-list">
+          <div class="dsw-list-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:droplets" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a;">Tahap 1 & 2 (Hidrasi & Energi Sel):</strong> Deep Sea Water Treatment Lotion Jumbo (150 ml) membuka pori lembap agar NAD+ Booster Serum (2% RejuveNAD™ + 6X Peptide) terserap maksimal.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:sparkles" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a;">Tahap 3 & 4 (Kunci Flek & Perisai UV):</strong> Adenosine Moisturizer (30 gr) menyamarkan noda & kerutan, lalu Oxydew Sunscreen SPF 50+ PA++++ (30 ml) menjaga kulit dari terik matahari.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:shield-check" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a;">Hemat Langsung Rp37.998:</strong> Total harga satuan Rp375.998, kini cukup Rp338.000 dengan botol Treatment Lotion ukuran besar 150 ml.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Tanda Masalah Kulit + Visual Grid -->
+      <section class="dsw-section dsw-section--warn">
+        <h2 class="dsw-h2">
+          Tanda kulit Anda butuh <span class="dsw-underline-warn">perbaikan menyeluruh 4 dimensi</span>:
+        </h2>
+
+        <div class="dsw-photo-grid-2">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/masalah-bingung-campur-skincare.webp`}
+              alt="Meja rias penuh botol skincare berbeda merek yang membuat kulit justru kusam dan iritasi"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #be123c; display: block;">Beli Satu-Satu Gak Cocok</strong>
+              Lelah ganti-ganti merek yang berujung mubazir di meja rias.
+            </p>
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/masalah-flek-kerut-barrier-rusak.webp`}
+              alt="Kulit usia 40 tahun dengan kombinasi masalah flek hitam, garis senyum, dan dehidrasi"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #be123c; display: block;">Penuaan Datang Bersamaan</strong>
+              Flek hitam, kerutan mata, dan pipi kendur muncul sekaligus.
+            </p>
+          </div>
+        </div>
+
+        <div class="dsw-list">
+          <div class="dsw-list-row">
+            <span class="dsw-icon-warn">
+              <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              Masalah wajah di usia 30–55 tahun <strong style="color: #be123c;">tidak lagi tunggal</strong>: dehidrasi, flek melasma, garis senyum, dan kerusakan UV terjadi bersamaan.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-warn">
+              <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              Memakai serum tanpa hydrating toner membuat <strong style="color: #be123c;">50% bahan aktif tertahan di permukaan kulit kering</strong>.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-warn">
+              <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              Bingung menentukan urutan pakai pagi & malam yang <strong style="color: #be123c;">aman tanpa takut bahan aktif saling berbenturan</strong>.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Perbandingan Visual Sebelum vs Sesudah -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Perbandingan visual <span class="dsw-hl-aqua">transformasi 4 minggu</span>
+        </h2>
+        <p class="dsw-sub">Hasil nyata saat keempat langkah bekerja dalam satu basis air laut dalam Pulau Ulleung.</p>
+
+        <div class="dsw-photo-stack">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/kondisi-penuaan-kompleks-kusam.webp`}
+              alt="Kondisi wajah dengan flek hitam, garis kerutan halus, pori kering kasar, dan rona kusam sebelum perawatan"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <span class="dsw-photo-badge dsw-photo-badge--before">Sebelum</span>
+            <p class="dsw-photo-caption">
+              Kulit tampak lelah dehidrasi, noda flek di tulang pipi terlihat jelas, dan garis lipatan senyum tampak tegas.
+            </p>
+          </div>
+
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/kondisi-transformasi-glass-skin.webp`}
+              alt="Kondisi wajah tampak kenyal bercahaya glass-skin, flek memudar, dan kontur kencang setelah rutin memakai Paket 4-in-1"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <span class="dsw-photo-badge dsw-photo-badge--after">Sesudah 4-in-1 Routine</span>
+            <p class="dsw-photo-caption">
+              Permukaan kulit tampak sejernih kaca (glass skin), noda gelap memudar merata, dan pipi terasa padat kenyal.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: Dark Marine Section — Cara Pakai Praktis -->
+      <section class="dsw-section dsw-section--dark">
+        <h2 class="dsw-h2">
+          Urutan Pakai <span style="color: #99e2ec;">1-2-3-4 Anti-Bingung</span>
+        </h2>
+        <p class="dsw-sub">Panduan lengkap pagi dan malam agar setiap tetes bekerja 100% optimal.</p>
+
+        <div class="dsw-photo-stack">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/cara-pakai-urutan-pagi-malam.webp`}
+              alt="Urutan 4 botol Numa Skin dari langkah 1 Treatment Lotion hingga langkah 4 Oxydew Sunscreen"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #ffffff;">Urutan Berbasis Viskositas:</strong> Mulai dari tekstur paling cair (Lotion) hingga pelindung akhir (Sunscreen).
+            </p>
+          </div>
+
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/cara-pakai-aplikasi-4-tahap.webp`}
+              alt="Wanita Indonesia menepuk lembut rangkaian perawatan 4-in-1 Numa Skin ke wajah"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #ffffff;">Penyerapan Cepat Tanpa Lengket:</strong> Keempat lapisan meresap ringan dalam waktu kurang dari 3 menit.
+            </p>
+          </div>
+        </div>
+
+        <div class="dsw-list">
+          <div class="dsw-list-row">
+            <span class="dsw-step-num">1</span>
+            <p class="dsw-step-text">
+              <strong style="color: #ffffff;">Langkah 1 & 2 (Pagi & Malam):</strong> Tepuk <strong style="color: #ffffff;">Treatment Lotion 150ml</strong> ke wajah, lalu teteskan <strong style="color: #ffffff;">NAD+ Booster Serum</strong>.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-step-num">2</span>
+            <p class="dsw-step-text">
+              <strong style="color: #ffffff;">Langkah 3 (Pagi & Malam):</strong> Kunci kelembapan dan nutrisi anti-flek dengan 1–2 pump <strong style="color: #ffffff; background: #104452; padding: 1px 6px; border-radius: 4px;">Adenosine Moisturizer</strong>.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-step-num">3</span>
+            <p class="dsw-step-text">
+              <strong style="color: #ffffff;">Langkah 4 (Khusus Pagi/Siang):</strong> Tutup dengan 2 ruas jari <strong style="color: #ffffff;">Oxydew Sunscreen SPF 50+ PA++++</strong> sebelum beraktivitas.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 6: Ulasan Pelanggan -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Pengalaman pelanggan <span class="dsw-hl-aqua">Paket Lengkap 4-in-1</span>
+        </h2>
+        <p class="dsw-sub">Solusi paling praktis dan hemat untuk transformasi kulit menyeluruh.</p>
+
+        <div class="dsw-reviews-divide">
+          <div class="dsw-review-row">
+            <div class="dsw-review-head">
+              <div>
+                <p class="dsw-review-author">
+                  Ibu Hj. Kartika
+                  <span style="color: #0b6e7d; display: inline-flex;">
+                    <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+                  </span>
+                </p>
+                <p class="dsw-review-meta">Surabaya • Usia 48 Tahun</p>
+              </div>
+              <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
+            </div>
+            <p class="dsw-review-quote">
+              "Dulu pusing beli skincare beda-beda merek malah muka jadi kusam. Sejak ambil paket 4-in-1 yang botol besar 150ml ini, <span class="dsw-hl-aqua">wajah jauh lebih bersih, flek memudar, dan anak-anak bilang muka Ibu kelihatan segar muda</span>."
+            </p>
+          </div>
+
+          <div class="dsw-review-row">
+            <div class="dsw-review-head">
+              <div>
+                <p class="dsw-review-author">
+                  Ibu Veronica L.
+                  <span style="color: #0b6e7d; display: inline-flex;">
+                    <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+                  </span>
+                </p>
+                <p class="dsw-review-meta">Jakarta Utara • Pembelian Paket ke-2</p>
+              </div>
+              <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
+            </div>
+            <p class="dsw-review-quote">
+              "Enaknya satu seri gini <strong style="color: #0f172a;">ditumpuk 4 lapis pun gak ada yang menggumpal atau lengket</strong>. <span class="dsw-hl-aqua">Toner 150ml-nya awet banget bisa dipakai kompres CSM</span> di bagian pipi yang ada flek."
+            </p>
+          </div>
+
+          <div class="dsw-review-row">
+            <div class="dsw-review-head">
+              <div>
+                <p class="dsw-review-author">
+                  Ibu Rahmawati
+                  <span style="color: #0b6e7d; display: inline-flex;">
+                    <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+                  </span>
+                </p>
+                <p class="dsw-review-meta">Depok • Hemat Rp38.000</p>
+              </div>
+              <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
+            </div>
+            <p class="dsw-review-quote">
+              "Hitung-hitung <span class="dsw-hl-rose">jauh lebih murah beli langsung 4-in-1 daripada ngeteng satu-satu</span>. Dapat lengkap dari toner besar, serum NAD+, pelembap Adenosine, sampai sunscreen. <span class="dsw-hl-aqua">Kulit kenyal glowing luar dalam!</span>"
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 7: Galeri Bukti Visual -->
+      <section class="dsw-section dsw-section--tint">
+        <h2 class="dsw-h2">
+          Keempat tekstur <span style="color: #0b6e7d;">menyatu ringan bak air</span>
+        </h2>
+        <p class="dsw-sub">Bebas rasa berat walau dipakai berlapis di iklim tropis Indonesia.</p>
+
+        <div class="dsw-photo-grid-2">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-tekstur-keempat-produk.webp`}
+              alt=" Urutan 4 tekstur produk Numa Skin dari cair, serum, gel-cream, hingga lotion sunscreen"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-wanita-matang-glowing-utuh.webp`}
+              alt="Potret wanita berhijab usia 39 tahun dengan kulit wajah kencang bercahaya"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-kulit-sehat-4-dimensi.webp`}
+              alt="Close-up pipi dan area bawah mata yang tampak kenyal, halus, dan cerah merata"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-meja-rias-4in1-lengkap.webp`}
+              alt="Jajaran 4 botol Paket Complete Routine 4-in-1 150ml di meja rias"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 8: Product Knowledge (Full-Bleed Figures) -->
+      <section class="dsw-section dsw-section--knowledge">
+        <h2 class="dsw-h2">
+          Arsitektur bahan aktif <span class="dsw-hl-aqua">Complete Routine 4-in-1</span>
+        </h2>
+        <p class="dsw-sub">
+          Lebih dari 25 bahan aktif klinis yang bekerja harmonis di setiap lapisan epidermis.
+        </p>
+
+        <div class="dsw-figure-stack">
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/formulasi-ekosistem-4-langkah.webp`}
+                alt="Ekosistem formulasi Ulleung Island Deep Sea Water, Swiss RejuveNAD, Jania rubens, dan Luceane"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">100% Ulleung Deep Sea Water Hydro-Matrix</h3>
+              <p class="dsw-figcaption-desc">
+                Keempat produk menggunakan matriks air laut dalam Pulau Ulleung Korea yang kaya 70+ mineral ionik sehingga setiap lapisan saling menarik dan mengunci ke dalam sel.
+              </p>
+            </figcaption>
+          </figure>
+
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/kandungan-ulleung-nad-adenosine-spf.webp`}
+                alt="Kombinasi 4 tekstur bahan aktif: Treatment Lotion, 2% RejuveNAD Serum, Adenosine Moisturizer, dan 3% Luceane SPF 50+"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">2% RejuveNAD™ + 6X Peptide + Adenosine + 3% Luceane™</h3>
+              <p class="dsw-figcaption-desc">
+                Kombinasi terlengkap untuk menghidrasi barrier, membangkitkan kolagen NAD+, memudarkan flek hitam Alpha-Arbutin, dan menangkal radiasi UV SPF 50+ PA++++.
+              </p>
+            </figcaption>
+          </figure>
+
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/kemasan-paket-4in1-150ml.webp`}
+                alt="Kemasan lengkap 4 produk Numa Skin Complete Routine dengan Treatment Lotion ukuran besar 150ml"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">Isi 4 Produk Full-Size (Termasuk Lotion Besar 150 ml)</h3>
+              <p class="dsw-figcaption-desc">
+                1× Treatment Lotion 150 ml, 1× NAD+ Booster Serum, 1× Adenosine Moisturizer 30 gr, dan 1× Oxydew Sunscreen 30 ml dalam satu paket resmi bersegel.
+              </p>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- Section 9: Garansi 100% Resmi -->
+      <section class="dsw-section" style="text-align: center; background: #f8fafc;">
+        <div style="margin: 0 auto 14px; display: flex; width: 52px; height: 52px; align-items: center; justify-content: center; color: #0b6e7d;">
+          <Icon name="lucide:shield-check" class="size-12" aria-hidden="true" />
+        </div>
+        <h2 class="dsw-h2" style="font-size: 32px;">GARANSI RESMI 100%</h2>
+        <p class="dsw-sub" style="max-width: 320px; margin: 8px auto 0;">
+          Pesanan dikirim langsung dari gudang resmi Numa Skin Indonesia.
+        </p>
+
+        <div class="dsw-guarantee-list">
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:badge-check" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">4 Produk Asli Tersegel BPOM</strong>
+              Seluruh item terdaftar resmi di BPOM RI dan bersertifikat Halal Indonesia.
+            </p>
+          </div>
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:truck" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">Bisa Bayar di Tempat (COD)</strong>
+              Pesan hari ini, bayar langsung ke kurir saat paket tiba di alamat Anda.
+            </p>
+          </div>
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:package-check" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">Garansi Ganti Baru</strong>
+              Kami ganti baru tanpa biaya tambahan bila ada produk yang diterima rusak/bocor.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 10: Checkout Form -->
+      <section id="form-pemesanan" class="dsw-section--checkout">
+        <div style="padding: 0 20px 14px; text-align: center;">
+          <h2 class="dsw-h2" style="font-size: 28px;">
+            Lengkapi Data <span class="dsw-hl-aqua">Pengiriman</span>
+          </h2>
+          <p class="dsw-sub" style="max-width: 340px; margin: 8px auto 0;">
+            Isi nama, nomor WhatsApp aktif, dan kecamatan tujuan untuk cek ongkir otomatis.
+          </p>
+        </div>
+
+        <GeoIpResolvedForm
+          mode="hybrid"
+          productSlug={product.slug}
+          embedded={true}
+          selectedVariantId={String(defaultVariant.id)}
+          codDisabledProvinceCodes={codDisabledProvinceCodes}
+        />
+      </section>
+    </main>
+
+    <!-- Floating Centered Sticky Button (hidden on Hero and Form) -->
+    <div id="floating-cta" data-sticky-cta class="dsw-float-wrap">
+      <a
+        href="#form-pemesanan"
+        class="dsw-float-btn"
+        data-scroll-to-form
+        aria-label="Pesan Paket Complete Routine 4-in-1 150ml"
+      >
+        <span>Ambil Paket 4-in-1</span>
+        <span class="dsw-float-divider" aria-hidden="true"></span>
+        <span class="dsw-float-sub">Promo Rp338.000</span>
+        <Icon name="lucide:arrow-down" class="size-3.5 dsw-float-arrow" aria-hidden="true" />
+      </a>
+    </div>
+  </div>
+
+  <script is:inline>
+    (function () {
+      const heroSection = document.getElementById('hero-section');
+      const formSection = document.getElementById('form-pemesanan');
+      const floatingCta = document.getElementById('floating-cta');
+
+      document.querySelectorAll('[data-scroll-to-form]').forEach((link) => {
+        link.addEventListener('click', (e) => {
+          if (!formSection) return;
+          e.preventDefault();
+          formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+
+      if (!floatingCta || !formSection || !('IntersectionObserver' in window)) return;
+
+      let isHeroVisible = true;
+      let isFormVisible = false;
+
+      function syncVisibility() {
+        const shouldShow = !isHeroVisible && !isFormVisible;
+        floatingCta.classList.toggle('is-visible', shouldShow);
+      }
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.target === heroSection) {
+              isHeroVisible = entry.isIntersecting;
+            } else if (entry.target === formSection) {
+              isFormVisible = entry.isIntersecting;
+            }
+          });
+          syncVisibility();
+        },
+        { root: null, threshold: 0.05 }
+      );
+
+      if (heroSection) observer.observe(heroSection);
+      observer.observe(formSection);
+    })();
+  </script>
+</BaseLayout>

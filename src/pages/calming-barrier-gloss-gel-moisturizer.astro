@@ -1,0 +1,690 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import GeoIpResolvedForm from '../components/storefront/forms/GeoIpResolvedForm.astro';
+import MetaLandingTracker from '../components/storefront/tracking/MetaLandingTracker.astro';
+import Icon from '../components/storefront/shared/Icon.astro';
+import RatingStars from '../components/storefront/shared/RatingStars.astro';
+import { getStorefrontProduct } from '../lib/catalog';
+import { nativeLandingCanonicalPath } from '../lib/landing-pages';
+import { defaultCatalogContentId } from '../lib/catalog-feed';
+import { getRuntimeEnv } from '../lib/env';
+import { loadStoreCodDisabledProvinceCodes } from '../lib/form-mode';
+import { getStoreAdsConfig } from '../lib/store-ads';
+import '../styles/form-hybrid.css';
+import '../styles/landing-pages/calming-barrier-gloss-gel-moisturizer.css';
+
+export const prerender = false;
+
+const PRODUCT_SLUG = 'calming-barrier-gloss-gel-moisturizer';
+const LANDING_SLUG = 'calming-barrier-gloss-gel-moisturizer';
+const PAGE_TITLE =
+  'Calming Barrier Gloss Gel Moisturizer — Pelembap Skin Barrier BPOM';
+const PAGE_DESC =
+  'Pelembap water-jelly dengan Meadowestolide, Peptides Probiotics, Astragalus Extract, Ceramide, dan Centella untuk menenangkan kemerahan dan skin barrier (BPOM NA18230107056).';
+const IMG_BASE = '/images/landing/calming-barrier-gloss-gel-moisturizer';
+const HERO_IMAGE = `${IMG_BASE}/hero-calming-gloss-gel.webp`;
+
+const database = getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined;
+const claimedProductSlug = Astro.request.headers.get('x-adsbook-product-page');
+const [product, canonicalPath, codDisabledProvinceCodes] = await Promise.all([
+  getStorefrontProduct(Astro.locals, PRODUCT_SLUG),
+  claimedProductSlug
+    ? Promise.resolve(`/produk/${claimedProductSlug}`)
+    : nativeLandingCanonicalPath(Astro.locals, LANDING_SLUG),
+  loadStoreCodDisabledProvinceCodes(database),
+  getStoreAdsConfig(Astro.locals),
+]);
+if (!product) {
+  return Astro.rewrite('/404');
+}
+
+const canonical = `${Astro.locals.tenant.siteUrl}${canonicalPath}`;
+
+const variants = product.variants || [];
+const cheapestVariant = variants.reduce(
+  (min: any, v: any) => (!min || v.price < min.price ? v : min),
+  variants[0]
+);
+const defaultVariant = cheapestVariant || {
+  id: '2',
+  label: '30 ml',
+  price: 79000,
+  comparePrice: 145000,
+};
+---
+
+<BaseLayout
+  title={PAGE_TITLE}
+  description={PAGE_DESC}
+  image={HERO_IMAGE}
+  preloadImages={HERO_IMAGE}
+  canonical={canonical}
+  hideHeader={true}
+  hideFooter={true}
+>
+  <MetaLandingTracker
+    slug={LANDING_SLUG}
+    contentId={defaultCatalogContentId(product)}
+    contentName={product.contentName}
+    price={defaultVariant.price}
+  />
+
+  <div class="dsw-shell">
+    <main class="dsw-canvas">
+      <!-- Section 1: Hero -->
+      <section id="hero-section" class="dsw-hero">
+        <div class="dsw-hero-head">
+          <h1 class="dsw-h1">
+            Wajah <span class="dsw-hl-tilt">Merah & Bruntusan</span> Akibat Salah Pakai Skincare Keras?
+          </h1>
+          <p class="dsw-sub" style="max-width: 390px; margin: 14px auto 0; font-weight: 700;">
+            Saat skin barrier jebol, krim pekat justru menyumbat pori.<br />
+            <span class="dsw-underline-teal">Dinginkan & pulihkan barrier dengan Water-Jelly Meadowestolide®!</span>
+          </p>
+        </div>
+
+        <div class="dsw-hero-stage">
+          <div class="dsw-hero-top-tag">
+            <div class="dsw-hero-top-pill">
+              <Icon name="lucide:droplets" class="size-3.5" aria-hidden="true" />
+              <span>Meadowestolide® + Ceramide NP + Astragalus</span>
+            </div>
+          </div>
+
+          <img
+            src={HERO_IMAGE}
+            alt="Perbandingan wajah kemerahan bruntusan dan mengelupas vs kulit tenang glassy sehat dengan Numa Skin Calming Barrier Gloss Gel Moisturizer"
+            width="720"
+            height="480"
+            class="dsw-hero-img"
+            fetchpriority="high"
+            loading="eager"
+            decoding="async"
+          />
+
+          <div class="dsw-hero-overlap">
+            <div class="dsw-hero-overlap-inner">
+              <h2 class="dsw-hero-overlap-title">Tanda Skin Barrier Sedang Rusak!</h2>
+              <p class="dsw-hero-overlap-text">
+                Ketika pelindung lipid bocor, <strong style="color: #be123c;">air menguap drastis sementara bakteri dan pemicu iritasi mudah masuk ke pori</strong>.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="dsw-trust-row">
+          <div class="dsw-trust-item">
+            <span class="dsw-trust-icon">
+              <Icon name="lucide:shield-check" class="size-4" aria-hidden="true" />
+            </span>
+            <div>
+              <span class="dsw-trust-label">BPOM Resmi</span>
+              <span class="dsw-trust-sub">NA18230107056</span>
+            </div>
+          </div>
+          <div class="dsw-trust-item">
+            <span class="dsw-trust-icon">
+              <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+            </span>
+            <div>
+              <span class="dsw-trust-label">Halal RI</span>
+              <span class="dsw-trust-sub">0% Alkohol</span>
+            </div>
+          </div>
+          <div class="dsw-trust-item">
+            <span class="dsw-trust-icon">
+              <Icon name="lucide:truck" class="size-4" aria-hidden="true" />
+            </span>
+            <div>
+              <span class="dsw-trust-label">Bisa COD</span>
+              <span class="dsw-trust-sub">Bayar di Rumah</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: Solusi Singkat + Visual -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Efek <span class="dsw-hl-aqua">kompres dingin instan</span> yang menenangkan kulit rewel
+        </h2>
+        <p class="dsw-sub">Tekstur water-jelly bening yang langsung pecah jadi air tanpa rasa lengket atau menyumbat pori.</p>
+
+        <div class="dsw-photo-stack">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/solusi-efek-dingin-menenangkan.webp`}
+              alt="Wanita Indonesia mengaplikasikan Calming Barrier Gloss Gel yang bening dan menyejukkan di pipi"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+        </div>
+
+        <div class="dsw-list">
+          <div class="dsw-list-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:shield-plus" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a;">0.5% Meadowestolide® + Ceramide NP</strong> menambal celah lipid skin barrier yang rusak tanpa meninggalkan minyak berlebih.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:sparkles" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a;">Astragalus Root + Centella Asiatica + Allantoin</strong> meredakan tampilan kemerahan, rasa perih, dan gatal akibat iritasi.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:droplets" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a;">1% Peptides Probiotics + 4X Hyaluronic Acid</strong> menyeimbangkan kadar air dan minyak agar bruntusan cepat reda.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Tanda Masalah Kulit + Visual Grid -->
+      <section class="dsw-section dsw-section--warn">
+        <h2 class="dsw-h2">
+          Gejala <span class="dsw-underline-warn">skin barrier rusak</span> yang sering disangka cuma kulit berminyak:
+        </h2>
+
+        <div class="dsw-photo-grid-2">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/masalah-perih-salah-skincare.webp`}
+              alt="Kulit pipi memerah dan terasa perih menyengat setelah memakai bahan eksfoliasi keras"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #be123c; display: block;">Merah & Perih</strong>
+              Pipi terasa panas menyengat saat terkena air atau keringat.
+            </p>
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/masalah-minyak-dehidrasi.webp`}
+              alt="Kulit kombinasi dengan bruntusan di dahi namun mengelupas kering di sekitar hidung"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #be123c; display: block;">Bruntusan & Mengelupas</strong>
+              Berminyak di luar tetapi kering mengelupas di sela hidung.
+            </p>
+          </div>
+        </div>
+
+        <div class="dsw-list">
+          <div class="dsw-list-row">
+            <span class="dsw-icon-warn">
+              <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              Wajah mendadak <strong style="color: #be123c;">penuh bintik bruntusan kecil dan kemerahan</strong> setelah mencoba produk eksfoliasi/peeling.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-warn">
+              <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              Serba salah memilih pelembap: <strong style="color: #be123c;">tidak pakai pelembap kulit ketarik, pakai krim biasa malah muncul jerawat</strong>.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-warn">
+              <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              Setiap kali memakai skincare apa pun, <strong style="color: #be123c;">area lipatan hidung dan pipi terasa cekit-cekit perih</strong>.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Perbandingan Visual Sebelum vs Sesudah -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Perbandingan visual <span class="dsw-hl-aqua">pemulihan skin barrier</span>
+        </h2>
+        <p class="dsw-sub">Perubahan nyata tekstur kulit yang rewel dan kemerahan setelah rutin ditenangkan.</p>
+
+        <div class="dsw-photo-stack">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/kondisi-kemerahan-bruntusan.webp`}
+              alt="Kondisi kulit pipi dengan kemerahan iritasi, bruntusan halus, dan pengelupasan kering sebelum perawatan"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <span class="dsw-photo-badge dsw-photo-badge--before">Sebelum</span>
+            <p class="dsw-photo-caption">
+              Lapisan barrier meradang kemerahan, tekstur kasar bruntusan, dan mengelupas di sekitar hidung.
+            </p>
+          </div>
+
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/kondisi-barrier-tenang-glassy.webp`}
+              alt="Kondisi kulit pipi tampak tenang, halus, bebas kemerahan, dan glassy sehat setelah perawatan rutin"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <span class="dsw-photo-badge dsw-photo-badge--after">Sesudah Rutin</span>
+            <p class="dsw-photo-caption">
+              Kemerahan mereda, tekstur bruntusan tampak jauh lebih rata, dan kulit memantulkan kilau sehat (glass-skin).
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: Dark Marine Section — Cara Pakai Praktis -->
+      <section class="dsw-section dsw-section--dark">
+        <h2 class="dsw-h2">
+          2 Fungsi: <span style="color: #99e2ec;">Pelembap Harian & Sleeping Mask</span>
+        </h2>
+        <p class="dsw-sub">Bisa dipakai tipis di pagi hari atau dijadikan masker tidur penenang di malam hari.</p>
+
+        <div class="dsw-photo-stack">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/cara-pakai-spatula-gel.webp`}
+              alt="Mengambil tekstur water-jelly bening dari jar Numa Skin Gloss Gel menggunakan spatula putih"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #ffffff;">Langkah 1 (Ambil Gel):</strong> Ambil gel seukuran kacang polong ke ujung jari yang bersih.
+            </p>
+          </div>
+
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/cara-pakai-oles-kompres-malam.webp`}
+              alt="Mengoleskan lapisan Calming Barrier Gloss Gel yang sejuk di pipi sebelum tidur"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #ffffff;">Langkah 2 (Kompres Malam):</strong> Oleskan sedikit lebih tebal di area yang merah/perih sebelum tidur.
+            </p>
+          </div>
+        </div>
+
+        <div class="dsw-list">
+          <div class="dsw-list-row">
+            <span class="dsw-step-num">1</span>
+            <p class="dsw-step-text">
+              Saat kulit sedang rewel/iritasi, <strong style="color: #ffffff;">hentikan sementara asam eksfoliasi</strong> dan cukup gunakan pencuci muka lembut + Gloss Gel ini.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-step-num">2</span>
+            <p class="dsw-step-text">
+              Simpan di pintu kulkas selama 10 menit bila ingin <strong style="color: #ffffff; background: #104452; padding: 1px 6px; border-radius: 4px;">sensasi kompres es ekstra dingin</strong> sehabis panas-panasan.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-step-num">3</span>
+            <p class="dsw-step-text">
+              Gunakan rutin <strong style="color: #ffffff;">pagi dan malam hari</strong> untuk menjaga skin barrier tetap kuat dan tenang.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 6: Ulasan Pelanggan -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Apa kata pelanggan dengan <span class="dsw-hl-aqua">kulit sensitif & berjerawat?</span>
+        </h2>
+        <p class="dsw-sub">Pelembap penyelamat saat wajah sedang breakout, kemerahan, atau salah skincare.</p>
+
+        <div class="dsw-reviews-divide">
+          <div class="dsw-review-row">
+            <div class="dsw-review-head">
+              <div>
+                <p class="dsw-review-author">
+                  Kak Zahra N.
+                  <span style="color: #0b6e7d; display: inline-flex;">
+                    <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+                  </span>
+                </p>
+                <p class="dsw-review-meta">Depok • Kulit Kombinasi Sensitif</p>
+              </div>
+              <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
+            </div>
+            <p class="dsw-review-quote">
+              "Kemarin muka sempet <span class="dsw-hl-rose">merah dan perih gara-gara kebanyakan eksfoliasi</span>. Pakai Gloss Gel Numa Skin ini <span class="dsw-hl-aqua">langsung adem banget pas nempel di pipi</span>, 3 hari kemerahannya kalem total!"
+            </p>
+          </div>
+
+          <div class="dsw-review-row">
+            <div class="dsw-review-head">
+              <div>
+                <p class="dsw-review-author">
+                  Kak Amel F.
+                  <span style="color: #0b6e7d; display: inline-flex;">
+                    <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+                  </span>
+                </p>
+                <p class="dsw-review-meta">Malang • Kulit Rentan Bruntusan</p>
+              </div>
+              <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
+            </div>
+            <p class="dsw-review-quote">
+              "Susah banget cari moisturizer yang gak bikin jidat bruntusan. Tekstur water-jelly ini <span class="dsw-hl-aqua">ringan kayak air tapi lembapnya tahan lama</span>, pori-pori berasa bersih dan tenang."
+            </p>
+          </div>
+
+          <div class="dsw-review-row">
+            <div class="dsw-review-head">
+              <div>
+                <p class="dsw-review-author">
+                  Ibu Tia R.
+                  <span style="color: #0b6e7d; display: inline-flex;">
+                    <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+                  </span>
+                </p>
+                <p class="dsw-review-meta">Makassar • Pembelian Jar ke-3</p>
+              </div>
+              <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
+            </div>
+            <p class="dsw-review-quote">
+              "Paling suka dipakai tebalan dikit sebelum tidur kayak sleeping mask. Paginya <strong style="color: #0f172a;">muka kelihatan sehat glassy</strong> dan bagian hidung yang suka ngelupas langsung mulus."
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 7: Galeri Bukti Visual -->
+      <section class="dsw-section dsw-section--tint">
+        <h2 class="dsw-h2">
+          Tekstur <span style="color: #0b6e7d;">Water-Jelly Bening</span> bebas minyak
+        </h2>
+        <p class="dsw-sub">Meleleh menjadi tetesan hidrasi sejuk begitu menyentuh suhu kulit.</p>
+
+        <div class="dsw-photo-grid-2">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-tekstur-water-jelly.webp`}
+              alt="Tekstur water-jelly bening Calming Barrier Gloss Gel di punggung tangan"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-wajah-kalem-sehat.webp`}
+              alt="Wanita Indonesia berhijab dengan kulit wajah tenang, bersih, dan bercahaya sehat"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-tanpa-lengket-pori.webp`}
+              alt="Close-up tekstur pipi yang halus, tenang, dan pori-pori tampak rapi"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-meja-rias-gloss-gel.webp`}
+              alt="Kemasan jar biru es Numa Skin Calming Barrier Gloss Gel Moisturizer 30ml di meja rias"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 8: Product Knowledge (Full-Bleed Figures) -->
+      <section class="dsw-section dsw-section--knowledge">
+        <h2 class="dsw-h2">
+          Mengapa <span class="dsw-hl-aqua">Meadowestolide® & Astragalus</span> efektif menenangkan barrier?
+        </h2>
+        <p class="dsw-sub">
+          Memperbaiki struktur lipid pelindung kulit tanpa menggunakan minyak berat yang memicu komedo.
+        </p>
+
+        <div class="dsw-figure-stack">
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/formulasi-meadowestolide-astragalus.webp`}
+                alt="Formulasi Meadowestolide, akar Astragalus membranaceus, dan daun Centella asiatica"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">0.5% Meadowestolide® & Astragalus Root Extract</h3>
+              <p class="dsw-figcaption-desc">
+                Analog ceramide bio-aktif dari bunga <em>Meadowfoam</em> yang meniru struktur lipid alami kulit manusia, dipadukan dengan ekstrak akar <em>Astragalus</em> dan <em>Centella</em> pereda kemerahan.
+              </p>
+            </figcaption>
+          </figure>
+
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/kandungan-ceramide-probiotik.webp`}
+                alt="Kombinasi Ceramide NP, 1% Peptides Probiotics, dan gel water-jelly di laboratorium"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">Ceramide NP + 3X Probiotic Ferment + 4X Hyaluronic</h3>
+              <p class="dsw-figcaption-desc">
+                Menjaga keseimbangan mikrobioma kulit berjerawat/sensitif sekaligus mengunci hidrasi berlapis tanpa rasa lengket.
+              </p>
+            </figcaption>
+          </figure>
+
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/kemasan-gloss-gel-30ml.webp`}
+                alt="Kemasan jar biru es Numa Skin Calming Barrier Gloss Gel Moisturizer 30ml"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">Kemasan Jar 30 ml untuk Pagi & Malam</h3>
+              <p class="dsw-figcaption-desc">
+                Aman untuk remaja maupun dewasa, ibu hamil & menyusui, serta cocok dikombinasikan dengan bahan aktif skincare apa pun.
+              </p>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- Section 9: Garansi 100% Resmi -->
+      <section class="dsw-section" style="text-align: center; background: #f8fafc;">
+        <div style="margin: 0 auto 14px; display: flex; width: 52px; height: 52px; align-items: center; justify-content: center; color: #0b6e7d;">
+          <Icon name="lucide:shield-check" class="size-12" aria-hidden="true" />
+        </div>
+        <h2 class="dsw-h2" style="font-size: 32px;">GARANSI RESMI 100%</h2>
+        <p class="dsw-sub" style="max-width: 320px; margin: 8px auto 0;">
+          Pesanan dikirim langsung dari gudang resmi Numa Skin Indonesia.
+        </p>
+
+        <div class="dsw-guarantee-list">
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:badge-check" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">100% Produk Asli Tersegel</strong>
+              Terdaftar resmi di BPOM (NA18230107056) dan bersertifikat Halal Indonesia.
+            </p>
+          </div>
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:truck" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">Bisa Bayar di Tempat (COD)</strong>
+              Pesan hari ini, bayar langsung ke kurir saat paket tiba di alamat Anda.
+            </p>
+          </div>
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:package-check" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">Garansi Ganti Baru</strong>
+              Kami ganti baru tanpa biaya tambahan bila jar diterima pecah atau bocor.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 10: Checkout Form -->
+      <section id="form-pemesanan" class="dsw-section--checkout">
+        <div style="padding: 0 20px 14px; text-align: center;">
+          <h2 class="dsw-h2" style="font-size: 28px;">
+            Lengkapi Data <span class="dsw-hl-aqua">Pengiriman</span>
+          </h2>
+          <p class="dsw-sub" style="max-width: 340px; margin: 8px auto 0;">
+            Isi nama, nomor WhatsApp aktif, dan kecamatan tujuan untuk cek ongkir otomatis.
+          </p>
+        </div>
+
+        <GeoIpResolvedForm
+          mode="hybrid"
+          productSlug={product.slug}
+          embedded={true}
+          selectedVariantId={String(defaultVariant.id)}
+          codDisabledProvinceCodes={codDisabledProvinceCodes}
+        />
+      </section>
+    </main>
+
+    <!-- Floating Centered Sticky Button (hidden on Hero and Form) -->
+    <div id="floating-cta" data-sticky-cta class="dsw-float-wrap">
+      <a
+        href="#form-pemesanan"
+        class="dsw-float-btn"
+        data-scroll-to-form
+        aria-label="Pesan Calming Barrier Gloss Gel Moisturizer"
+      >
+        <span>Pesan Sekarang</span>
+        <span class="dsw-float-divider" aria-hidden="true"></span>
+        <span class="dsw-float-sub">Promo Rp79.000</span>
+        <Icon name="lucide:arrow-down" class="size-3.5 dsw-float-arrow" aria-hidden="true" />
+      </a>
+    </div>
+  </div>
+
+  <script is:inline>
+    (function () {
+      const heroSection = document.getElementById('hero-section');
+      const formSection = document.getElementById('form-pemesanan');
+      const floatingCta = document.getElementById('floating-cta');
+
+      document.querySelectorAll('[data-scroll-to-form]').forEach((link) => {
+        link.addEventListener('click', (e) => {
+          if (!formSection) return;
+          e.preventDefault();
+          formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+
+      if (!floatingCta || !formSection || !('IntersectionObserver' in window)) return;
+
+      let isHeroVisible = true;
+      let isFormVisible = false;
+
+      function syncVisibility() {
+        const shouldShow = !isHeroVisible && !isFormVisible;
+        floatingCta.classList.toggle('is-visible', shouldShow);
+      }
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.target === heroSection) {
+              isHeroVisible = entry.isIntersecting;
+            } else if (entry.target === formSection) {
+              isFormVisible = entry.isIntersecting;
+            }
+          });
+          syncVisibility();
+        },
+        { root: null, threshold: 0.05 }
+      );
+
+      if (heroSection) observer.observe(heroSection);
+      observer.observe(formSection);
+    })();
+  </script>
+</BaseLayout>
