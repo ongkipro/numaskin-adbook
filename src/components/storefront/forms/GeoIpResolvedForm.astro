@@ -15,6 +15,7 @@ interface Props {
   selectedVariantId?: string;
   province?: string;
   embedded?: boolean;
+  codDisabledProvinceCodes?: string[];
 }
 
 const {
@@ -24,9 +25,12 @@ const {
   embedded = false,
   selectedVariantId,
   bannerImage,
+  codDisabledProvinceCodes: codDisabledProvinceCodesProp,
 } = Astro.props;
 const database = getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined;
-const codDisabledProvinceCodes = await loadStoreCodDisabledProvinceCodes(database);
+const codDisabledProvinceCodes =
+  codDisabledProvinceCodesProp ??
+  (await loadStoreCodDisabledProvinceCodes(database));
 const formContext = await resolveFormModeContext(
   Astro.request,
   codDisabledProvinceCodes,

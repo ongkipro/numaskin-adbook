@@ -55,19 +55,21 @@ async function loadLocalDevCatalogRows() {
   }
 }
 
-export async function getStorefrontProducts(
+const catalogRequestCache = new WeakMap<object, Promise<Product[]>>();
+
+async function loadStorefrontProductsUncached(
   locals?: App.Locals,
 ): Promise<Product[]> {
   const database = getRuntimeEnv(locals)?.OMS_DB as D1Database | undefined;
 
   try {
-    const rows = database && typeof database === "object"
-      ? await loadCatalogRows(database)
-      : await loadLocalDevCatalogRows();
-
-    const runtimeContent = database && typeof database === "object"
-      ? await loadPublishedProductContent(database)
-      : new Map();
+    const [rows, runtimeContent] =
+      database && typeof database === "object"
+        ? await Promise.all([
+            loadCatalogRows(database),
+            loadPublishedProductContent(database),
+          ])
+        : [await loadLocalDevCatalogRows(), new Map()];
 
     const presentations = mergeRuntimeProductContent(
       rows.products,
@@ -78,6 +80,19 @@ export async function getStorefrontProducts(
     console.error("storefront-catalog-load", error);
     return [];
   }
+}
+
+export async function getStorefrontProducts(
+  locals?: App.Locals,
+): Promise<Product[]> {
+  if (!locals || typeof locals !== "object") {
+    return loadStorefrontProductsUncached(locals);
+  }
+  const cached = catalogRequestCache.get(locals);
+  if (cached) return cached;
+  const pending = loadStorefrontProductsUncached(locals);
+  catalogRequestCache.set(locals, pending);
+  return pending;
 }
 
 /**

@@ -924,6 +924,7 @@ export async function getProductPageLanding(
     .bind(trimmed)
     .first<LandingPageRow>();
   if (!page) return null;
+  if (page.source === "native") return { ...page, sections: [] };
 
   return { ...page, sections: await loadSections(database, page.id) };
 }

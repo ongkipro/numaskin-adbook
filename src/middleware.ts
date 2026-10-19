@@ -158,57 +158,63 @@ export function createMiddleware(
   const url = context.url;
   const runtime = getRuntimeEnv(context.locals);
   const identityDb = runtime?.OMS_DB as D1Database | undefined;
-  try {
-    if (!identityDb?.prepare) {
-      throw new SchemaUpgradeError(
-        'SCHEMA_UPGRADE_NO_DATABASE',
-        CMS_VERSION.schemaVersion,
-        null,
-      );
-    }
-    await ensureSchemaReady(identityDb);
-  } catch (error) {
-    const schemaError =
-      error instanceof SchemaUpgradeError
-        ? error
-        : new SchemaUpgradeError(
-            'SCHEMA_UPGRADE_READ_FAILED',
-            CMS_VERSION.schemaVersion,
-            null,
-          );
-    console.error(SCHEMA_UPGRADE_ERROR_LABEL, {
-      code: schemaError.code,
-      expected: schemaError.expected,
-      applied: schemaError.applied,
-      migration: schemaError.migration,
-    });
-    await evaluateOperationalAlerts([schemaAlertFromError(schemaError)], {
-      store: runtime?.SESSION as KVNamespace | undefined,
-      webhookUrl: getEnvValue('OPS_ALERT_WEBHOOK_URL', runtime),
-      source: url.origin,
-    });
-
-    const apiRequest = url.pathname === '/api' || url.pathname.startsWith('/api/');
-    const response = apiRequest
-      ? new Response(
-          JSON.stringify({
-            success: false,
-            error: 'Database belum siap menerima permintaan.',
-            code: 'SCHEMA_UPGRADE_FAILED',
-          }),
-          { status: 503, headers: JSON_HEADERS },
-        )
-      : new Response(
-          'Database toko belum siap. Periksa status migrasi di Workers Logs.',
-          {
-            status: 503,
-            headers: {
-              'Content-Type': 'text/plain; charset=utf-8',
-              'Cache-Control': 'no-store',
-            },
-          },
+  const isInternalProductRewrite = Boolean(
+    context.request.headers.get('x-adsbook-product-page') &&
+      context.locals.tenant,
+  );
+  if (!isInternalProductRewrite) {
+    try {
+      if (!identityDb?.prepare) {
+        throw new SchemaUpgradeError(
+          'SCHEMA_UPGRADE_NO_DATABASE',
+          CMS_VERSION.schemaVersion,
+          null,
         );
-    return applySecurityHeaders(response, true);
+      }
+      await ensureSchemaReady(identityDb);
+    } catch (error) {
+      const schemaError =
+        error instanceof SchemaUpgradeError
+          ? error
+          : new SchemaUpgradeError(
+              'SCHEMA_UPGRADE_READ_FAILED',
+              CMS_VERSION.schemaVersion,
+              null,
+            );
+      console.error(SCHEMA_UPGRADE_ERROR_LABEL, {
+        code: schemaError.code,
+        expected: schemaError.expected,
+        applied: schemaError.applied,
+        migration: schemaError.migration,
+      });
+      await evaluateOperationalAlerts([schemaAlertFromError(schemaError)], {
+        store: runtime?.SESSION as KVNamespace | undefined,
+        webhookUrl: getEnvValue('OPS_ALERT_WEBHOOK_URL', runtime),
+        source: url.origin,
+      });
+
+      const apiRequest = url.pathname === '/api' || url.pathname.startsWith('/api/');
+      const response = apiRequest
+        ? new Response(
+            JSON.stringify({
+              success: false,
+              error: 'Database belum siap menerima permintaan.',
+              code: 'SCHEMA_UPGRADE_FAILED',
+            }),
+            { status: 503, headers: JSON_HEADERS },
+          )
+        : new Response(
+            'Database toko belum siap. Periksa status migrasi di Workers Logs.',
+            {
+              status: 503,
+              headers: {
+                'Content-Type': 'text/plain; charset=utf-8',
+                'Cache-Control': 'no-store',
+              },
+            },
+          );
+      return applySecurityHeaders(response, true);
+    }
   }
 
   // Canonical host first. This used to sit below the installer redirects, which
@@ -237,13 +243,16 @@ export function createMiddleware(
   // through locals. Doing it here rather than per page keeps consumers
   // synchronous — 125 call sites cannot each be an opportunity to forget an
   // await for a value that cannot change mid-request. ADR-003.
-  const identity =
-    identityDb && typeof identityDb === 'object'
+  const identity = isInternalProductRewrite
+    ? ({ state: 'installed', row: null } as const)
+    : identityDb && typeof identityDb === 'object'
       ? await readStoreIdentity(identityDb)
       : ({ state: 'unknown' } as const);
-  context.locals.tenant = resolveTenantConfig(
-    identity.state === 'installed' ? identity.row : null,
-  );
+  if (!isInternalProductRewrite) {
+    context.locals.tenant = resolveTenantConfig(
+      identity.state === 'installed' ? identity.row : null,
+    );
+  }
 
   // A migrated database with no store row has never been set up: no migration
   // inserts one. Send the operator to the wizard rather than to twenty call

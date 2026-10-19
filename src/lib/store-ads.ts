@@ -33,7 +33,20 @@ export type StoreAdsConfig = {
 
 export type AdsConfigSource = 'database' | 'environment' | 'none';
 
+const storeAdsRequestCache = new WeakMap<object, Promise<StoreAdsConfig>>();
+
 export async function getStoreAdsConfig(locals?: App.Locals): Promise<StoreAdsConfig> {
+  if (locals && typeof locals === 'object') {
+    const cached = storeAdsRequestCache.get(locals);
+    if (cached) return cached;
+    const pending = loadStoreAdsConfigUncached(locals);
+    storeAdsRequestCache.set(locals, pending);
+    return pending;
+  }
+  return loadStoreAdsConfigUncached(locals);
+}
+
+async function loadStoreAdsConfigUncached(locals?: App.Locals): Promise<StoreAdsConfig> {
   let dbPixelId = '';
   let dbCapiToken = '';
   let dbGoogleId = '';

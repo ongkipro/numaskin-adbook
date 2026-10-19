@@ -7,6 +7,9 @@ import RatingStars from '../components/storefront/shared/RatingStars.astro';
 import { getStorefrontProduct } from '../lib/catalog';
 import { nativeLandingCanonicalPath } from '../lib/landing-pages';
 import { defaultCatalogContentId } from '../lib/catalog-feed';
+import { getRuntimeEnv } from '../lib/env';
+import { loadStoreCodDisabledProvinceCodes } from '../lib/form-mode';
+import { getStoreAdsConfig } from '../lib/store-ads';
 import '../styles/form-hybrid.css';
 import '../styles/landing-pages/deep-sea-water-treatment-lotion.css';
 
@@ -20,12 +23,21 @@ const PAGE_DESC =
 const IMG_BASE = '/images/landing/deep-sea-water-treatment-lotion';
 const HERO_IMAGE = `${IMG_BASE}/hero-treatment-lotion.webp`;
 
-const product = await getStorefrontProduct(Astro.locals, PRODUCT_SLUG);
+const database = getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined;
+const claimedProductSlug = Astro.request.headers.get('x-adsbook-product-page');
+const [product, canonicalPath, codDisabledProvinceCodes] = await Promise.all([
+  getStorefrontProduct(Astro.locals, PRODUCT_SLUG),
+  claimedProductSlug
+    ? Promise.resolve(`/produk/${claimedProductSlug}`)
+    : nativeLandingCanonicalPath(Astro.locals, LANDING_SLUG),
+  loadStoreCodDisabledProvinceCodes(database),
+  getStoreAdsConfig(Astro.locals),
+]);
 if (!product) {
   return Astro.rewrite('/404');
 }
 
-const canonical = `${Astro.locals.tenant.siteUrl}${await nativeLandingCanonicalPath(Astro.locals, LANDING_SLUG)}`;
+const canonical = `${Astro.locals.tenant.siteUrl}${canonicalPath}`;
 
 const variants = product.variants || [];
 const cheapestVariant = variants.reduce(
@@ -611,6 +623,7 @@ const defaultVariant = cheapestVariant || {
           productSlug={product.slug}
           embedded={true}
           selectedVariantId={String(defaultVariant.id)}
+          codDisabledProvinceCodes={codDisabledProvinceCodes}
         />
       </section>
     </main>
