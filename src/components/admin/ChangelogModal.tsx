@@ -29,10 +29,126 @@ interface ChangelogRelease {
 // changelog.test.ts fails when version.ts moves without a matching entry here.
 const CHANGELOG_RELEASES: ChangelogRelease[] = [
   {
-    version: "1.6.1",
+    version: "1.7.2",
     date: "20 Oktober 2026",
     releaseTag: "2026.10-plugins",
     isLatest: true,
+    highlight: "Teks halaman benar-benar tidak lagi bergeser saat font dimuat.",
+    changes: [
+      {
+        title: "Font Inter hanya dalam mode optional",
+        description: "Font dipakai bila siap saat halaman pertama digambar; jika belum, halaman memakai font sistem sampai kunjungan berikutnya. Perbaikan 1.7.1 ternyata belum cukup karena aturan font bawaan paket masih ikut termuat dan menukar font; kini aturan itu dihapus. Hanya subset latin dan latin-ext yang dideklarasikan.",
+      },
+    ],
+  },
+  {
+    version: "1.7.1",
+    date: "20 Oktober 2026",
+    releaseTag: "2026.10-plugins",
+    highlight: "Teks halaman tidak lagi bergeser saat font dimuat.",
+    changes: [
+      {
+        title: "Font tidak bertukar di tengah halaman",
+        description: "Font Inter kini dipakai bila sudah siap saat halaman pertama digambar; jika belum, halaman memakai font sistem sampai kunjungan berikutnya. Judul dan paragraf tidak lagi melompat (CLS).",
+      },
+    ],
+  },
+  {
+    version: "1.7.0",
+    date: "20 Oktober 2026",
+    releaseTag: "2026.10-plugins",
+    highlight: "Halaman toko dan landing page terbuka lebih cepat, dan tidak lagi bergeser saat font dimuat.",
+    changes: [
+      {
+        title: "Cache halaman dua menit",
+        description:
+          "Beranda, daftar produk, dan landing page disimpan sebentar di edge Cloudflare, sehingga pengunjung berikutnya tidak menunggu render ulang. Perubahan dari admin tampil paling lama dua menit kemudian. Halaman produk, form, terima kasih, dan admin tidak pernah di-cache, dan harga tetap divalidasi ulang saat order.",
+      },
+      {
+        title: "Font dimuat lebih awal",
+        description: "Font Inter dipreload sehingga judul tidak lagi bergeser saat font tiba (CLS).",
+      },
+    ],
+  },
+  {
+    version: "1.6.5",
+    date: "20 Oktober 2026",
+    releaseTag: "2026.10-plugins",
+    highlight: "Satu domain utama: domain lama dan http diarahkan otomatis, link iklan tetap jalan.",
+    changes: [
+      {
+        title: "Domain lama diarahkan ke domain utama",
+        description:
+          "Domain lama toko (diatur lewat PUBLIC_ALIAS_HOSTS) diarahkan permanen ke domain utama, lengkap dengan path dan parameter iklan (UTM, fbclid). Webhook dan callback pembayaran tidak ikut diarahkan.",
+      },
+      {
+        title: "Selalu HTTPS",
+        description: "Kunjungan lewat http kini selalu diarahkan ke https, walau pengaturan zona Cloudflare belum mengaktifkannya.",
+      },
+    ],
+  },
+  {
+    version: "1.6.4",
+    date: "20 Oktober 2026",
+    releaseTag: "2026.10-plugins",
+    highlight: "Pembeli COD dari form singkat kini otomatis diarahkan ke WhatsApp CS dari halaman terima kasih.",
+    changes: [
+      {
+        title: "Redirect WhatsApp untuk form singkat",
+        description:
+          "Order COD dari form singkat (middle) sebelumnya tidak pernah diarahkan ke WhatsApp walau pengaturannya aktif. Kini setiap order COD yang tercatat ikut diarahkan, setelah Purchase terkirim.",
+      },
+      {
+        title: "Catatan nomor WhatsApp lebih jelas",
+        description: "Halaman terima kasih kini menyebut bahwa CS akan menghubungi WhatsApp pembeli di nomornya sendiri.",
+      },
+    ],
+  },
+  {
+    version: "1.6.3",
+    date: "20 Oktober 2026",
+    releaseTag: "2026.10-plugins",
+    highlight: "Pesan WhatsApp CRM kini menyebut varian, jumlah, dan harga satuan yang dipilih pembeli.",
+    changes: [
+      {
+        title: "Varian dan harga di Template CRM",
+        description:
+          "Variabel baru: {{varian}}, {{product_variant}}, {{jumlah}}, {{harga_satuan}}, dan {{rincian_pesanan}} (satu baris per item). Template bawaan memakainya; template yang sudah Anda ubah tetap seperti semula dan bisa ditambahkan variabelnya di Pengaturan → Template CRM.",
+      },
+      {
+        title: "Harga coret tidak lagi dikarang",
+        description:
+          "{{compare_price}} kini memakai harga coret asli varian. Tanpa harga coret, nilainya sama dengan harga jual, tidak lagi harga × 1,3.",
+      },
+      {
+        title: "Status tugas terjadwal di dashboard",
+        description:
+          "Panel kesehatan menampilkan apakah pemeliharaan per jam (retry CAPI, rekonsiliasi pembayaran, skor penerima, plugin) benar-benar berjalan.",
+      },
+    ],
+  },
+  {
+    version: "1.6.2",
+    date: "20 Oktober 2026",
+    releaseTag: "2026.10-plugins",
+    highlight: "Skor penerima Mengantar pulih sendiri setelah akun di-whitelist, termasuk di toko yang lama tidak menerima order.",
+    changes: [
+      {
+        title: "Cek ulang otomatis setelah whitelist",
+        description:
+          "Order yang pernah ditolak Mengantar karena belum di-whitelist kini dicek ulang tiap jam berapa pun umurnya, jadi peringatan di dashboard hilang sendiri begitu akses aktif.",
+      },
+      {
+        title: "Pesan penolakan lebih jelas",
+        description:
+          "Pesan dari Mengantar kini menyebut fitur yang ditolak (cek skor penerima) dan API key mana yang dipakai: dari dashboard atau dari secret server. Dengan begitu permintaan ke CS Mengantar tepat sasaran.",
+      },
+    ],
+  },
+  {
+    version: "1.6.1",
+    date: "20 Oktober 2026",
+    releaseTag: "2026.10-plugins",
     highlight: "Halaman Kelola CRM lebih mudah dibaca saat ada order yang gagal terkirim.",
     changes: [
       {
