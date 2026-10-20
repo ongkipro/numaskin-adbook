@@ -1,0 +1,683 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import GeoIpResolvedForm from '../components/storefront/forms/GeoIpResolvedForm.astro';
+import MetaLandingTracker from '../components/storefront/tracking/MetaLandingTracker.astro';
+import Icon from '../components/storefront/shared/Icon.astro';
+import RatingStars from '../components/storefront/shared/RatingStars.astro';
+import { getStorefrontProduct } from '../lib/catalog';
+import { nativeLandingCanonicalPath } from '../lib/landing-pages';
+import { defaultCatalogContentId } from '../lib/catalog-feed';
+import { getRuntimeEnv } from '../lib/env';
+import { loadStoreCodDisabledProvinceCodes } from '../lib/form-mode';
+import { getStoreAdsConfig } from '../lib/store-ads';
+import '../styles/form-hybrid.css';
+import '../styles/landing-pages/paket-rejuvenating-trio-150ml.css';
+
+export const prerender = false;
+
+const PRODUCT_SLUG = 'paket-rejuvenating-trio-150ml';
+const LANDING_SLUG = 'paket-rejuvenating-trio-150ml';
+const PAGE_TITLE = 'Paket Rejuvenating Trio (150ml) — 3 Langkah Regenerasi & Kencangkan Kulit BPOM';
+const PAGE_DESC = 'Paket bundling 3-in-1 Numa Skin: Deep Sea Water Treatment Lotion 150ml + NAD+ Booster Serum 20ml + Adenosine Moisturizer 30gr untuk hidrasi dalam & perawatan kerutan (3 BPOM Resmi).';
+const IMG_BASE = '/images/landing/paket-rejuvenating-trio-150ml';
+const HERO_IMAGE = `${IMG_BASE}/hero-paket-rejuvenating-150ml.webp`;
+
+const database = getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined;
+const claimedProductSlug = Astro.request.headers.get('x-adsbook-product-page');
+const [product, canonicalPath, codDisabledProvinceCodes] = await Promise.all([
+  getStorefrontProduct(Astro.locals, PRODUCT_SLUG),
+  claimedProductSlug
+    ? Promise.resolve(`/produk/${claimedProductSlug}`)
+    : nativeLandingCanonicalPath(Astro.locals, LANDING_SLUG),
+  loadStoreCodDisabledProvinceCodes(database),
+  getStoreAdsConfig(Astro.locals),
+]);
+if (!product) {
+  return Astro.rewrite('/404');
+}
+
+const canonical = `${Astro.locals.tenant.siteUrl}${canonicalPath}`;
+
+const variants = product.variants || [];
+const cheapestVariant = variants.reduce(
+  (min: any, v: any) => (!min || v.price < min.price ? v : min),
+  variants[0]
+);
+const defaultVariant = cheapestVariant || {
+  id: '35',
+  label: 'Toner 150ml + NAD+ Serum 20ml + Adenosine 30gr',
+  price: 267000,
+  comparePrice: 296998,
+};
+---
+
+<BaseLayout
+  title={PAGE_TITLE}
+  description={PAGE_DESC}
+  image={HERO_IMAGE}
+  preloadImages={HERO_IMAGE}
+  canonical={canonical}
+  hideHeader={true}
+  hideFooter={true}
+>
+  <MetaLandingTracker
+    slug={LANDING_SLUG}
+    contentId={defaultCatalogContentId(product)}
+    contentName={product.contentName}
+    price={defaultVariant.price}
+  />
+
+  <div class="dsw-shell">
+    <main class="dsw-canvas">
+      <!-- Section 1: Hero -->
+      <section id="hero-section" class="dsw-hero">
+        <div class="dsw-hero-head">
+          <h1 class="dsw-h1">
+            <span class="dsw-hl-tilt">Wajah Kering Pagi</span> & Garis Senyum Makin Tegas?
+          </h1>
+          <p class="dsw-sub" style="max-width: 390px; margin: 14px auto 0; font-weight: 700;">
+            Serum anti-aging mahal sulit menembus pori yang kering dan cepat menguap tanpa pelembap pengunci.<br />
+            <span class="dsw-underline-teal">Hidupkan kekenyalan kulit dengan Rejuvenating Trio 150ml Numa Skin!</span>
+          </p>
+        </div>
+
+        <div class="dsw-hero-stage">
+          <div class="dsw-hero-top-tag">
+            <div class="dsw-hero-top-pill">
+              <Icon name="lucide:sparkles" class="size-3.5" aria-hidden="true" />
+              <span>Trio Regenerasi 150ml • Hemat Rp30.000</span>
+            </div>
+          </div>
+
+          <img
+            src={HERO_IMAGE}
+            alt="Perbandingan kulit kering bergaris halus vs wajah kenyal kencang bercahaya dengan Paket Rejuvenating Trio 150ml Numa Skin"
+            width="720"
+            height="480"
+            class="dsw-hero-img"
+            fetchpriority="high"
+            loading="eager"
+            decoding="async"
+          />
+
+          <div class="dsw-hero-overlap">
+            <div class="dsw-hero-overlap-inner">
+              <h2 class="dsw-hero-overlap-title">Mengapa Serum Saja Tidak Cukup Saat Tidur?</h2>
+              <p class="dsw-hero-overlap-text">
+                Tanpa <strong style="color: #be123c;">toner pembuka jalur hidrasi dan gel-cream pengunci kolagen</strong>, kelembapan kulit terkuras habis oleh AC sepanjang malam.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="dsw-trust-row">
+          <div class="dsw-trust-item">
+            <span class="dsw-trust-icon">
+              <Icon name="lucide:shield-check" class="size-4" aria-hidden="true" />
+            </span>
+            <div>
+              <span class="dsw-trust-label">BPOM Resmi</span>
+              <span class="dsw-trust-sub">3 Izin Edar</span>
+            </div>
+          </div>
+          <div class="dsw-trust-item">
+            <span class="dsw-trust-icon">
+              <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+            </span>
+            <div>
+              <span class="dsw-trust-label">Halal RI</span>
+              <span class="dsw-trust-sub">Aman Bumil</span>
+            </div>
+          </div>
+          <div class="dsw-trust-item">
+            <span class="dsw-trust-icon">
+              <Icon name="lucide:truck" class="size-4" aria-hidden="true" />
+            </span>
+            <div>
+              <span class="dsw-trust-label">Bisa COD</span>
+              <span class="dsw-trust-sub">Bayar di Rumah</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: Solusi Singkat + Visual -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Formula <span class="dsw-hl-aqua">3 tahap peremajaan intensif</span> pagi & malam
+        </h2>
+        <p class="dsw-sub">Bekerja berurutan mulai dari membasahi pori, mengencangkan kontur, hingga mengunci kelembapan.</p>
+
+        <div class="dsw-photo-stack">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/solusi-tiga-tahap-regenerasi.webp`}
+              alt="Wanita Indonesia usia 39 tahun dengan kulit pipi kenyal, padat, dan lembap berkat Rejuvenating Trio Numa Skin"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+        </div>
+
+        <div class="dsw-list">
+          <div class="dsw-list-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:droplets" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a;">Deep Sea Water Treatment Lotion (150 ml):</strong> 2-in-1 Toner & First Essence dengan Galactomyces & Ceramide yang menyiapkan kulit agar serum terserap jauh lebih dalam.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:sparkles" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a;">NAD+ Booster Anti-Aging Serum (20 ml):</strong> Mengaktifkan energi seluler dengan 2% Swiss RejuveNAD™ & 6X Peptide untuk merawat kekencangan pipi dan garis senyum.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:shield-check" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a;">Adenosine Moisturizer (30 gr):</strong> Mengunci nutrisi serum dengan Adenosine, Skin Communicator™, & 11X Hyaluronic Acid sekaligus menyamarkan flek hitam.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Tanda Masalah Kulit + Visual Grid -->
+      <section class="dsw-section dsw-section--warn">
+        <h2 class="dsw-h2">
+          Tanda kulit <span class="dsw-underline-warn">kehilangan daya serap</span> & elastisitasnya
+        </h2>
+
+        <div class="dsw-photo-grid-2">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/masalah-serum-mahal-tak-meresap.webp`}
+              alt="Wanita menyentuh kulit pipi yang kering di mana serum sulit meresap tanpa persiapan toner"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #be123c; display: block;">Serum Tertahan di Permukaan</strong>
+              Kulit dehidrasi menolak menyerap serum pekat bila tidak dilembapkan dengan Treatment Lotion.
+            </p>
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/masalah-wajah-lelah-kendur-malam.webp`}
+              alt="Close-up wajah lelah dengan garis senyum dalam dan tekstur kusam di malam hari"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #be123c; display: block;">Kelembapan Menguap Saat Tidur</strong>
+              Tanpa pelembap pengunci Adenosine, kulit bangun dalam keadaan kering dan garis halus makin dalam.
+            </p>
+          </div>
+        </div>
+
+        <div class="dsw-list">
+          <div class="dsw-list-row">
+            <span class="dsw-icon-warn">
+              <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              Wajah terasa <strong style="color: #be123c;">kaku, kasar, dan kusam</strong> setiap bangun pagi akibat terpapar AC semalaman.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-warn">
+              <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              Lipatan garis senyum dan kerutan sudut mata <strong style="color: #be123c;">terlihat makin tegas saat tersenyum</strong>.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-warn">
+              <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              Bercak flek kecokelatan di tulang pipi <strong style="color: #be123c;">lambat memudar karena regenerasi kulit melambat</strong>.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Perbandingan Visual Sebelum vs Sesudah -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Perbedaan hasil <span class="dsw-hl-aqua">sebelum vs sesudah rutin</span>
+        </h2>
+        <p class="dsw-sub">Ketika kulit disiapkan oleh First Essence, diisi NAD+ Serum, dan dikunci Adenosine.</p>
+
+        <div class="dsw-photo-stack">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/kondisi-kulit-kering-garis-dalam.webp`}
+              alt="Kondisi kulit pipi kering kasar dengan garis senyum jelas sebelum perawatan"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <span class="dsw-photo-badge dsw-photo-badge--before">Sebelum Rejuvenating Trio</span>
+            <p class="dsw-photo-caption">
+              Permukaan kulit tampak kering berpori kasar, kurang membal, dan garis halus tampak jelas.
+            </p>
+          </div>
+
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/kondisi-bangun-pagi-kenyal-padat.webp`}
+              alt="Kondisi kulit pipi kenyal, halus, dan padat bercahaya setelah rutin memakai Rejuvenating Trio 150ml"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <span class="dsw-photo-badge dsw-photo-badge--after">Rutin Rejuvenating Trio</span>
+            <p class="dsw-photo-caption">
+              Kulit terasa jauh lebih lembap membal saat bangun pagi, garis senyum tampak halus, dan warna kulit merata.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: Dark Marine Section — Cara Pakai Praktis -->
+      <section class="dsw-section dsw-section--dark">
+        <h2 class="dsw-h2">
+          Urutan Pakai <span style="color: #99e2ec;">3 Langkah Pengunci Muda</span>
+        </h2>
+        <p class="dsw-sub">Hanya butuh 90 detik setiap habis cuci muka pagi dan malam hari.</p>
+
+        <div class="dsw-photo-stack">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/cara-pakai-rejuve-step1-toner.webp`}
+              alt="Langkah 1: Tuang dan tepuk Deep Sea Water Treatment Lotion 150ml ke seluruh wajah"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #ffffff;">Langkah 1 (Buka Jalur Hidrasi):</strong> Tuang 3–4 tetes Treatment Lotion 150ml ke telapak tangan, tepuk lembut ke wajah yang masih lembap.
+            </p>
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/cara-pakai-rejuve-step2-serum-krim.webp`}
+              alt="Langkah 2 dan 3: Ratakan NAD+ Booster Serum lalu kunci dengan Adenosine Moisturizer"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #ffffff;">Langkah 2 & 3 (Isi & Kunci Kolagen):</strong> Teteskan NAD+ Booster Serum, pijat ke arah atas, lalu kunci dengan 1–2 pump Adenosine Moisturizer.
+            </p>
+          </div>
+        </div>
+
+        <div class="dsw-list">
+          <div class="dsw-list-row">
+            <span class="dsw-step-num">1</span>
+            <p class="dsw-step-text">
+              <strong style="color: #ffffff;">Tahap 1 — Treatment Lotion (150 ml):</strong> Melembutkan tekstur kulit agar siap menerima serum.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-step-num">2</span>
+            <p class="dsw-step-text">
+              <strong style="color: #ffffff;">Tahap 2 — NAD+ Booster Serum (20 ml):</strong> Merawat elastisitas kontur wajah & garis halus.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-step-num">3</span>
+            <p class="dsw-step-text">
+              <strong style="color: #ffffff;">Tahap 3 — Adenosine Moisturizer (30 gr):</strong> <strong style="color: #ffffff; background: #104452; padding: 1px 6px; border-radius: 4px;">Mengunci kelembapan 12 jam</strong> & menyamarkan noda hitam.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 6: Ulasan Pelanggan -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Cerita mereka yang rutin <span class="dsw-hl-aqua">Rejuvenating Trio 150ml</span>
+        </h2>
+        <p class="dsw-sub">Ukuran toner 150ml jauh lebih awet dan hemat Rp30.000 dibanding beli terpisah.</p>
+
+        <div class="dsw-reviews-divide">
+          <div class="dsw-review-row">
+            <div class="dsw-review-head">
+              <div>
+                <p class="dsw-review-author">
+                  Ibu Kartika D.
+                  <span style="color: #0b6e7d; display: inline-flex;">
+                    <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+                  </span>
+                </p>
+                <p class="dsw-review-meta">Tangerang Selatan • Usia 39 Tahun</p>
+              </div>
+              <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
+            </div>
+            <p class="dsw-review-quote">
+              "Beda banget rasanya pakai NAD Serum kalau diawali Treatment Lotion dulu. <span class="dsw-hl-aqua">Langsung nyerep ke dalam dan pas dikunci Adenosine muka berasa membal</span> sampai pagi."
+            </p>
+          </div>
+          <div class="dsw-review-row">
+            <div class="dsw-review-head">
+              <div>
+                <p class="dsw-review-author">
+                  Bunda Rini H.
+                  <span style="color: #0b6e7d; display: inline-flex;">
+                    <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+                  </span>
+                </p>
+                <p class="dsw-review-meta">Malang • Usia 44 Tahun</p>
+              </div>
+              <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
+            </div>
+            <p class="dsw-review-quote">
+              "Garis senyum di pinggir bibir sama flek halus di pipi kelihatan jauh lebih samar. <strong style="color: #0f172a;">Toner 150ml-nya gede banget</strong>, <span class="dsw-hl-aqua">bisa dipakai kompres kapas tiap malam</span>."
+            </p>
+          </div>
+          <div class="dsw-review-row">
+            <div class="dsw-review-head">
+              <div>
+                <p class="dsw-review-author">
+                  Ibu Meilani S.
+                  <span style="color: #0b6e7d; display: inline-flex;">
+                    <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+                  </span>
+                </p>
+                <p class="dsw-review-meta">Medan • Hemat Rp30.000</p>
+              </div>
+              <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
+            </div>
+            <p class="dsw-review-quote">
+              "Paket malam paling favorit! <span class="dsw-hl-rose">Hemat 30 ribu daripada beli satuan</span>, <span class="dsw-hl-aqua">bangun tidur muka gak pernah berminyak kusam lagi</span>, malah glowing sehat."
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 7: Galeri Bukti Visual -->
+      <section class="dsw-section dsw-section--tint">
+        <h2 class="dsw-h2">
+          Kombinasi <span style="color: #0b6e7d;">hidrasi & pengencang</span> terbaik
+        </h2>
+        <p class="dsw-sub">Tiga tekstur berair yang menyatu lembut tanpa menyumbat pori.</p>
+
+        <div class="dsw-photo-grid-2">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-tekstur-trio-rejuvenating.webp`}
+              alt="Swatch 3 tekstur Rejuvenating Trio: essence cair, serum lembut, dan gel-cream dingin"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-wanita-38an-kulit-membal.webp`}
+              alt="Potret wanita Indonesia berhijab usia 38 tahun dengan kulit wajah kencang dan kenyal"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-pipi-halus-bangun-tidur.webp`}
+              alt="Close-up kulit pipi yang lembap dan halus saat bangun pagi"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-meja-rias-rejuvenating-150ml.webp`}
+              alt="Paket Rejuvenating Trio 150ml Numa Skin di atas meja rias kayu"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 8: Product Knowledge (Full-Bleed Figures) -->
+      <section class="dsw-section dsw-section--knowledge">
+        <h2 class="dsw-h2">
+          Sains di balik <span class="dsw-hl-aqua">Rejuvenating Trio 150ml</span>
+        </h2>
+        <p class="dsw-sub">
+          Menyatukan mineral laut dalam Pulau Ulleung dengan bioteknologi Swiss RejuveNAD™ dan Adenosine.
+        </p>
+
+        <div class="dsw-figure-stack">
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/formulasi-trio-malam-ulleung.webp`}
+                alt="Formulasi Ulleung Deep Sea Water dengan kecambah bunga matahari RejuveNAD dan alga merah"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">Deep Sea Mineral + Cellular NAD+ Activation</h3>
+              <p class="dsw-figcaption-desc">
+                Mineral laut dalam membuka kanal penyerapan sel agar RejuveNAD™ dan Skin Communicator™ bekerja maksimal memperbaiki elastisitas.
+              </p>
+            </figcaption>
+          </figure>
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/kandungan-galactomyces-nad-adenosine.webp`}
+                alt="Kandungan aktif Galactomyces, 6X Peptide, Adenosine, Alpha-Arbutin, dan 11X Hyaluronic Acid"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">Galactomyces + 6X Peptide + Adenosine + 11X HA</h3>
+              <p class="dsw-figcaption-desc">
+                Rangkaian komplit fermentasi pencerah, 6 peptida pengencang, Adenosine penghalus kerutan, dan 11 ukuran molekul asam hialuronat.
+              </p>
+            </figcaption>
+          </figure>
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/kemasan-rejuvenating-trio-150ml.webp`}
+                alt="Kemasan resmi Paket Rejuvenating Trio 150ml Numa Skin terdaftar BPOM"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">3 Produk Resmi BPOM (Hemat Rp30.000)</h3>
+              <p class="dsw-figcaption-desc">
+                Berisi Treatment Lotion 150ml (NA18220101400), NAD+ Booster Serum 20ml (NA18262000245), dan Adenosine Moisturizer 30gr (NA18250109281).
+              </p>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- Section 9: Garansi 100% Resmi -->
+      <section class="dsw-section" style="text-align: center; background: #f8fafc;">
+        <div style="margin: 0 auto 14px; display: flex; width: 52px; height: 52px; align-items: center; justify-content: center; color: #0b6e7d;">
+          <Icon name="lucide:shield-check" class="size-12" aria-hidden="true" />
+        </div>
+        <h2 class="dsw-h2" style="font-size: 32px;">GARANSI RESMI 100%</h2>
+        <p class="dsw-sub" style="max-width: 320px; margin: 8px auto 0;">
+          Pesanan dikirim langsung dari gudang resmi Numa Skin Indonesia.
+        </p>
+
+        <div class="dsw-guarantee-list">
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:badge-check" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">3 Produk Asli Tersegel BPOM</strong>
+              Terdaftar resmi di BPOM (NA18220101400, NA18262000245 & NA18250109281) serta Halal Indonesia.
+            </p>
+          </div>
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:truck" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">Bisa Bayar di Tempat (COD)</strong>
+              Pesan hari ini, bayar langsung ke kurir saat paket tiba di alamat Anda.
+            </p>
+          </div>
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:package-check" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">Garansi Ganti Baru</strong>
+              Kami ganti baru tanpa biaya tambahan bila ada kemasan yang diterima rusak atau bocor.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 10: Checkout Form -->
+      <section id="form-pemesanan" class="dsw-section--checkout">
+        <div style="padding: 0 20px 14px; text-align: center;">
+          <h2 class="dsw-h2" style="font-size: 28px;">
+            Lengkapi Data <span class="dsw-hl-aqua">Pengiriman</span>
+          </h2>
+          <p class="dsw-sub" style="max-width: 340px; margin: 8px auto 0;">
+            Isi nama, nomor WhatsApp aktif, dan kecamatan tujuan untuk cek ongkir otomatis.
+          </p>
+        </div>
+
+        <GeoIpResolvedForm
+          mode="hybrid"
+          productSlug={product.slug}
+          embedded={true}
+          selectedVariantId={String(defaultVariant.id)}
+          codDisabledProvinceCodes={codDisabledProvinceCodes}
+        />
+      </section>
+    </main>
+
+    <!-- Floating Centered Sticky Button (hidden on Hero and Form) -->
+    <div id="floating-cta" data-sticky-cta class="dsw-float-wrap">
+      <a
+        href="#form-pemesanan"
+        class="dsw-float-btn"
+        data-scroll-to-form
+        aria-label="Pesan Paket Rejuvenating Trio (150ml) — 3 Langkah Regenerasi & Kencangkan Kulit BPOM"
+      >
+        <span>Ambil Paket Hemat</span>
+        <span class="dsw-float-divider" aria-hidden="true"></span>
+        <span class="dsw-float-sub">Promo Rp267.000</span>
+        <Icon name="lucide:arrow-down" class="size-3.5 dsw-float-arrow" aria-hidden="true" />
+      </a>
+    </div>
+  </div>
+
+  <script is:inline>
+    (function () {
+      const heroSection = document.getElementById('hero-section');
+      const formSection = document.getElementById('form-pemesanan');
+      const floatingCta = document.getElementById('floating-cta');
+
+      document.querySelectorAll('[data-scroll-to-form]').forEach((link) => {
+        link.addEventListener('click', (e) => {
+          if (!formSection) return;
+          e.preventDefault();
+          formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+
+      if (!floatingCta || !formSection || !('IntersectionObserver' in window)) return;
+
+      let isHeroVisible = true;
+      let isFormVisible = false;
+
+      function syncVisibility() {
+        const shouldShow = !isHeroVisible && !isFormVisible;
+        floatingCta.classList.toggle('is-visible', shouldShow);
+      }
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.target === heroSection) {
+              isHeroVisible = entry.isIntersecting;
+            } else if (entry.target === formSection) {
+              isFormVisible = entry.isIntersecting;
+            }
+          });
+          syncVisibility();
+        },
+        { root: null, threshold: 0.05 }
+      );
+
+      if (heroSection) observer.observe(heroSection);
+      observer.observe(formSection);
+    })();
+  </script>
+</BaseLayout>

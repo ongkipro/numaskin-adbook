@@ -1,0 +1,683 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import GeoIpResolvedForm from '../components/storefront/forms/GeoIpResolvedForm.astro';
+import MetaLandingTracker from '../components/storefront/tracking/MetaLandingTracker.astro';
+import Icon from '../components/storefront/shared/Icon.astro';
+import RatingStars from '../components/storefront/shared/RatingStars.astro';
+import { getStorefrontProduct } from '../lib/catalog';
+import { nativeLandingCanonicalPath } from '../lib/landing-pages';
+import { defaultCatalogContentId } from '../lib/catalog-feed';
+import { getRuntimeEnv } from '../lib/env';
+import { loadStoreCodDisabledProvinceCodes } from '../lib/form-mode';
+import { getStoreAdsConfig } from '../lib/store-ads';
+import '../styles/form-hybrid.css';
+import '../styles/landing-pages/paket-glow-up-gloss-gel.css';
+
+export const prerender = false;
+
+const PRODUCT_SLUG = 'paket-glow-up-gloss-gel';
+const LANDING_SLUG = 'paket-glow-up-gloss-gel';
+const PAGE_TITLE = 'Paket Glow Up Gloss Gel — 3 Langkah Tenangkan Kemerahan, Bruntusan & Glass Skin BPOM';
+const PAGE_DESC = 'Paket bundling 3-in-1 Numa Skin: Deep Sea Water Facial Wash 100ml + Treatment Lotion (50ml/150ml) + Calming Barrier Gloss Gel 30ml untuk merawat skin barrier & bruntusan (3 BPOM Resmi).';
+const IMG_BASE = '/images/landing/paket-glow-up-gloss-gel';
+const HERO_IMAGE = `${IMG_BASE}/hero-paket-glow-up-gloss-gel.webp`;
+
+const database = getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined;
+const claimedProductSlug = Astro.request.headers.get('x-adsbook-product-page');
+const [product, canonicalPath, codDisabledProvinceCodes] = await Promise.all([
+  getStorefrontProduct(Astro.locals, PRODUCT_SLUG),
+  claimedProductSlug
+    ? Promise.resolve(`/produk/${claimedProductSlug}`)
+    : nativeLandingCanonicalPath(Astro.locals, LANDING_SLUG),
+  loadStoreCodDisabledProvinceCodes(database),
+  getStoreAdsConfig(Astro.locals),
+]);
+if (!product) {
+  return Astro.rewrite('/404');
+}
+
+const canonical = `${Astro.locals.tenant.siteUrl}${canonicalPath}`;
+
+const variants = product.variants || [];
+const cheapestVariant = variants.reduce(
+  (min: any, v: any) => (!min || v.price < min.price ? v : min),
+  variants[0]
+);
+const defaultVariant = cheapestVariant || {
+  id: '26',
+  label: 'Facial Wash 100ml + Toner 50ml + Gloss Gel 30ml',
+  price: 204000,
+  comparePrice: 226999,
+};
+---
+
+<BaseLayout
+  title={PAGE_TITLE}
+  description={PAGE_DESC}
+  image={HERO_IMAGE}
+  preloadImages={HERO_IMAGE}
+  canonical={canonical}
+  hideHeader={true}
+  hideFooter={true}
+>
+  <MetaLandingTracker
+    slug={LANDING_SLUG}
+    contentId={defaultCatalogContentId(product)}
+    contentName={product.contentName}
+    price={defaultVariant.price}
+  />
+
+  <div class="dsw-shell">
+    <main class="dsw-canvas">
+      <!-- Section 1: Hero -->
+      <section id="hero-section" class="dsw-hero">
+        <div class="dsw-hero-head">
+          <h1 class="dsw-h1">
+            <span class="dsw-hl-tilt">Wajah Mudah Merah</span>, Bruntusan & Berminyak Tapi Terasa Perih?
+          </h1>
+          <p class="dsw-sub" style="max-width: 390px; margin: 14px auto 0; font-weight: 700;">
+            Itu tanda pelindung kulit (skin barrier) sedang rusak akibat sabun keras atau krim yang menyumbat pori.<br />
+            <span class="dsw-underline-teal">Tenangkan & pulihkan dengan 3 langkah Paket Glow Up Gloss Gel!</span>
+          </p>
+        </div>
+
+        <div class="dsw-hero-stage">
+          <div class="dsw-hero-top-tag">
+            <div class="dsw-hero-top-pill">
+              <Icon name="lucide:sparkles" class="size-3.5" aria-hidden="true" />
+              <span>Trio Penenang Skin Barrier • Mulai Rp204.000</span>
+            </div>
+          </div>
+
+          <img
+            src={HERO_IMAGE}
+            alt="Perbandingan wajah kemerahan bruntusan vs kulit tenang bening glass skin dengan Paket Glow Up Gloss Gel Numa Skin"
+            width="720"
+            height="480"
+            class="dsw-hero-img"
+            fetchpriority="high"
+            loading="eager"
+            decoding="async"
+          />
+
+          <div class="dsw-hero-overlap">
+            <div class="dsw-hero-overlap-inner">
+              <h2 class="dsw-hero-overlap-title">Mengapa Kulit Sensitif & Kombinasi Butuh Tekstur Air-Gel?</h2>
+              <p class="dsw-hero-overlap-text">
+                Kulit rewel membutuhkan <strong style="color: #be123c;">pembersih tanpa SLS kasar, hidrasi mineral cair, dan gel-air bebas minyak berat</strong> agar bruntusan mereda tanpa menyumbat pori.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="dsw-trust-row">
+          <div class="dsw-trust-item">
+            <span class="dsw-trust-icon">
+              <Icon name="lucide:shield-check" class="size-4" aria-hidden="true" />
+            </span>
+            <div>
+              <span class="dsw-trust-label">BPOM Resmi</span>
+              <span class="dsw-trust-sub">3 Izin Edar</span>
+            </div>
+          </div>
+          <div class="dsw-trust-item">
+            <span class="dsw-trust-icon">
+              <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+            </span>
+            <div>
+              <span class="dsw-trust-label">Halal RI</span>
+              <span class="dsw-trust-sub">Kulit Sensitif</span>
+            </div>
+          </div>
+          <div class="dsw-trust-item">
+            <span class="dsw-trust-icon">
+              <Icon name="lucide:truck" class="size-4" aria-hidden="true" />
+            </span>
+            <div>
+              <span class="dsw-trust-label">Bisa COD</span>
+              <span class="dsw-trust-sub">Bayar di Rumah</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: Solusi Singkat + Visual -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Rangkaian <span class="dsw-hl-aqua">3 tahap penenang barrier</span> & pengontrol minyak
+        </h2>
+        <p class="dsw-sub">Tersedia varian Toner 50ml (Rp204.000) dan Toner Jumbo 150ml (Rp231.000).</p>
+
+        <div class="dsw-photo-stack">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/solusi-tenangkan-kemerahan-bruntusan.webp`}
+              alt="Wanita Indonesia usia 28 tahun mengoleskan Calming Gloss Gel pada kulit pipi yang tenang, bening, dan bebas kemerahan"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+        </div>
+
+        <div class="dsw-list">
+          <div class="dsw-list-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:droplets" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a;">Deep Sea Water Facial Wash Gel (100 ml):</strong> Gel pembersih ber-pH seimbang dengan 5% Niacinamide yang mengangkat minyak berlebih tanpa membuat wajah perih.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:sparkles" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a;">Deep Sea Water Treatment Lotion (50 ml / 150 ml):</strong> Mengisi ulang kelembapan yang hilang dengan mineral Pulau Ulleung, Galactomyces, & Ceramide.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:shield-check" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a;">Calming Barrier Gloss Gel (30 ml):</strong> Pelembap water-jelly dengan Meadowestolide®, Astragalus, Cica, & Probiotik untuk meredakan kemerahan dan bruntusan.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Tanda Masalah Kulit + Visual Grid -->
+      <section class="dsw-section dsw-section--warn">
+        <h2 class="dsw-h2">
+          Ciri skin barrier <span class="dsw-underline-warn">sedang rusak</span> & butuh ditenangkan
+        </h2>
+
+        <div class="dsw-photo-grid-2">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/masalah-kulit-rewel-salah-pakai.webp`}
+              alt="Wanita bercermin melihat pipi yang memerah dan timbul bruntusan halus akibat iritasi"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #be123c; display: block;">Mudah Merah & Perih</strong>
+              Lapisan pelindung kulit yang menipis membuat wajah gampang memerah saat kena panas.
+            </p>
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/masalah-minyak-banjir-tapi-perih.webp`}
+              alt="Close-up kulit kombinasi yang berminyak di area T-zone namun mengelupas dan bruntusan di pipi"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #be123c; display: block;">Berminyak di Luar, Kering di Dalam</strong>
+              Kulit dehidrasi memproduksi minyak berlebih yang justru memicu bruntusan di dahi dan pipi.
+            </p>
+          </div>
+        </div>
+
+        <div class="dsw-list">
+          <div class="dsw-list-row">
+            <span class="dsw-icon-warn">
+              <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              Muncul <strong style="color: #be123c;">bintik-bintik bruntusan kasar di dahi dan pipi</strong> setiap kali cuaca panas atau kurang tidur.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-warn">
+              <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              Pakai krim pelembap biasa terasa <strong style="color: #be123c;">berat, lengket, dan makin memicu komedo</strong>.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-warn">
+              <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              Lipatan hidung dan pipi terasa <strong style="color: #be123c;">kering mengelupas serta perih saat memakai skincare aktif</strong>.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Perbandingan Visual Sebelum vs Sesudah -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Perbandingan kulit <span class="dsw-hl-aqua">sebelum vs sesudah rutin</span>
+        </h2>
+        <p class="dsw-sub">Saat pelindung alami kulit dipulihkan dengan hidrasi ringan bebas minyak berat.</p>
+
+        <div class="dsw-photo-stack">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/kondisi-merah-bruntusan-berminyak.webp`}
+              alt="Kondisi pipi kemerahan, bruntusan, dan berminyak sebelum pemakaian rutin"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <span class="dsw-photo-badge dsw-photo-badge--before">Sebelum Glow Up Gloss Gel</span>
+            <p class="dsw-photo-caption">
+              Permukaan kulit tampak memerah reaktif, bruntusan kasar terlihat jelas, dan kilap minyak tidak terkontrol.
+            </p>
+          </div>
+
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/kondisi-barrier-tenang-glass-skin.webp`}
+              alt="Kondisi pipi tenang, halus, bebas kemerahan, dan tampak bening glass skin setelah rutin memakai Paket Glow Up Gloss Gel"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <span class="dsw-photo-badge dsw-photo-badge--after">Rutin Glow Up Gloss Gel</span>
+            <p class="dsw-photo-caption">
+              Kemerahan mereda, tekstur bruntusan terasa jauh lebih rata halus, dan wajah tampak bening sehat.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: Dark Marine Section — Cara Pakai Praktis -->
+      <section class="dsw-section dsw-section--dark">
+        <h2 class="dsw-h2">
+          Urutan Pakai <span style="color: #99e2ec;">3 Langkah Penenang Kulit</span>
+        </h2>
+        <p class="dsw-sub">Sensasi dingin sejuk yang langsung meresap seperti air.</p>
+
+        <div class="dsw-photo-stack">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/cara-pakai-gloss-cuci-dan-toner.webp`}
+              alt="Langkah 1 dan 2: Cuci muka dengan Facial Wash Gel lalu tepuk Treatment Lotion pada wajah lembap"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #ffffff;">Langkah 1 & 2 (Cuci Lembut & Hidrasi Esens):</strong> Bersihkan wajah dengan Facial Wash Gel, lalu tepuk 3–4 tetes Treatment Lotion.
+            </p>
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/cara-pakai-gloss-kunci-jelly.webp`}
+              alt="Langkah 3: Oleskan Calming Barrier Gloss Gel Moisturizer merata ke seluruh wajah"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #ffffff;">Langkah 3 (Kompres Water-Jelly):</strong> Ambil Gloss Gel secukupnya dan ratakan ke seluruh wajah pagi & malam untuk menenangkan skin barrier.
+            </p>
+          </div>
+        </div>
+
+        <div class="dsw-list">
+          <div class="dsw-list-row">
+            <span class="dsw-step-num">1</span>
+            <p class="dsw-step-text">
+              <strong style="color: #ffffff;">Tahap 1 — Facial Wash Gel (100 ml):</strong> Mengangkat kotoran & sebum dengan lembut tanpa mengikis lipid alami.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-step-num">2</span>
+            <p class="dsw-step-text">
+              <strong style="color: #ffffff;">Tahap 2 — Treatment Lotion (50 ml / 150 ml):</strong> Menyeimbangkan hidrasi dalam agar kelenjar minyak tidak overaktif.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-step-num">3</span>
+            <p class="dsw-step-text">
+              <strong style="color: #ffffff;">Tahap 3 — Calming Gloss Gel (30 ml):</strong> <strong style="color: #ffffff; background: #104452; padding: 1px 6px; border-radius: 4px;">Meredakan kemerahan</strong> & mengunci tampilan glass skin.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 6: Ulasan Pelanggan -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Kata mereka yang punya <span class="dsw-hl-aqua">kulit sensitif & kombinasi</span>
+        </h2>
+        <p class="dsw-sub">Solusi nyaman tanpa rasa lengket atau menyumbat pori.</p>
+
+        <div class="dsw-reviews-divide">
+          <div class="dsw-review-row">
+            <div class="dsw-review-head">
+              <div>
+                <p class="dsw-review-author">
+                  Kak Nadira P.
+                  <span style="color: #0b6e7d; display: inline-flex;">
+                    <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+                  </span>
+                </p>
+                <p class="dsw-review-meta">Bandung • Varian Toner 150ml</p>
+              </div>
+              <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
+            </div>
+            <p class="dsw-review-quote">
+              "Kulitku gampang banget merah sama bruntusan kalau salah pelembap. <span class="dsw-hl-aqua">Paket Gloss Gel ini adem banget kayak dikompres air es</span>, bruntusan di jidat cepet kalem."
+            </p>
+          </div>
+          <div class="dsw-review-row">
+            <div class="dsw-review-head">
+              <div>
+                <p class="dsw-review-author">
+                  Bunda Amel K.
+                  <span style="color: #0b6e7d; display: inline-flex;">
+                    <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+                  </span>
+                </p>
+                <p class="dsw-review-meta">Jakarta Barat • Varian Toner 50ml</p>
+              </div>
+              <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
+            </div>
+            <p class="dsw-review-quote">
+              "T-zone aku berminyak parah tapi pipi kering. <strong style="color: #0f172a;">Sejak pakai trio ini minyak di hidung jauh berkurang</strong> dan <span class="dsw-hl-aqua">pipi jadi glowing bening gak lengket sama sekali</span>."
+            </p>
+          </div>
+          <div class="dsw-review-row">
+            <div class="dsw-review-head">
+              <div>
+                <p class="dsw-review-author">
+                  Kak Tiara S.
+                  <span style="color: #0b6e7d; display: inline-flex;">
+                    <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+                  </span>
+                </p>
+                <p class="dsw-review-meta">Surabaya • Hemat s/d Rp26.000</p>
+              </div>
+              <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
+            </div>
+            <p class="dsw-review-quote">
+              "Beli satu set gini <span class="dsw-hl-rose">jauh lebih hemat daripada beli pisah</span>. <span class="dsw-hl-aqua">Sabun, toner, sama gloss gel-nya ringan semua</span> buat dipakai pagi malam."
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 7: Galeri Bukti Visual -->
+      <section class="dsw-section dsw-section--tint">
+        <h2 class="dsw-h2">
+          Tekstur <span style="color: #0b6e7d;">sejuk berair</span> untuk kulit tenang
+        </h2>
+        <p class="dsw-sub">Bebas rasa gerah dan aman untuk kulit yang mudah berjerawat/bruntusan.</p>
+
+        <div class="dsw-photo-grid-2">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-tekstur-trio-glow-gloss.webp`}
+              alt="Swatch 3 tekstur Paket Glow Up Gloss Gel: gel pembersih, essence cair, dan water-jelly bening"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-wanita-28an-kalem-bening.webp`}
+              alt="Potret wanita berhijab usia 28 tahun dengan kulit wajah tenang, bersih, dan bening"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-pipi-adem-bebas-bruntusan.webp`}
+              alt="Close-up pipi halus bebas kemerahan dan bebas bruntusan"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-meja-rias-glow-gloss-gel.webp`}
+              alt="Paket Glow Up Gloss Gel Numa Skin di meja wastafel minimalis"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 8: Product Knowledge (Full-Bleed Figures) -->
+      <section class="dsw-section dsw-section--knowledge">
+        <h2 class="dsw-h2">
+          Formulasi <span class="dsw-hl-aqua">Paket Glow Up Gloss Gel</span>
+        </h2>
+        <p class="dsw-sub">
+          Memulihkan keseimbangan mikrobioma dan lipid pelindung kulit tanpa menyumbat pori.
+        </p>
+
+        <div class="dsw-figure-stack">
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/formulasi-calming-trio-ulleung.webp`}
+                alt="Formulasi Ulleung Deep Sea Water dengan Astragalus Root dan Centella Asiatica"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">3-Step Barrier & Microbiome Recovery</h3>
+              <p class="dsw-figcaption-desc">
+                Membersihkan dengan pH seimbang, mengisi mineral laut dalam, lalu mengunci dengan lipid biomimetik Meadowestolide®.
+              </p>
+            </figcaption>
+          </figure>
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/kandungan-niacinamide-ceramide-astragalus.webp`}
+                alt="Kandungan 5% Niacinamide, Galactomyces, Ceramide NP, Meadowestolide, Astragalus, dan Probiotik"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">Meadowestolide® + Astragalus + Ceramide + Probiotik</h3>
+              <p class="dsw-figcaption-desc">
+                Kombinasi penenang kemerahan, pengontrol sebum, dan penguat jaringan skin barrier yang rusak.
+              </p>
+            </figcaption>
+          </figure>
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/kemasan-glow-up-gloss-gel.webp`}
+                alt="Kemasan resmi Paket Glow Up Gloss Gel Numa Skin terdaftar BPOM"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">3 Produk Resmi BPOM (Pilihan Toner 50ml / 150ml)</h3>
+              <p class="dsw-figcaption-desc">
+                Terdiri dari Facial Wash 100ml (NA18261203408), Treatment Lotion (NA18220101400), dan Calming Gloss Gel 30ml (NA18230107056).
+              </p>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- Section 9: Garansi 100% Resmi -->
+      <section class="dsw-section" style="text-align: center; background: #f8fafc;">
+        <div style="margin: 0 auto 14px; display: flex; width: 52px; height: 52px; align-items: center; justify-content: center; color: #0b6e7d;">
+          <Icon name="lucide:shield-check" class="size-12" aria-hidden="true" />
+        </div>
+        <h2 class="dsw-h2" style="font-size: 32px;">GARANSI RESMI 100%</h2>
+        <p class="dsw-sub" style="max-width: 320px; margin: 8px auto 0;">
+          Pesanan dikirim langsung dari gudang resmi Numa Skin Indonesia.
+        </p>
+
+        <div class="dsw-guarantee-list">
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:badge-check" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">3 Produk Asli Tersegel BPOM</strong>
+              Terdaftar resmi di BPOM (NA18261203408, NA18220101400 & NA18230107056) serta Halal Indonesia.
+            </p>
+          </div>
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:truck" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">Bisa Bayar di Tempat (COD)</strong>
+              Pesan hari ini, bayar langsung ke kurir saat paket tiba di alamat Anda.
+            </p>
+          </div>
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:package-check" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">Garansi Ganti Baru</strong>
+              Kami ganti baru tanpa biaya tambahan bila ada kemasan yang diterima rusak atau bocor.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 10: Checkout Form -->
+      <section id="form-pemesanan" class="dsw-section--checkout">
+        <div style="padding: 0 20px 14px; text-align: center;">
+          <h2 class="dsw-h2" style="font-size: 28px;">
+            Lengkapi Data <span class="dsw-hl-aqua">Pengiriman</span>
+          </h2>
+          <p class="dsw-sub" style="max-width: 340px; margin: 8px auto 0;">
+            Pilih ukuran Toner (50ml / 150ml) dan isi alamat lengkap untuk cek ongkir otomatis.
+          </p>
+        </div>
+
+        <GeoIpResolvedForm
+          mode="hybrid"
+          productSlug={product.slug}
+          embedded={true}
+          selectedVariantId={String(defaultVariant.id)}
+          codDisabledProvinceCodes={codDisabledProvinceCodes}
+        />
+      </section>
+    </main>
+
+    <!-- Floating Centered Sticky Button (hidden on Hero and Form) -->
+    <div id="floating-cta" data-sticky-cta class="dsw-float-wrap">
+      <a
+        href="#form-pemesanan"
+        class="dsw-float-btn"
+        data-scroll-to-form
+        aria-label="Pesan Paket Glow Up Gloss Gel — 3 Langkah Tenangkan Kemerahan, Bruntusan & Glass Skin BPOM"
+      >
+        <span>Ambil Paket Hemat</span>
+        <span class="dsw-float-divider" aria-hidden="true"></span>
+        <span class="dsw-float-sub">Mulai Rp204.000</span>
+        <Icon name="lucide:arrow-down" class="size-3.5 dsw-float-arrow" aria-hidden="true" />
+      </a>
+    </div>
+  </div>
+
+  <script is:inline>
+    (function () {
+      const heroSection = document.getElementById('hero-section');
+      const formSection = document.getElementById('form-pemesanan');
+      const floatingCta = document.getElementById('floating-cta');
+
+      document.querySelectorAll('[data-scroll-to-form]').forEach((link) => {
+        link.addEventListener('click', (e) => {
+          if (!formSection) return;
+          e.preventDefault();
+          formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+
+      if (!floatingCta || !formSection || !('IntersectionObserver' in window)) return;
+
+      let isHeroVisible = true;
+      let isFormVisible = false;
+
+      function syncVisibility() {
+        const shouldShow = !isHeroVisible && !isFormVisible;
+        floatingCta.classList.toggle('is-visible', shouldShow);
+      }
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.target === heroSection) {
+              isHeroVisible = entry.isIntersecting;
+            } else if (entry.target === formSection) {
+              isFormVisible = entry.isIntersecting;
+            }
+          });
+          syncVisibility();
+        },
+        { root: null, threshold: 0.05 }
+      );
+
+      if (heroSection) observer.observe(heroSection);
+      observer.observe(formSection);
+    })();
+  </script>
+</BaseLayout>

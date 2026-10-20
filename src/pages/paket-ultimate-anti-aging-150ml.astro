@@ -1,0 +1,683 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import GeoIpResolvedForm from '../components/storefront/forms/GeoIpResolvedForm.astro';
+import MetaLandingTracker from '../components/storefront/tracking/MetaLandingTracker.astro';
+import Icon from '../components/storefront/shared/Icon.astro';
+import RatingStars from '../components/storefront/shared/RatingStars.astro';
+import { getStorefrontProduct } from '../lib/catalog';
+import { nativeLandingCanonicalPath } from '../lib/landing-pages';
+import { defaultCatalogContentId } from '../lib/catalog-feed';
+import { getRuntimeEnv } from '../lib/env';
+import { loadStoreCodDisabledProvinceCodes } from '../lib/form-mode';
+import { getStoreAdsConfig } from '../lib/store-ads';
+import '../styles/form-hybrid.css';
+import '../styles/landing-pages/paket-ultimate-anti-aging-150ml.css';
+
+export const prerender = false;
+
+const PRODUCT_SLUG = 'paket-ultimate-anti-aging-150ml';
+const LANDING_SLUG = 'paket-ultimate-anti-aging-150ml';
+const PAGE_TITLE = 'Paket Ultimate Anti-Aging (150ml) — 5 Langkah Kencangkan Wajah & Samarkan Flek BPOM';
+const PAGE_DESC = 'Paket bundling 5-in-1 Numa Skin: Treatment Lotion 150ml + NAD+ Serum 20ml + PDRN Day Cream 30gr + Adenosine Moisturizer 30gr + Oxydew Sunscreen SPF 50+ 30ml (5 BPOM Resmi).';
+const IMG_BASE = '/images/landing/paket-ultimate-anti-aging-150ml';
+const HERO_IMAGE = `${IMG_BASE}/hero-paket-ultimate-150ml.webp`;
+
+const database = getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined;
+const claimedProductSlug = Astro.request.headers.get('x-adsbook-product-page');
+const [product, canonicalPath, codDisabledProvinceCodes] = await Promise.all([
+  getStorefrontProduct(Astro.locals, PRODUCT_SLUG),
+  claimedProductSlug
+    ? Promise.resolve(`/produk/${claimedProductSlug}`)
+    : nativeLandingCanonicalPath(Astro.locals, LANDING_SLUG),
+  loadStoreCodDisabledProvinceCodes(database),
+  getStoreAdsConfig(Astro.locals),
+]);
+if (!product) {
+  return Astro.rewrite('/404');
+}
+
+const canonical = `${Astro.locals.tenant.siteUrl}${canonicalPath}`;
+
+const variants = product.variants || [];
+const cheapestVariant = variants.reduce(
+  (min: any, v: any) => (!min || v.price < min.price ? v : min),
+  variants[0]
+);
+const defaultVariant = cheapestVariant || {
+  id: '50',
+  label: 'Toner 150ml + NAD+ Serum 20ml + Day Cream 30gr + Adenosine 30gr + Sunscreen 30ml',
+  price: 409500,
+  comparePrice: 455497,
+};
+---
+
+<BaseLayout
+  title={PAGE_TITLE}
+  description={PAGE_DESC}
+  image={HERO_IMAGE}
+  preloadImages={HERO_IMAGE}
+  canonical={canonical}
+  hideHeader={true}
+  hideFooter={true}
+>
+  <MetaLandingTracker
+    slug={LANDING_SLUG}
+    contentId={defaultCatalogContentId(product)}
+    contentName={product.contentName}
+    price={defaultVariant.price}
+  />
+
+  <div class="dsw-shell">
+    <main class="dsw-canvas">
+      <!-- Section 1: Hero -->
+      <section id="hero-section" class="dsw-hero">
+        <div class="dsw-hero-head">
+          <h1 class="dsw-h1">
+            <span class="dsw-hl-tilt">Flek & Kerutan 40+</span> Sulit Pudar Karena Perawatan Tidak Lengkap?
+          </h1>
+          <p class="dsw-sub" style="max-width: 390px; margin: 14px auto 0; font-weight: 700;">
+            Merawat kulit usia matang butuh urutan hidrasi, serum pengencang, krim pencerah pagi, pelembap pengunci, hingga perisai UV.<br />
+            <span class="dsw-underline-teal">Tuntaskan dengan 5 langkah Ultimate Anti-Aging Numa Skin (Toner 150ml)!</span>
+          </p>
+        </div>
+
+        <div class="dsw-hero-stage">
+          <div class="dsw-hero-top-tag">
+            <div class="dsw-hero-top-pill">
+              <Icon name="lucide:sparkles" class="size-3.5" aria-hidden="true" />
+              <span>Paket 5-in-1 Jumbo 150ml • Hemat Rp46.000</span>
+            </div>
+          </div>
+
+          <img
+            src={HERO_IMAGE}
+            alt="Perbandingan wajah berflek dan kendur vs kulit kencang cerah merata dengan Paket Ultimate Anti-Aging 150ml Numa Skin"
+            width="720"
+            height="480"
+            class="dsw-hero-img"
+            fetchpriority="high"
+            loading="eager"
+            decoding="async"
+          />
+
+          <div class="dsw-hero-overlap">
+            <div class="dsw-hero-overlap-inner">
+              <h2 class="dsw-hero-overlap-title">Mengapa Usia 35–55 Butuh 5 Tahap Sinergis?</h2>
+              <p class="dsw-hero-overlap-text">
+                Kulit dewasa mengalami <strong style="color: #be123c;">dehidrasi dalam, penurunan kolagen, flek melasma membandel, sekaligus paparan sinar UVA harian</strong> yang tidak cukup diatasi 1 botol saja.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="dsw-trust-row">
+          <div class="dsw-trust-item">
+            <span class="dsw-trust-icon">
+              <Icon name="lucide:shield-check" class="size-4" aria-hidden="true" />
+            </span>
+            <div>
+              <span class="dsw-trust-label">BPOM Resmi</span>
+              <span class="dsw-trust-sub">5 Izin Edar</span>
+            </div>
+          </div>
+          <div class="dsw-trust-item">
+            <span class="dsw-trust-icon">
+              <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+            </span>
+            <div>
+              <span class="dsw-trust-label">Halal RI</span>
+              <span class="dsw-trust-sub">Aman Dipakai</span>
+            </div>
+          </div>
+          <div class="dsw-trust-item">
+            <span class="dsw-trust-icon">
+              <Icon name="lucide:truck" class="size-4" aria-hidden="true" />
+            </span>
+            <div>
+              <span class="dsw-trust-label">Bisa COD</span>
+              <span class="dsw-trust-sub">Bayar di Rumah</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: Solusi Singkat + Visual -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Rangkaian <span class="dsw-hl-aqua">5 produk ukuran penuh</span> untuk siang & malam
+        </h2>
+        <p class="dsw-sub">Lima formula berbahan dasar air laut dalam Pulau Ulleung yang saling menguatkan tanpa terasa tebal.</p>
+
+        <div class="dsw-photo-stack">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/solusi-lima-tahap-siang-malam.webp`}
+              alt="Wanita Indonesia usia 41 tahun dengan wajah kencang, cerah merata, dan kenyal berkat Paket Ultimate Anti-Aging 5-in-1"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+        </div>
+
+        <div class="dsw-list">
+          <div class="dsw-list-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:droplets" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a;">Treatment Lotion 150 ml + NAD+ Serum 20 ml:</strong> Membuka jalur penyerapan mineral laut dalam lalu mengencangkan tampilan garis senyum dengan 2% RejuveNAD™ & 6X Peptide.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:sparkles" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a;">PDRN Day Cream 30 gr + Adenosine Moisturizer 30 gr:</strong> Mencerahkan wajah pagi dengan rona krem natural (tanpa abu-abu) serta mengunci hidrasi 11X Hyaluronic Acid & Adenosine di malam hari.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:sun-dim" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a;">Oxydew Sunscreen SPF 50+ PA++++ 30 ml:</strong> Menangkal radiasi UVA/UVB pemicu flek hitam baru dengan 3% Luceane™ tanpa rasa lengket.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Tanda Masalah Kulit + Visual Grid -->
+      <section class="dsw-section dsw-section--warn">
+        <h2 class="dsw-h2">
+          Mengapa beli skincare <span class="dsw-underline-warn">eceran beda merek</span> sering gagal di usia 40+?
+        </h2>
+
+        <div class="dsw-photo-grid-2">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/masalah-beli-eceran-setengah.webp`}
+              alt="Wanita kecewa melihat hasil skincare eceran yang tidak serasi dan membuat wajah tetap kusam"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #be123c; display: block;">Formula Saling Bertabrakan</strong>
+              Mencampur produk beda merek sering membuat krim menggumpal dan nutrisi gagal meresap.
+            </p>
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/masalah-flek-kerutan-usia-40.webp`}
+              alt="Close-up kulit usia 40-an dengan flek hitam membandel dan garis senyum yang makin tegas"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #be123c; display: block;">Flek & Kerutan Datang Bersamaan</strong>
+              Merawat flek tanpa mengencangkan kolagen dan mengunci UV membuat wajah tetap tampak lelah.
+            </p>
+          </div>
+        </div>
+
+        <div class="dsw-list">
+          <div class="dsw-list-row">
+            <span class="dsw-icon-warn">
+              <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              Pakai serum tanpa <em>Treatment Lotion</em> membuat bahan aktif <strong style="color: #be123c;">tertahan di permukaan kulit yang kering dan kasar</strong>.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-warn">
+              <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              Pagi hari wajah tampak kusam tidak merata, namun <strong style="color: #be123c;">pakai bedak tebal justru masuk ke celah kerutan</strong>.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-warn">
+              <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              Beli 5 produk satu per satu <strong style="color: #be123c;">jauh lebih mahal Rp46.000</strong> dibanding paket bundling resmi.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Perbandingan Visual Sebelum vs Sesudah -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Perubahan nyata <span class="dsw-hl-aqua">perawatan 5 tahap utuh</span>
+        </h2>
+        <p class="dsw-sub">Saat hidrasi, pengencangan, pencerah pagi, pengunci malam, dan proteksi UV bekerja selaras.</p>
+
+        <div class="dsw-photo-stack">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/kondisi-penuaan-flek-kendur.webp`}
+              alt="Kondisi kulit wajah sebelum perawatan: bercak flek hitam, garis senyum dalam, dan warna kulit kusam"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <span class="dsw-photo-badge dsw-photo-badge--before">Sebelum Rutin 5 Tahap</span>
+            <p class="dsw-photo-caption">
+              Bercak flek hitam tampak kontras, lipatan senyum terlihat jelas, dan kulit terasa kering ketarik.
+            </p>
+          </div>
+
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/kondisi-wajah-kencang-cerah-utuh.webp`}
+              alt="Kondisi kulit wajah sesudah perawatan rutin Paket Ultimate Anti-Aging: kencang, kenyal, dan cerah merata"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <span class="dsw-photo-badge dsw-photo-badge--after">Rutin Paket Ultimate 5-in-1</span>
+            <p class="dsw-photo-caption">
+              Tekstur pipi terasa lebih padat membal, tampilan noda gelap memudar, dan rona wajah tampak cerah alami.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: Dark Marine Section — Cara Pakai Praktis -->
+      <section class="dsw-section dsw-section--dark">
+        <h2 class="dsw-h2">
+          Panduan <span style="color: #99e2ec;">Ritual Pagi & Malam</span>
+        </h2>
+        <p class="dsw-sub">Urutan pemakaian terstruktur agar setiap tetes terserap optimal tanpa lengket.</p>
+
+        <div class="dsw-photo-stack">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/cara-pakai-ultimate-pagi.webp`}
+              alt="Urutan pagi: Treatment Lotion 150ml, PDRN Day Cream natural beige, dan Oxydew Sunscreen SPF 50+"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #ffffff;">Ritual Pagi (Cerah Instan & Anti-UV):</strong> Tepuk Treatment Lotion → NAD+ Serum → PDRN Day Cream → kunci 2 ruas jari Oxydew Sunscreen SPF 50+.
+            </p>
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/cara-pakai-ultimate-malam.webp`}
+              alt="Urutan malam: Treatment Lotion 150ml, NAD+ Booster Serum, dan Adenosine Moisturizer sebelum tidur"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #ffffff;">Ritual Malam (Regenerasi & Pengunci Kolagen):</strong> Tepuk Treatment Lotion → 3 tetes NAD+ Booster Serum → kunci dengan Adenosine Moisturizer.
+            </p>
+          </div>
+        </div>
+
+        <div class="dsw-list">
+          <div class="dsw-list-row">
+            <span class="dsw-step-num">1</span>
+            <p class="dsw-step-text">
+              <strong style="color: #ffffff;">Pagi Hari:</strong> Treatment Lotion 150ml → NAD+ Serum → PDRN Tone-Up Day Cream → Oxydew Sunscreen SPF 50+.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-step-num">2</span>
+            <p class="dsw-step-text">
+              <strong style="color: #ffffff;">Malam Hari:</strong> Treatment Lotion 150ml → NAD+ Serum → <strong style="color: #ffffff; background: #104452; padding: 1px 6px; border-radius: 4px;">Adenosine Moisturizer</strong>.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-step-num">3</span>
+            <p class="dsw-step-text">
+              Botol Treatment Lotion ukuran jumbo 150 ml awet untuk pemakaian kompres dan tepuk hingga 2 bulan penuh.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 6: Ulasan Pelanggan -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Pengalaman pelanggan <span class="dsw-hl-aqua">Paket Ultimate 150ml</span>
+        </h2>
+        <p class="dsw-sub">Solusi paling praktis untuk merawat penuaan tanpa bingung mencocokkan produk.</p>
+
+        <div class="dsw-reviews-divide">
+          <div class="dsw-review-row">
+            <div class="dsw-review-head">
+              <div>
+                <p class="dsw-review-author">
+                  Ibu Hj. Marlina
+                  <span style="color: #0b6e7d; display: inline-flex;">
+                    <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+                  </span>
+                </p>
+                <p class="dsw-review-meta">Surabaya • Usia 46 Tahun</p>
+              </div>
+              <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
+            </div>
+            <p class="dsw-review-quote">
+              "Senang banget ambil yang toner besar 150ml. <span class="dsw-hl-aqua">Pagi pakai Day Cream + Sunscreen mukanya langsung cerah gak abu-abu</span>, malamnya pakai NAD Serum + Adenosine bangun tidur pipi kenyal."
+            </p>
+          </div>
+          <div class="dsw-review-row">
+            <div class="dsw-review-head">
+              <div>
+                <p class="dsw-review-author">
+                  Bunda Yuliana K.
+                  <span style="color: #0b6e7d; display: inline-flex;">
+                    <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+                  </span>
+                </p>
+                <p class="dsw-review-meta">Bekasi • Usia 41 Tahun</p>
+              </div>
+              <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
+            </div>
+            <p class="dsw-review-quote">
+              "Flek di tulang pipi sama garis senyum udah lama susah pudar. <strong style="color: #0f172a;">Begitu rutin pakai 5 tahapan Numa ini</strong>, <span class="dsw-hl-aqua">kulit berasa jauh lebih kencang dan noda hitam menipis</span>."
+            </p>
+          </div>
+          <div class="dsw-review-row">
+            <div class="dsw-review-head">
+              <div>
+                <p class="dsw-review-author">
+                  Ibu Dian P.
+                  <span style="color: #0b6e7d; display: inline-flex;">
+                    <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+                  </span>
+                </p>
+                <p class="dsw-review-meta">Yogyakarta • Hemat Rp46.000</p>
+              </div>
+              <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
+            </div>
+            <p class="dsw-review-quote">
+              "Hitung-hitung <span class="dsw-hl-rose">hemat hampir 46 ribu dibanding beli ketengan</span>. <span class="dsw-hl-aqua">Teksturnya ringan semua di kulit saya</span>, gak bikin gerah walaupun ditumpuk."
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 7: Galeri Bukti Visual -->
+      <section class="dsw-section dsw-section--tint">
+        <h2 class="dsw-h2">
+          5 tekstur ringan <span style="color: #0b6e7d;">tanpa rasa lengket</span>
+        </h2>
+        <p class="dsw-sub">Diformulasikan khusus untuk iklim tropis Indonesia yang lembap dan panas.</p>
+
+        <div class="dsw-photo-grid-2">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-tekstur-lima-produk.webp`}
+              alt="Swatch 5 tekstur Paket Ultimate Anti-Aging Numa Skin di punggung tangan"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-ibu-40an-glowing-utuh.webp`}
+              alt="Potret pelanggan usia 40-an dengan kulit wajah cerah, kencang, dan sehat"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-kulit-padat-bebas-kusam.webp`}
+              alt="Close-up tekstur pipi yang tampak kenyal, padat, dan halus"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-meja-rias-ultimate-150ml.webp`}
+              alt="Kelima produk Paket Ultimate Anti-Aging 150ml tertata di meja rias"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 8: Product Knowledge (Full-Bleed Figures) -->
+      <section class="dsw-section dsw-section--knowledge">
+        <h2 class="dsw-h2">
+          Keunggulan ilmiah <span class="dsw-hl-aqua">Paket Ultimate 5-in-1</span>
+        </h2>
+        <p class="dsw-sub">
+          Menggabungkan energi perbaikan seluler, koreksi pigmen noda hitam, dan proteksi UV spektrum luas.
+        </p>
+
+        <div class="dsw-figure-stack">
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/formulasi-lima-lapis-ulleung.webp`}
+                alt="Formulasi Ulleung Deep Sea Water dengan RejuveNAD, Encapsulated PDRN, dan Red Algae"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">Ulleung Deep Sea Water 5-Step Ecosystem</h3>
+              <p class="dsw-figcaption-desc">
+                Kekayaan 72+ mineral ionik Pulau Ulleung memastikan kelima tahapan perawatan meresap berlapis tanpa menyumbat pori.
+              </p>
+            </figcaption>
+          </figure>
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/kandungan-nad-pdrn-adenosine-spf.webp`}
+                alt="Sinergi bahan aktif Galactomyces, 2% RejuveNAD, 1% PDRN, Adenosine, dan 3% Luceane SPF 50+"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">RejuveNAD™ + PDRN + Adenosine + Luceane™ SPF 50+</h3>
+              <p class="dsw-figcaption-desc">
+                Kombinasi pengencang kontur wajah, pencerah flek Alpha-Arbutin, pengunci kelembapan 11X HA, dan pelindung matahari PA++++.
+              </p>
+            </figcaption>
+          </figure>
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/kemasan-paket-ultimate-150ml.webp`}
+                alt="Kemasan resmi 5 produk Paket Ultimate Anti-Aging 150ml Numa Skin terdaftar BPOM"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">5 Produk Full-Size Resmi BPOM (Toner Jumbo 150 ml)</h3>
+              <p class="dsw-figcaption-desc">
+                Terdiri dari Treatment Lotion 150ml (NA18220101400), NAD+ Serum (NA18262000245), PDRN Day Cream (NA18262000246), Adenosine (NA18250109281), & Oxydew SPF 50+ (NA18251703709).
+              </p>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- Section 9: Garansi 100% Resmi -->
+      <section class="dsw-section" style="text-align: center; background: #f8fafc;">
+        <div style="margin: 0 auto 14px; display: flex; width: 52px; height: 52px; align-items: center; justify-content: center; color: #0b6e7d;">
+          <Icon name="lucide:shield-check" class="size-12" aria-hidden="true" />
+        </div>
+        <h2 class="dsw-h2" style="font-size: 32px;">GARANSI RESMI 100%</h2>
+        <p class="dsw-sub" style="max-width: 320px; margin: 8px auto 0;">
+          Pesanan dikirim langsung dari gudang resmi Numa Skin Indonesia.
+        </p>
+
+        <div class="dsw-guarantee-list">
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:badge-check" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">5 Produk Asli Tersegel BPOM</strong>
+              Seluruh produk memiliki nomor notifikasi BPOM resmi dan sertifikasi Halal Indonesia.
+            </p>
+          </div>
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:truck" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">Bisa Bayar di Tempat (COD)</strong>
+              Pesan hari ini, bayar langsung ke kurir saat paket tiba di rumah Anda.
+            </p>
+          </div>
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:package-check" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">Garansi Ganti Baru</strong>
+              Kami ganti baru tanpa biaya tambahan bila ada kemasan yang diterima rusak atau bocor.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 10: Checkout Form -->
+      <section id="form-pemesanan" class="dsw-section--checkout">
+        <div style="padding: 0 20px 14px; text-align: center;">
+          <h2 class="dsw-h2" style="font-size: 28px;">
+            Lengkapi Data <span class="dsw-hl-aqua">Pengiriman</span>
+          </h2>
+          <p class="dsw-sub" style="max-width: 340px; margin: 8px auto 0;">
+            Isi nama, nomor WhatsApp aktif, dan kecamatan tujuan untuk cek ongkir otomatis.
+          </p>
+        </div>
+
+        <GeoIpResolvedForm
+          mode="hybrid"
+          productSlug={product.slug}
+          embedded={true}
+          selectedVariantId={String(defaultVariant.id)}
+          codDisabledProvinceCodes={codDisabledProvinceCodes}
+        />
+      </section>
+    </main>
+
+    <!-- Floating Centered Sticky Button (hidden on Hero and Form) -->
+    <div id="floating-cta" data-sticky-cta class="dsw-float-wrap">
+      <a
+        href="#form-pemesanan"
+        class="dsw-float-btn"
+        data-scroll-to-form
+        aria-label="Pesan Paket Ultimate Anti-Aging (150ml) — 5 Langkah Kencangkan Wajah & Samarkan Flek BPOM"
+      >
+        <span>Ambil Paket 5-in-1</span>
+        <span class="dsw-float-divider" aria-hidden="true"></span>
+        <span class="dsw-float-sub">Promo Rp409.500</span>
+        <Icon name="lucide:arrow-down" class="size-3.5 dsw-float-arrow" aria-hidden="true" />
+      </a>
+    </div>
+  </div>
+
+  <script is:inline>
+    (function () {
+      const heroSection = document.getElementById('hero-section');
+      const formSection = document.getElementById('form-pemesanan');
+      const floatingCta = document.getElementById('floating-cta');
+
+      document.querySelectorAll('[data-scroll-to-form]').forEach((link) => {
+        link.addEventListener('click', (e) => {
+          if (!formSection) return;
+          e.preventDefault();
+          formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+
+      if (!floatingCta || !formSection || !('IntersectionObserver' in window)) return;
+
+      let isHeroVisible = true;
+      let isFormVisible = false;
+
+      function syncVisibility() {
+        const shouldShow = !isHeroVisible && !isFormVisible;
+        floatingCta.classList.toggle('is-visible', shouldShow);
+      }
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.target === heroSection) {
+              isHeroVisible = entry.isIntersecting;
+            } else if (entry.target === formSection) {
+              isFormVisible = entry.isIntersecting;
+            }
+          });
+          syncVisibility();
+        },
+        { root: null, threshold: 0.05 }
+      );
+
+      if (heroSection) observer.observe(heroSection);
+      observer.observe(formSection);
+    })();
+  </script>
+</BaseLayout>

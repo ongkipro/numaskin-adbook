@@ -183,6 +183,96 @@ export const nativeLandingPages: NativeLandingPage[] = [
     image:
       '/images/landing/paket-lengkap-6-in-1-routine/hero-paket-lengkap-6in1.webp',
   },
+  {
+    slug: 'paket-ultimate-anti-aging-150ml',
+    title: 'Paket Ultimate Anti-Aging (150ml)',
+    productSlug: 'paket-ultimate-anti-aging-150ml',
+    description:
+      'Paket bundling 5-in-1 Numa Skin: Treatment Lotion 150ml + NAD+ Serum 20ml + PDRN Day Cream 30gr + Adenosine Moisturizer 30gr + Oxydew Sunscreen SPF 50+ 30ml (5 BPOM Resmi).',
+    image:
+      '/images/landing/paket-ultimate-anti-aging-150ml/hero-paket-ultimate-150ml.webp',
+  },
+  {
+    slug: 'paket-rejuvenating-trio-150ml',
+    title: 'Paket Rejuvenating Trio (150ml)',
+    productSlug: 'paket-rejuvenating-trio-150ml',
+    description:
+      'Trio regenerasi intensif 3-in-1: Deep Sea Water Treatment Lotion 150ml + NAD+ Booster Serum 20ml + Adenosine Moisturizer 30gr untuk merawat elastisitas & garis senyum (3 BPOM Resmi).',
+    image:
+      '/images/landing/paket-rejuvenating-trio-150ml/hero-paket-rejuvenating-150ml.webp',
+  },
+  {
+    slug: 'paket-age-defense-trio',
+    title: 'Paket Age Defense Trio',
+    productSlug: 'paket-age-defense-trio',
+    description:
+      'Trio pelindung & pencerah 24 jam: PDRN Tone-Up Day Cream 30gr (Warm Beige) + Adenosine Moisturizer 30gr + Oxydew Sunscreen SPF 50+ PA++++ 30ml untuk menyamarkan flek hitam (3 BPOM Resmi).',
+    image:
+      '/images/landing/paket-age-defense-trio/hero-paket-age-defense-trio.webp',
+  },
+  {
+    slug: 'paket-age-repair-trio-150ml',
+    title: 'Paket Age Repair Trio (150ml)',
+    productSlug: 'paket-age-repair-trio-150ml',
+    description:
+      'Trio perbaikan tekstur & warna kulit: Deep Sea Water Treatment Lotion 150ml + PDRN Tone-Up Day Cream 30gr + Adenosine Moisturizer 30gr untuk kulit cerah merata bebas dempul (3 BPOM Resmi).',
+    image:
+      '/images/landing/paket-age-repair-trio-150ml/hero-paket-age-repair-150ml.webp',
+  },
+  {
+    slug: 'paket-glow-up-adenosine',
+    title: 'Paket Glow Up Adenosine',
+    productSlug: 'paket-glow-up-adenosine',
+    description:
+      'Rangkaian dasar 3 langkah kulit cerah & kenyal: Facial Wash Gel 100ml + Treatment Lotion Toner (50ml/150ml) + Adenosine Moisturizer 30gr (3 BPOM Resmi).',
+    image:
+      '/images/landing/paket-glow-up-adenosine/hero-paket-glow-up-adenosine.webp',
+  },
+  {
+    slug: 'paket-glow-up-gloss-gel',
+    title: 'Paket Glow Up Gloss Gel',
+    productSlug: 'paket-glow-up-gloss-gel',
+    description:
+      'Rangkaian dasar 3 langkah penenang skin barrier: Facial Wash Gel 100ml + Treatment Lotion Toner (50ml/150ml) + Calming Barrier Gloss Gel Moisturizer 30ml untuk kulit kemerahan & bruntusan (3 BPOM Resmi).',
+    image:
+      '/images/landing/paket-glow-up-gloss-gel/hero-paket-glow-up-gloss-gel.webp',
+  },
+  {
+    slug: 'paket-triple-protection-3-in-1',
+    title: 'Paket Triple Protection 3-in-1',
+    productSlug: 'paket-triple-protection-3-in-1',
+    description:
+      'Rangkaian esensial 3 langkah harian: Deep Sea Water Facial Wash Gel 100ml + Adenosine Moisturizer 30gr + Oxydew Sunscreen SPF 50+ PA++++ 30ml untuk cuci, lembapkan, dan lindungi kulit (3 BPOM Resmi).',
+    image:
+      '/images/landing/paket-triple-protection-3-in-1/hero-paket-triple-protection.webp',
+  },
+  {
+    slug: 'paket-clean-and-glow',
+    title: 'Paket Clean & Glow Duo',
+    productSlug: 'paket-clean-and-glow',
+    description:
+      'Duo pembersih pori & booster pengencang: Deep Sea Water Facial Wash Gel 100ml (5% Niacinamide) + NAD+ Booster Anti-Aging Serum 20ml (2% RejuveNAD + 6X Peptide) (2 BPOM Resmi).',
+    image:
+      '/images/landing/paket-clean-and-glow/hero-paket-clean-and-glow.webp',
+  },
+  {
+    slug: 'paket-hydra-glow-duo',
+    title: 'Paket Hydra Glow Duo',
+    productSlug: 'paket-hydra-glow-duo',
+    description:
+      'Duet krim siang & malam anti-flek: PDRN + Alpha-Arbutin Tone-Up Day Cream 30gr (Warm Beige) + Adenosine Deep Sea Water Moisturizer 30gr (11X Hyaluronic Acid) (2 BPOM Resmi).',
+    image:
+      '/images/landing/paket-hydra-glow-duo/hero-paket-hydra-glow-duo.webp',
+  },
+  {
+    slug: 'paket-timeless-skin-set',
+    title: 'Paket Timeless Skin Set',
+    productSlug: 'paket-timeless-skin-set',
+    description:
+      'Duo anti-aging ramah kulit sensitif: NAD+ Booster Anti-Aging Serum 20ml (2% RejuveNAD + 6X Peptide) + Calming Barrier Gloss Gel Moisturizer 30ml (Meadowestolide + Ceramide NP) (2 BPOM Resmi).',
+    image:
+      '/images/landing/paket-timeless-skin-set/hero-paket-timeless-skin-set.webp',
+  },
 ];
 
 /**

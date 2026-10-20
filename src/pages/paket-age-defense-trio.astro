@@ -1,0 +1,683 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import GeoIpResolvedForm from '../components/storefront/forms/GeoIpResolvedForm.astro';
+import MetaLandingTracker from '../components/storefront/tracking/MetaLandingTracker.astro';
+import Icon from '../components/storefront/shared/Icon.astro';
+import RatingStars from '../components/storefront/shared/RatingStars.astro';
+import { getStorefrontProduct } from '../lib/catalog';
+import { nativeLandingCanonicalPath } from '../lib/landing-pages';
+import { defaultCatalogContentId } from '../lib/catalog-feed';
+import { getRuntimeEnv } from '../lib/env';
+import { loadStoreCodDisabledProvinceCodes } from '../lib/form-mode';
+import { getStoreAdsConfig } from '../lib/store-ads';
+import '../styles/form-hybrid.css';
+import '../styles/landing-pages/paket-age-defense-trio.css';
+
+export const prerender = false;
+
+const PRODUCT_SLUG = 'paket-age-defense-trio';
+const LANDING_SLUG = 'paket-age-defense-trio';
+const PAGE_TITLE = 'Paket Age Defense Trio — 3 Langkah Cerah Natural, Samarkan Flek & Tameng SPF 50+ BPOM';
+const PAGE_DESC = 'Paket bundling 3-in-1 Numa Skin: PDRN Tone-Up Day Cream 30gr + Adenosine Moisturizer 30gr + Oxydew Sunscreen SPF 50+ PA++++ 30ml untuk koreksi flek & proteksi UV harian (3 BPOM Resmi).';
+const IMG_BASE = '/images/landing/paket-age-defense-trio';
+const HERO_IMAGE = `${IMG_BASE}/hero-paket-age-defense-trio.webp`;
+
+const database = getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined;
+const claimedProductSlug = Astro.request.headers.get('x-adsbook-product-page');
+const [product, canonicalPath, codDisabledProvinceCodes] = await Promise.all([
+  getStorefrontProduct(Astro.locals, PRODUCT_SLUG),
+  claimedProductSlug
+    ? Promise.resolve(`/produk/${claimedProductSlug}`)
+    : nativeLandingCanonicalPath(Astro.locals, LANDING_SLUG),
+  loadStoreCodDisabledProvinceCodes(database),
+  getStoreAdsConfig(Astro.locals),
+]);
+if (!product) {
+  return Astro.rewrite('/404');
+}
+
+const canonical = `${Astro.locals.tenant.siteUrl}${canonicalPath}`;
+
+const variants = product.variants || [];
+const cheapestVariant = variants.reduce(
+  (min: any, v: any) => (!min || v.price < min.price ? v : min),
+  variants[0]
+);
+const defaultVariant = cheapestVariant || {
+  id: '10',
+  label: 'Day Cream 30gr + Adenosine 30gr + Sunscreen 30ml',
+  price: 213500,
+  comparePrice: 237498,
+};
+---
+
+<BaseLayout
+  title={PAGE_TITLE}
+  description={PAGE_DESC}
+  image={HERO_IMAGE}
+  preloadImages={HERO_IMAGE}
+  canonical={canonical}
+  hideHeader={true}
+  hideFooter={true}
+>
+  <MetaLandingTracker
+    slug={LANDING_SLUG}
+    contentId={defaultCatalogContentId(product)}
+    contentName={product.contentName}
+    price={defaultVariant.price}
+  />
+
+  <div class="dsw-shell">
+    <main class="dsw-canvas">
+      <!-- Section 1: Hero -->
+      <section id="hero-section" class="dsw-hero">
+        <div class="dsw-hero-head">
+          <h1 class="dsw-h1">
+            <span class="dsw-hl-tilt">Flek Hitam & Kusam</span> Makin Parah Tiap Kena Panas Siang?
+          </h1>
+          <p class="dsw-sub" style="max-width: 390px; margin: 14px auto 0; font-weight: 700;">
+            Menutupi flek dengan bedak tebal hanya membuat wajah abu-abu, sementara sinar matahari terus memperdalam noda hitam.<br />
+            <span class="dsw-underline-teal">Rawat & lindungi 24 jam dengan Paket Age Defense Trio Numa Skin!</span>
+          </p>
+        </div>
+
+        <div class="dsw-hero-stage">
+          <div class="dsw-hero-top-tag">
+            <div class="dsw-hero-top-pill">
+              <Icon name="lucide:sparkles" class="size-3.5" aria-hidden="true" />
+              <span>Trio Siang-Malam Anti-Flek • Hemat Rp24.000</span>
+            </div>
+          </div>
+
+          <img
+            src={HERO_IMAGE}
+            alt="Perbandingan kulit kusam berflek hitam vs wajah cerah merata bebas dempul dengan Paket Age Defense Trio Numa Skin"
+            width="720"
+            height="480"
+            class="dsw-hero-img"
+            fetchpriority="high"
+            loading="eager"
+            decoding="async"
+          />
+
+          <div class="dsw-hero-overlap">
+            <div class="dsw-hero-overlap-inner">
+              <h2 class="dsw-hero-overlap-title">Mengapa Flek Hitam Harus Dijaga Pagi & Malam?</h2>
+              <p class="dsw-hero-overlap-text">
+                Flek yang dirawat malam hari akan <strong style="color: #be123c;">kembali menggelap di siang hari bila wajah tidak dilindungi tone-up pencerah & SPF 50+ PA++++</strong>.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="dsw-trust-row">
+          <div class="dsw-trust-item">
+            <span class="dsw-trust-icon">
+              <Icon name="lucide:shield-check" class="size-4" aria-hidden="true" />
+            </span>
+            <div>
+              <span class="dsw-trust-label">BPOM Resmi</span>
+              <span class="dsw-trust-sub">3 Izin Edar</span>
+            </div>
+          </div>
+          <div class="dsw-trust-item">
+            <span class="dsw-trust-icon">
+              <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+            </span>
+            <div>
+              <span class="dsw-trust-label">Halal RI</span>
+              <span class="dsw-trust-sub">Aman Bumil</span>
+            </div>
+          </div>
+          <div class="dsw-trust-item">
+            <span class="dsw-trust-icon">
+              <Icon name="lucide:truck" class="size-4" aria-hidden="true" />
+            </span>
+            <div>
+              <span class="dsw-trust-label">Bisa COD</span>
+              <span class="dsw-trust-sub">Bayar di Rumah</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: Solusi Singkat + Visual -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Perisai <span class="dsw-hl-aqua">cerah pagi & perbaikan malam</span> dalam 1 paket
+        </h2>
+        <p class="dsw-sub">Tiga produk yang memadukan rona cerah natural di pagi hari dan perawatan kolagen di malam hari.</p>
+
+        <div class="dsw-photo-stack">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/solusi-cerah-pagi-kencang-malam.webp`}
+              alt="Wanita Indonesia usia 36 tahun dengan kulit sawo matang yang tampak cerah alami, menyatu, dan bebas flek"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+        </div>
+
+        <div class="dsw-list">
+          <div class="dsw-list-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:sparkles" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a;">PDRN + Alpha-Arbutin Tone-Up Day Cream (30 gr):</strong> Krim pagi berwarna krem natural yang meratakan warna kulit kusam seketika tanpa efek abu-abu di kulit sawo matang.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:sun-dim" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a;">Oxydew Sunscreen SPF 50+ PA++++ (30 ml):</strong> Melindungi kulit dari sinar UVA/UVB pemicu flek baru dengan 3% Luceane™ tanpa rasa gerah atau berminyak.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:droplets" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a;">Adenosine Moisturizer (30 gr):</strong> Gel-cream malam & pagi yang mengunci hidrasi 11X Hyaluronic Acid sekaligus merawat garis halus dan noda hitam.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Tanda Masalah Kulit + Visual Grid -->
+      <section class="dsw-section dsw-section--warn">
+        <h2 class="dsw-h2">
+          Mengapa flek hitam <span class="dsw-underline-warn">makin melebar</span> meski sudah pakai krim?
+        </h2>
+
+        <div class="dsw-photo-grid-2">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/masalah-flek-makin-gelap-siang.webp`}
+              alt="Wanita di bawah terik matahari dengan noda flek hitam di tulang pipi yang makin gelap"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #be123c; display: block;">Sinar UV Memicu Melanin Baru</strong>
+              Tanpa pelindung SPF 50+ PA++++, paparan matahari 15 menit saja kembali menghitamkan flek.
+            </p>
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/masalah-bedak-dempul-menyumbat.webp`}
+              alt="Wajah tampak belang abu-abu dan cakey karena menutupi flek dengan foundation tebal"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #be123c; display: block;">Bedak Tebal Bikin Muka Abu-Abu</strong>
+              Krim pemutih instan biasa meninggalkan bercak dempul yang retak di garis senyum.
+            </p>
+          </div>
+        </div>
+
+        <div class="dsw-list">
+          <div class="dsw-list-row">
+            <span class="dsw-icon-warn">
+              <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              Bercak cokelat di tulang pipi <strong style="color: #be123c;">tampak makin kontras dan sulit ditutupi bedak</strong>.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-warn">
+              <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              Pakai krim siang biasa <strong style="color: #be123c;">luntur saat berkeringat dan membuat wajah belang</strong> dengan leher.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-warn">
+              <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              Malam hari kulit terasa <strong style="color: #be123c;">kering ketarik sehingga garis halus makin cepat muncul</strong>.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Perbandingan Visual Sebelum vs Sesudah -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Perbandingan kulit <span class="dsw-hl-aqua">sebelum vs sesudah rutin</span>
+        </h2>
+        <p class="dsw-sub">Sinergi pencerah pagi, perisai UV, dan gel-cream pengunci kelembapan malam.</p>
+
+        <div class="dsw-photo-stack">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/kondisi-flek-hitam-terbakar-uv.webp`}
+              alt="Kondisi kulit pipi dengan flek hitam matahari, kemerahan UV, dan pori kering sebelum perawatan"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <span class="dsw-photo-badge dsw-photo-badge--before">Sebelum Age Defense Trio</span>
+            <p class="dsw-photo-caption">
+              Warna kulit tampak belang kusam, noda hitam tegas di pipi, dan tekstur kering kasar.
+            </p>
+          </div>
+
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/kondisi-cerah-merata-terlindungi.webp`}
+              alt="Kondisi kulit sawo matang yang cerah alami, merata, kenyal, dan terlindungi setelah rutin memakai Age Defense Trio"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <span class="dsw-photo-badge dsw-photo-badge--after">Rutin Age Defense Trio</span>
+            <p class="dsw-photo-caption">
+              Rona wajah tampak cerah natural menyatu dengan kulit asli, noda flek memudar, dan lembap seharian.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: Dark Marine Section — Cara Pakai Praktis -->
+      <section class="dsw-section dsw-section--dark">
+        <h2 class="dsw-h2">
+          Urutan Pakai <span style="color: #99e2ec;">Pagi Cerah & Malam Kenyal</span>
+        </h2>
+        <p class="dsw-sub">Praktis tanpa perlu foundation tebal di pagi hari.</p>
+
+        <div class="dsw-photo-stack">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/cara-pakai-defense-pagi-pdrn-spf.webp`}
+              alt="Cara pakai pagi: oleskan PDRN Day Cream natural beige lalu lapisi dengan Oxydew Sunscreen SPF 50+"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #ffffff;">Rutinitas Pagi (Tone-Up Natural + SPF 50+):</strong> Oleskan PDRN Day Cream tipis merata, lalu kunci dengan 2 ruas jari Oxydew Sunscreen.
+            </p>
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/cara-pakai-defense-malam-adenosine.webp`}
+              alt="Cara pakai malam: pijat lembut Adenosine Moisturizer pada wajah sebelum tidur"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #ffffff;">Rutinitas Malam (Perbaikan Flek & Kerutan):</strong> Tekan 1–2 pump Adenosine Moisturizer dan pijat lembut ke seluruh wajah sebelum tidur.
+            </p>
+          </div>
+        </div>
+
+        <div class="dsw-list">
+          <div class="dsw-list-row">
+            <span class="dsw-step-num">1</span>
+            <p class="dsw-step-text">
+              <strong style="color: #ffffff;">Pagi Hari:</strong> PDRN Tone-Up Day Cream → Oxydew Sunscreen SPF 50+ PA++++ (wajah langsung segar tanpa bedak tebal).
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-step-num">2</span>
+            <p class="dsw-step-text">
+              <strong style="color: #ffffff;">Malam Hari:</strong> <strong style="color: #ffffff; background: #104452; padding: 1px 6px; border-radius: 4px;">Adenosine Moisturizer</strong> untuk mengunci hidrasi & merawat elastisitas semalaman.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-step-num">3</span>
+            <p class="dsw-step-text">
+              Untuk kulit sangat kering, Adenosine Moisturizer juga dapat dipakai tipis sebelum Day Cream di pagi hari.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 6: Ulasan Pelanggan -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Favorit bunda aktif <span class="dsw-hl-aqua">kulit sawo matang & kuning langsat</span>
+        </h2>
+        <p class="dsw-sub">Wajah tampak rapi cerah sejak pagi sekaligus terawat saat tidur.</p>
+
+        <div class="dsw-reviews-divide">
+          <div class="dsw-review-row">
+            <div class="dsw-review-head">
+              <div>
+                <p class="dsw-review-author">
+                  Bunda Nisa A.
+                  <span style="color: #0b6e7d; display: inline-flex;">
+                    <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+                  </span>
+                </p>
+                <p class="dsw-review-meta">Depok • Usia 36 Tahun</p>
+              </div>
+              <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
+            </div>
+            <p class="dsw-review-quote">
+              "Paling suka karena pagi gak perlu dandan lama. <span class="dsw-hl-aqua">Pakai PDRN Day Cream + Oxydew Sunscreen langsung cerah natural gak abu-abu</span>, malamnya tinggal pakai Adenosine."
+            </p>
+          </div>
+          <div class="dsw-review-row">
+            <div class="dsw-review-head">
+              <div>
+                <p class="dsw-review-author">
+                  Ibu Wulan T.
+                  <span style="color: #0b6e7d; display: inline-flex;">
+                    <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+                  </span>
+                </p>
+                <p class="dsw-review-meta">Solo • Usia 40 Tahun</p>
+              </div>
+              <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
+            </div>
+            <p class="dsw-review-quote">
+              "Sering antar jemput anak siang bolong tapi <strong style="color: #0f172a;">flek di pipi gak pernah tambah gelap lagi</strong>. <span class="dsw-hl-aqua">Malah makin samar dan kulit terasa adem kenyal</span>."
+            </p>
+          </div>
+          <div class="dsw-review-row">
+            <div class="dsw-review-head">
+              <div>
+                <p class="dsw-review-author">
+                  Bunda Fitri R.
+                  <span style="color: #0b6e7d; display: inline-flex;">
+                    <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+                  </span>
+                </p>
+                <p class="dsw-review-meta">Makassar • Hemat Rp24.000</p>
+              </div>
+              <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
+            </div>
+            <p class="dsw-review-quote">
+              "Pas banget isinya ada krim pagi, krim malam/pelembap, sama sunscreen. <span class="dsw-hl-rose">Lebih hemat 24 ribu</span> dan <span class="dsw-hl-aqua">semua teksturnya ringan gak bikin komedoan</span>."
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 7: Galeri Bukti Visual -->
+      <section class="dsw-section dsw-section--tint">
+        <h2 class="dsw-h2">
+          Tampilan <span style="color: #0b6e7d;">cerah alami & terlindungi</span> setiap hari
+        </h2>
+        <p class="dsw-sub">Tanpa dempul, tanpa whitecast, dan nyaman di bawah hijab seharian.</p>
+
+        <div class="dsw-photo-grid-2">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-tekstur-trio-defense.webp`}
+              alt="Swatch 3 tekstur Age Defense Trio: krem beige natural, gel-cream bening, dan lotion sunscreen"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-wanita-aktif-bebas-flek.webp`}
+              alt="Potret wanita Indonesia berhijab aktif di luar ruangan dengan kulit wajah cerah merata"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-kulit-cerah-tanpa-foundation.webp`}
+              alt="Close-up pipi cerah merata dengan hasil akhir satin-dewy tanpa foundation"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-meja-rias-age-defense.webp`}
+              alt="Paket Age Defense Trio Numa Skin di meja rias pagi hari"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 8: Product Knowledge (Full-Bleed Figures) -->
+      <section class="dsw-section dsw-section--knowledge">
+        <h2 class="dsw-h2">
+          Teknologi di balik <span class="dsw-hl-aqua">Age Defense Trio</span>
+        </h2>
+        <p class="dsw-sub">
+          Menghadirkan perlindungan ganda terhadap pigmentasi siang hari sekaligus pemulihan barrier malam hari.
+        </p>
+
+        <div class="dsw-figure-stack">
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/formulasi-perisai-siang-malam.webp`}
+                alt="Formulasi Encapsulated PDRN, Red Algae Skin Communicator, dan Luceane Marine Bio-Ferment"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">Day-to-Night Pigment & Barrier Shield</h3>
+              <p class="dsw-figcaption-desc">
+                1% Encapsulated PDRN & Luceane™ menjaga kulit dari radiasi UV siang hari, sementara Skin Communicator™ merawat elastisitas di malam hari.
+              </p>
+            </figcaption>
+          </figure>
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/kandungan-pdrn-adenosine-luceane.webp`}
+                alt="Kombinasi Alpha-Arbutin, Niacinamide, Adenosine, 11X Hyaluronic Acid, dan SPF 50+ PA++++"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">PDRN + Double Alpha-Arbutin + Adenosine + SPF 50+</h3>
+              <p class="dsw-figcaption-desc">
+                Sinergi pencerah flek hitam di krim pagi dan malam yang dikunci oleh perlindungan matahari tertinggi PA++++.
+              </p>
+            </figcaption>
+          </figure>
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/kemasan-age-defense-trio.webp`}
+                alt="Kemasan resmi Paket Age Defense Trio Numa Skin terdaftar BPOM"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">3 Produk Full-Size Resmi BPOM (Hemat Rp24.000)</h3>
+              <p class="dsw-figcaption-desc">
+                Anda mendapatkan PDRN Day Cream 30gr (NA18262000246), Adenosine Moisturizer 30gr (NA18250109281), & Oxydew Sunscreen 30ml (NA18251703709).
+              </p>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- Section 9: Garansi 100% Resmi -->
+      <section class="dsw-section" style="text-align: center; background: #f8fafc;">
+        <div style="margin: 0 auto 14px; display: flex; width: 52px; height: 52px; align-items: center; justify-content: center; color: #0b6e7d;">
+          <Icon name="lucide:shield-check" class="size-12" aria-hidden="true" />
+        </div>
+        <h2 class="dsw-h2" style="font-size: 32px;">GARANSI RESMI 100%</h2>
+        <p class="dsw-sub" style="max-width: 320px; margin: 8px auto 0;">
+          Pesanan dikirim langsung dari gudang resmi Numa Skin Indonesia.
+        </p>
+
+        <div class="dsw-guarantee-list">
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:badge-check" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">3 Produk Asli Tersegel BPOM</strong>
+              Terdaftar resmi di BPOM (NA18262000246, NA18250109281 & NA18251703709) serta Halal Indonesia.
+            </p>
+          </div>
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:truck" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">Bisa Bayar di Tempat (COD)</strong>
+              Pesan hari ini, bayar langsung ke kurir saat paket tiba di alamat Anda.
+            </p>
+          </div>
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:package-check" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">Garansi Ganti Baru</strong>
+              Kami ganti baru tanpa biaya tambahan bila ada kemasan yang diterima rusak atau bocor.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 10: Checkout Form -->
+      <section id="form-pemesanan" class="dsw-section--checkout">
+        <div style="padding: 0 20px 14px; text-align: center;">
+          <h2 class="dsw-h2" style="font-size: 28px;">
+            Lengkapi Data <span class="dsw-hl-aqua">Pengiriman</span>
+          </h2>
+          <p class="dsw-sub" style="max-width: 340px; margin: 8px auto 0;">
+            Isi nama, nomor WhatsApp aktif, dan kecamatan tujuan untuk cek ongkir otomatis.
+          </p>
+        </div>
+
+        <GeoIpResolvedForm
+          mode="hybrid"
+          productSlug={product.slug}
+          embedded={true}
+          selectedVariantId={String(defaultVariant.id)}
+          codDisabledProvinceCodes={codDisabledProvinceCodes}
+        />
+      </section>
+    </main>
+
+    <!-- Floating Centered Sticky Button (hidden on Hero and Form) -->
+    <div id="floating-cta" data-sticky-cta class="dsw-float-wrap">
+      <a
+        href="#form-pemesanan"
+        class="dsw-float-btn"
+        data-scroll-to-form
+        aria-label="Pesan Paket Age Defense Trio — 3 Langkah Cerah Natural, Samarkan Flek & Tameng SPF 50+ BPOM"
+      >
+        <span>Ambil Paket Hemat</span>
+        <span class="dsw-float-divider" aria-hidden="true"></span>
+        <span class="dsw-float-sub">Promo Rp213.500</span>
+        <Icon name="lucide:arrow-down" class="size-3.5 dsw-float-arrow" aria-hidden="true" />
+      </a>
+    </div>
+  </div>
+
+  <script is:inline>
+    (function () {
+      const heroSection = document.getElementById('hero-section');
+      const formSection = document.getElementById('form-pemesanan');
+      const floatingCta = document.getElementById('floating-cta');
+
+      document.querySelectorAll('[data-scroll-to-form]').forEach((link) => {
+        link.addEventListener('click', (e) => {
+          if (!formSection) return;
+          e.preventDefault();
+          formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+
+      if (!floatingCta || !formSection || !('IntersectionObserver' in window)) return;
+
+      let isHeroVisible = true;
+      let isFormVisible = false;
+
+      function syncVisibility() {
+        const shouldShow = !isHeroVisible && !isFormVisible;
+        floatingCta.classList.toggle('is-visible', shouldShow);
+      }
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.target === heroSection) {
+              isHeroVisible = entry.isIntersecting;
+            } else if (entry.target === formSection) {
+              isFormVisible = entry.isIntersecting;
+            }
+          });
+          syncVisibility();
+        },
+        { root: null, threshold: 0.05 }
+      );
+
+      if (heroSection) observer.observe(heroSection);
+      observer.observe(formSection);
+    })();
+  </script>
+</BaseLayout>
