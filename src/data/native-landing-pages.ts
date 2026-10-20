@@ -59,7 +59,7 @@ export const nativeLandingPages: NativeLandingPage[] = [
   },
   {
     slug: 'pdrn-alpha-arbutin-tone-up-day-cream',
-    title: 'PDRN + Alpha-Arbutin Tone-Up Day Cream',
+    title: 'PDRN Alpha Arbutin Tone-Up Day Cream',
     productSlug: 'pdrn-alpha-arbutin-tone-up-day-cream',
     description:
       'Natural Beige Tone-Up Day Cream dengan 1% Encapsulated PDRN, Alpha-Arbutin, Niacinamide, dan 4X UV Defense tanpa efek abu-abu di kulit sawo matang (BPOM NA18262000246).',
@@ -77,7 +77,7 @@ export const nativeLandingPages: NativeLandingPage[] = [
   },
   {
     slug: 'oxydew-sunscreen-luceane-spf50-pa',
-    title: 'Oxydew Anti-Aging Sunscreen SPF 50+ PA++++',
+    title: 'Oxydew Sunscreen Luceane SPF 50+ PA++++',
     productSlug: 'oxydew-sunscreen-luceane-spf50-pa',
     description:
       'Breathable Cellular Sunscreen SPF 50+ PA++++ dengan 3% Luceane™ (Sederma France), Galactomyces, Niacinamide, dan 4X UV Filter tanpa whitecast (BPOM NA18251703709).',
@@ -272,6 +272,96 @@ export const nativeLandingPages: NativeLandingPage[] = [
       'Duo anti-aging ramah kulit sensitif: NAD+ Booster Anti-Aging Serum 20ml (2% RejuveNAD + 6X Peptide) + Calming Barrier Gloss Gel Moisturizer 30ml (Meadowestolide + Ceramide NP) (2 BPOM Resmi).',
     image:
       '/images/landing/paket-timeless-skin-set/hero-paket-timeless-skin-set.webp',
+  },
+  {
+    slug: 'paket-adenosine-dan-toner-150ml',
+    title: 'Paket Adenosine & Toner (150ml)',
+    productSlug: 'paket-adenosine-dan-toner-150ml',
+    description:
+      'Duet hidrasi ukuran besar & pengunci elastisitas: Deep Sea Water Treatment Lotion 150ml + Adenosine Deep Sea Water Moisturizer 30gr (11X Hyaluronic Acid + Jania Rubens) (2 BPOM Resmi).',
+    image:
+      '/images/landing/paket-adenosine-dan-toner-150ml/hero-paket-adenosine-toner-150ml.webp',
+  },
+  {
+    slug: 'paket-skin-recharge-duo-150ml',
+    title: 'Paket Skin Recharge Duo (150ml)',
+    productSlug: 'paket-skin-recharge-duo-150ml',
+    description:
+      'Duet booster energi sel & hidrasi ukuran besar: Deep Sea Water Treatment Lotion 150ml + NAD+ Booster Anti-Aging Serum 20ml (2% RejuveNAD + 6X Peptide) (2 BPOM Resmi).',
+    image:
+      '/images/landing/paket-skin-recharge-duo-150ml/hero-paket-skin-recharge-150ml.webp',
+  },
+  {
+    slug: 'paket-youth-glow-duo-150ml',
+    title: 'Paket Youth Glow Duo (150ml)',
+    productSlug: 'paket-youth-glow-duo-150ml',
+    description:
+      'Duet persiapan hidrasi ukuran besar & pencerah pagi: Deep Sea Water Treatment Lotion 150ml + PDRN + Alpha-Arbutin Tone-Up Day Cream 30gr (Warm Beige) (2 BPOM Resmi).',
+    image:
+      '/images/landing/paket-youth-glow-duo-150ml/hero-paket-youth-glow-150ml.webp',
+  },
+  {
+    slug: 'paket-skin-protection-duo',
+    title: 'Paket Skin Protection Duo',
+    productSlug: 'paket-skin-protection-duo',
+    description:
+      'Duet serum pengencang & perisai sinar UV anti-aging: NAD+ Booster Anti-Aging Serum 20ml + Oxydew Sunscreen Luceane SPF 50+ PA++++ 30ml (Zero Whitecast) (2 BPOM Resmi).',
+    image:
+      '/images/landing/paket-skin-protection-duo/hero-paket-skin-protection-duo.webp',
+  },
+  {
+    slug: 'paket-sunscreen-dan-gloss-gel',
+    title: 'Paket Sunscreen & Gloss Gel',
+    productSlug: 'paket-sunscreen-dan-gloss-gel',
+    description:
+      'Duet penenang barrier & proteksi UV ringan bebas lengket: Calming Barrier Gloss Gel Moisturizer 30ml + Oxydew Sunscreen Luceane SPF 50+ PA++++ 30ml (2 BPOM Resmi).',
+    image:
+      '/images/landing/paket-sunscreen-dan-gloss-gel/hero-paket-sunscreen-gloss-gel.webp',
+  },
+  {
+    slug: 'paket-daily-care-gloss-gel',
+    title: 'Paket Daily Care Gloss Gel',
+    productSlug: 'paket-daily-care-gloss-gel',
+    description:
+      'Rangkaian 2 tahap dasar penenang kemerahan & bruntusan: Deep Sea Water Facial Wash Gel 100ml + Calming Barrier Gloss Gel Moisturizer 30ml (2 BPOM Resmi).',
+    image:
+      '/images/landing/paket-daily-care-gloss-gel/hero-paket-daily-care-gloss-gel.webp',
+  },
+  {
+    slug: 'paket-daily-protection',
+    title: 'Paket Daily Protection Duo',
+    productSlug: 'paket-daily-protection',
+    description:
+      'Rangkaian 2 tahap pembersih lembut & proteksi UV harian: Deep Sea Water Facial Wash Gel 100ml + Oxydew Sunscreen Luceane SPF 50+ PA++++ 30ml (2 BPOM Resmi).',
+    image:
+      '/images/landing/paket-daily-protection/hero-paket-daily-protection.webp',
+  },
+  {
+    slug: 'paket-daily-glow',
+    title: 'Paket Daily Glow Duo',
+    productSlug: 'paket-daily-glow',
+    description:
+      'Rangkaian 2 langkah pagi cerah alami tanpa dempul: Deep Sea Water Facial Wash Gel 100ml + PDRN + Alpha-Arbutin Tone-Up Day Cream 30gr (Warm Beige) (2 BPOM Resmi).',
+    image:
+      '/images/landing/paket-daily-glow/hero-paket-daily-glow.webp',
+  },
+  {
+    slug: 'paket-moist-glow-duo',
+    title: 'Paket Moist Glow Duo',
+    productSlug: 'paket-moist-glow-duo',
+    description:
+      'Pasangan krim pencerah pagi & water-jelly penenang malam: PDRN + Alpha-Arbutin Tone-Up Day Cream 30gr + Calming Barrier Gloss Gel Moisturizer 30ml (2 BPOM Resmi).',
+    image:
+      '/images/landing/paket-moist-glow-duo/hero-paket-moist-glow-duo.webp',
+  },
+  {
+    slug: 'paket-sunscreen-adenosine-toner-150ml',
+    title: 'Paket Sunscreen, Adenosine & Toner (150ml)',
+    productSlug: 'paket-sunscreen-adenosine-toner-150ml',
+    description:
+      'Trio anti-aging & proteksi sinar UV ukuran besar: Deep Sea Water Treatment Lotion 150ml + Adenosine Moisturizer 30gr + Oxydew Sunscreen SPF 50+ PA++++ 30ml (3 BPOM Resmi).',
+    image:
+      '/images/landing/paket-sunscreen-adenosine-toner-150ml/hero-paket-sunscreen-adenosine-toner-150ml.webp',
   },
 ];
 

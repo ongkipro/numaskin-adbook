@@ -1,0 +1,808 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import GeoIpResolvedForm from '../components/storefront/forms/GeoIpResolvedForm.astro';
+import MetaLandingTracker from '../components/storefront/tracking/MetaLandingTracker.astro';
+import Icon from '../components/storefront/shared/Icon.astro';
+import RatingStars from '../components/storefront/shared/RatingStars.astro';
+import { getStorefrontProduct } from '../lib/catalog';
+import { nativeLandingCanonicalPath } from '../lib/landing-pages';
+import { defaultCatalogContentId } from '../lib/catalog-feed';
+import { getRuntimeEnv } from '../lib/env';
+import { loadStoreCodDisabledProvinceCodes } from '../lib/form-mode';
+import { getStoreAdsConfig } from '../lib/store-ads';
+import '../styles/form-hybrid.css';
+import '../styles/landing-pages/paket-youth-glow-duo-150ml.css';
+
+export const prerender = false;
+
+const PRODUCT_SLUG = 'paket-youth-glow-duo-150ml';
+const LANDING_SLUG = 'paket-youth-glow-duo-150ml';
+const PAGE_TITLE = 'Paket Youth Glow Duo (150ml) — Toner Laut Dalam & PDRN Tone-Up Day Cream BPOM';
+const PAGE_DESC = 'Paket Youth Glow Numa Skin memadukan Deep Sea Water Treatment Lotion 150ml (NA18220101400) dan PDRN Tone-Up Day Cream 30gr (NA18262000246) untuk kulit lembap dan cerah alami bebas abu-abu.';
+const IMG_BASE = '/images/landing/paket-youth-glow-duo-150ml';
+const HERO_IMAGE = `${IMG_BASE}/hero-paket-youth-glow-150ml.webp`;
+
+const database = getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined;
+const claimedProductSlug = Astro.request.headers.get('x-adsbook-product-page');
+const [product, canonicalPath, codDisabledProvinceCodes] = await Promise.all([
+  getStorefrontProduct(Astro.locals, PRODUCT_SLUG),
+  claimedProductSlug
+    ? Promise.resolve(`/produk/${claimedProductSlug}`)
+    : nativeLandingCanonicalPath(Astro.locals, LANDING_SLUG),
+  loadStoreCodDisabledProvinceCodes(database),
+  getStoreAdsConfig(Astro.locals),
+]);
+if (!product) {
+  return Astro.rewrite('/404');
+}
+
+const canonical = `${Astro.locals.tenant.siteUrl}${canonicalPath}`;
+
+const variants = product.variants || [];
+const cheapestVariant = variants.reduce(
+  (min: any, v: any) => (!min || v.price < min.price ? v : min),
+  variants[0]
+);
+const defaultVariant = cheapestVariant || {
+  id: '52',
+  label: 'Toner 150ml + Day Cream 30gr',
+  price: 169500,
+  comparePrice: 188499,
+};
+---
+
+<BaseLayout
+  title={PAGE_TITLE}
+  description={PAGE_DESC}
+  image={HERO_IMAGE}
+  preloadImages={HERO_IMAGE}
+  canonical={canonical}
+  hideHeader={true}
+  hideFooter={true}
+>
+  <MetaLandingTracker
+    slug={LANDING_SLUG}
+    contentId={defaultCatalogContentId(product)}
+    contentName={product.contentName}
+    price={defaultVariant.price}
+  />
+
+  <div class="dsw-shell">
+    <main class="dsw-canvas">
+      <!-- Section 1: Hero -->
+      <section id="hero-section" class="dsw-hero">
+        <div class="dsw-hero-head">
+          <h1 class="dsw-h1">
+            <span class="dsw-hl-tilt">Krim Pagi Menggumpal</span> di Kulit Kering & Wajah Tampak Kusam?
+          </h1>
+          <p class="dsw-sub" style="max-width: 390px; margin: 14px auto 0; font-weight: 700;">
+            Krim pagi yang dioleskan pada kulit kering mudah retak di garis senyum. Basahi dulu dengan hidrasi mineral laut dalam!<br />
+            <span class="dsw-underline-teal">Tampil cerah menyatu seharian dengan Paket Youth Glow Duo 150ml!</span>
+          </p>
+        </div>
+
+        <div class="dsw-hero-stage">
+          <div class="dsw-hero-top-tag">
+            <div class="dsw-hero-top-pill">
+              <Icon name="lucide:sparkles" class="size-3.5" aria-hidden="true" />
+              <span>Duo Cerah Lembap 150ml • Hemat Rp19.000</span>
+            </div>
+          </div>
+
+          <img
+            src={HERO_IMAGE}
+            alt="Perbandingan wajah kering dempul vs kulit cerah natural menyatu dengan Paket Youth Glow Duo 150ml Numa Skin"
+            width="720"
+            height="480"
+            class="dsw-hero-img"
+            fetchpriority="high"
+            loading="eager"
+            decoding="async"
+          />
+
+          <div class="dsw-hero-ba" aria-hidden="true">
+            <span class="dsw-hero-ba-pill dsw-hero-ba-pill--before">Kering & Dempul</span>
+            <span class="dsw-hero-ba-pill dsw-hero-ba-pill--after">Lembap & Cerah</span>
+          </div>
+
+          <div class="dsw-hero-trust-strip" role="list" aria-label="Jaminan kualitas Numa Skin">
+            <div class="dsw-trust-item" role="listitem">
+              <span class="dsw-trust-icon">
+                <Icon name="lucide:shield-check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-trust-text">
+                <strong class="dsw-trust-label">2 BPOM Resmi</strong>
+                <span class="dsw-trust-sub">Lotion & PDRN Cream</span>
+              </span>
+            </div>
+            <div class="dsw-trust-item" role="listitem">
+              <span class="dsw-trust-icon">
+                <Icon name="lucide:droplets" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-trust-text">
+                <strong class="dsw-trust-label">1% Salmon PDRN</strong>
+                <span class="dsw-trust-sub">Warm Beige Alami</span>
+              </span>
+            </div>
+            <div class="dsw-trust-item" role="listitem">
+              <span class="dsw-trust-icon">
+                <Icon name="lucide:award" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-trust-text">
+                <strong class="dsw-trust-label">Halal ID</strong>
+                <span class="dsw-trust-sub">Bebas Abu-Abu</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="dsw-hero-foot">
+          <p class="dsw-hero-caption">
+            Duet <strong>Deep Sea Water Treatment Lotion 150ml</strong> & <strong>PDRN + Alpha-Arbutin Tone-Up Day Cream 30gr</strong> untuk kanvas kulit lembap dan cerah instan tanpa bedak tebal.
+          </p>
+          <a href="#form-pemesanan" class="dsw-cta" data-scroll-to-form>
+            <span>Ambil Paket Youth Glow 150ml</span>
+            <Icon name="lucide:arrow-right" class="size-5" aria-hidden="true" />
+          </a>
+        </div>
+      </section>
+
+      <!-- Section 2: Solusi Praktis -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Rahasia <span class="dsw-hl-aqua">Tone-Up Mulus Tanpa Retak</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Mengapa krim pencerah pagi tampak jauh lebih menyatu seperti kulit asli saat diawali dengan Treatment Lotion 150ml:
+        </p>
+
+        <div class="dsw-solution-box">
+          <img
+            src={`${IMG_BASE}/solusi-hidrasi-toner-toneup-beige.webp`}
+            alt="Wanita Indonesia meratakan krim pagi warna natural beige di atas kulit yang sudah lembap oleh toner"
+            width="648"
+            height="432"
+            class="dsw-solution-img"
+            loading="lazy"
+            fetchpriority="low"
+            decoding="async"
+          />
+
+          <div class="dsw-check-list">
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                <strong>Tahap 1 — Treatment Lotion 150ml (Kanvas Lembap):</strong> Menghidrasi pori kering dengan 72+ mineral laut dalam Ulleung, Galactomyces, dan Ceramide agar krim pagi meluncur mulus tanpa menggumpal.
+              </p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                <strong>Tahap 2 — PDRN Tone-Up Day Cream 30gr (Warm Beige):</strong> Krim warna krem-beige alami dengan 1% Encapsulated PDRN (10.000 ppm) & Alpha-Arbutin yang mencerahkan kulit sawo matang tanpa efek abu-abu.
+              </p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                <strong>Praktis Pengganti Alas Bedak Harian:</strong> Wajah langsung tampak segar, noda hitam tersamarkan secara rapi, dan tidak menyumbat pori seharian.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Masalah Kulit -->
+      <section class="dsw-section--tinted">
+        <h2 class="dsw-h2">
+          Masalah Klasik <span class="dsw-hl-coral">Skincare Pagi Hari</span>
+        </h2>
+
+        <div class="dsw-grid-2">
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/masalah-krim-retak-garis-senyum.webp`}
+              alt="Krim pagi retak dan menggumpal di area garis senyum yang kering"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-red">Cakey di Area Kering</span>
+              <p class="dsw-card-desc">
+                Mengoleskan krim pagi langsung pada kulit yang belum terhidrasi membuat krim pecah di sela pori dan garis halus.
+              </p>
+            </div>
+          </article>
+
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/masalah-toneup-putih-kapur-abu.webp`}
+              alt="Wajah tampak belang abu-abu akibat krim pemutih instan warna putih kapur"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-red">Tone-Up Putih Kapur</span>
+              <p class="dsw-card-desc">
+                Krim tone-up berwarna putih pekat sering membuat kulit sawo matang dan kuning langsat terlihat keabuan seperti memakai topeng.
+              </p>
+            </div>
+          </article>
+        </div>
+
+        <div class="dsw-list-box">
+          <p class="dsw-list-box-title">Tanda Anda Membutuhkan Youth Glow Duo 150ml:</p>
+          <div class="dsw-check-list" style="margin-top: 0;">
+            <div class="dsw-check-item">
+              <span class="dsw-icon-red">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                Krim pagi atau bedak sering terlihat retak di sekitar hidung dan garis senyum saat siang hari
+              </p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-red">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                Ingin menyamarkan tampilan flek hitam dan kusam di pagi hari tanpa harus memakai foundation tebal
+              </p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-red">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                Membutuhkan toner ukuran besar 150ml untuk menghidrasi wajah pagi dan malam
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Transformasi Nyata -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Transformasi <span class="dsw-hl-aqua">Satin-Glow Alami</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Perbandingan tampilan kulit pagi hari sebelum dan sesudah menggunakan urutan Treatment Lotion 150ml + PDRN Day Cream:
+        </p>
+
+        <div class="dsw-grid-2">
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/kondisi-kusam-dempul-tidak-rata.webp`}
+              alt="Kondisi kulit kusam berflek dengan krim yang tampak dempul tidak merata"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-red">Tanpa Persiapan Toner</span>
+              <p class="dsw-card-desc">
+                Permukaan kulit kering membuat krim menumpuk di pori, warna wajah terlihat belang, dan noda hitam masih menonjol.
+              </p>
+            </div>
+          </article>
+
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/kondisi-cerah-mulus-menyatu.webp`}
+              alt="Kondisi kulit wajah cerah alami, mulus, dan menyatu sempurna setelah memakai Youth Glow Duo"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-green">Dengan Youth Glow Duo</span>
+              <p class="dsw-card-desc">
+                Krim Warm Beige menyatu mulus di atas kulit lembap, menghasilkan kilau sehat alami tanpa efek dempul.
+              </p>
+            </div>
+          </article>
+        </div>
+
+        <div class="dsw-list-box">
+          <p class="dsw-list-box-title">Manfaat Ganda Instan & Jangka Panjang:</p>
+          <div class="dsw-check-list" style="margin-top: 0;">
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                <strong>Detik ke-60:</strong> Wajah tampak satu tingkat lebih cerah merata dengan hasil akhir satin-dewy yang natural
+              </p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                <strong>Minggu 2–3:</strong> Kulit terasa lebih lembap kenyal berkat hidrasi Galactomyces & Ceramide setiap hari
+              </p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                <strong>Minggu 4+:</strong> Kandungan Alpha-Arbutin, Niacinamide, dan 1% PDRN membantu merawat tampilan noda hitam secara nyata
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: Cara Pakai 2 Langkah -->
+      <section class="dsw-section--tinted">
+        <h2 class="dsw-h2">
+          Ritual Pagi <span class="dsw-hl-aqua">2 Langkah Anti-Dempul</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Urutan praktis sebelum beraktivitas agar wajah lembap dan cerah sepanjang hari:
+        </p>
+
+        <div class="dsw-grid-2">
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/cara-pakai-youth-step1-toner.webp`}
+              alt="Langkah 1 tepuk lembut Deep Sea Water Treatment Lotion 150ml ke wajah"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-teal">1. Lembapkan Kanvas Kulit</span>
+              <p class="dsw-card-desc">
+                Tepukkan 4–5 tetes <strong>Treatment Lotion 150ml</strong> ke seluruh wajah hingga meresap dan kulit terasa sejuk kenyal.
+              </p>
+            </div>
+          </article>
+
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/cara-pakai-youth-step2-pdrn.webp`}
+              alt="Langkah 2 ratakan PDRN Tone-Up Day Cream warna natural beige di wajah"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-teal">2. Ratakan PDRN Beige</span>
+              <p class="dsw-card-desc">
+                Ambil seujung jari <strong>PDRN Tone-Up Day Cream 30gr</strong>, totolkan di 5 titik wajah, lalu baurkan merata.
+              </p>
+            </div>
+          </article>
+        </div>
+
+        <div style="margin-top: 22px; text-align: center;">
+          <a href="#form-pemesanan" class="dsw-cta" data-scroll-to-form>
+            <span>Pesan Paket Youth Glow 150ml</span>
+            <Icon name="lucide:arrow-right" class="size-5" aria-hidden="true" />
+          </a>
+        </div>
+      </section>
+
+      <!-- Section 6: Bukti Pelanggan -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Favorit <span class="dsw-hl-aqua">Wanita Aktif Indonesia</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Ulasan pelanggan yang beralih dari bedak tebal ke Paket Youth Glow Duo 150ml:
+        </p>
+
+        <div class="dsw-grid-2">
+          <div class="dsw-proof-cell">
+            <img
+              src={`${IMG_BASE}/bukti-tekstur-youth-glow-duo.webp`}
+              alt="Tekstur cair Treatment Lotion dan krim Warm Beige PDRN Day Cream"
+              width="480"
+              height="320"
+              class="dsw-proof-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-proof-OverlayCaption">Lotion Cair + Krim Warm Beige</p>
+          </div>
+          <div class="dsw-proof-cell">
+            <img
+              src={`${IMG_BASE}/bukti-bunda-cerah-tanpa-topeng.webp`}
+              alt="Potret wanita berhijab dengan wajah cerah natural tanpa efek abu-abu"
+              width="480"
+              height="320"
+              class="dsw-proof-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-proof-OverlayCaption">Menyatu di Sawo Matang</p>
+          </div>
+          <div class="dsw-proof-cell">
+            <img
+              src={`${IMG_BASE}/bukti-pipi-mulus-anti-cakey.webp`}
+              alt="Close-up pipi mulus bercahaya tanpa garis bedak retak"
+              width="480"
+              height="320"
+              class="dsw-proof-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-proof-OverlayCaption">Bebas Retak Seharian</p>
+          </div>
+          <div class="dsw-proof-cell">
+            <img
+              src={`${IMG_BASE}/bukti-meja-rias-youth-glow.webp`}
+              alt="Kemasan Paket Youth Glow Duo 150ml di meja rias pelanggan"
+              width="480"
+              height="320"
+              class="dsw-proof-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-proof-OverlayCaption">Toner 150ml + Krim Pagi 30gr</p>
+          </div>
+        </div>
+
+        <div class="dsw-testi-list">
+          <article class="dsw-testi-card">
+            <div class="dsw-testi-head">
+              <div class="dsw-testi-avatar" aria-hidden="true">N</div>
+              <div class="dsw-testi-meta">
+                <p class="dsw-testi-name">
+                  Kak Nindy Larasati (34 thn)
+                  <span class="dsw-verified-pill">Verified Buyer</span>
+                </p>
+                <div class="dsw-stars">
+                  <RatingStars rating={5} />
+                </div>
+              </div>
+            </div>
+            <p class="dsw-testi-body">
+              "Biasanya kalau pakai day cream langsung suka nyangkut di bagian pipi yang kering. Setelah pakai Treatment Lotion 150ml dulu baru PDRN Day Cream, hasilnya licin mulus banget! Warnanya natural beige nggak bikin abu-abu."
+            </p>
+            <div class="dsw-testi-foot">
+              <span>Bekasi</span>
+              <span>•</span>
+              <span>Pemakaian 3 Minggu</span>
+            </div>
+          </article>
+
+          <article class="dsw-testi-card">
+            <div class="dsw-testi-head">
+              <div class="dsw-testi-avatar" aria-hidden="true">H</div>
+              <div class="dsw-testi-meta">
+                <p class="dsw-testi-name">
+                  Ibu Hesti Wulandari (37 thn)
+                  <span class="dsw-verified-pill">Verified Buyer</span>
+                </p>
+                <div class="dsw-stars">
+                  <RatingStars rating={5} />
+                </div>
+              </div>
+            </div>
+            <p class="dsw-testi-body">
+              "Sekarang berangkat ngajar nggak perlu pakai foundation lagi. Cukup tepuk toner 150ml terus oles PDRN Day Cream tipis-tipis, muka langsung cerah segar dan bekas flek tersamarkan rapi."
+            </p>
+            <div class="dsw-testi-foot">
+              <span>Yogyakarta</span>
+              <span>•</span>
+              <span>Pemakaian 4 Minggu</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- Section 7: Tabel Perbandingan -->
+      <section class="dsw-section--tinted">
+        <h2 class="dsw-h2">
+          Keunggulan <span class="dsw-hl-aqua">Paket Youth Glow 150ml</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Mengapa duet hidrasi + PDRN Tone-Up jauh lebih unggul dibandingkan krim pemutih biasa:
+        </p>
+
+        <div class="dsw-cmp-card">
+          <div class="dsw-cmp-head">
+            <div class="dsw-cmp-col">Parameter</div>
+            <div class="dsw-cmp-col dsw-cmp-col--numa">Youth Glow 150ml</div>
+            <div class="dsw-cmp-col">Krim Tone-Up Biasa</div>
+          </div>
+
+          <div class="dsw-cmp-row">
+            <div class="dsw-cmp-cell dsw-cmp-cell--feature">Hasil di Kulit Sawo Matang</div>
+            <div class="dsw-cmp-cell dsw-cmp-cell--numa">
+              <span class="dsw-icon-green" style="margin: 0 auto;">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">Warm Beige menyatu alami</span>
+            </div>
+            <div class="dsw-cmp-cell">
+              <span class="dsw-icon-red" style="margin: 0 auto;">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">Putih kapur / abu-abu</span>
+            </div>
+          </div>
+
+          <div class="dsw-cmp-row">
+            <div class="dsw-cmp-cell dsw-cmp-cell--feature">Ketahanan di Area Garis Senyum</div>
+            <div class="dsw-cmp-cell dsw-cmp-cell--numa">
+              <span class="dsw-icon-green" style="margin: 0 auto;">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">Dihidrasi Toner 150ml</span>
+            </div>
+            <div class="dsw-cmp-cell">
+              <span class="dsw-icon-red" style="margin: 0 auto;">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">Mudah retak (cakey)</span>
+            </div>
+          </div>
+
+          <div class="dsw-cmp-row">
+            <div class="dsw-cmp-cell dsw-cmp-cell--feature">Bahan Aktif Pencerah</div>
+            <div class="dsw-cmp-cell dsw-cmp-cell--numa">
+              <span class="dsw-icon-green" style="margin: 0 auto;">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">1% PDRN + Alpha-Arbutin</span>
+            </div>
+            <div class="dsw-cmp-cell">
+              <span class="dsw-icon-red" style="margin: 0 auto;">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">Hanya pigmen pewarna</span>
+            </div>
+          </div>
+
+          <div class="dsw-cmp-row">
+            <div class="dsw-cmp-cell dsw-cmp-cell--feature">Harga Paket</div>
+            <div class="dsw-cmp-cell dsw-cmp-cell--numa">
+              <strong>Rp169.500</strong>
+              <span class="dsw-cmp-sub">Hemat Rp19.000</span>
+            </div>
+            <div class="dsw-cmp-cell">
+              <span>Rp188.499</span>
+              <span class="dsw-cmp-sub">Harga beli satuan</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 8: Formulasi, Kandungan & Kemasan -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Formulasi <span class="dsw-hl-aqua">Ulleung & Encapsulated PDRN</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Nutrisi laut dalam Korea berpadu dengan DNA Salmon terenkapsulasi untuk kecerahan kulit yang sehat:
+        </p>
+
+        <div class="dsw-fig-stack">
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/formulasi-ulleung-pdrn-kapsul.webp`}
+                alt="Formulasi Air Laut Dalam Pulau Ulleung dan mikrokapsul PDRN emas"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">72+ Mineral Ulleung + 1% Encapsulated PDRN</h3>
+              <p class="dsw-figcaption-desc">
+                Teknologi enkapsulasi menjaga kestabilan polinukleotida (PDRN) saat meresap di atas kulit yang telah dilembapkan mineral laut dalam.
+              </p>
+            </figcaption>
+          </figure>
+
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/kandungan-galactomyces-arbutin-niacinamide.webp`}
+                alt="Kandungan aktif Galactomyces, Alpha-Arbutin, Niacinamide, dan Ceramide"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">Galactomyces + Alpha-Arbutin + Niacinamide</h3>
+              <p class="dsw-figcaption-desc">
+                Membantu meratakan warna kulit yang belang, menyamarkan tampilan noda hitam, dan memperkuat pertahanan skin barrier.
+              </p>
+            </figcaption>
+          </figure>
+
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/kemasan-youth-glow-150ml.webp`}
+                alt="Kemasan resmi Paket Youth Glow Duo 150ml Numa Skin"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">2 Produk Full-Size Resmi BPOM (Toner Jumbo 150 ml)</h3>
+              <p class="dsw-figcaption-desc">
+                Terdiri dari Deep Sea Water Treatment Lotion 150ml (BPOM NA18220101400) dan PDRN + Alpha-Arbutin Tone-Up Day Cream 30gr (BPOM NA18262000246).
+              </p>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- Section 9: Garansi 100% Resmi -->
+      <section class="dsw-section" style="text-align: center; background: #f8fafc;">
+        <div style="margin: 0 auto 14px; display: flex; width: 52px; height: 52px; align-items: center; justify-content: center; color: #0b6e7d;">
+          <Icon name="lucide:shield-check" class="size-12" aria-hidden="true" />
+        </div>
+        <h2 class="dsw-h2" style="font-size: 32px;">GARANSI RESMI 100%</h2>
+        <p class="dsw-sub" style="max-width: 320px; margin: 8px auto 0;">
+          Pesanan dikirim langsung dari gudang resmi Numa Skin Indonesia.
+        </p>
+
+        <div class="dsw-guarantee-list">
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:badge-check" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">2 Produk Asli Tersegel BPOM</strong>
+              Terdaftar resmi di BPOM RI (NA18220101400 & NA18262000246) dan bersertifikat Halal Indonesia.
+            </p>
+          </div>
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:truck" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">Bisa Bayar di Tempat (COD)</strong>
+              Pesan hari ini, bayar langsung ke kurir saat paket tiba di rumah Anda.
+            </p>
+          </div>
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:package-check" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">Garansi Ganti Baru</strong>
+              Kami ganti baru tanpa biaya tambahan bila ada kemasan yang diterima rusak atau bocor.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 10: Checkout Form -->
+      <section id="form-pemesanan" class="dsw-section--checkout">
+        <div style="padding: 0 20px 14px; text-align: center;">
+          <h2 class="dsw-h2" style="font-size: 28px;">
+            Lengkapi Data <span class="dsw-hl-aqua">Pengiriman</span>
+          </h2>
+          <p class="dsw-sub" style="max-width: 340px; margin: 8px auto 0;">
+            Isi nama, nomor WhatsApp aktif, dan kecamatan tujuan untuk cek ongkir otomatis.
+          </p>
+        </div>
+
+        <GeoIpResolvedForm
+          mode="hybrid"
+          productSlug={product.slug}
+          embedded={true}
+          selectedVariantId={String(defaultVariant.id)}
+          codDisabledProvinceCodes={codDisabledProvinceCodes}
+        />
+      </section>
+    </main>
+
+    <!-- Floating Centered Sticky Button -->
+    <div id="floating-cta" data-sticky-cta class="dsw-float-wrap">
+      <a
+        href="#form-pemesanan"
+        class="dsw-float-btn"
+        data-scroll-to-form
+        aria-label="Ambil Paket Youth Glow Duo 150ml Sekarang"
+      >
+        <Icon name="lucide:shopping-bag" class="size-5" aria-hidden="true" />
+        <span>Ambil Youth Glow 150ml (Hemat Rp19rb)</span>
+        <Icon name="lucide:arrow-right" class="size-4" aria-hidden="true" />
+      </a>
+    </div>
+  </div>
+
+  <script is:inline>
+    (function () {
+      var sticky = document.getElementById('floating-cta');
+      var hero = document.getElementById('hero-section');
+      var formSection = document.getElementById('form-pemesanan');
+
+      document.querySelectorAll('[data-scroll-to-form]').forEach(function (link) {
+        link.addEventListener('click', function (ev) {
+          if (!formSection) return;
+          ev.preventDefault();
+          formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          setTimeout(function () {
+            var firstInput = formSection.querySelector('input[name="name"], input[type="text"]');
+            if (firstInput && typeof firstInput.focus === 'function') {
+              firstInput.focus({ preventScroll: true });
+            }
+          }, 480);
+        });
+      });
+
+      if (!sticky || !hero || !formSection || !('IntersectionObserver' in window)) return;
+
+      var heroVisible = true;
+      var formVisible = false;
+
+      function syncSticky() {
+        if (!heroVisible && !formVisible) {
+          sticky.classList.add('is-visible');
+        } else {
+          sticky.classList.remove('is-visible');
+        }
+      }
+
+      var observer = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.target === hero) {
+              heroVisible = entry.isIntersecting;
+            } else if (entry.target === formSection) {
+              formVisible = entry.isIntersecting;
+            }
+          });
+          syncSticky();
+        },
+        { threshold: 0.08 }
+      );
+
+      observer.observe(hero);
+      observer.observe(formSection);
+    })();
+  </script>
+</BaseLayout>

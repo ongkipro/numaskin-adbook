@@ -1,0 +1,808 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import GeoIpResolvedForm from '../components/storefront/forms/GeoIpResolvedForm.astro';
+import MetaLandingTracker from '../components/storefront/tracking/MetaLandingTracker.astro';
+import Icon from '../components/storefront/shared/Icon.astro';
+import RatingStars from '../components/storefront/shared/RatingStars.astro';
+import { getStorefrontProduct } from '../lib/catalog';
+import { nativeLandingCanonicalPath } from '../lib/landing-pages';
+import { defaultCatalogContentId } from '../lib/catalog-feed';
+import { getRuntimeEnv } from '../lib/env';
+import { loadStoreCodDisabledProvinceCodes } from '../lib/form-mode';
+import { getStoreAdsConfig } from '../lib/store-ads';
+import '../styles/form-hybrid.css';
+import '../styles/landing-pages/paket-adenosine-dan-toner-150ml.css';
+
+export const prerender = false;
+
+const PRODUCT_SLUG = 'paket-adenosine-dan-toner-150ml';
+const LANDING_SLUG = 'paket-adenosine-dan-toner-150ml';
+const PAGE_TITLE = 'Paket Adenosine & Toner (150ml) — Duo Hidrasi Laut Dalam & Penyamaran Flek BPOM';
+const PAGE_DESC = 'Paket perawatan skin barrier Numa Skin: Deep Sea Water Treatment Lotion 150ml (NA18220101400) + Adenosine Moisturizer 30gr (NA18250109281) untuk kulit lembap, kenyal, dan tampak cerah.';
+const IMG_BASE = '/images/landing/paket-adenosine-dan-toner-150ml';
+const HERO_IMAGE = `${IMG_BASE}/hero-paket-adenosine-toner-150ml.webp`;
+
+const database = getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined;
+const claimedProductSlug = Astro.request.headers.get('x-adsbook-product-page');
+const [product, canonicalPath, codDisabledProvinceCodes] = await Promise.all([
+  getStorefrontProduct(Astro.locals, PRODUCT_SLUG),
+  claimedProductSlug
+    ? Promise.resolve(`/produk/${claimedProductSlug}`)
+    : nativeLandingCanonicalPath(Astro.locals, LANDING_SLUG),
+  loadStoreCodDisabledProvinceCodes(database),
+  getStoreAdsConfig(Astro.locals),
+]);
+if (!product) {
+  return Astro.rewrite('/404');
+}
+
+const canonical = `${Astro.locals.tenant.siteUrl}${canonicalPath}`;
+
+const variants = product.variants || [];
+const cheapestVariant = variants.reduce(
+  (min: any, v: any) => (!min || v.price < min.price ? v : min),
+  variants[0]
+);
+const defaultVariant = cheapestVariant || {
+  id: '9',
+  label: 'Toner 150ml + Adenosine 30gr',
+  price: 169000,
+  comparePrice: 187999,
+};
+---
+
+<BaseLayout
+  title={PAGE_TITLE}
+  description={PAGE_DESC}
+  image={HERO_IMAGE}
+  preloadImages={HERO_IMAGE}
+  canonical={canonical}
+  hideHeader={true}
+  hideFooter={true}
+>
+  <MetaLandingTracker
+    slug={LANDING_SLUG}
+    contentId={defaultCatalogContentId(product)}
+    contentName={product.contentName}
+    price={defaultVariant.price}
+  />
+
+  <div class="dsw-shell">
+    <main class="dsw-canvas">
+      <!-- Section 1: Hero -->
+      <section id="hero-section" class="dsw-hero">
+        <div class="dsw-hero-head">
+          <h1 class="dsw-h1">
+            <span class="dsw-hl-tilt">Krim Sulit Meresap</span> di Kulit Kering & Flek Hitam Makin Tampak?
+          </h1>
+          <p class="dsw-sub" style="max-width: 390px; margin: 14px auto 0; font-weight: 700;">
+            Pelembap anti-flek terbaik pun sulit bekerja optimal jika dioleskan pada pori yang kaku dan dehidrasi.<br />
+            <span class="dsw-underline-teal">Buka jalur pori & kunci hidrasi dengan Paket Adenosine & Toner 150ml!</span>
+          </p>
+        </div>
+
+        <div class="dsw-hero-stage">
+          <div class="dsw-hero-top-tag">
+            <div class="dsw-hero-top-pill">
+              <Icon name="lucide:sparkles" class="size-3.5" aria-hidden="true" />
+              <span>Duo Hidrasi & Anti-Flek 150ml • Hemat Rp19.000</span>
+            </div>
+          </div>
+
+          <img
+            src={HERO_IMAGE}
+            alt="Perbandingan wajah kering berflek hitam vs kulit lembap kenyal merata dengan Paket Adenosine & Toner 150ml Numa Skin"
+            width="720"
+            height="480"
+            class="dsw-hero-img"
+            fetchpriority="high"
+            loading="eager"
+            decoding="async"
+          />
+
+          <div class="dsw-hero-ba" aria-hidden="true">
+            <span class="dsw-hero-ba-pill dsw-hero-ba-pill--before">Kering & Berflek</span>
+            <span class="dsw-hero-ba-pill dsw-hero-ba-pill--after">Lembap & Kenyal</span>
+          </div>
+
+          <div class="dsw-hero-trust-strip" role="list" aria-label="Jaminan kualitas Numa Skin">
+            <div class="dsw-trust-item" role="listitem">
+              <span class="dsw-trust-icon">
+                <Icon name="lucide:shield-check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-trust-text">
+                <strong class="dsw-trust-label">2 BPOM Resmi</strong>
+                <span class="dsw-trust-sub">Lotion & Adenosine</span>
+              </span>
+            </div>
+            <div class="dsw-trust-item" role="listitem">
+              <span class="dsw-trust-icon">
+                <Icon name="lucide:droplets" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-trust-text">
+                <strong class="dsw-trust-label">72+ Mineral + 11X HA</strong>
+                <span class="dsw-trust-sub">Hidrasi Berlapis</span>
+              </span>
+            </div>
+            <div class="dsw-trust-item" role="listitem">
+              <span class="dsw-trust-icon">
+                <Icon name="lucide:award" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-trust-text">
+                <strong class="dsw-trust-label">Halal ID</strong>
+                <span class="dsw-trust-sub">Aman Ibu Hamil</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="dsw-hero-foot">
+          <p class="dsw-hero-caption">
+            Sinergi <strong>Deep Sea Water Treatment Lotion 150ml</strong> & <strong>Adenosine Moisturizer 30gr</strong> untuk melembutkan pori dan merawat noda hitam.
+          </p>
+          <a href="#form-pemesanan" class="dsw-cta" data-scroll-to-form>
+            <span>Ambil Paket Duo 150ml Sekarang</span>
+            <Icon name="lucide:arrow-right" class="size-5" aria-hidden="true" />
+          </a>
+        </div>
+      </section>
+
+      <!-- Section 2: Solusi Praktis -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Kombinasi <span class="dsw-hl-aqua">Kompres & Kunci</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Dua langkah dasar berbahan dasar Air Laut Dalam Pulau Ulleung Korea yang membantu penyerapan nutrisi lebih optimal:
+        </p>
+
+        <div class="dsw-solution-box">
+          <img
+            src={`${IMG_BASE}/solusi-kompres-toner-kunci-adenosine.webp`}
+            alt="Wanita Indonesia dengan kulit wajah lembap dan kenyal setelah menggunakan Toner 150ml dan Adenosine Moisturizer"
+            width="648"
+            height="432"
+            class="dsw-solution-img"
+            loading="lazy"
+            fetchpriority="low"
+            decoding="async"
+          />
+
+          <div class="dsw-check-list">
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                <strong>Tahap 1 — Treatment Lotion 150ml (Hydrating First Essence):</strong> Mengandung Air Laut Dalam Pulau Ulleung (72+ mineral alami), Galactomyces, dan Ceramide untuk melunakkan lapisan kulit kering agar siap menyerap pelembap.
+              </p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                <strong>Tahap 2 — Adenosine Moisturizer 30gr (Skin Communicator):</strong> Mengunci hidrasi dengan 11X Hyaluronic Acid, Adenosine, Actiporine 8G, dan Alpha-Arbutin untuk membantu menyamarkan flek hitam serta garis halus.
+              </p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                <strong>Ukuran Jumbo 150ml Lebih Awet:</strong> Kapasitas Treatment Lotion 150ml cukup untuk pemakaian pagi-malam dan metode kompres kapas (CSM) hingga 2–3 bulan dengan hemat Rp19.000.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Masalah Kulit -->
+      <section class="dsw-section--tinted">
+        <h2 class="dsw-h2">
+          Kenapa Pelembap Saja <span class="dsw-hl-coral">Sering Kurang Maksimal?</span>
+        </h2>
+
+        <div class="dsw-grid-2">
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/masalah-krim-numpuk-kulit-kering.webp`}
+              alt="Ilustrasi kulit wajah kering yang membuat krim sulit meresap"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-red">Pori Kaku Dehidrasi</span>
+              <p class="dsw-card-desc">
+                Mengoleskan krim langsung di atas kulit yang kering kerontang ibarat menuang air ke tanah tandus—nutrisi hanya menumpuk di permukaan.
+              </p>
+            </div>
+          </article>
+
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/masalah-flek-garis-halus-dehidrasi.webp`}
+              alt="Tampilan flek hitam dan garis halus akibat skin barrier kekurangan air"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-red">Barrier Kehilangan Air</span>
+              <p class="dsw-card-desc">
+                Saat kadar air di dalam kulit terus menguap karena ruangan ber-AC dan usia 30+, garis senyum tampak makin tegas dan noda hitam makin gelap.
+              </p>
+            </div>
+          </article>
+        </div>
+
+        <div class="dsw-list-box">
+          <p class="dsw-list-box-title">Tanda Kulit Anda Butuh Duet Toner 150ml & Adenosine:</p>
+          <div class="dsw-check-list" style="margin-top: 0;">
+            <div class="dsw-check-item">
+              <span class="dsw-icon-red">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                Sudah pakai pelembap setiap malam tapi bangun pagi pipi masih terasa kering atau kurang membal
+              </p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-red">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                Bintik kecokelatan (flek hitam) di tulang pipi dan garis halus di sudut mata mulai terlihat jelas
+              </p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-red">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                Tekstur kulit terasa kasar dan riasan bedak mudah retak (cakey) di area garis senyum
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Transformasi Nyata -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Transformasi <span class="dsw-hl-aqua">Hidrasi & Kekenyalan</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Perbedaan kondisi kulit saat menggunakan pelembap tanpa toner pembuka dibandingkan ritual 2 langkah Treatment Lotion 150ml + Adenosine:
+        </p>
+
+        <div class="dsw-grid-2">
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/kondisi-kering-kasar-berflek.webp`}
+              alt="Kondisi kulit kering kasar dengan flek hitam dan garis halus sebelum perawatan"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-red">Tanpa Hidrasi Berlapis</span>
+              <p class="dsw-card-desc">
+                Permukaan kulit tampak kusam, pori-pori terlihat kering kasar, dan noda hitam maupun garis dehidrasi tampak jelas.
+              </p>
+            </div>
+          </article>
+
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/kondisi-lembap-kenyal-cerah.webp`}
+              alt="Kondisi kulit wajah lembap, kenyal, dan tampak cerah merata setelah perawatan rutin"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-green">Rutin Toner + Adenosine</span>
+              <p class="dsw-card-desc">
+                Kulit tampak terhidrasi penuh dari dalam, tekstur pipi terasa halus membal, dan tampilan noda hitam tampak lebih samar.
+              </p>
+            </div>
+          </article>
+        </div>
+
+        <div class="dsw-list-box">
+          <p class="dsw-list-box-title">Hasil Pemakaian Rutin Pagi & Malam:</p>
+          <div class="dsw-check-list" style="margin-top: 0;">
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                <strong>Minggu 1–2:</strong> Kulit langsung terasa sejuk, lembap hingga ke lapisan dalam, dan tidak lagi terasa ketarik
+              </p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                <strong>Minggu 3–4:</strong> Tampilan pori-pori tampak lebih rapat, warna kulit lebih cerah, dan garis dehidrasi tampak melunak
+              </p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                <strong>Hari ke-28+:</strong> Noda hitam tampak memudar bertahap dan elastisitas kulit pipi terasa lebih kencang
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: Cara Pakai 2 Langkah -->
+      <section class="dsw-section--tinted">
+        <h2 class="dsw-h2">
+          Ritual Simpel <span class="dsw-hl-aqua">2 Langkah Pagi & Malam</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Hanya butuh 60 detik setiap habis cuci muka untuk mengembalikan kelembapan dan kekenyalan kulit:
+        </p>
+
+        <div class="dsw-grid-2">
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/cara-pakai-step1-toner-150ml.webp`}
+              alt="Langkah 1 tepuk lembut Deep Sea Water Treatment Lotion 150ml pada wajah"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-teal">1. Buka Jalur Pori</span>
+              <p class="dsw-card-desc">
+                Tuangkan 4–5 tetes <strong>Treatment Lotion 150ml</strong> ke telapak tangan, lalu tepuk lembut ke wajah yang masih setengah lembap.
+              </p>
+            </div>
+          </article>
+
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/cara-pakai-step2-kunci-adenosine.webp`}
+              alt="Langkah 2 kunci kelembapan dengan Adenosine Deep Sea Water Moisturizer"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-teal">2. Kunci & Rawat Flek</span>
+              <p class="dsw-card-desc">
+                Saat wajah masih lembap oleh toner, oleskan <strong>Adenosine Moisturizer 30gr</strong> secara merata sambil dipijat ke arah atas.
+              </p>
+            </div>
+          </article>
+        </div>
+
+        <div style="margin-top: 22px; text-align: center;">
+          <a href="#form-pemesanan" class="dsw-cta" data-scroll-to-form>
+            <span>Pesan Paket Adenosine & Toner 150ml</span>
+            <Icon name="lucide:arrow-right" class="size-5" aria-hidden="true" />
+          </a>
+        </div>
+      </section>
+
+      <!-- Section 6: Bukti Pelanggan -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Dipercaya <span class="dsw-hl-aqua">Ribuan Wanita Indonesia</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Pengalaman pelanggan yang memadukan Treatment Lotion 150ml dengan Adenosine Moisturizer:
+        </p>
+
+        <div class="dsw-grid-2">
+          <div class="dsw-proof-cell">
+            <img
+              src={`${IMG_BASE}/bukti-tekstur-toner-dan-adenosine.webp`}
+              alt="Tekstur cair menyegarkan Treatment Lotion dan gel-cream Adenosine yang mudah meresap"
+              width="480"
+              height="320"
+              class="dsw-proof-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-proof-OverlayCaption">Duet Cair & Gel-Cream Dingin</p>
+          </div>
+          <div class="dsw-proof-cell">
+            <img
+              src={`${IMG_BASE}/bukti-bunda-35an-lembap-cerah.webp`}
+              alt="Potret pelanggan usia 35 tahun dengan kulit wajah lembap dan cerah"
+              width="480"
+              height="320"
+              class="dsw-proof-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-proof-OverlayCaption">Flek Tampak Memudar</p>
+          </div>
+          <div class="dsw-proof-cell">
+            <img
+              src={`${IMG_BASE}/bukti-pipi-kenyal-terhidrasi.webp`}
+              alt="Close-up kulit pipi yang kenyal dan halus setelah pemakaian rutin"
+              width="480"
+              height="320"
+              class="dsw-proof-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-proof-OverlayCaption">Pipi Terasa Lebih Membal</p>
+          </div>
+          <div class="dsw-proof-cell">
+            <img
+              src={`${IMG_BASE}/bukti-meja-rias-adenosine-toner.webp`}
+              alt="Kemasan Paket Adenosine dan Toner 150ml di meja rias pelanggan"
+              width="480"
+              height="320"
+              class="dsw-proof-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-proof-OverlayCaption">Ukuran 150ml Awet Berbulan-bulan</p>
+          </div>
+        </div>
+
+        <div class="dsw-testi-list">
+          <article class="dsw-testi-card">
+            <div class="dsw-testi-head">
+              <div class="dsw-testi-avatar" aria-hidden="true">R</div>
+              <div class="dsw-testi-meta">
+                <p class="dsw-testi-name">
+                  Ibu Ratna Dewi (38 thn)
+                  <span class="dsw-verified-pill">Verified Buyer</span>
+                </p>
+                <div class="dsw-stars">
+                  <RatingStars rating={5} />
+                </div>
+              </div>
+            </div>
+            <p class="dsw-testi-body">
+              "Dulu pakai Adenosine saja sudah bagus, tapi begitu dipasangkan sama Treatment Lotion 150ml ini meresapnya jauh lebih cepat! Bangun tidur pipi berasa kenyal banget dan flek di tulang pipi mulai samar."
+            </p>
+            <div class="dsw-testi-foot">
+              <span>Surabaya</span>
+              <span>•</span>
+              <span>Pemakaian 4 Minggu</span>
+            </div>
+          </article>
+
+          <article class="dsw-testi-card">
+            <div class="dsw-testi-head">
+              <div class="dsw-testi-avatar" aria-hidden="true">L</div>
+              <div class="dsw-testi-meta">
+                <p class="dsw-testi-name">
+                  Kak Laila Sari (34 thn)
+                  <span class="dsw-verified-pill">Verified Buyer</span>
+                </p>
+                <div class="dsw-stars">
+                  <RatingStars rating={5} />
+                </div>
+              </div>
+            </div>
+            <p class="dsw-testi-body">
+              "Kulitku tipe kering yang gampang kusam kalau di ruang AC. Tonernya ukuran 150ml gede banget bisa buat kompres kapas tiap malam, terus dikunci pakai Adenosine. Wajah jadi adem dan glowing sehat."
+            </p>
+            <div class="dsw-testi-foot">
+              <span>Bandung</span>
+              <span>•</span>
+              <span>Pemakaian 3 Minggu</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- Section 7: Tabel Perbandingan -->
+      <section class="dsw-section--tinted">
+        <h2 class="dsw-h2">
+          Lebih Hemat & Efektif <span class="dsw-hl-aqua">Beli Paket Duo</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Mengapa Paket Adenosine & Toner (150ml) menjadi pilihan favorit untuk perawatan skin barrier dan flek:
+        </p>
+
+        <div class="dsw-cmp-card">
+          <div class="dsw-cmp-head">
+            <div class="dsw-cmp-col">Fitur Perawatan</div>
+            <div class="dsw-cmp-col dsw-cmp-col--numa">Paket Duo 150ml</div>
+            <div class="dsw-cmp-col">Krim Tunggal Biasa</div>
+          </div>
+
+          <div class="dsw-cmp-row">
+            <div class="dsw-cmp-cell dsw-cmp-cell--feature">Penyerapan ke Pori</div>
+            <div class="dsw-cmp-cell dsw-cmp-cell--numa">
+              <span class="dsw-icon-green" style="margin: 0 auto;">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">Dibuka 72+ Mineral</span>
+            </div>
+            <div class="dsw-cmp-cell">
+              <span class="dsw-icon-red" style="margin: 0 auto;">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">Tertahan di permukaan</span>
+            </div>
+          </div>
+
+          <div class="dsw-cmp-row">
+            <div class="dsw-cmp-cell dsw-cmp-cell--feature">Kandungan Anti-Flek & Kerutan</div>
+            <div class="dsw-cmp-cell dsw-cmp-cell--numa">
+              <span class="dsw-icon-green" style="margin: 0 auto;">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">Adenosine + Alpha-Arbutin</span>
+            </div>
+            <div class="dsw-cmp-cell">
+              <span class="dsw-icon-red" style="margin: 0 auto;">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">Hanya pelembap dasar</span>
+            </div>
+          </div>
+
+          <div class="dsw-cmp-row">
+            <div class="dsw-cmp-cell dsw-cmp-cell--feature">Hidrasi Multi-Kedalaman</div>
+            <div class="dsw-cmp-cell dsw-cmp-cell--numa">
+              <span class="dsw-icon-green" style="margin: 0 auto;">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">Galactomyces + 11X HA</span>
+            </div>
+            <div class="dsw-cmp-cell">
+              <span class="dsw-icon-red" style="margin: 0 auto;">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">1 jenis pelembap</span>
+            </div>
+          </div>
+
+          <div class="dsw-cmp-row">
+            <div class="dsw-cmp-cell dsw-cmp-cell--feature">Harga Resmi</div>
+            <div class="dsw-cmp-cell dsw-cmp-cell--numa">
+              <strong>Rp169.000</strong>
+              <span class="dsw-cmp-sub">Hemat Rp19.000</span>
+            </div>
+            <div class="dsw-cmp-cell">
+              <span>Rp187.999</span>
+              <span class="dsw-cmp-sub">Beli satuan terpisah</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 8: Formulasi, Kandungan & Kemasan -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Sains <span class="dsw-hl-aqua">Deep Sea Water Korea</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Kedua produk diformulasikan dengan basis Air Laut Dalam Pulau Ulleung yang kaya mineral mikro untuk menjaga kekuatan skin barrier:
+        </p>
+
+        <div class="dsw-fig-stack">
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/formulasi-ulleung-mineral-communicator.webp`}
+                alt="Formulasi Air Laut Dalam Pulau Ulleung Korea dan alga merah laut Jania rubens"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">Ulleung Deep Sea Water + Skin Communicator™</h3>
+              <p class="dsw-figcaption-desc">
+                Menggabungkan kemurnian air laut dalam Korea sedalam 200 meter dengan teknologi komunikasi sel untuk merawat elastisitas kulit secara alami.
+              </p>
+            </figcaption>
+          </figure>
+
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/kandungan-galactomyces-adenosine-11ha.webp`}
+                alt="Kandungan aktif Galactomyces, Ceramide, Adenosine, 11X Hyaluronic Acid, dan Alpha-Arbutin"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">Galactomyces + Ceramide + Adenosine + 11X HA</h3>
+              <p class="dsw-figcaption-desc">
+                Menghidrasi setiap lapisan epidermis sekaligus membantu menyamarkan tampilan noda hitam dan garis halus dengan Alpha-Arbutin.
+              </p>
+            </figcaption>
+          </figure>
+
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/kemasan-adenosine-toner-150ml.webp`}
+                alt="Kemasan resmi Paket Adenosine Moisturizer 30gr dan Deep Sea Water Treatment Lotion 150ml"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">2 Produk Full-Size Resmi BPOM (Toner Jumbo 150 ml)</h3>
+              <p class="dsw-figcaption-desc">
+                Terdiri dari Deep Sea Water Treatment Lotion 150ml (BPOM NA18220101400) dan Adenosine Deep Sea Water Moisturizer 30gr (BPOM NA18250109281).
+              </p>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- Section 9: Garansi 100% Resmi -->
+      <section class="dsw-section" style="text-align: center; background: #f8fafc;">
+        <div style="margin: 0 auto 14px; display: flex; width: 52px; height: 52px; align-items: center; justify-content: center; color: #0b6e7d;">
+          <Icon name="lucide:shield-check" class="size-12" aria-hidden="true" />
+        </div>
+        <h2 class="dsw-h2" style="font-size: 32px;">GARANSI RESMI 100%</h2>
+        <p class="dsw-sub" style="max-width: 320px; margin: 8px auto 0;">
+          Pesanan dikirim langsung dari gudang resmi Numa Skin Indonesia.
+        </p>
+
+        <div class="dsw-guarantee-list">
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:badge-check" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">2 Produk Asli Tersegel BPOM</strong>
+              Dilengkapi nomor notifikasi BPOM resmi (NA18220101400 & NA18250109281) serta Halal Indonesia.
+            </p>
+          </div>
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:truck" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">Bisa Bayar di Tempat (COD)</strong>
+              Pesan hari ini, bayar langsung ke kurir saat paket tiba di rumah Anda.
+            </p>
+          </div>
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:package-check" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">Garansi Ganti Baru</strong>
+              Kami ganti baru tanpa biaya tambahan bila ada kemasan yang diterima rusak atau bocor.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 10: Checkout Form -->
+      <section id="form-pemesanan" class="dsw-section--checkout">
+        <div style="padding: 0 20px 14px; text-align: center;">
+          <h2 class="dsw-h2" style="font-size: 28px;">
+            Lengkapi Data <span class="dsw-hl-aqua">Pengiriman</span>
+          </h2>
+          <p class="dsw-sub" style="max-width: 340px; margin: 8px auto 0;">
+            Isi nama, nomor WhatsApp aktif, dan kecamatan tujuan untuk cek ongkir otomatis.
+          </p>
+        </div>
+
+        <GeoIpResolvedForm
+          mode="hybrid"
+          productSlug={product.slug}
+          embedded={true}
+          selectedVariantId={String(defaultVariant.id)}
+          codDisabledProvinceCodes={codDisabledProvinceCodes}
+        />
+      </section>
+    </main>
+
+    <!-- Floating Centered Sticky Button -->
+    <div id="floating-cta" data-sticky-cta class="dsw-float-wrap">
+      <a
+        href="#form-pemesanan"
+        class="dsw-float-btn"
+        data-scroll-to-form
+        aria-label="Ambil Paket Adenosine & Toner 150ml Sekarang"
+      >
+        <Icon name="lucide:shopping-bag" class="size-5" aria-hidden="true" />
+        <span>Ambil Paket Duo 150ml (Hemat Rp19rb)</span>
+        <Icon name="lucide:arrow-right" class="size-4" aria-hidden="true" />
+      </a>
+    </div>
+  </div>
+
+  <script is:inline>
+    (function () {
+      var sticky = document.getElementById('floating-cta');
+      var hero = document.getElementById('hero-section');
+      var formSection = document.getElementById('form-pemesanan');
+
+      document.querySelectorAll('[data-scroll-to-form]').forEach(function (link) {
+        link.addEventListener('click', function (ev) {
+          if (!formSection) return;
+          ev.preventDefault();
+          formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          setTimeout(function () {
+            var firstInput = formSection.querySelector('input[name="name"], input[type="text"]');
+            if (firstInput && typeof firstInput.focus === 'function') {
+              firstInput.focus({ preventScroll: true });
+            }
+          }, 480);
+        });
+      });
+
+      if (!sticky || !hero || !formSection || !('IntersectionObserver' in window)) return;
+
+      var heroVisible = true;
+      var formVisible = false;
+
+      function syncSticky() {
+        if (!heroVisible && !formVisible) {
+          sticky.classList.add('is-visible');
+        } else {
+          sticky.classList.remove('is-visible');
+        }
+      }
+
+      var observer = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.target === hero) {
+              heroVisible = entry.isIntersecting;
+            } else if (entry.target === formSection) {
+              formVisible = entry.isIntersecting;
+            }
+          });
+          syncSticky();
+        },
+        { threshold: 0.08 }
+      );
+
+      observer.observe(hero);
+      observer.observe(formSection);
+    })();
+  </script>
+</BaseLayout>

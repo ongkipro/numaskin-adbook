@@ -1,0 +1,808 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import GeoIpResolvedForm from '../components/storefront/forms/GeoIpResolvedForm.astro';
+import MetaLandingTracker from '../components/storefront/tracking/MetaLandingTracker.astro';
+import Icon from '../components/storefront/shared/Icon.astro';
+import RatingStars from '../components/storefront/shared/RatingStars.astro';
+import { getStorefrontProduct } from '../lib/catalog';
+import { nativeLandingCanonicalPath } from '../lib/landing-pages';
+import { defaultCatalogContentId } from '../lib/catalog-feed';
+import { getRuntimeEnv } from '../lib/env';
+import { loadStoreCodDisabledProvinceCodes } from '../lib/form-mode';
+import { getStoreAdsConfig } from '../lib/store-ads';
+import '../styles/form-hybrid.css';
+import '../styles/landing-pages/paket-daily-protection.css';
+
+export const prerender = false;
+
+const PRODUCT_SLUG = 'paket-daily-protection';
+const LANDING_SLUG = 'paket-daily-protection';
+const PAGE_TITLE = 'Paket Daily Protection Duo — Duet Cuci Wajah Lembut & Sunscreen Anti-Aging SPF 50+ BPOM';
+const PAGE_DESC = 'Rangkaian esensial 2 langkah pagi & pembersih harian: Deep Sea Water Facial Wash Gel 100ml (NA18261203408) dan Oxydew Sunscreen Luceane SPF 50+ PA++++ 30ml (NA18251703709).';
+const IMG_BASE = '/images/landing/paket-daily-protection';
+const HERO_IMAGE = `${IMG_BASE}/hero-paket-daily-protection.webp`;
+
+const database = getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined;
+const claimedProductSlug = Astro.request.headers.get('x-adsbook-product-page');
+const [product, canonicalPath, codDisabledProvinceCodes] = await Promise.all([
+  getStorefrontProduct(Astro.locals, PRODUCT_SLUG),
+  claimedProductSlug
+    ? Promise.resolve(`/produk/${claimedProductSlug}`)
+    : nativeLandingCanonicalPath(Astro.locals, LANDING_SLUG),
+  loadStoreCodDisabledProvinceCodes(database),
+  getStoreAdsConfig(Astro.locals),
+]);
+if (!product) {
+  return Astro.rewrite('/404');
+}
+
+const canonical = `${Astro.locals.tenant.siteUrl}${canonicalPath}`;
+
+const variants = product.variants || [];
+const cheapestVariant = variants.reduce(
+  (min: any, v: any) => (!min || v.price < min.price ? v : min),
+  variants[0]
+);
+const defaultVariant = cheapestVariant || {
+  id: '19',
+  label: 'Facial Wash 100ml + Sunscreen 30ml',
+  price: 133000,
+  comparePrice: 147999,
+};
+---
+
+<BaseLayout
+  title={PAGE_TITLE}
+  description={PAGE_DESC}
+  image={HERO_IMAGE}
+  preloadImages={HERO_IMAGE}
+  canonical={canonical}
+  hideHeader={true}
+  hideFooter={true}
+>
+  <MetaLandingTracker
+    slug={LANDING_SLUG}
+    contentId={defaultCatalogContentId(product)}
+    contentName={product.contentName}
+    price={defaultVariant.price}
+  />
+
+  <div class="dsw-shell">
+    <main class="dsw-canvas">
+      <!-- Section 1: Hero -->
+      <section id="hero-section" class="dsw-hero">
+        <div class="dsw-hero-head">
+          <h1 class="dsw-h1">
+            <span class="dsw-hl-tilt">Wajah Cepat Kusam</span> & Flek Muncul Karena Malas Pakai Sunscreen Lengket?
+          </h1>
+          <p class="dsw-sub" style="max-width: 390px; margin: 14px auto 0; font-weight: 700;">
+            Paparan UV dan debu polusi adalah penyebab utama flek hitam serta penuaan dini di iklim tropis.<br />
+            <span class="dsw-underline-teal">Bersihkan pori & kunci proteksi UV ringan dengan Paket Daily Protection!</span>
+          </p>
+        </div>
+
+        <div class="dsw-hero-stage">
+          <div class="dsw-hero-top-tag">
+            <div class="dsw-hero-top-pill">
+              <Icon name="lucide:sparkles" class="size-3.5" aria-hidden="true" />
+              <span>Duo Bersih & Perisai UV • Hemat Rp15.000</span>
+            </div>
+          </div>
+
+          <img
+            src={HERO_IMAGE}
+            alt="Perbandingan wajah kusam terpapar UV vs kulit bersih segar terlindungi dengan Paket Daily Protection Numa Skin"
+            width="720"
+            height="480"
+            class="dsw-hero-img"
+            fetchpriority="high"
+            loading="eager"
+            decoding="async"
+          />
+
+          <div class="dsw-hero-ba" aria-hidden="true">
+            <span class="dsw-hero-ba-pill dsw-hero-ba-pill--before">Kusam & Flek UV</span>
+            <span class="dsw-hero-ba-pill dsw-hero-ba-pill--after">Segar & Terlindungi</span>
+          </div>
+
+          <div class="dsw-hero-trust-strip" role="list" aria-label="Jaminan kualitas Numa Skin">
+            <div class="dsw-trust-item" role="listitem">
+              <span class="dsw-trust-icon">
+                <Icon name="lucide:shield-check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-trust-text">
+                <strong class="dsw-trust-label">2 BPOM Resmi</strong>
+                <span class="dsw-trust-sub">Wash & Oxydew SPF</span>
+              </span>
+            </div>
+            <div class="dsw-trust-item" role="listitem">
+              <span class="dsw-trust-icon">
+                <Icon name="lucide:sun" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-trust-text">
+                <strong class="dsw-trust-label">SPF 50+ PA++++</strong>
+                <span class="dsw-trust-sub">3% Luceane™</span>
+              </span>
+            </div>
+            <div class="dsw-trust-item" role="listitem">
+              <span class="dsw-trust-icon">
+                <Icon name="lucide:award" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-trust-text">
+                <strong class="dsw-trust-label">Zero Whitecast</strong>
+                <span class="dsw-trust-sub">Ringan Tidak Lengket</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="dsw-hero-foot">
+          <p class="dsw-hero-caption">
+            Paduan <strong>Deep Sea Water Facial Wash Gel 100ml</strong> & <strong>Oxydew Anti-Aging Sunscreen SPF 50+ PA++++ 30ml</strong> untuk rutinitas pagi anti-ribet.
+          </p>
+          <a href="#form-pemesanan" class="dsw-cta" data-scroll-to-form>
+            <span>Ambil Paket Daily Protection</span>
+            <Icon name="lucide:arrow-right" class="size-5" aria-hidden="true" />
+          </a>
+        </div>
+      </section>
+
+      <!-- Section 2: Solusi Praktis -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Fondasi Paling Dasar <span class="dsw-hl-aqua">Cegah Penuaan Dini</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Cukup 2 langkah esensial setiap hari untuk menjaga pori tetap bersih dan menangkal radiasi UVA/UVB pemicu flek:
+        </p>
+
+        <div class="dsw-solution-box">
+          <img
+            src={`${IMG_BASE}/solusi-bersih-lembut-proteksi-uv.webp`}
+            alt="Wanita Indonesia dengan kulit segar terlindungi mengaplikasikan Oxydew Sunscreen setelah mencuci muka"
+            width="648"
+            height="432"
+            class="dsw-solution-img"
+            loading="lazy"
+            fetchpriority="low"
+            decoding="async"
+          />
+
+          <div class="dsw-check-list">
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                <strong>Tahap 1 — Deep Sea Water Facial Wash Gel 100ml:</strong> Pembersih gel rendah pH dengan Air Laut Dalam Ulleungdo dan 5% Niacinamide yang mengangkat minyak serta residu harian tanpa rasa ketarik.
+              </p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                <strong>Tahap 2 — Oxydew Sunscreen SPF 50+ PA++++ 30ml:</strong> Tabir surya anti-aging dengan 3% Luceane™, Galactomyces, dan Probiotik yang melindungi kulit dari terik matahari tanpa efek abu-abu.
+              </p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                <strong>Praktis Kurang dari 2 Menit:</strong> Sangat cocok untuk Anda yang sibuk di pagi hari dan menginginkan perlindungan maksimal yang nyaman di kulit.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Masalah Kulit -->
+      <section class="dsw-section--tinted">
+        <h2 class="dsw-h2">
+          Bahaya Sinar UV <span class="dsw-hl-coral">& Pori Tersumbat</span>
+        </h2>
+
+        <div class="dsw-grid-2">
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/masalah-keluar-tanpa-sunscreen-flek.webp`}
+              alt="Kulit wajah memerah dan muncul bintik flek hitam akibat terpapar sinar matahari tanpa proteksi UV"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-red">Sinar UVA Tembus Kaca</span>
+              <p class="dsw-card-desc">
+                Tanpa SPF 50+ PA++++ setiap pagi, radiasi UVA merusak kolagen dan memicu munculnya flek hitam baru di tulang pipi.
+              </p>
+            </div>
+          </article>
+
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/masalah-sisa-sunscreen-debu-pori.webp`}
+              alt="Wajah tampak lengket, kusam, dan pori-pori tersumbat sisa keringat serta tabir surya tebal"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-red">Sunscreen Lengket & Abu</span>
+              <p class="dsw-card-desc">
+                Sunscreen biasa terasa pengap berminyak dan meninggalkan whitecast abu-abu, sementara sabun keras membuat kulit makin kusam.
+              </p>
+            </div>
+          </article>
+        </div>
+
+        <div class="dsw-list-box">
+          <p class="dsw-list-box-title">Tanda Anda Membutuhkan Paket Daily Protection:</p>
+          <div class="dsw-check-list" style="margin-top: 0;">
+            <div class="dsw-check-item">
+              <span class="dsw-icon-red">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                Sering melewatkan sunscreen karena takut wajah terasa lengket, gerah, atau belang abu-abu
+              </p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-red">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                Wajah mudah tampak kusam dan berminyak setelah beraktivitas di luar ruangan atau di depan layar
+              </p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-red">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                Menginginkan duet pembersih wajah lembut dan sunscreen ringan yang sekaligus merawat anti-aging
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Transformasi Nyata -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Transformasi <span class="dsw-hl-aqua">Bersih Segar Seharian</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Perbedaan kondisi kulit sebelum dan sesudah rutin menggunakan Paket Daily Protection:
+        </p>
+
+        <div class="dsw-grid-2">
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/kondisi-kusam-terbakar-lengket.webp`}
+              alt="Kulit wajah tampak kusam, kemerahan terbakar matahari, dan muncul bintik flek sebelum perawatan"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-red">Sebelum Perawatan</span>
+              <p class="dsw-card-desc">
+                Wajah tampak kusam kemerahan saat siang hari, pori-pori terasa kotor oleh polusi, dan bintik flek makin menggelap.
+              </p>
+            </div>
+          </article>
+
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/kondisi-bersih-segar-terlindungi.webp`}
+              alt="Kulit wajah tampak bersih, segar, warna kulit merata, dan bebas whitecast setelah pemakaian rutin"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-green">Rutin Wash + Oxydew</span>
+              <p class="dsw-card-desc">
+                Pori-pori terasa bersih segar, warna kulit tampak lebih cerah merata, dan terlindungi dari sinar UV tanpa whitecast.
+              </p>
+            </div>
+          </article>
+        </div>
+
+        <div class="dsw-list-box">
+          <p class="dsw-list-box-title">Manfaat yang Dirasakan Setiap Hari:</p>
+          <div class="dsw-check-list" style="margin-top: 0;">
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                <strong>Sejak Hari Pertama:</strong> Wajah bersih tanpa rasa ketarik dan sunscreen langsung meresap bening tanpa dempul
+              </p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                <strong>Minggu 1–2:</strong> Kulit tidak lagi mudah memerah atau kusam saat beraktivitas di bawah terik matahari
+              </p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                <strong>Minggu 3–4:</strong> Rona wajah tampak lebih cerah bersih dan terlindungi dari munculnya flek hitam baru
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: Cara Pakai 2 Langkah -->
+      <section class="dsw-section--tinted">
+        <h2 class="dsw-h2">
+          Cara Pakai <span class="dsw-hl-aqua">2 Langkah Harian</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Rutinitas cepat sebelum beraktivitas pagi dan pembersihan sore/malam:
+        </p>
+
+        <div class="dsw-grid-2">
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/cara-pakai-daily-prot-step1-wash.webp`}
+              alt="Langkah 1 mencuci wajah pagi dan malam dengan Deep Sea Water Facial Wash Gel 100ml"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-teal">1. Cuci Wajah (Pagi & Malam)</span>
+              <p class="dsw-card-desc">
+                Busakan 1–2 pump <strong>Deep Sea Water Facial Wash Gel 100ml</strong> pada wajah yang basah untuk membersihkan pori secara lembut.
+              </p>
+            </div>
+          </article>
+
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/cara-pakai-daily-prot-step2-spf.webp`}
+              alt="Langkah 2 mengoleskan Oxydew Sunscreen SPF 50+ PA++++ sebanyak 2 ruas jari di pagi hari"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-teal">2. Proteksi UV (Pagi/Siang)</span>
+              <p class="dsw-card-desc">
+                Oleskan 2 ruas jari <strong>Oxydew Sunscreen SPF 50+ PA++++</strong> secara merata ke seluruh wajah dan leher setiap pagi.
+              </p>
+            </div>
+          </article>
+        </div>
+
+        <div style="margin-top: 22px; text-align: center;">
+          <a href="#form-pemesanan" class="dsw-cta" data-scroll-to-form>
+            <span>Pesan Paket Daily Protection</span>
+            <Icon name="lucide:arrow-right" class="size-5" aria-hidden="true" />
+          </a>
+        </div>
+      </section>
+
+      <!-- Section 6: Bukti Pelanggan -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Bukti Nyaman <span class="dsw-hl-aqua">Dipakai Seharian</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Pengalaman pelanggan yang menggunakan Paket Daily Protection untuk aktivitas harian:
+        </p>
+
+        <div class="dsw-grid-2">
+          <div class="dsw-proof-cell">
+            <img
+              src={`${IMG_BASE}/bukti-tekstur-duo-daily-protection.webp`}
+              alt="Swatch tekstur gel cuci muka bening dan lotion ringan Oxydew Sunscreen di punggung tangan"
+              width="480"
+              height="320"
+              class="dsw-proof-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-proof-OverlayCaption">Tekstur Ringan Tanpa Residu Putih</p>
+          </div>
+          <div class="dsw-proof-cell">
+            <img
+              src={`${IMG_BASE}/bukti-wanita-outdoor-segar.webp`}
+              alt="Wanita Indonesia berhijab tersenyum di bawah sinar matahari pagi dengan kulit segar bebas kilap"
+              width="480"
+              height="320"
+              class="dsw-proof-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-proof-OverlayCaption">Bebas Gerah Saat Beraktivitas</p>
+          </div>
+          <div class="dsw-proof-cell">
+            <img
+              src={`${IMG_BASE}/bukti-pipi-bersih-tanpa-whitecast.webp`}
+              alt="Close-up pipi bersih dan halus dengan hasil akhir satin-dewy alami di bawah cahaya pagi"
+              width="480"
+              height="320"
+              class="dsw-proof-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-proof-OverlayCaption">Menyatu di Kulit Sawo Matang</p>
+          </div>
+          <div class="dsw-proof-cell">
+            <img
+              src={`${IMG_BASE}/bukti-meja-rias-daily-protection.webp`}
+              alt="Kemasan Numa Skin Paket Daily Protection Facial Wash 100ml dan Oxydew Sunscreen 30ml"
+              width="480"
+              height="320"
+              class="dsw-proof-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-proof-OverlayCaption">Duet Esensial Pagi Hari</p>
+          </div>
+        </div>
+
+        <div class="dsw-testi-list">
+          <article class="dsw-testi-card">
+            <div class="dsw-testi-head">
+              <div class="dsw-testi-avatar" aria-hidden="true">R</div>
+              <div class="dsw-testi-meta">
+                <p class="dsw-testi-name">
+                  Kak Rina Oktaviani (32 thn)
+                  <span class="dsw-verified-pill">Verified Buyer</span>
+                </p>
+                <div class="dsw-stars">
+                  <RatingStars rating={5} />
+                </div>
+              </div>
+            </div>
+            <p class="dsw-testi-body">
+              "Aku paling males pakai skincare berlapis-lapis kalau pagi mau berangkat kerja. Paket Facial Wash + Oxydew Sunscreen Numa Skin ini penyelamat banget! Cuci mukanya enak nggak bikin kering, terus sunscreen-nya ringan banget kayak lotion air, nggak ada whitecast sama sekali."
+            </p>
+            <div class="dsw-testi-foot">
+              <span>Jakarta Selatan</span>
+              <span>•</span>
+              <span>Pemakaian 3 Minggu</span>
+            </div>
+          </article>
+
+          <article class="dsw-testi-card">
+            <div class="dsw-testi-head">
+              <div class="dsw-testi-avatar" aria-hidden="true">M</div>
+              <div class="dsw-testi-meta">
+                <p class="dsw-testi-name">
+                  Bunda Maya Sari (36 thn)
+                  <span class="dsw-verified-pill">Verified Buyer</span>
+                </p>
+                <div class="dsw-stars">
+                  <RatingStars rating={5} />
+                </div>
+              </div>
+            </div>
+            <p class="dsw-testi-body">
+              "Biasanya kalau pakai sunscreen jam 12 siang muka udah kayak kilang minyak dan perih di mata. Oxydew ini beda banget, adem seharian dan pas sore dicuci pakai Facial Wash Gel-nya langsung bersih tuntas tanpa bikin muka ketarik."
+            </p>
+            <div class="dsw-testi-foot">
+              <span>Semarang</span>
+              <span>•</span>
+              <span>Pemakaian 1 Bulan</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- Section 7: Tabel Perbandingan -->
+      <section class="dsw-section--tinted">
+        <h2 class="dsw-h2">
+          Keunggulan <span class="dsw-hl-aqua">Paket Daily Protection</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Perbandingan Paket Daily Protection Numa Skin dengan sabun dan tabir surya konvensional:
+        </p>
+
+        <div class="dsw-cmp-card">
+          <div class="dsw-cmp-head">
+            <div class="dsw-cmp-col">Karakteristik</div>
+            <div class="dsw-cmp-col dsw-cmp-col--numa">Daily Protection</div>
+            <div class="dsw-cmp-col">Produk Biasa</div>
+          </div>
+
+          <div class="dsw-cmp-row">
+            <div class="dsw-cmp-cell dsw-cmp-cell--feature">Pembersih Wajah</div>
+            <div class="dsw-cmp-cell dsw-cmp-cell--numa">
+              <span class="dsw-icon-green" style="margin: 0 auto;">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">Low-pH Gel + 5% Niacinamide</span>
+            </div>
+            <div class="dsw-cmp-cell">
+              <span class="dsw-icon-red" style="margin: 0 auto;">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">Sabun keras bikin kulit ketarik</span>
+            </div>
+          </div>
+
+          <div class="dsw-cmp-row">
+            <div class="dsw-cmp-cell dsw-cmp-cell--feature">Hasil Akhir Sunscreen</div>
+            <div class="dsw-cmp-cell dsw-cmp-cell--numa">
+              <span class="dsw-icon-green" style="margin: 0 auto;">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">Zero Whitecast & Breathable</span>
+            </div>
+            <div class="dsw-cmp-cell">
+              <span class="dsw-icon-red" style="margin: 0 auto;">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">Abu-abu, lengket & perih di mata</span>
+            </div>
+          </div>
+
+          <div class="dsw-cmp-row">
+            <div class="dsw-cmp-cell dsw-cmp-cell--feature">Aktif Anti-Aging UV</div>
+            <div class="dsw-cmp-cell dsw-cmp-cell--numa">
+              <span class="dsw-icon-green" style="margin: 0 auto;">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">SPF 50+ PA++++ & 3% Luceane™</span>
+            </div>
+            <div class="dsw-cmp-cell">
+              <span class="dsw-icon-red" style="margin: 0 auto;">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">Hanya filter UV tanpa nutrisi</span>
+            </div>
+          </div>
+
+          <div class="dsw-cmp-row">
+            <div class="dsw-cmp-cell dsw-cmp-cell--feature">Harga Paket</div>
+            <div class="dsw-cmp-cell dsw-cmp-cell--numa">
+              <strong>Rp133.000</strong>
+              <span class="dsw-cmp-sub">Hemat Rp15.000</span>
+            </div>
+            <div class="dsw-cmp-cell">
+              <span>Rp147.999</span>
+              <span class="dsw-cmp-sub">Harga beli satuan</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 8: Formulasi, Kandungan & Kemasan -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Formulasi <span class="dsw-hl-aqua">Marine Cleanse & UV Shield</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Menggabungkan kekuatan mineral laut dalam Korea dan bio-fermentasi Perancis:
+        </p>
+
+        <div class="dsw-fig-stack">
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/formulasi-ulleung-luceane-spf50.webp`}
+                alt="Formulasi Air Laut Dalam Ulleungdo dan 3% Luceane Marine Bio-Active"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">Ulleungdo Deep Sea Water + 3% Luceane™</h3>
+              <p class="dsw-figcaption-desc">
+                Membersihkan pori dengan mineral laut alami sekaligus melindungi energi sel kulit dari stres oksidatif akibat radiasi UV dan polusi.
+              </p>
+            </figcaption>
+          </figure>
+
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/kandungan-niacinamide-ceramide-luceane.webp`}
+                alt="Kandungan 5% Niacinamide, Ceramide NP, Probiotik, dan Phyllanthus Niruri"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">5% Niacinamide + Ceramide NP + Probiotic Complex</h3>
+              <p class="dsw-figcaption-desc">
+                Menjaga kekuatan skin barrier dan memberikan hasil akhir kulit yang tampak cerah, tenang, serta bebas kilap minyak berlebih.
+              </p>
+            </figcaption>
+          </figure>
+
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/kemasan-daily-protection.webp`}
+                alt="Kemasan resmi Paket Daily Protection Numa Skin"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">2 Produk Full-Size Resmi BPOM</h3>
+              <p class="dsw-figcaption-desc">
+                Terdiri dari Deep Sea Water Facial Wash Gel 100ml (BPOM NA18261203408) dan Oxydew Sunscreen SPF 50+ PA++++ 30ml (BPOM NA18251703709).
+              </p>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- Section 9: Garansi 100% Resmi -->
+      <section class="dsw-section" style="text-align: center; background: #f8fafc;">
+        <div style="margin: 0 auto 14px; display: flex; width: 52px; height: 52px; align-items: center; justify-content: center; color: #0b6e7d;">
+          <Icon name="lucide:shield-check" class="size-12" aria-hidden="true" />
+        </div>
+        <h2 class="dsw-h2" style="font-size: 32px;">GARANSI RESMI 100%</h2>
+        <p class="dsw-sub" style="max-width: 320px; margin: 8px auto 0;">
+          Pesanan dikirim langsung dari gudang resmi Numa Skin Indonesia.
+        </p>
+
+        <div class="dsw-guarantee-list">
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:badge-check" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">2 Produk Asli Tersegel BPOM</strong>
+              Terdaftar resmi di BPOM RI (NA18261203408 & NA18251703709) dan bersertifikat Halal Indonesia.
+            </p>
+          </div>
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:truck" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">Bisa Bayar di Tempat (COD)</strong>
+              Pesan hari ini, bayar langsung ke kurir saat paket tiba di rumah Anda.
+            </p>
+          </div>
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:package-check" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">Garansi Ganti Baru</strong>
+              Kami ganti baru tanpa biaya tambahan bila ada kemasan yang diterima rusak atau bocor.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 10: Checkout Form -->
+      <section id="form-pemesanan" class="dsw-section--checkout">
+        <div style="padding: 0 20px 14px; text-align: center;">
+          <h2 class="dsw-h2" style="font-size: 28px;">
+            Lengkapi Data <span class="dsw-hl-aqua">Pengiriman</span>
+          </h2>
+          <p class="dsw-sub" style="max-width: 340px; margin: 8px auto 0;">
+            Isi nama, nomor WhatsApp aktif, dan kecamatan tujuan untuk cek ongkir otomatis.
+          </p>
+        </div>
+
+        <GeoIpResolvedForm
+          mode="hybrid"
+          productSlug={product.slug}
+          embedded={true}
+          selectedVariantId={String(defaultVariant.id)}
+          codDisabledProvinceCodes={codDisabledProvinceCodes}
+        />
+      </section>
+    </main>
+
+    <!-- Floating Centered Sticky Button -->
+    <div id="floating-cta" data-sticky-cta class="dsw-float-wrap">
+      <a
+        href="#form-pemesanan"
+        class="dsw-float-btn"
+        data-scroll-to-form
+        aria-label="Ambil Paket Daily Protection Sekarang"
+      >
+        <Icon name="lucide:shopping-bag" class="size-5" aria-hidden="true" />
+        <span>Ambil Daily Protection (Hemat Rp15rb)</span>
+        <Icon name="lucide:arrow-right" class="size-4" aria-hidden="true" />
+      </a>
+    </div>
+  </div>
+
+  <script is:inline>
+    (function () {
+      var sticky = document.getElementById('floating-cta');
+      var hero = document.getElementById('hero-section');
+      var formSection = document.getElementById('form-pemesanan');
+
+      document.querySelectorAll('[data-scroll-to-form]').forEach(function (link) {
+        link.addEventListener('click', function (ev) {
+          if (!formSection) return;
+          ev.preventDefault();
+          formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          setTimeout(function () {
+            var firstInput = formSection.querySelector('input[name="name"], input[type="text"]');
+            if (firstInput && typeof firstInput.focus === 'function') {
+              firstInput.focus({ preventScroll: true });
+            }
+          }, 480);
+        });
+      });
+
+      if (!sticky || !hero || !formSection || !('IntersectionObserver' in window)) return;
+
+      var heroVisible = true;
+      var formVisible = false;
+
+      function syncSticky() {
+        if (!heroVisible && !formVisible) {
+          sticky.classList.add('is-visible');
+        } else {
+          sticky.classList.remove('is-visible');
+        }
+      }
+
+      var observer = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.target === hero) {
+              heroVisible = entry.isIntersecting;
+            } else if (entry.target === formSection) {
+              formVisible = entry.isIntersecting;
+            }
+          });
+          syncSticky();
+        },
+        { threshold: 0.08 }
+      );
+
+      observer.observe(hero);
+      observer.observe(formSection);
+    })();
+  </script>
+</BaseLayout>

@@ -1,0 +1,808 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import GeoIpResolvedForm from '../components/storefront/forms/GeoIpResolvedForm.astro';
+import MetaLandingTracker from '../components/storefront/tracking/MetaLandingTracker.astro';
+import Icon from '../components/storefront/shared/Icon.astro';
+import RatingStars from '../components/storefront/shared/RatingStars.astro';
+import { getStorefrontProduct } from '../lib/catalog';
+import { nativeLandingCanonicalPath } from '../lib/landing-pages';
+import { defaultCatalogContentId } from '../lib/catalog-feed';
+import { getRuntimeEnv } from '../lib/env';
+import { loadStoreCodDisabledProvinceCodes } from '../lib/form-mode';
+import { getStoreAdsConfig } from '../lib/store-ads';
+import '../styles/form-hybrid.css';
+import '../styles/landing-pages/paket-moist-glow-duo.css';
+
+export const prerender = false;
+
+const PRODUCT_SLUG = 'paket-moist-glow-duo';
+const LANDING_SLUG = 'paket-moist-glow-duo';
+const PAGE_TITLE = 'Paket Moist Glow Duo — Duet Krim Pagi PDRN Tone-Up & Gel Penenang Malam BPOM';
+const PAGE_DESC = 'Pasangan perawatan siang & malam kulit kombinasi-sensitif: PDRN + Alpha-Arbutin Tone-Up Day Cream 30gr (NA18262000246) dan Calming Barrier Gloss Gel Moisturizer 30ml (NA18230107056).';
+const IMG_BASE = '/images/landing/paket-moist-glow-duo';
+const HERO_IMAGE = `${IMG_BASE}/hero-paket-moist-glow-duo.webp`;
+
+const database = getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined;
+const claimedProductSlug = Astro.request.headers.get('x-adsbook-product-page');
+const [product, canonicalPath, codDisabledProvinceCodes] = await Promise.all([
+  getStorefrontProduct(Astro.locals, PRODUCT_SLUG),
+  claimedProductSlug
+    ? Promise.resolve(`/produk/${claimedProductSlug}`)
+    : nativeLandingCanonicalPath(Astro.locals, LANDING_SLUG),
+  loadStoreCodDisabledProvinceCodes(database),
+  getStoreAdsConfig(Astro.locals),
+]);
+if (!product) {
+  return Astro.rewrite('/404');
+}
+
+const canonical = `${Astro.locals.tenant.siteUrl}${canonicalPath}`;
+
+const variants = product.variants || [];
+const cheapestVariant = variants.reduce(
+  (min: any, v: any) => (!min || v.price < min.price ? v : min),
+  variants[0]
+);
+const defaultVariant = cheapestVariant || {
+  id: '32',
+  label: 'Day Cream 30gr + Gloss Gel 30ml',
+  price: 142500,
+  comparePrice: 158499,
+};
+---
+
+<BaseLayout
+  title={PAGE_TITLE}
+  description={PAGE_DESC}
+  image={HERO_IMAGE}
+  preloadImages={HERO_IMAGE}
+  canonical={canonical}
+  hideHeader={true}
+  hideFooter={true}
+>
+  <MetaLandingTracker
+    slug={LANDING_SLUG}
+    contentId={defaultCatalogContentId(product)}
+    contentName={product.contentName}
+    price={defaultVariant.price}
+  />
+
+  <div class="dsw-shell">
+    <main class="dsw-canvas">
+      <!-- Section 1: Hero -->
+      <section id="hero-section" class="dsw-hero">
+        <div class="dsw-hero-head">
+          <h1 class="dsw-h1">
+            <span class="dsw-hl-tilt">Ingin Cerah Pagi Hari</span> Tapi Kulit Gampang Merah Kalau Pakai Krim Malam Tebal?
+          </h1>
+          <p class="dsw-sub" style="max-width: 390px; margin: 14px auto 0; font-weight: 700;">
+            Pasangkan krim pagi warm-beige pencerah noda hitam dengan pelembap malam water-jelly yang mendinginkan skin barrier.<br />
+            <span class="dsw-underline-teal">Cerah di pagi hari, adem bebas bruntusan di malam hari dengan Paket Moist Glow Duo!</span>
+          </p>
+        </div>
+
+        <div class="dsw-hero-stage">
+          <div class="dsw-hero-top-tag">
+            <div class="dsw-hero-top-pill">
+              <Icon name="lucide:sparkles" class="size-3.5" aria-hidden="true" />
+              <span>Duet Krim Pagi & Jelly Malam • Hemat Rp16.000</span>
+            </div>
+          </div>
+
+          <img
+            src={HERO_IMAGE}
+            alt="Perbandingan wajah kusam kemerahan vs kulit cerah tenang glassy dengan Paket Moist Glow Duo Numa Skin"
+            width="720"
+            height="480"
+            class="dsw-hero-img"
+            fetchpriority="high"
+            loading="eager"
+            decoding="async"
+          />
+
+          <div class="dsw-hero-ba" aria-hidden="true">
+            <span class="dsw-hero-ba-pill dsw-hero-ba-pill--before">Kusam & Kemerahan</span>
+            <span class="dsw-hero-ba-pill dsw-hero-ba-pill--after">Cerah & Adem Glassy</span>
+          </div>
+
+          <div class="dsw-hero-trust-strip" role="list" aria-label="Jaminan kualitas Numa Skin">
+            <div class="dsw-trust-item" role="listitem">
+              <span class="dsw-trust-icon">
+                <Icon name="lucide:shield-check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-trust-text">
+                <strong class="dsw-trust-label">2 BPOM Resmi</strong>
+                <span class="dsw-trust-sub">Day Cream & Gloss Gel</span>
+              </span>
+            </div>
+            <div class="dsw-trust-item" role="listitem">
+              <span class="dsw-trust-icon">
+                <Icon name="lucide:sun" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-trust-text">
+                <strong class="dsw-trust-label">PDRN + Arbutin</strong>
+                <span class="dsw-trust-sub">Warm Beige Pagi</span>
+              </span>
+            </div>
+            <div class="dsw-trust-item" role="listitem">
+              <span class="dsw-trust-icon">
+                <Icon name="lucide:droplets" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-trust-text">
+                <strong class="dsw-trust-label">Water-Jelly</strong>
+                <span class="dsw-trust-sub">Adem Malam Hari</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="dsw-hero-foot">
+          <p class="dsw-hero-caption">
+            Paduan <strong>PDRN + Alpha-Arbutin Tone-Up Day Cream 30gr</strong> & <strong>Calming Barrier Gloss Gel Moisturizer 30ml</strong> untuk siklus perawatan 24 jam yang ringan di kulit.
+          </p>
+          <a href="#form-pemesanan" class="dsw-cta" data-scroll-to-form>
+            <span>Ambil Paket Moist Glow Duo</span>
+            <Icon name="lucide:arrow-right" class="size-5" aria-hidden="true" />
+          </a>
+        </div>
+      </section>
+
+      <!-- Section 2: Solusi Praktis -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Siklus 24 Jam <span class="dsw-hl-aqua">Cerah Pagi & Tenang Malam</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Dua jar yang dirancang khusus untuk kebutuhan kulit sensitif dan kombinasi yang berbeda antara siang dan malam:
+        </p>
+
+        <div class="dsw-solution-box">
+          <img
+            src={`${IMG_BASE}/solusi-pagi-toneup-malam-water-jelly.webp`}
+            alt="Wanita Indonesia dengan kulit cerah tenang berkat perawatan pagi PDRN Day Cream dan malam Calming Gloss Gel"
+            width="648"
+            height="432"
+            class="dsw-solution-img"
+            loading="lazy"
+            fetchpriority="low"
+            decoding="async"
+          />
+
+          <div class="dsw-check-list">
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                <strong>Pagi Hari — PDRN Tone-Up Day Cream 30gr:</strong> Krim pagi berwarna warm natural beige dengan Encapsulated PDRN dan Alpha-Arbutin yang mencerahkan wajah kusam serta merawat noda hitam tanpa efek abu-abu.
+              </p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                <strong>Malam Hari — Calming Barrier Gloss Gel 30ml:</strong> Pelembap water-jelly bening dengan Meadowestolide®, Astragalus, dan Ceramide NP yang menurunkan suhu kulit lelah serta meredakan kemerahan saat tidur.
+              </p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                <strong>Bangun Tidur Kulit Licin & Siap Tone-Up:</strong> Hidrasi water-jelly semalaman membuat permukaan kulit lembap kenyal sehingga krim pagi menempel jauh lebih mulus keesokan harinya.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Masalah Kulit -->
+      <section class="dsw-section--tinted">
+        <h2 class="dsw-h2">
+          Dilema Kulit Kombinasi <span class="dsw-hl-coral">Saat Memilih Krim</span>
+        </h2>
+
+        <div class="dsw-grid-2">
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/masalah-krim-malam-berat-bruntusan.webp`}
+              alt="Wajah tampak kemerahan dan muncul bruntusan halus karena memakai krim malam yang terlalu pekat"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-red">Krim Malam Terlalu Berat</span>
+              <p class="dsw-card-desc">
+                Memakai krim malam yang terlalu pekat membuat pori-pori pengap semalaman dan memicu bruntusan baru saat bangun tidur.
+              </p>
+            </div>
+          </article>
+
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/masalah-pagi-kusam-malam-merah.webp`}
+              alt="Wajah tampak kusam belang dengan noda hitam di pagi hari dan kemerahan kering di malam hari"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-red">Pagi Tetap Kusam & Belang</span>
+              <p class="dsw-card-desc">
+                Sebaliknya, jika pagi hari hanya memakai gel bening biasa, noda hitam dan warna kulit yang tidak merata tetap terlihat jelas.
+              </p>
+            </div>
+          </article>
+        </div>
+
+        <div class="dsw-list-box">
+          <p class="dsw-list-box-title">Tanda Anda Membutuhkan Paket Moist Glow Duo:</p>
+          <div class="dsw-check-list" style="margin-top: 0;">
+            <div class="dsw-check-item">
+              <span class="dsw-icon-red">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                Ingin wajah tampak cerah merata di pagi hari tapi tidak tahan memakai krim malam yang terasa tebal dan lengket
+              </p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-red">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                Kulit mudah memerah setelah beraktivitas seharian dan butuh gel pendingin di malam hari
+              </p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-red">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                Memiliki noda hitam atau bekas jerawat gelap yang perlu disamarkan dan dirawat secara lembut
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Transformasi Nyata -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Transformasi <span class="dsw-hl-aqua">Cerah & Glass Skin</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Perbedaan kondisi kulit sebelum dan sesudah rutin menggunakan Paket Moist Glow Duo:
+        </p>
+
+        <div class="dsw-grid-2">
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/kondisi-kusam-merah-dehidrasi.webp`}
+              alt="Kondisi kulit wajah tampak kusam, noda hitam terlihat jelas, disertai kemerahan dan bruntusan"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-red">Sebelum Perawatan</span>
+              <p class="dsw-card-desc">
+                Warna kulit tampak belang kusam dengan noda hitam di pipi, sementara area sekitar hidung dan dahi mudah memerah.
+              </p>
+            </div>
+          </article>
+
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/kondisi-cerah-tenang-glass-skin.webp`}
+              alt="Kondisi kulit wajah tampak cerah merata, tenang bebas kemerahan, dan berkilau sehat"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-green">Rutin Moist Glow Duo</span>
+              <p class="dsw-card-desc">
+                Pagi hari wajah tampak cerah alami bebas abu-abu, dan malam hari skin barrier terasa tenang, adem, serta halus kenyal.
+              </p>
+            </div>
+          </article>
+        </div>
+
+        <div class="dsw-list-box">
+          <p class="dsw-list-box-title">Progres Perawatan Siang & Malam:</p>
+          <div class="dsw-check-list" style="margin-top: 0;">
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                <strong>Hari 1–3:</strong> Tone-up warm beige langsung meratakan rona pagi, dan Gloss Gel menyejukkan wajah sebelum tidur
+              </p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                <strong>Minggu 1–2:</strong> Kemerahan dan bruntusan tampak lebih kalem, sementara krim pagi menempel makin licin
+              </p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                <strong>Minggu 3–4:</strong> Tampilan noda hitam memudar dan kulit tampak bening bercahaya (glass-satin finish)
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: Cara Pakai 2 Langkah -->
+      <section class="dsw-section--tinted">
+        <h2 class="dsw-h2">
+          Cara Pakai <span class="dsw-hl-aqua">Pagi & Malam</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Gunakan masing-masing jar sesuai waktunya pada wajah yang bersih:
+        </p>
+
+        <div class="dsw-grid-2">
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/cara-pakai-moist-glow-pagi-pdrn.webp`}
+              alt="Rutinitas pagi mengoleskan PDRN Alpha Arbutin Tone-Up Day Cream 30gr"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-teal">1. Pagi: PDRN Day Cream</span>
+              <p class="dsw-card-desc">
+                Totolkan tipis <strong>PDRN Tone-Up Day Cream 30gr</strong> di pagi hari dan baurkan merata untuk mencerahkan serta merawat noda hitam.
+              </p>
+            </div>
+          </article>
+
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/cara-pakai-moist-glow-malam-jelly.webp`}
+              alt="Rutinitas malam mengoleskan Calming Barrier Gloss Gel Moisturizer 30ml sebelum tidur"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-teal">2. Malam: Calming Gloss Gel</span>
+              <p class="dsw-card-desc">
+                Oleskan <strong>Calming Barrier Gloss Gel 30ml</strong> di malam hari (dan tipis sebelum krim pagi bila kulit kering) untuk menenangkan barrier.
+              </p>
+            </div>
+          </article>
+        </div>
+
+        <div style="margin-top: 22px; text-align: center;">
+          <a href="#form-pemesanan" class="dsw-cta" data-scroll-to-form>
+            <span>Pesan Paket Moist Glow Duo</span>
+            <Icon name="lucide:arrow-right" class="size-5" aria-hidden="true" />
+          </a>
+        </div>
+      </section>
+
+      <!-- Section 6: Bukti Pelanggan -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Bukti Tekstur <span class="dsw-hl-aqua">& Pengalaman Pelanggan</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Duplikasi perawatan pagi dan malam yang disukai pemilik kulit kombinasi dan sensitif:
+        </p>
+
+        <div class="dsw-grid-2">
+          <div class="dsw-proof-cell">
+            <img
+              src={`${IMG_BASE}/bukti-tekstur-duo-moist-glow.webp`}
+              alt="Perbandingan tekstur krim pagi warm beige PDRN dan gel bening Calming Gloss Gel di punggung tangan"
+              width="480"
+              height="320"
+              class="dsw-proof-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-proof-OverlayCaption">Warm Beige + Crystal Water-Jelly</p>
+          </div>
+          <div class="dsw-proof-cell">
+            <img
+              src={`${IMG_BASE}/bukti-wanita-cerah-adem-sehat.webp`}
+              alt="Wanita Indonesia berhijab dengan kulit wajah cerah merata dan bebas kemerahan"
+              width="480"
+              height="320"
+              class="dsw-proof-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-proof-OverlayCaption">Cerah Tanpa Takut Bruntusan</p>
+          </div>
+          <div class="dsw-proof-cell">
+            <img
+              src={`${IMG_BASE}/bukti-pipi-glassy-tanpa-bedak.webp`}
+              alt="Close-up pipi halus bercahaya dengan pori-pori tenang dan rona kulit merata"
+              width="480"
+              height="320"
+              class="dsw-proof-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-proof-OverlayCaption">Hasil Akhir Halus & Bening</p>
+          </div>
+          <div class="dsw-proof-cell">
+            <img
+              src={`${IMG_BASE}/bukti-meja-rias-moist-glow-duo.webp`}
+              alt="Dua jar Numa Skin PDRN Day Cream 30gr dan Calming Barrier Gloss Gel 30ml di meja rias"
+              width="480"
+              height="320"
+              class="dsw-proof-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-proof-OverlayCaption">Pasangan Jar Pagi & Malam</p>
+          </div>
+        </div>
+
+        <div class="dsw-testi-list">
+          <article class="dsw-testi-card">
+            <div class="dsw-testi-head">
+              <div class="dsw-testi-avatar" aria-hidden="true">S</div>
+              <div class="dsw-testi-meta">
+                <p class="dsw-testi-name">
+                  Kak Siska Amelia (31 thn)
+                  <span class="dsw-verified-pill">Verified Buyer</span>
+                </p>
+                <div class="dsw-stars">
+                  <RatingStars rating={5} />
+                </div>
+              </div>
+            </div>
+            <p class="dsw-testi-body">
+              "Kombinasi paling pas buat kulitku yang gampang merah kalau kena panas tapi tetap pengen kelihatan cerah! Malam pakai Gloss Gel rasanya adem banget bruntusan cepet kempes, paginya tinggal oles PDRN Day Cream langsung glowing natural nggak abu-abu."
+            </p>
+            <div class="dsw-testi-foot">
+              <span>Tangerang</span>
+              <span>•</span>
+              <span>Pemakaian 3 Minggu</span>
+            </div>
+          </article>
+
+          <article class="dsw-testi-card">
+            <div class="dsw-testi-head">
+              <div class="dsw-testi-avatar" aria-hidden="true">T</div>
+              <div class="dsw-testi-meta">
+                <p class="dsw-testi-name">
+                  Bunda Tia Kurnia (34 thn)
+                  <span class="dsw-verified-pill">Verified Buyer</span>
+                </p>
+                <div class="dsw-stars">
+                  <RatingStars rating={5} />
+                </div>
+              </div>
+            </div>
+            <p class="dsw-testi-body">
+              "Dulu pakai krim malam yang kental malah besok paginya komedoan. Sejak malamnya ganti pakai Gloss Gel dan paginya PDRN Day Cream Numa Skin, tekstur pipi jadi halus banget dan noda bekas jerawat mulai samar."
+            </p>
+            <div class="dsw-testi-foot">
+              <span>Malang</span>
+              <span>•</span>
+              <span>Pemakaian 4 Minggu</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- Section 7: Tabel Perbandingan -->
+      <section class="dsw-section--tinted">
+        <h2 class="dsw-h2">
+          Keunggulan <span class="dsw-hl-aqua">Paket Moist Glow Duo</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Mengapa memisahkan tekstur krim pagi dan gel malam jauh lebih efektif untuk kulit tropis:
+        </p>
+
+        <div class="dsw-cmp-card">
+          <div class="dsw-cmp-head">
+            <div class="dsw-cmp-col">Karakteristik</div>
+            <div class="dsw-cmp-col dsw-cmp-col--numa">Moist Glow Duo</div>
+            <div class="dsw-cmp-col">Krim Biasa</div>
+          </div>
+
+          <div class="dsw-cmp-row">
+            <div class="dsw-cmp-cell dsw-cmp-cell--feature">Krim Pagi Pencerah</div>
+            <div class="dsw-cmp-cell dsw-cmp-cell--numa">
+              <span class="dsw-icon-green" style="margin: 0 auto;">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">PDRN + Arbutin (Warm Beige)</span>
+            </div>
+            <div class="dsw-cmp-cell">
+              <span class="dsw-icon-red" style="margin: 0 auto;">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">Dempul putih kapur</span>
+            </div>
+          </div>
+
+          <div class="dsw-cmp-row">
+            <div class="dsw-cmp-cell dsw-cmp-cell--feature">Pelembap Malam</div>
+            <div class="dsw-cmp-cell dsw-cmp-cell--numa">
+              <span class="dsw-icon-green" style="margin: 0 auto;">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">Water-Jelly Penenang Barrier</span>
+            </div>
+            <div class="dsw-cmp-cell">
+              <span class="dsw-icon-red" style="margin: 0 auto;">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">Pekat & memicu bruntusan</span>
+            </div>
+          </div>
+
+          <div class="dsw-cmp-row">
+            <div class="dsw-cmp-cell dsw-cmp-cell--feature">Kontrol Sebum & Kemerahan</div>
+            <div class="dsw-cmp-cell dsw-cmp-cell--numa">
+              <span class="dsw-icon-green" style="margin: 0 auto;">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">Meadowestolide® + Astragalus</span>
+            </div>
+            <div class="dsw-cmp-cell">
+              <span class="dsw-icon-red" style="margin: 0 auto;">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">Tidak menyeimbangkan minyak</span>
+            </div>
+          </div>
+
+          <div class="dsw-cmp-row">
+            <div class="dsw-cmp-cell dsw-cmp-cell--feature">Harga Paket</div>
+            <div class="dsw-cmp-cell dsw-cmp-cell--numa">
+              <strong>Rp142.500</strong>
+              <span class="dsw-cmp-sub">Hemat Rp16.000</span>
+            </div>
+            <div class="dsw-cmp-cell">
+              <span>Rp158.499</span>
+              <span class="dsw-cmp-sub">Harga beli satuan</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 8: Formulasi, Kandungan & Kemasan -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Formulasi <span class="dsw-hl-aqua">PDRN & Meadowestolide®</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Sinergi pencerah terenkapsulasi dan bio-lipid penenang skin barrier:
+        </p>
+
+        <div class="dsw-fig-stack">
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/formulasi-pdrn-arbutin-meadowestolide.webp`}
+                alt="Formulasi Encapsulated Pure PDRN dan water-jelly Meadowestolide"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">Encapsulated Pure PDRN + Meadowestolide®</h3>
+              <p class="dsw-figcaption-desc">
+                Merawat elastisitas dan keremajaan kulit di siang hari sekaligus menyeimbangkan kadar air-minyak di malam hari.
+              </p>
+            </figcaption>
+          </figure>
+
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/kandungan-pdrn-arbutin-ceramide-astragalus.webp`}
+                alt="Kandungan Alpha-Arbutin, Glutathione, Ceramide NP, dan Astragalus Root"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">Alpha-Arbutin + Ceramide NP + Astragalus Root</h3>
+              <p class="dsw-figcaption-desc">
+                Membantu menyamarkan noda hitam di pipi sekaligus menenangkan kemerahan serta memperkuat benteng pertahanan kulit.
+              </p>
+            </figcaption>
+          </figure>
+
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/kemasan-moist-glow-duo.webp`}
+                alt="Kemasan resmi Paket Moist Glow Duo Numa Skin"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">2 Produk Full-Size Resmi BPOM</h3>
+              <p class="dsw-figcaption-desc">
+                Terdiri dari PDRN + Alpha-Arbutin Tone-Up Day Cream 30gr (BPOM NA18262000246) dan Calming Barrier Gloss Gel Moisturizer 30ml (BPOM NA18230107056).
+              </p>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- Section 9: Garansi 100% Resmi -->
+      <section class="dsw-section" style="text-align: center; background: #f8fafc;">
+        <div style="margin: 0 auto 14px; display: flex; width: 52px; height: 52px; align-items: center; justify-content: center; color: #0b6e7d;">
+          <Icon name="lucide:shield-check" class="size-12" aria-hidden="true" />
+        </div>
+        <h2 class="dsw-h2" style="font-size: 32px;">GARANSI RESMI 100%</h2>
+        <p class="dsw-sub" style="max-width: 320px; margin: 8px auto 0;">
+          Pesanan dikirim langsung dari gudang resmi Numa Skin Indonesia.
+        </p>
+
+        <div class="dsw-guarantee-list">
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:badge-check" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">2 Produk Asli Tersegel BPOM</strong>
+              Terdaftar resmi di BPOM RI (NA18262000246 & NA18230107056) dan bersertifikat Halal Indonesia.
+            </p>
+          </div>
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:truck" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">Bisa Bayar di Tempat (COD)</strong>
+              Pesan hari ini, bayar langsung ke kurir saat paket tiba di rumah Anda.
+            </p>
+          </div>
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:package-check" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">Garansi Ganti Baru</strong>
+              Kami ganti baru tanpa biaya tambahan bila ada kemasan yang diterima rusak atau bocor.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 10: Checkout Form -->
+      <section id="form-pemesanan" class="dsw-section--checkout">
+        <div style="padding: 0 20px 14px; text-align: center;">
+          <h2 class="dsw-h2" style="font-size: 28px;">
+            Lengkapi Data <span class="dsw-hl-aqua">Pengiriman</span>
+          </h2>
+          <p class="dsw-sub" style="max-width: 340px; margin: 8px auto 0;">
+            Isi nama, nomor WhatsApp aktif, dan kecamatan tujuan untuk cek ongkir otomatis.
+          </p>
+        </div>
+
+        <GeoIpResolvedForm
+          mode="hybrid"
+          productSlug={product.slug}
+          embedded={true}
+          selectedVariantId={String(defaultVariant.id)}
+          codDisabledProvinceCodes={codDisabledProvinceCodes}
+        />
+      </section>
+    </main>
+
+    <!-- Floating Centered Sticky Button -->
+    <div id="floating-cta" data-sticky-cta class="dsw-float-wrap">
+      <a
+        href="#form-pemesanan"
+        class="dsw-float-btn"
+        data-scroll-to-form
+        aria-label="Ambil Paket Moist Glow Duo Sekarang"
+      >
+        <Icon name="lucide:shopping-bag" class="size-5" aria-hidden="true" />
+        <span>Ambil Moist Glow Duo (Hemat Rp16rb)</span>
+        <Icon name="lucide:arrow-right" class="size-4" aria-hidden="true" />
+      </a>
+    </div>
+  </div>
+
+  <script is:inline>
+    (function () {
+      var sticky = document.getElementById('floating-cta');
+      var hero = document.getElementById('hero-section');
+      var formSection = document.getElementById('form-pemesanan');
+
+      document.querySelectorAll('[data-scroll-to-form]').forEach(function (link) {
+        link.addEventListener('click', function (ev) {
+          if (!formSection) return;
+          ev.preventDefault();
+          formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          setTimeout(function () {
+            var firstInput = formSection.querySelector('input[name="name"], input[type="text"]');
+            if (firstInput && typeof firstInput.focus === 'function') {
+              firstInput.focus({ preventScroll: true });
+            }
+          }, 480);
+        });
+      });
+
+      if (!sticky || !hero || !formSection || !('IntersectionObserver' in window)) return;
+
+      var heroVisible = true;
+      var formVisible = false;
+
+      function syncSticky() {
+        if (!heroVisible && !formVisible) {
+          sticky.classList.add('is-visible');
+        } else {
+          sticky.classList.remove('is-visible');
+        }
+      }
+
+      var observer = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.target === hero) {
+              heroVisible = entry.isIntersecting;
+            } else if (entry.target === formSection) {
+              formVisible = entry.isIntersecting;
+            }
+          });
+          syncSticky();
+        },
+        { threshold: 0.08 }
+      );
+
+      observer.observe(hero);
+      observer.observe(formSection);
+    })();
+  </script>
+</BaseLayout>

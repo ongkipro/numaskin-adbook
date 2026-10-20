@@ -1,0 +1,808 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import GeoIpResolvedForm from '../components/storefront/forms/GeoIpResolvedForm.astro';
+import MetaLandingTracker from '../components/storefront/tracking/MetaLandingTracker.astro';
+import Icon from '../components/storefront/shared/Icon.astro';
+import RatingStars from '../components/storefront/shared/RatingStars.astro';
+import { getStorefrontProduct } from '../lib/catalog';
+import { nativeLandingCanonicalPath } from '../lib/landing-pages';
+import { defaultCatalogContentId } from '../lib/catalog-feed';
+import { getRuntimeEnv } from '../lib/env';
+import { loadStoreCodDisabledProvinceCodes } from '../lib/form-mode';
+import { getStoreAdsConfig } from '../lib/store-ads';
+import '../styles/form-hybrid.css';
+import '../styles/landing-pages/paket-sunscreen-adenosine-toner-150ml.css';
+
+export const prerender = false;
+
+const PRODUCT_SLUG = 'paket-sunscreen-adenosine-toner-150ml';
+const LANDING_SLUG = 'paket-sunscreen-adenosine-toner-150ml';
+const PAGE_TITLE = 'Paket Sunscreen, Adenosine & Toner 150ml — Trio Hidrasi, Anti-Flek & Proteksi UV BPOM';
+const PAGE_DESC = 'Rangkaian 3 langkah anti-aging & perisai UV ukuran besar: Deep Sea Water Treatment Lotion 150ml (NA18220101400), Adenosine Moisturizer 30gr (NA18250109281), dan Oxydew Sunscreen SPF 50+ 30ml (NA18251703709).';
+const IMG_BASE = '/images/landing/paket-sunscreen-adenosine-toner-150ml';
+const HERO_IMAGE = `${IMG_BASE}/hero-paket-sunscreen-adenosine-toner-150ml.webp`;
+
+const database = getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined;
+const claimedProductSlug = Astro.request.headers.get('x-adsbook-product-page');
+const [product, canonicalPath, codDisabledProvinceCodes] = await Promise.all([
+  getStorefrontProduct(Astro.locals, PRODUCT_SLUG),
+  claimedProductSlug
+    ? Promise.resolve(`/produk/${claimedProductSlug}`)
+    : nativeLandingCanonicalPath(Astro.locals, LANDING_SLUG),
+  loadStoreCodDisabledProvinceCodes(database),
+  getStoreAdsConfig(Astro.locals),
+]);
+if (!product) {
+  return Astro.rewrite('/404');
+}
+
+const canonical = `${Astro.locals.tenant.siteUrl}${canonicalPath}`;
+
+const variants = product.variants || [];
+const cheapestVariant = variants.reduce(
+  (min: any, v: any) => (!min || v.price < min.price ? v : min),
+  variants[0]
+);
+const defaultVariant = cheapestVariant || {
+  id: '40',
+  label: 'Toner 150ml + Adenosine 30gr + Sunscreen 30ml',
+  price: 240000,
+  comparePrice: 266999,
+};
+---
+
+<BaseLayout
+  title={PAGE_TITLE}
+  description={PAGE_DESC}
+  image={HERO_IMAGE}
+  preloadImages={HERO_IMAGE}
+  canonical={canonical}
+  hideHeader={true}
+  hideFooter={true}
+>
+  <MetaLandingTracker
+    slug={LANDING_SLUG}
+    contentId={defaultCatalogContentId(product)}
+    contentName={product.contentName}
+    price={defaultVariant.price}
+  />
+
+  <div class="dsw-shell">
+    <main class="dsw-canvas">
+      <!-- Section 1: Hero -->
+      <section id="hero-section" class="dsw-hero">
+        <div class="dsw-hero-head">
+          <h1 class="dsw-h1">
+            <span class="dsw-hl-tilt">Flek Makin Tebal</span> & Garis Halus Tampak Karena Kulit Kering Terpapar UV?
+          </h1>
+          <p class="dsw-sub" style="max-width: 390px; margin: 14px auto 0; font-weight: 700;">
+            Merawat kulit malam hari akan bocor kembali di siang hari jika kulit dehidrasi tidak dilindungi tabir surya SPF 50+.<br />
+            <span class="dsw-underline-teal">Hidrasi, kencangkan & kunci perisai UV dengan Paket Trio 150ml!</span>
+          </p>
+        </div>
+
+        <div class="dsw-hero-stage">
+          <div class="dsw-hero-top-tag">
+            <div class="dsw-hero-top-pill">
+              <Icon name="lucide:sparkles" class="size-3.5" aria-hidden="true" />
+              <span>Trio Anti-Aging & UV 150ml • Hemat Rp27.000</span>
+            </div>
+          </div>
+
+          <img
+            src={HERO_IMAGE}
+            alt="Perbandingan wajah kering berflek vs kulit kenyal terlindungi dengan Paket Sunscreen Adenosine dan Toner 150ml Numa Skin"
+            width="720"
+            height="480"
+            class="dsw-hero-img"
+            fetchpriority="high"
+            loading="eager"
+            decoding="async"
+          />
+
+          <div class="dsw-hero-ba" aria-hidden="true">
+            <span class="dsw-hero-ba-pill dsw-hero-ba-pill--before">Flek & Kerutan Kering</span>
+            <span class="dsw-hero-ba-pill dsw-hero-ba-pill--after">Kenyal & Terlindungi</span>
+          </div>
+
+          <div class="dsw-hero-trust-strip" role="list" aria-label="Jaminan kualitas Numa Skin">
+            <div class="dsw-trust-item" role="listitem">
+              <span class="dsw-trust-icon">
+                <Icon name="lucide:shield-check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-trust-text">
+                <strong class="dsw-trust-label">3 BPOM Resmi</strong>
+                <span class="dsw-trust-sub">Toner, Krim & SPF</span>
+              </span>
+            </div>
+            <div class="dsw-trust-item" role="listitem">
+              <span class="dsw-trust-icon">
+                <Icon name="lucide:droplets" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-trust-text">
+                <strong class="dsw-trust-label">Toner Jumbo 150ml</strong>
+                <span class="dsw-trust-sub">Adenosine + 11X HA</span>
+              </span>
+            </div>
+            <div class="dsw-trust-item" role="listitem">
+              <span class="dsw-trust-icon">
+                <Icon name="lucide:sun" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-trust-text">
+                <strong class="dsw-trust-label">SPF 50+ PA++++</strong>
+                <span class="dsw-trust-sub">3% Luceane™</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="dsw-hero-foot">
+          <p class="dsw-hero-caption">
+            Rangkaian 3 langkah utuh: <strong>Deep Sea Water Treatment Lotion 150ml</strong>, <strong>Adenosine Moisturizer 30gr</strong>, dan <strong>Oxydew Sunscreen SPF 50+ PA++++ 30ml</strong>.
+          </p>
+          <a href="#form-pemesanan" class="dsw-cta" data-scroll-to-form>
+            <span>Ambil Paket Trio 150ml Ini</span>
+            <Icon name="lucide:arrow-right" class="size-5" aria-hidden="true" />
+          </a>
+        </div>
+      </section>
+
+      <!-- Section 2: Solusi Praktis -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          3 Langkah Utuh <span class="dsw-hl-aqua">Hidrasi, Kencang & Perisai UV</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Kombinasi lengkap untuk memutus siklus dehidrasi dan flek hitam akibat sinar matahari:
+        </p>
+
+        <div class="dsw-solution-box">
+          <img
+            src={`${IMG_BASE}/solusi-kompres-kunci-perisai-uv.webp`}
+            alt="Wanita Indonesia dengan kulit kenyal, cerah, dan terlindungi berkat rangkaian 3 produk Numa Skin"
+            width="648"
+            height="432"
+            class="dsw-solution-img"
+            loading="lazy"
+            fetchpriority="low"
+            decoding="async"
+          />
+
+          <div class="dsw-check-list">
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                <strong>Tahap 1 — Deep Sea Water Treatment Lotion 150ml:</strong> First essence ukuran besar dengan 76% Air Laut Dalam Ulleungdo, Galactomyces, dan 5X Ceramide yang membuka jalur penyerapan pori.
+              </p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                <strong>Tahap 2 — Adenosine Deep Sea Water Moisturizer 30gr:</strong> Cooling gel-cream dengan Adenosine, Skin Communicator™, dan 11X Hyaluronic Acid untuk merawat garis halus serta noda hitam.
+              </p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                <strong>Tahap 3 (Pagi) — Oxydew Sunscreen SPF 50+ PA++++ 30ml:</strong> Perisai UV breathable dengan 3% Luceane™ yang mencegah sinar matahari memicu flek baru tanpa whitecast.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Masalah Kulit -->
+      <section class="dsw-section--tinted">
+        <h2 class="dsw-h2">
+          Kenapa Perawatan Malam <span class="dsw-hl-coral">Sering Bocor di Siang Hari?</span>
+        </h2>
+
+        <div class="dsw-grid-2">
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/masalah-rawat-malam-bocor-siang.webp`}
+              alt="Kulit wajah terpapar terik matahari siang sehingga flek hitam kembali menggelap"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-red">Flek Kambuh Terpapar UV</span>
+              <p class="dsw-card-desc">
+                Sudah memakai krim malam, tetapi pagi harinya keluar tanpa SPF 50+ PA++++ sehingga sinar UVA langsung memicu melanin gelap kembali.
+              </p>
+            </div>
+          </article>
+
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/masalah-kulit-kering-kerutan-uv.webp`}
+              alt="Tekstur kulit kering dehidrasi dengan garis senyum dan kerutan halus di sudut mata"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-red">Pori Kaku & Dehidrasi</span>
+              <p class="dsw-card-desc">
+                Mengoleskan pelembap langsung ke kulit yang kering tanpa toner hidrasi membuat nutrisi tertahan di luar dan kerutan makin tampak.
+              </p>
+            </div>
+          </article>
+        </div>
+
+        <div class="dsw-list-box">
+          <p class="dsw-list-box-title">Tanda Anda Membutuhkan Paket Trio 150ml Ini:</p>
+          <div class="dsw-check-list" style="margin-top: 0;">
+            <div class="dsw-check-item">
+              <span class="dsw-icon-red">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                Flek hitam di tulang pipi terasa sulit memudar karena sering terpapar panas matahari siang
+              </p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-red">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                Kulit terasa kering dehidrasi, kurang membal, dan garis halus mulai tampak di sudut mata serta garis senyum
+              </p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-red">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                Menginginkan paket 3-in-1 dengan ukuran Toner Jumbo 150ml yang awet untuk pemakaian pagi dan malam
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Transformasi Nyata -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Transformasi <span class="dsw-hl-aqua">Kenyal & Terlindungi 24 Jam</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Perbedaan kondisi kulit sebelum dan sesudah rutin memakai Paket Sunscreen, Adenosine & Toner 150ml:
+        </p>
+
+        <div class="dsw-grid-2">
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/kondisi-flek-kering-terbakar-uv.webp`}
+              alt="Kondisi kulit wajah kering dehidrasi, muncul garis halus, dan flek hitam tampak gelap akibat sinar UV"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-red">Sebelum Perawatan</span>
+              <p class="dsw-card-desc">
+                Kulit tampak kering kusam, garis dehidrasi terlihat jelas, dan bintik flek hitam terus menggelap saat terkena panas.
+              </p>
+            </div>
+          </article>
+
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/kondisi-kenyal-cerah-terlindungi-24jam.webp`}
+              alt="Kondisi kulit wajah tampak kenyal, lembap merata, garis halus tersamarkan, dan terlindungi dari sinar UV"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-green">Rutin Trio 150ml</span>
+              <p class="dsw-card-desc">
+                Tekstur pipi terasa kenyal membal, tampilan noda hitam serta garis halus tampak lebih samar, dan wajah terlindungi nyaman seharian.
+              </p>
+            </div>
+          </article>
+        </div>
+
+        <div class="dsw-list-box">
+          <p class="dsw-list-box-title">Tahapan Hasil Pemakaian Rutin:</p>
+          <div class="dsw-check-list" style="margin-top: 0;">
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                <strong>Minggu 1:</strong> Kulit terasa jauh lebih lembap sejuk, Adenosine meresap mulus, dan Oxydew melindungi tanpa whitecast
+              </p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                <strong>Minggu 2–3:</strong> Garis-garis halus akibat dehidrasi tampak lebih terisi dan kulit tidak lagi mudah kusam saat siang
+              </p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                <strong>Minggu 4–6:</strong> Tampilan flek hitam tampak lebih samar, rona wajah cerah merata, dan pipi terasa padat elastis
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: Cara Pakai -->
+      <section class="dsw-section--tinted">
+        <h2 class="dsw-h2">
+          Cara Pakai <span class="dsw-hl-aqua">Pagi & Malam</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Urutan pemakaian setelah mencuci wajah agar ketiga produk meresap sempurna:
+        </p>
+
+        <div class="dsw-grid-2">
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/cara-pakai-trio-step1-toner-adenosine.webp`}
+              alt="Langkah 1 dan 2 menepukkan Treatment Lotion 150ml lalu mengunci kelembapan dengan Adenosine Moisturizer 30gr"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-teal">1. Toner + Adenosine (Pagi/Malam)</span>
+              <p class="dsw-card-desc">
+                Tepuk lembut <strong>Treatment Lotion 150ml</strong> ke seluruh wajah, lalu kunci hidrasi dengan <strong>Adenosine Moisturizer 30gr</strong>.
+              </p>
+            </div>
+          </article>
+
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/cara-pakai-trio-step2-proteksi-spf50.webp`}
+              alt="Langkah 3 pagi hari mengoleskan Oxydew Sunscreen SPF 50+ PA++++ 30ml sebanyak 2 ruas jari"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-teal">2. Kunci SPF 50+ (Khusus Pagi)</span>
+              <p class="dsw-card-desc">
+                Setiap pagi/siang, ratakan 2 ruas jari <strong>Oxydew Sunscreen SPF 50+ PA++++</strong> di wajah dan leher sebelum beraktivitas.
+              </p>
+            </div>
+          </article>
+        </div>
+
+        <div style="margin-top: 22px; text-align: center;">
+          <a href="#form-pemesanan" class="dsw-cta" data-scroll-to-form>
+            <span>Pesan Paket Trio 150ml Sekarang</span>
+            <Icon name="lucide:arrow-right" class="size-5" aria-hidden="true" />
+          </a>
+        </div>
+      </section>
+
+      <!-- Section 6: Bukti Pelanggan -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Bukti Tekstur <span class="dsw-hl-aqua">& Kepuasan Pelanggan</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Pengalaman pelanggan yang beralih ke Paket Sunscreen, Adenosine & Toner 150ml:
+        </p>
+
+        <div class="dsw-grid-2">
+          <div class="dsw-proof-cell">
+            <img
+              src={`${IMG_BASE}/bukti-tekstur-trio-sunscreen-adenosine-toner.webp`}
+              alt="Swatch 3 tekstur Treatment Lotion, Adenosine Gel-Cream, dan Oxydew Sunscreen di punggung tangan"
+              width="480"
+              height="320"
+              class="dsw-proof-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-proof-OverlayCaption">3 Tekstur Ringan Bebas Pilling</p>
+          </div>
+          <div class="dsw-proof-cell">
+            <img
+              src={`${IMG_BASE}/bukti-bunda-38an-cerah-kenyal.webp`}
+              alt="Wanita Indonesia usia 38 tahun berhijab dengan kulit wajah kenyal, cerah, dan terlindungi"
+              width="480"
+              height="320"
+              class="dsw-proof-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-proof-OverlayCaption">Cerah & Terlindungi di Usia 35+</p>
+          </div>
+          <div class="dsw-proof-cell">
+            <img
+              src={`${IMG_BASE}/bukti-pipi-lembap-bebas-whitecast.webp`}
+              alt="Close-up pipi kenyal dan halus tanpa residu putih di bawah sinar matahari pagi"
+              width="480"
+              height="320"
+              class="dsw-proof-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-proof-OverlayCaption">Kenyal Membal Tanpa Whitecast</p>
+          </div>
+          <div class="dsw-proof-cell">
+            <img
+              src={`${IMG_BASE}/bukti-meja-rias-sunscreen-adenosine-toner-150ml.webp`}
+              alt="Rangkaian 3 produk Numa Skin ukuran 150ml di meja rias pagi hari"
+              width="480"
+              height="320"
+              class="dsw-proof-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-proof-OverlayCaption">Toner Jumbo 150ml Lebih Awet</p>
+          </div>
+        </div>
+
+        <div class="dsw-testi-list">
+          <article class="dsw-testi-card">
+            <div class="dsw-testi-head">
+              <div class="dsw-testi-avatar" aria-hidden="true">L</div>
+              <div class="dsw-testi-meta">
+                <p class="dsw-testi-name">
+                  Bunda Lestari Putri (39 thn)
+                  <span class="dsw-verified-pill">Verified Buyer</span>
+                </p>
+                <div class="dsw-stars">
+                  <RatingStars rating={5} />
+                </div>
+              </div>
+            </div>
+            <p class="dsw-testi-body">
+              "Puas banget ambil paket yang Toner 150ml + Adenosine + Sunscreen ini! Botol tonernya gede banget awet dipakai kompres tiap hari. Pas ditimpa Adenosine dan Oxydew Sunscreen rasanya adem, nggak lengket, dan flek di tulang pipiku nggak makin item lagi kalau kena panas."
+            </p>
+            <div class="dsw-testi-foot">
+              <span>Depok</span>
+              <span>•</span>
+              <span>Pemakaian 5 Minggu</span>
+            </div>
+          </article>
+
+          <article class="dsw-testi-card">
+            <div class="dsw-testi-head">
+              <div class="dsw-testi-avatar" aria-hidden="true">W</div>
+              <div class="dsw-testi-meta">
+                <p class="dsw-testi-name">
+                  Ibu Wahyuni Ningsih (41 thn)
+                  <span class="dsw-verified-pill">Verified Buyer</span>
+                </p>
+                <div class="dsw-stars">
+                  <RatingStars rating={5} />
+                </div>
+              </div>
+            </div>
+            <p class="dsw-testi-body">
+              "Kulitku usia 41 tahun tadinya kering banget dan garis senyum kelihatan jelas. Setelah rutin 3 langkah ini pagi malam, muka berasa jauh lebih kenyal membal dan sunscreen-nya beneran menyatu tanpa bikin muka abu-abu."
+            </p>
+            <div class="dsw-testi-foot">
+              <span>Sidoarjo</span>
+              <span>•</span>
+              <span>Pemakaian 6 Minggu</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- Section 7: Tabel Perbandingan -->
+      <section class="dsw-section--tinted">
+        <h2 class="dsw-h2">
+          Keunggulan <span class="dsw-hl-aqua">Paket Trio 150ml</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Mengapa membeli Paket Trio 150ml jauh lebih untung dan efektif dibandingkan membeli produk terpisah:
+        </p>
+
+        <div class="dsw-cmp-card">
+          <div class="dsw-cmp-head">
+            <div class="dsw-cmp-col">Karakteristik</div>
+            <div class="dsw-cmp-col dsw-cmp-col--numa">Paket Trio 150ml</div>
+            <div class="dsw-cmp-col">Krim Satuan Biasa</div>
+          </div>
+
+          <div class="dsw-cmp-row">
+            <div class="dsw-cmp-cell dsw-cmp-cell--feature">Pembuka Jalur Hidrasi</div>
+            <div class="dsw-cmp-cell dsw-cmp-cell--numa">
+              <span class="dsw-icon-green" style="margin: 0 auto;">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">Treatment Lotion Jumbo 150ml</span>
+            </div>
+            <div class="dsw-cmp-cell">
+              <span class="dsw-icon-red" style="margin: 0 auto;">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">Krim sulit meresap di pori kering</span>
+            </div>
+          </div>
+
+          <div class="dsw-cmp-row">
+            <div class="dsw-cmp-cell dsw-cmp-cell--feature">Kunci Elastisitas & Flek</div>
+            <div class="dsw-cmp-cell dsw-cmp-cell--numa">
+              <span class="dsw-icon-green" style="margin: 0 auto;">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">Adenosine + 11X HA + Jania Rubens</span>
+            </div>
+            <div class="dsw-cmp-cell">
+              <span class="dsw-icon-red" style="margin: 0 auto;">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">Melembapkan permukaan saja</span>
+            </div>
+          </div>
+
+          <div class="dsw-cmp-row">
+            <div class="dsw-cmp-cell dsw-cmp-cell--feature">Proteksi UV Anti-Aging</div>
+            <div class="dsw-cmp-cell dsw-cmp-cell--numa">
+              <span class="dsw-icon-green" style="margin: 0 auto;">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">SPF 50+ PA++++ & 3% Luceane™</span>
+            </div>
+            <div class="dsw-cmp-cell">
+              <span class="dsw-icon-red" style="margin: 0 auto;">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">Rawan bocor terpapar matahari</span>
+            </div>
+          </div>
+
+          <div class="dsw-cmp-row">
+            <div class="dsw-cmp-cell dsw-cmp-cell--feature">Harga Paket</div>
+            <div class="dsw-cmp-cell dsw-cmp-cell--numa">
+              <strong>Rp240.000</strong>
+              <span class="dsw-cmp-sub">Hemat Rp27.000</span>
+            </div>
+            <div class="dsw-cmp-cell">
+              <span>Rp266.999</span>
+              <span class="dsw-cmp-sub">Harga beli satuan</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 8: Formulasi, Kandungan & Kemasan -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Formulasi <span class="dsw-hl-aqua">Triple Marine Bio-Science</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Sinergi 3 produk berbahan dasar laut dalam yang nyaman ditumpuk tanpa rasa lengket:
+        </p>
+
+        <div class="dsw-fig-stack">
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/formulasi-trio-ulleung-adenosine-luceane.webp`}
+                alt="Formulasi Air Laut Dalam Ulleungdo, Alga Merah Jania Rubens, dan 3% Luceane"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">Ulleungdo Water + Jania Rubens + 3% Luceane™</h3>
+              <p class="dsw-figcaption-desc">
+                Menghidrasi hingga lapisan epidermis terdalam, mengaktifkan komunikasi regenerasi kulit, dan menangkal penuaan akibat sinar UV.
+              </p>
+            </figcaption>
+          </figure>
+
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/kandungan-galactomyces-adenosine-luceane.webp`}
+                alt="Kandungan Galactomyces, Adenosine, 11X Hyaluronic Acid, dan 5X Ceramide"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">Galactomyces + Adenosine + 11X Hyaluronic Acid</h3>
+              <p class="dsw-figcaption-desc">
+                Mengunci cadangan air hingga 24 jam, menghaluskan tampilan kerutan halus, dan membantu mencerahkan noda hitam.
+              </p>
+            </figcaption>
+          </figure>
+
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/kemasan-sunscreen-adenosine-toner-150ml.webp`}
+                alt="Kemasan resmi Paket Sunscreen Adenosine dan Toner 150ml Numa Skin"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">3 Produk Full-Size Resmi BPOM (Toner 150ml)</h3>
+              <p class="dsw-figcaption-desc">
+                Terdiri dari Treatment Lotion 150ml (BPOM NA18220101400), Adenosine Moisturizer 30gr (BPOM NA18250109281), dan Oxydew Sunscreen 30ml (BPOM NA18251703709).
+              </p>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- Section 9: Garansi 100% Resmi -->
+      <section class="dsw-section" style="text-align: center; background: #f8fafc;">
+        <div style="margin: 0 auto 14px; display: flex; width: 52px; height: 52px; align-items: center; justify-content: center; color: #0b6e7d;">
+          <Icon name="lucide:shield-check" class="size-12" aria-hidden="true" />
+        </div>
+        <h2 class="dsw-h2" style="font-size: 32px;">GARANSI RESMI 100%</h2>
+        <p class="dsw-sub" style="max-width: 320px; margin: 8px auto 0;">
+          Pesanan dikirim langsung dari gudang resmi Numa Skin Indonesia.
+        </p>
+
+        <div class="dsw-guarantee-list">
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:badge-check" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">3 Produk Asli Tersegel BPOM</strong>
+              Terdaftar resmi di BPOM RI (NA18220101400, NA18250109281 & NA18251703709) dan bersertifikat Halal Indonesia.
+            </p>
+          </div>
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:truck" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">Bisa Bayar di Tempat (COD)</strong>
+              Pesan hari ini, bayar langsung ke kurir saat paket tiba di rumah Anda.
+            </p>
+          </div>
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:package-check" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">Garansi Ganti Baru</strong>
+              Kami ganti baru tanpa biaya tambahan bila ada kemasan yang diterima rusak atau bocor.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 10: Checkout Form -->
+      <section id="form-pemesanan" class="dsw-section--checkout">
+        <div style="padding: 0 20px 14px; text-align: center;">
+          <h2 class="dsw-h2" style="font-size: 28px;">
+            Lengkapi Data <span class="dsw-hl-aqua">Pengiriman</span>
+          </h2>
+          <p class="dsw-sub" style="max-width: 340px; margin: 8px auto 0;">
+            Isi nama, nomor WhatsApp aktif, dan kecamatan tujuan untuk cek ongkir otomatis.
+          </p>
+        </div>
+
+        <GeoIpResolvedForm
+          mode="hybrid"
+          productSlug={product.slug}
+          embedded={true}
+          selectedVariantId={String(defaultVariant.id)}
+          codDisabledProvinceCodes={codDisabledProvinceCodes}
+        />
+      </section>
+    </main>
+
+    <!-- Floating Centered Sticky Button -->
+    <div id="floating-cta" data-sticky-cta class="dsw-float-wrap">
+      <a
+        href="#form-pemesanan"
+        class="dsw-float-btn"
+        data-scroll-to-form
+        aria-label="Ambil Paket Sunscreen Adenosine & Toner 150ml Sekarang"
+      >
+        <Icon name="lucide:shopping-bag" class="size-5" aria-hidden="true" />
+        <span>Ambil Paket Trio 150ml (Hemat Rp27rb)</span>
+        <Icon name="lucide:arrow-right" class="size-4" aria-hidden="true" />
+      </a>
+    </div>
+  </div>
+
+  <script is:inline>
+    (function () {
+      var sticky = document.getElementById('floating-cta');
+      var hero = document.getElementById('hero-section');
+      var formSection = document.getElementById('form-pemesanan');
+
+      document.querySelectorAll('[data-scroll-to-form]').forEach(function (link) {
+        link.addEventListener('click', function (ev) {
+          if (!formSection) return;
+          ev.preventDefault();
+          formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          setTimeout(function () {
+            var firstInput = formSection.querySelector('input[name="name"], input[type="text"]');
+            if (firstInput && typeof firstInput.focus === 'function') {
+              firstInput.focus({ preventScroll: true });
+            }
+          }, 480);
+        });
+      });
+
+      if (!sticky || !hero || !formSection || !('IntersectionObserver' in window)) return;
+
+      var heroVisible = true;
+      var formVisible = false;
+
+      function syncSticky() {
+        if (!heroVisible && !formVisible) {
+          sticky.classList.add('is-visible');
+        } else {
+          sticky.classList.remove('is-visible');
+        }
+      }
+
+      var observer = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.target === hero) {
+              heroVisible = entry.isIntersecting;
+            } else if (entry.target === formSection) {
+              formVisible = entry.isIntersecting;
+            }
+          });
+          syncSticky();
+        },
+        { threshold: 0.08 }
+      );
+
+      observer.observe(hero);
+      observer.observe(formSection);
+    })();
+  </script>
+</BaseLayout>

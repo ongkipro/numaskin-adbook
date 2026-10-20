@@ -1,0 +1,808 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import GeoIpResolvedForm from '../components/storefront/forms/GeoIpResolvedForm.astro';
+import MetaLandingTracker from '../components/storefront/tracking/MetaLandingTracker.astro';
+import Icon from '../components/storefront/shared/Icon.astro';
+import RatingStars from '../components/storefront/shared/RatingStars.astro';
+import { getStorefrontProduct } from '../lib/catalog';
+import { nativeLandingCanonicalPath } from '../lib/landing-pages';
+import { defaultCatalogContentId } from '../lib/catalog-feed';
+import { getRuntimeEnv } from '../lib/env';
+import { loadStoreCodDisabledProvinceCodes } from '../lib/form-mode';
+import { getStoreAdsConfig } from '../lib/store-ads';
+import '../styles/form-hybrid.css';
+import '../styles/landing-pages/paket-daily-care-gloss-gel.css';
+
+export const prerender = false;
+
+const PRODUCT_SLUG = 'paket-daily-care-gloss-gel';
+const LANDING_SLUG = 'paket-daily-care-gloss-gel';
+const PAGE_TITLE = 'Paket Daily Care Gloss Gel — Duet Cuci Wajah Lembut & Gel Penenang Kemerahan BPOM';
+const PAGE_DESC = 'Rangkaian dasar 2 langkah kulit sensitif & bruntusan: Deep Sea Water Facial Wash Gel 100ml (NA18261203408) dan Calming Barrier Gloss Gel Moisturizer 30ml (NA18230107056).';
+const IMG_BASE = '/images/landing/paket-daily-care-gloss-gel';
+const HERO_IMAGE = `${IMG_BASE}/hero-paket-daily-care-gloss-gel.webp`;
+
+const database = getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined;
+const claimedProductSlug = Astro.request.headers.get('x-adsbook-product-page');
+const [product, canonicalPath, codDisabledProvinceCodes] = await Promise.all([
+  getStorefrontProduct(Astro.locals, PRODUCT_SLUG),
+  claimedProductSlug
+    ? Promise.resolve(`/produk/${claimedProductSlug}`)
+    : nativeLandingCanonicalPath(Astro.locals, LANDING_SLUG),
+  loadStoreCodDisabledProvinceCodes(database),
+  getStoreAdsConfig(Astro.locals),
+]);
+if (!product) {
+  return Astro.rewrite('/404');
+}
+
+const canonical = `${Astro.locals.tenant.siteUrl}${canonicalPath}`;
+
+const variants = product.variants || [];
+const cheapestVariant = variants.reduce(
+  (min: any, v: any) => (!min || v.price < min.price ? v : min),
+  variants[0]
+);
+const defaultVariant = cheapestVariant || {
+  id: '17',
+  label: 'Facial Wash 100ml + Gloss Gel 30ml',
+  price: 133000,
+  comparePrice: 147999,
+};
+---
+
+<BaseLayout
+  title={PAGE_TITLE}
+  description={PAGE_DESC}
+  image={HERO_IMAGE}
+  preloadImages={HERO_IMAGE}
+  canonical={canonical}
+  hideHeader={true}
+  hideFooter={true}
+>
+  <MetaLandingTracker
+    slug={LANDING_SLUG}
+    contentId={defaultCatalogContentId(product)}
+    contentName={product.contentName}
+    price={defaultVariant.price}
+  />
+
+  <div class="dsw-shell">
+    <main class="dsw-canvas">
+      <!-- Section 1: Hero -->
+      <section id="hero-section" class="dsw-hero">
+        <div class="dsw-hero-head">
+          <h1 class="dsw-h1">
+            <span class="dsw-hl-tilt">Wajah Perih & Ketarik</span> Setiap Habis Cuci Muka Lalu Muncul Bruntusan?
+          </h1>
+          <p class="dsw-sub" style="max-width: 390px; margin: 14px auto 0; font-weight: 700;">
+            Saat skin barrier rewel, ganti sabun keras dan krim pekat Anda dengan pembersih gel rendah pH serta pelembap water-jelly.<br />
+            <span class="dsw-underline-teal">Tenangkan kemerahan sejak langkah pertama dengan Paket Daily Care Gloss Gel!</span>
+          </p>
+        </div>
+
+        <div class="dsw-hero-stage">
+          <div class="dsw-hero-top-tag">
+            <div class="dsw-hero-top-pill">
+              <Icon name="lucide:sparkles" class="size-3.5" aria-hidden="true" />
+              <span>Duo Penenang Barrier • Hemat Rp15.000</span>
+            </div>
+          </div>
+
+          <img
+            src={HERO_IMAGE}
+            alt="Perbandingan wajah kemerahan bruntusan vs kulit tenang glassy dengan Paket Daily Care Gloss Gel Numa Skin"
+            width="720"
+            height="480"
+            class="dsw-hero-img"
+            fetchpriority="high"
+            loading="eager"
+            decoding="async"
+          />
+
+          <div class="dsw-hero-ba" aria-hidden="true">
+            <span class="dsw-hero-ba-pill dsw-hero-ba-pill--before">Merah & Bruntusan</span>
+            <span class="dsw-hero-ba-pill dsw-hero-ba-pill--after">Adem & Glassy</span>
+          </div>
+
+          <div class="dsw-hero-trust-strip" role="list" aria-label="Jaminan kualitas Numa Skin">
+            <div class="dsw-trust-item" role="listitem">
+              <span class="dsw-trust-icon">
+                <Icon name="lucide:shield-check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-trust-text">
+                <strong class="dsw-trust-label">2 BPOM Resmi</strong>
+                <span class="dsw-trust-sub">Wash & Gloss Gel</span>
+              </span>
+            </div>
+            <div class="dsw-trust-item" role="listitem">
+              <span class="dsw-trust-icon">
+                <Icon name="lucide:droplets" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-trust-text">
+                <strong class="dsw-trust-label">Low-pH & Jelly</strong>
+                <span class="dsw-trust-sub">Tanpa Ketarik</span>
+              </span>
+            </div>
+            <div class="dsw-trust-item" role="listitem">
+              <span class="dsw-trust-icon">
+                <Icon name="lucide:award" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-trust-text">
+                <strong class="dsw-trust-label">Barrier Care</strong>
+                <span class="dsw-trust-sub">Ceramide + Probiotik</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="dsw-hero-foot">
+          <p class="dsw-hero-caption">
+            Paduan <strong>Deep Sea Water Facial Wash Gel 100ml</strong> & <strong>Calming Barrier Gloss Gel Moisturizer 30ml</strong> untuk merawat kulit sensitif, kombinasi, dan rentan bruntusan.
+          </p>
+          <a href="#form-pemesanan" class="dsw-cta" data-scroll-to-form>
+            <span>Ambil Paket Daily Care Gloss Gel</span>
+            <Icon name="lucide:arrow-right" class="size-5" aria-hidden="true" />
+          </a>
+        </div>
+      </section>
+
+      <!-- Section 2: Solusi Praktis -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          2 Langkah Dasar <span class="dsw-hl-aqua">Penenang Kulit Rewel</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Ketika kulit mudah memerah dan bruntusan, kunci utamanya adalah menyederhanakan rutinitas ke 2 produk berbasis air yang lembut:
+        </p>
+
+        <div class="dsw-solution-box">
+          <img
+            src={`${IMG_BASE}/solusi-cuci-lembut-kunci-water-jelly.webp`}
+            alt="Wanita Indonesia mengaplikasikan Calming Gloss Gel setelah mencuci wajah dengan Facial Wash Gel"
+            width="648"
+            height="432"
+            class="dsw-solution-img"
+            loading="lazy"
+            fetchpriority="low"
+            decoding="async"
+          />
+
+          <div class="dsw-check-list">
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                <strong>Tahap 1 — Deep Sea Water Facial Wash Gel 100ml:</strong> Pembersih gel lembut dengan Air Laut Dalam Ulleungdo, 5% Niacinamide, dan Ceramide NP yang membersihkan pori tanpa rasa kaku ketarik.
+              </p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                <strong>Tahap 2 — Calming Barrier Gloss Gel 30ml:</strong> Pelembap water-jelly bening dengan Meadowestolide®, Astragalus Root, dan 3X Probiotik yang menyejukkan kemerahan sekaligus mengontrol sebum.
+              </p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                <strong>Bebas Lengket Pagi & Malam:</strong> Kedua produk bertekstur gel ringan berbasis air yang menjaga pori-pori tetap bersih dan terhidrasi tanpa menyumbat komedo.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Masalah Kulit -->
+      <section class="dsw-section--tinted">
+        <h2 class="dsw-h2">
+          Kenapa Bruntusan <span class="dsw-hl-coral">Tak Kunjung Reda?</span>
+        </h2>
+
+        <div class="dsw-grid-2">
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/masalah-sabun-bikin-merah-perih.webp`}
+              alt="Kulit wajah terasa perih, ketarik, dan memerah selesai mencuci muka dengan sabun keras"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-red">Sabun Mengikis Barrier</span>
+              <p class="dsw-card-desc">
+                Sabun pembersih muka dengan busa deterjen keras merusak lapisan lipid alami sehingga pipi terasa perih dan mudah memerah.
+              </p>
+            </div>
+          </article>
+
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/masalah-bruntusan-minyak-dehidrasi.webp`}
+              alt="Kulit kombinasi dengan zona-T berminyak dan bruntusan halus akibat dehidrasi"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-red">Minyak Dehidrasi</span>
+              <p class="dsw-card-desc">
+                Takut memakai pelembap justru membuat kulit dehidrasi memproduksi minyak berlebih yang menyumbat pori menjadi bruntusan.
+              </p>
+            </div>
+          </article>
+        </div>
+
+        <div class="dsw-list-box">
+          <p class="dsw-list-box-title">Tanda Anda Membutuhkan Paket Daily Care Gloss Gel:</p>
+          <div class="dsw-check-list" style="margin-top: 0;">
+            <div class="dsw-check-item">
+              <span class="dsw-icon-red">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                Wajah sering terasa kaku ketarik selesai mencuci muka, lalu 2 jam kemudian kembali berminyak
+              </p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-red">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                Sering muncul bruntusan di dahi atau kemerahan di sekitar lipatan hidung dan pipi
+              </p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-red">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                Ingin rangkaian dasar cuci muka + pelembap gel yang adem, ringan, dan tidak memicu komedo
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Transformasi Nyata -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Transformasi <span class="dsw-hl-aqua">Kulit Tenang & Halus</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Perbandingan kondisi kulit sebelum dan sesudah rutin memakai duet Facial Wash Gel & Calming Gloss Gel:
+        </p>
+
+        <div class="dsw-grid-2">
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/kondisi-merah-bruntusan-ketarik.webp`}
+              alt="Kondisi kulit wajah kemerahan, bruntusan, dan kering mengelupas sebelum perawatan"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-red">Sebelum Perawatan</span>
+              <p class="dsw-card-desc">
+                Permukaan kulit tampak memerah, bintik bruntusan terasa kasar saat diraba, dan pori terlihat kusam berminyak.
+              </p>
+            </div>
+          </article>
+
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/kondisi-tenang-halus-glassy.webp`}
+              alt="Kondisi kulit wajah tenang, bebas kemerahan, halus, dan tampak glassy sehat setelah pemakaian rutin"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-green">Rutin Wash + Gloss Gel</span>
+              <p class="dsw-card-desc">
+                Kemerahan tampak mereda, tekstur pipi dan dahi terasa jauh lebih licin halus, serta kulit tampak bening terhidrasi.
+              </p>
+            </div>
+          </article>
+        </div>
+
+        <div class="dsw-list-box">
+          <p class="dsw-list-box-title">Tahapan Perubahan yang Dirasakan:</p>
+          <div class="dsw-check-list" style="margin-top: 0;">
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                <strong>Hari 1–3:</strong> Cuci muka terasa bersih segar tanpa rasa ketarik, dan Gloss Gel langsung mendinginkan kulit
+              </p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                <strong>Minggu 1–2:</strong> Kemerahan tampak lebih kalem dan produksi minyak di zona-T terasa lebih seimbang
+              </p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">
+                <strong>Minggu 3–4:</strong> Bruntusan menghalus, skin barrier terasa lebih kuat, dan wajah tampak glowing sehat
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: Cara Pakai 2 Langkah -->
+      <section class="dsw-section--tinted">
+        <h2 class="dsw-h2">
+          Cara Pakai <span class="dsw-hl-aqua">Pagi & Malam</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Cukup 2 langkah praktis setiap pagi dan malam hari:
+        </p>
+
+        <div class="dsw-grid-2">
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/cara-pakai-daily-gloss-step1-wash.webp`}
+              alt="Langkah 1 mencuci wajah dengan Deep Sea Water Facial Wash Gel 100ml"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-teal">1. Cuci Lembut (100ml)</span>
+              <p class="dsw-card-desc">
+                Busakan 1–2 pump <strong>Deep Sea Water Facial Wash Gel</strong> di tangan yang basah, pijat lembut 30 detik di wajah, lalu bilas bersih.
+              </p>
+            </div>
+          </article>
+
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/cara-pakai-daily-gloss-step2-jelly.webp`}
+              alt="Langkah 2 mengoleskan Calming Barrier Gloss Gel Moisturizer 30ml"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-teal">2. Kunci Gloss Gel (30ml)</span>
+              <p class="dsw-card-desc">
+                Oleskan <strong>Calming Barrier Gloss Gel</strong> merata ke seluruh wajah untuk mendinginkan dan mengunci kelembapan barrier.
+              </p>
+            </div>
+          </article>
+        </div>
+
+        <div style="margin-top: 22px; text-align: center;">
+          <a href="#form-pemesanan" class="dsw-cta" data-scroll-to-form>
+            <span>Pesan Paket Daily Care Gloss Gel</span>
+            <Icon name="lucide:arrow-right" class="size-5" aria-hidden="true" />
+          </a>
+        </div>
+      </section>
+
+      <!-- Section 6: Bukti Pelanggan -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Favorit Pemilik <span class="dsw-hl-aqua">Kulit Sensitif & Kombinasi</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Pengalaman nyata pelanggan yang merawat skin barrier dengan Paket Daily Care Gloss Gel:
+        </p>
+
+        <div class="dsw-grid-2">
+          <div class="dsw-proof-cell">
+            <img
+              src={`${IMG_BASE}/bukti-tekstur-duo-daily-gloss.webp`}
+              alt="Swatch tekstur gel pembersih bening dan water-jelly Gloss Gel di punggung tangan"
+              width="480"
+              height="320"
+              class="dsw-proof-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-proof-OverlayCaption">100% Tekstur Gel Berbasis Air</p>
+          </div>
+          <div class="dsw-proof-cell">
+            <img
+              src={`${IMG_BASE}/bukti-wanita-kalem-bebas-merah.webp`}
+              alt="Wanita Indonesia berhijab dengan kulit wajah tenang, bersih, dan bebas kemerahan"
+              width="480"
+              height="320"
+              class="dsw-proof-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-proof-OverlayCaption">Kemerahan & Bruntusan Kalem</p>
+          </div>
+          <div class="dsw-proof-cell">
+            <img
+              src={`${IMG_BASE}/bukti-pipi-adem-halus-sehat.webp`}
+              alt="Close-up pipi yang halus, pori-pori bersih, dan tampak glassy tanpa minyak berlebih"
+              width="480"
+              height="320"
+              class="dsw-proof-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-proof-OverlayCaption">Pori Bersih & Lembap Glassy</p>
+          </div>
+          <div class="dsw-proof-cell">
+            <img
+              src={`${IMG_BASE}/bukti-meja-rias-daily-care-gloss.webp`}
+              alt="Rangkaian Numa Skin Paket Daily Care Gloss Gel di wastafel kamar mandi"
+              width="480"
+              height="320"
+              class="dsw-proof-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-proof-OverlayCaption">Duet Dasar Pagi & Malam</p>
+          </div>
+        </div>
+
+        <div class="dsw-testi-list">
+          <article class="dsw-testi-card">
+            <div class="dsw-testi-head">
+              <div class="dsw-testi-avatar" aria-hidden="true">N</div>
+              <div class="dsw-testi-meta">
+                <p class="dsw-testi-name">
+                  Kak Nabila Putri (27 thn)
+                  <span class="dsw-verified-pill">Verified Buyer</span>
+                </p>
+                <div class="dsw-stars">
+                  <RatingStars rating={5} />
+                </div>
+              </div>
+            </div>
+            <p class="dsw-testi-body">
+              "Kulitku tipe kombinasi yang gampang banget bruntusan di jidat dan merah di pinggir hidung. Sejak ganti ke Facial Wash Gel + Gloss Gel Numa Skin ini, habis cuci muka rasanya adem banget nggak ketarik, terus Gloss Gel-nya dingin kayak air. Bruntusan cepet banget kalemnya!"
+            </p>
+            <div class="dsw-testi-foot">
+              <span>Bandung</span>
+              <span>•</span>
+              <span>Pemakaian 3 Minggu</span>
+            </div>
+          </article>
+
+          <article class="dsw-testi-card">
+            <div class="dsw-testi-head">
+              <div class="dsw-testi-avatar" aria-hidden="true">D</div>
+              <div class="dsw-testi-meta">
+                <p class="dsw-testi-name">
+                  Kak Dinda Maharani (30 thn)
+                  <span class="dsw-verified-pill">Verified Buyer</span>
+                </p>
+                <div class="dsw-stars">
+                  <RatingStars rating={5} />
+                </div>
+              </div>
+            </div>
+            <p class="dsw-testi-body">
+              "Paling cocok buat yang nggak suka pelembap lengket! Sabunnya lembut banget di kulit sensitifku, dan Gloss Gel-nya pas dioles langsung meresap bikin muka kelihatan sehat bening tapi nggak berminyak sama sekali."
+            </p>
+            <div class="dsw-testi-foot">
+              <span>Surabaya</span>
+              <span>•</span>
+              <span>Pemakaian 1 Bulan</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- Section 7: Tabel Perbandingan -->
+      <section class="dsw-section--tinted">
+        <h2 class="dsw-h2">
+          Keunggulan <span class="dsw-hl-aqua">Daily Care Gloss Gel</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Mengapa paket ini lebih aman untuk kulit sensitif dan rentan bruntusan dibanding sabun serta krim biasa:
+        </p>
+
+        <div class="dsw-cmp-card">
+          <div class="dsw-cmp-head">
+            <div class="dsw-cmp-col">Karakteristik</div>
+            <div class="dsw-cmp-col dsw-cmp-col--numa">Daily Care Gloss Gel</div>
+            <div class="dsw-cmp-col">Sabun & Krim Biasa</div>
+          </div>
+
+          <div class="dsw-cmp-row">
+            <div class="dsw-cmp-cell dsw-cmp-cell--feature">Sensasi Habis Cuci Muka</div>
+            <div class="dsw-cmp-cell dsw-cmp-cell--numa">
+              <span class="dsw-icon-green" style="margin: 0 auto;">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">Lembut, lembap & tidak ketarik</span>
+            </div>
+            <div class="dsw-cmp-cell">
+              <span class="dsw-icon-red" style="margin: 0 auto;">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">Kesat kaku & mengikis barrier</span>
+            </div>
+          </div>
+
+          <div class="dsw-cmp-row">
+            <div class="dsw-cmp-cell dsw-cmp-cell--feature">Tekstur Pelembap</div>
+            <div class="dsw-cmp-cell dsw-cmp-cell--numa">
+              <span class="dsw-icon-green" style="margin: 0 auto;">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">Water-Jelly Meadowestolide®</span>
+            </div>
+            <div class="dsw-cmp-cell">
+              <span class="dsw-icon-red" style="margin: 0 auto;">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">Pekat & menyumbat pori</span>
+            </div>
+          </div>
+
+          <div class="dsw-cmp-row">
+            <div class="dsw-cmp-cell dsw-cmp-cell--feature">Bahan Aktif Penenang</div>
+            <div class="dsw-cmp-cell dsw-cmp-cell--numa">
+              <span class="dsw-icon-green" style="margin: 0 auto;">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">Astragalus + Ceramide + Probiotik</span>
+            </div>
+            <div class="dsw-cmp-cell">
+              <span class="dsw-icon-red" style="margin: 0 auto;">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">Minim kandungan barrier repair</span>
+            </div>
+          </div>
+
+          <div class="dsw-cmp-row">
+            <div class="dsw-cmp-cell dsw-cmp-cell--feature">Harga Paket</div>
+            <div class="dsw-cmp-cell dsw-cmp-cell--numa">
+              <strong>Rp133.000</strong>
+              <span class="dsw-cmp-sub">Hemat Rp15.000</span>
+            </div>
+            <div class="dsw-cmp-cell">
+              <span>Rp147.999</span>
+              <span class="dsw-cmp-sub">Harga beli satuan</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 8: Formulasi, Kandungan & Kemasan -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Formulasi <span class="dsw-hl-aqua">Penenang Skin Barrier</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Sinergi air laut dalam Korea dan bio-aktif botani untuk ketenangan kulit sensitif:
+        </p>
+
+        <div class="dsw-fig-stack">
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/formulasi-calming-wash-gloss-gel.webp`}
+                alt="Formulasi Air Laut Dalam Ulleungdo dan water-jelly Meadowestolide Astragalus"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">Ulleungdo Deep Sea Water + Meadowestolide®</h3>
+              <p class="dsw-figcaption-desc">
+                Menjaga pH dan kelembapan alami kulit saat mencuci muka sekaligus menyeimbangkan kadar air-minyak (sebum) di permukaan pori.
+              </p>
+            </figcaption>
+          </figure>
+
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/kandungan-niacinamide-meadowestolide-ceramide.webp`}
+                alt="Kandungan 5% Niacinamide, Ceramide NP, Astragalus Root, dan 3X Probiotik"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">5% Niacinamide + Astragalus + Ceramide NP</h3>
+              <p class="dsw-figcaption-desc">
+                Membantu meredakan tampilan kemerahan dan bruntusan sekaligus mencerahkan kulit kusam tanpa rasa perih.
+              </p>
+            </figcaption>
+          </figure>
+
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/kemasan-daily-care-gloss-gel.webp`}
+                alt="Kemasan resmi Paket Daily Care Gloss Gel Numa Skin"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">2 Produk Full-Size Resmi BPOM</h3>
+              <p class="dsw-figcaption-desc">
+                Terdiri dari Deep Sea Water Facial Wash Gel 100ml (BPOM NA18261203408) dan Calming Barrier Gloss Gel Moisturizer 30ml (BPOM NA18230107056).
+              </p>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- Section 9: Garansi 100% Resmi -->
+      <section class="dsw-section" style="text-align: center; background: #f8fafc;">
+        <div style="margin: 0 auto 14px; display: flex; width: 52px; height: 52px; align-items: center; justify-content: center; color: #0b6e7d;">
+          <Icon name="lucide:shield-check" class="size-12" aria-hidden="true" />
+        </div>
+        <h2 class="dsw-h2" style="font-size: 32px;">GARANSI RESMI 100%</h2>
+        <p class="dsw-sub" style="max-width: 320px; margin: 8px auto 0;">
+          Pesanan dikirim langsung dari gudang resmi Numa Skin Indonesia.
+        </p>
+
+        <div class="dsw-guarantee-list">
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:badge-check" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">2 Produk Asli Tersegel BPOM</strong>
+              Terdaftar resmi di BPOM RI (NA18261203408 & NA18230107056) dan bersertifikat Halal Indonesia.
+            </p>
+          </div>
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:truck" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">Bisa Bayar di Tempat (COD)</strong>
+              Pesan hari ini, bayar langsung ke kurir saat paket tiba di rumah Anda.
+            </p>
+          </div>
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:package-check" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">Garansi Ganti Baru</strong>
+              Kami ganti baru tanpa biaya tambahan bila ada kemasan yang diterima rusak atau bocor.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 10: Checkout Form -->
+      <section id="form-pemesanan" class="dsw-section--checkout">
+        <div style="padding: 0 20px 14px; text-align: center;">
+          <h2 class="dsw-h2" style="font-size: 28px;">
+            Lengkapi Data <span class="dsw-hl-aqua">Pengiriman</span>
+          </h2>
+          <p class="dsw-sub" style="max-width: 340px; margin: 8px auto 0;">
+            Isi nama, nomor WhatsApp aktif, dan kecamatan tujuan untuk cek ongkir otomatis.
+          </p>
+        </div>
+
+        <GeoIpResolvedForm
+          mode="hybrid"
+          productSlug={product.slug}
+          embedded={true}
+          selectedVariantId={String(defaultVariant.id)}
+          codDisabledProvinceCodes={codDisabledProvinceCodes}
+        />
+      </section>
+    </main>
+
+    <!-- Floating Centered Sticky Button -->
+    <div id="floating-cta" data-sticky-cta class="dsw-float-wrap">
+      <a
+        href="#form-pemesanan"
+        class="dsw-float-btn"
+        data-scroll-to-form
+        aria-label="Ambil Paket Daily Care Gloss Gel Sekarang"
+      >
+        <Icon name="lucide:shopping-bag" class="size-5" aria-hidden="true" />
+        <span>Ambil Daily Care Gloss Gel (Hemat Rp15rb)</span>
+        <Icon name="lucide:arrow-right" class="size-4" aria-hidden="true" />
+      </a>
+    </div>
+  </div>
+
+  <script is:inline>
+    (function () {
+      var sticky = document.getElementById('floating-cta');
+      var hero = document.getElementById('hero-section');
+      var formSection = document.getElementById('form-pemesanan');
+
+      document.querySelectorAll('[data-scroll-to-form]').forEach(function (link) {
+        link.addEventListener('click', function (ev) {
+          if (!formSection) return;
+          ev.preventDefault();
+          formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          setTimeout(function () {
+            var firstInput = formSection.querySelector('input[name="name"], input[type="text"]');
+            if (firstInput && typeof firstInput.focus === 'function') {
+              firstInput.focus({ preventScroll: true });
+            }
+          }, 480);
+        });
+      });
+
+      if (!sticky || !hero || !formSection || !('IntersectionObserver' in window)) return;
+
+      var heroVisible = true;
+      var formVisible = false;
+
+      function syncSticky() {
+        if (!heroVisible && !formVisible) {
+          sticky.classList.add('is-visible');
+        } else {
+          sticky.classList.remove('is-visible');
+        }
+      }
+
+      var observer = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.target === hero) {
+              heroVisible = entry.isIntersecting;
+            } else if (entry.target === formSection) {
+              formVisible = entry.isIntersecting;
+            }
+          });
+          syncSticky();
+        },
+        { threshold: 0.08 }
+      );
+
+      observer.observe(hero);
+      observer.observe(formSection);
+    })();
+  </script>
+</BaseLayout>
