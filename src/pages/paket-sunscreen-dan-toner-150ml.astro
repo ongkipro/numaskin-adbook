@@ -1,0 +1,768 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import GeoIpResolvedForm from '../components/storefront/forms/GeoIpResolvedForm.astro';
+import MetaLandingTracker from '../components/storefront/tracking/MetaLandingTracker.astro';
+import Icon from '../components/storefront/shared/Icon.astro';
+import RatingStars from '../components/storefront/shared/RatingStars.astro';
+import { getStorefrontProduct } from '../lib/catalog';
+import { nativeLandingCanonicalPath } from '../lib/landing-pages';
+import { defaultCatalogContentId } from '../lib/catalog-feed';
+import { getRuntimeEnv } from '../lib/env';
+import { loadStoreCodDisabledProvinceCodes } from '../lib/form-mode';
+import { getStoreAdsConfig } from '../lib/store-ads';
+import '../styles/form-hybrid.css';
+import '../styles/landing-pages/paket-sunscreen-dan-toner-150ml.css';
+
+export const prerender = false;
+
+const PRODUCT_SLUG = 'paket-sunscreen-dan-toner-150ml';
+const LANDING_SLUG = 'paket-sunscreen-dan-toner-150ml';
+const PAGE_TITLE = 'Paket Sunscreen & Toner 150ml - Duet Hidrasi Jumbo & Perisai UV SPF 50+ BPOM';
+const PAGE_DESC = 'Paket hemat perawatan pagi ukuran besar: Deep Sea Water Treatment Lotion 150ml (NA18220101400) dan Oxydew Sunscreen Luceane SPF 50+ PA++++ 30ml (NA18251703709).';
+const IMG_BASE = '/images/landing/paket-sunscreen-dan-toner-150ml';
+const HERO_IMAGE = `${IMG_BASE}/hero-paket-sunscreen-toner-150ml.webp`;
+
+const database = getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined;
+const claimedProductSlug = Astro.request.headers.get('x-adsbook-product-page');
+const [product, canonicalPath, codDisabledProvinceCodes] = await Promise.all([
+  getStorefrontProduct(Astro.locals, PRODUCT_SLUG),
+  claimedProductSlug
+    ? Promise.resolve(`/produk/${claimedProductSlug}`)
+    : nativeLandingCanonicalPath(Astro.locals, LANDING_SLUG),
+  loadStoreCodDisabledProvinceCodes(database),
+  getStoreAdsConfig(Astro.locals),
+]);
+if (!product) {
+  return Astro.rewrite('/404');
+}
+
+const canonical = `${Astro.locals.tenant.siteUrl}${canonicalPath}`;
+
+const variants = product.variants || [];
+const cheapestVariant = variants.reduce(
+  (min: any, v: any) => (!min || v.price < min.price ? v : min),
+  variants[0]
+);
+const defaultVariant = cheapestVariant || {
+  id: '43',
+  label: 'Toner 150ml + Sunscreen 30ml',
+  price: 169000,
+  comparePrice: 188000,
+};
+---
+
+<BaseLayout
+  title={PAGE_TITLE}
+  description={PAGE_DESC}
+  image={HERO_IMAGE}
+  preloadImages={HERO_IMAGE}
+  canonical={canonical}
+  hideHeader={true}
+  hideFooter={true}
+>
+  <MetaLandingTracker
+    slug={LANDING_SLUG}
+    contentId={defaultCatalogContentId(product)}
+    contentName={product.contentName}
+    price={defaultVariant.price}
+  />
+
+  <div class="dsw-shell">
+    <main class="dsw-canvas">
+      <!-- Section 1: Hero -->
+      <section id="hero-section" class="dsw-hero">
+        <div class="dsw-hero-head">
+          <h1 class="dsw-h1">
+            <span class="dsw-hl-tilt">Wajah Kusam & Belang</span> Padahal Sudah Pakai Sunscreen?
+          </h1>
+          <p class="dsw-sub" style="max-width: 390px; margin: 14px auto 0; font-weight: 700;">
+            Kulit yang dehidrasi di bagian dalam membuat sunscreen tidak merata dan wajah tetap kusam saat terkena panas.<br />
+            <span class="dsw-underline-teal">Hidrasi maksimal & kunci SPF 50+ dengan Toner Jumbo 150ml + Oxydew!</span>
+          </p>
+        </div>
+
+        <div class="dsw-hero-stage">
+          <div class="dsw-hero-top-tag">
+            <div class="dsw-hero-top-pill">
+              <Icon name="lucide:award" class="size-3.5" aria-hidden="true" />
+              <span>Sunscreen + Toner 150ml • Hemat Rp19rb</span>
+            </div>
+          </div>
+
+          <img
+            src={HERO_IMAGE}
+            alt="Perbandingan kulit terbakar UV dan kusam vs kulit lembap terlindungi dengan Paket Sunscreen dan Toner 150ml Numa Skin"
+            width="720"
+            height="480"
+            class="dsw-hero-img"
+            fetchpriority="high"
+            loading="eager"
+            decoding="async"
+          />
+
+          <div class="dsw-hero-ba" aria-hidden="true">
+            <span class="dsw-hero-ba-pill dsw-hero-ba-pill--before">Kusam & Whitecast</span>
+            <span class="dsw-hero-ba-pill dsw-hero-ba-pill--after">Segar & Terlindungi</span>
+          </div>
+
+          <div class="dsw-hero-trust-strip" role="list" aria-label="Jaminan kualitas Numa Skin">
+            <div class="dsw-trust-item" role="listitem">
+              <span class="dsw-trust-icon">
+                <Icon name="lucide:shield-check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-trust-text">
+                <strong class="dsw-trust-label">2 BPOM Resmi</strong>
+                <span class="dsw-trust-sub">Toner & Sunscreen</span>
+              </span>
+            </div>
+            <div class="dsw-trust-item" role="listitem">
+              <span class="dsw-trust-icon">
+                <Icon name="lucide:droplets" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-trust-text">
+                <strong class="dsw-trust-label">Toner Jumbo 150ml</strong>
+                <span class="dsw-trust-sub">76% Ulleung Water</span>
+              </span>
+            </div>
+            <div class="dsw-trust-item" role="listitem">
+              <span class="dsw-trust-icon">
+                <Icon name="lucide:layers" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-trust-text">
+                <strong class="dsw-trust-label">SPF 50+ PA++++</strong>
+                <span class="dsw-trust-sub">3% Luceane™</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="dsw-hero-foot">
+          <p class="dsw-hero-caption">
+            Duet pagi ukuran puas: <strong>Deep Sea Water Treatment Lotion 150ml</strong> + <strong>Oxydew Sunscreen SPF 50+ PA++++ 30ml</strong>.
+          </p>
+          <a href="#form-pemesanan" class="dsw-cta" data-scroll-to-form>
+            <span>Ambil Paket Pagi 150ml Ini</span>
+            <Icon name="lucide:arrow-right" class="size-5" aria-hidden="true" />
+          </a>
+        </div>
+      </section>
+
+      <!-- Section 2: Solusi Praktis -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Fondasi Hidrasi Jumbo <span class="dsw-hl-aqua">& Perisai UV Bebas Whitecast</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Dua langkah dasar agar kulit tetap sejuk, cerah, dan terlindungi dari flek matahari:
+        </p>
+
+        <div class="dsw-solution-box">
+          <img
+            src={`${IMG_BASE}/solusi-hidrasi-segar-tanpa-whitecast-150ml.webp`}
+            alt="Wanita Indonesia mengaplikasikan Oxydew Sunscreen setelah Treatment Lotion 150ml"
+            width="648"
+            height="432"
+            class="dsw-solution-img"
+            loading="lazy"
+            fetchpriority="low"
+            decoding="async"
+          />
+
+          <div class="dsw-check-list">
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text"><strong>Langkah 1 — Treatment Lotion Jumbo 150ml:</strong> 76% Air Laut Dalam Ulleungdo, Galactomyces, dan 5X Ceramide mengisi kelembapan pori pagi dan malam.</p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text"><strong>Langkah 2 — Oxydew Sunscreen SPF 50+ PA++++ 30ml:</strong> Melindungi kulit dari sinar UVA/UVB dan polusi dengan 3% Luceane™ tanpa meninggalkan bercak putih.</p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text"><strong>Botol Toner 150ml Lebih Hemat & Awet:</strong> Cukup untuk pemakaian rutin pagi dan malam selama 2 bulan penuh.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Masalah Kulit -->
+      <section class="dsw-section--tinted">
+        <h2 class="dsw-h2">
+          Kenapa Kulit Tetap Kering <span class="dsw-hl-coral">& Flek Muncul di Siang Hari?</span>
+        </h2>
+
+        <div class="dsw-grid-2">
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/masalah-sunscreen-menggumpal-kulit-kering-150ml.webp`}
+              alt="Sunscreen tampak menggumpal dan abu-abu di kulit yang kurang hidrasi"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-red">Sunscreen Sulit Menyatu</span>
+              <p class="dsw-card-desc">Tanpa hidrasi toner yang cukup, permukaan kulit yang kering membuat sunscreen menggumpal dan tampak belang.</p>
+            </div>
+          </article>
+
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/masalah-flek-matahari-kusam-siang-150ml.webp`}
+              alt="Wajah memerah dan muncul flek hitam akibat paparan sinar UV"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-red">Flek Akibat Panas UV</span>
+              <p class="dsw-card-desc">Paparan terik matahari tropis memicu stres oksidatif dan bintik hitam baru jika tidak ditangkal SPF 50+ PA++++.</p>
+            </div>
+          </article>
+        </div>
+
+        <div class="dsw-list-box">
+          <p class="dsw-list-box-title">Tanda Anda Membutuhkan Paket Ini:</p>
+          <div class="dsw-check-list" style="margin-top: 0;">
+            <div class="dsw-check-item">
+              <span class="dsw-icon-red">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">Menginginkan botol Treatment Lotion ukuran besar 150ml untuk dipakai pagi-malam ditambah Oxydew Sunscreen untuk pagi hari</p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-red">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">Sering mengeluhkan sunscreen yang terasa gerah, lengket, atau perih di mata saat berkeringat</p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-red">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">Ingin mencegah flek hitam semakin tebal dengan perlindungan UV harian yang ringan</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Transformasi Nyata -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Transformasi <span class="dsw-hl-aqua">Kulit Lembap, Segar & Bebas Abu-Abu</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Perbedaan tampilan kulit di siang hari sebelum dan sesudah memakai Paket Sunscreen & Toner 150ml:
+        </p>
+
+        <div class="dsw-grid-2">
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/kondisi-kulit-kering-terbakar-uv-150ml.webp`}
+              alt="Kondisi kulit kemerahan, berminyak kusam, dan muncul flek matahari"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-red">Sebelum Perawatan</span>
+              <p class="dsw-card-desc">Kulit tampak kusam berminyak di luar namun kering di dalam, disertai bintik kecokelatan akibat UV.</p>
+            </div>
+          </article>
+
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/kondisi-kulit-lembap-terlindungi-150ml.webp`}
+              alt="Kondisi kulit tampak segar, lembap merata, dan bebas whitecast"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-green">Rutin Duet 150ml</span>
+              <p class="dsw-card-desc">Wajah tampak segar bernapas, kelembapan terjaga seimbang, dan terlindungi dari sengatan matahari.</p>
+            </div>
+          </article>
+        </div>
+
+        <div class="dsw-list-box">
+          <p class="dsw-list-box-title">Tahapan Hasil Pemakaian Rutin:</p>
+          <div class="dsw-check-list" style="margin-top: 0;">
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text"><strong>Minggu 1:</strong> Kulit terasa adem terhidrasi dan sunscreen menyatu bening tanpa membuat makeup cakey</p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text"><strong>Minggu 2–3:</strong> Wajah tidak lagi mudah kusam atau memerah saat beraktivitas di luar ruangan</p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text"><strong>Minggu 4–6:</strong> Skin barrier terasa lebih sehat, halus, dan terlindungi dari munculnya flek baru</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: Cara Pakai -->
+      <section class="dsw-section--tinted">
+        <h2 class="dsw-h2">
+          Cara Pakai <span class="dsw-hl-aqua">Praktis Setiap Hari</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Urutan pemakaian setiap pagi (dan Toner 150ml kembali di malam hari):
+        </p>
+
+        <div class="dsw-grid-2">
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/cara-pakai-st150-step1-toner.webp`}
+              alt="Menuangkan Treatment Lotion 150ml ke telapak tangan dan menepuk ke wajah"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-teal">1. Tepuk Toner 150ml (Pagi & Malam)</span>
+              <p class="dsw-card-desc">Tuang <strong>Treatment Lotion 150ml</strong> ke telapak tangan, tepuk lembut ke wajah pagi dan malam sehabis cuci muka.</p>
+            </div>
+          </article>
+
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/cara-pakai-st150-step2-sunscreen.webp`}
+              alt="Meratakan Oxydew Sunscreen SPF 50+ PA++++ di wajah pada pagi hari"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-teal">2. Kunci SPF 50+ (Pagi/Siang)</span>
+              <p class="dsw-card-desc">Setiap pagi, ratakan 2 ruas jari <strong>Oxydew Sunscreen SPF 50+ PA++++</strong> ke wajah dan leher.</p>
+            </div>
+          </article>
+        </div>
+
+        <div style="margin-top: 22px; text-align: center;">
+          <a href="#form-pemesanan" class="dsw-cta" data-scroll-to-form>
+            <span>Pesan Sunscreen & Toner 150ml</span>
+            <Icon name="lucide:arrow-right" class="size-5" aria-hidden="true" />
+          </a>
+        </div>
+      </section>
+
+      <!-- Section 6: Bukti Pelanggan -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Bukti Tekstur <span class="dsw-hl-aqua">& Kepuasan Pelanggan</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Kepuasan pelanggan yang memilih ukuran Toner Jumbo 150ml + Oxydew Sunscreen:
+        </p>
+
+        <div class="dsw-grid-2">
+          <div class="dsw-proof-cell">
+            <img
+              src={`${IMG_BASE}/bukti-tekstur-toner-dan-sunscreen-150ml.webp`}
+              alt="Swatch tekstur cair Treatment Lotion dan losion ringan Oxydew Sunscreen"
+              width="480"
+              height="320"
+              class="dsw-proof-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-proof-OverlayCaption">Cair Segar & Losion UV Tanpa Whitecast</p>
+          </div>
+          <div class="dsw-proof-cell">
+            <img
+              src={`${IMG_BASE}/bukti-wanita-35an-cerah-outdoor-150ml.webp`}
+              alt="Wanita Indonesia usia 35 tahun berhijab tersenyum cerah di luar ruangan"
+              width="480"
+              height="320"
+              class="dsw-proof-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-proof-OverlayCaption">Wajah Tetap Segar Sampai Sore</p>
+          </div>
+          <div class="dsw-proof-cell">
+            <img
+              src={`${IMG_BASE}/bukti-pipi-segar-bebas-lengket-150ml.webp`}
+              alt="Close-up pipi halus lembap tanpa minyak berlebih"
+              width="480"
+              height="320"
+              class="dsw-proof-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-proof-OverlayCaption">Nyaman Dipakai di Bawah Makeup</p>
+          </div>
+          <div class="dsw-proof-cell">
+            <img
+              src={`${IMG_BASE}/bukti-meja-rias-sunscreen-toner-150ml.webp`}
+              alt="Botol Treatment Lotion 150ml dan Oxydew Sunscreen 30ml di meja rias"
+              width="480"
+              height="320"
+              class="dsw-proof-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-proof-OverlayCaption">Toner Jumbo 150ml Lebih Puas</p>
+          </div>
+        </div>
+
+        <div class="dsw-testi-list">
+          <article class="dsw-testi-card">
+            <div class="dsw-testi-head">
+              <div class="dsw-testi-avatar" aria-hidden="true">R</div>
+              <div class="dsw-testi-meta">
+                <p class="dsw-testi-name">
+                  Bunda Rini Susanti (36 thn)
+                  <span class="dsw-verified-pill">Verified Buyer</span>
+                </p>
+                <div class="dsw-stars">
+                  <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
+                </div>
+              </div>
+            </div>
+            <p class="dsw-testi-body">"Sengaja pilih paket yang Toner 150ml + Sunscreen ini karena tonernya aku pakai pagi malam. Sebelum pakai Oxydew Sunscreen ditepuk toner ini dulu, hasilnya di muka glowing sehat dan nggak kusam sampai sore."</p>
+            <div class="dsw-testi-foot">
+              <span>Depok</span>
+              <span>•</span>
+              <span>Pemakaian 5 Minggu</span>
+            </div>
+          </article>
+
+          <article class="dsw-testi-card">
+            <div class="dsw-testi-head">
+              <div class="dsw-testi-avatar" aria-hidden="true">K</div>
+              <div class="dsw-testi-meta">
+                <p class="dsw-testi-name">
+                  Ibu Kartini Wulandari (40 thn)
+                  <span class="dsw-verified-pill">Verified Buyer</span>
+                </p>
+                <div class="dsw-stars">
+                  <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
+                </div>
+              </div>
+            </div>
+            <p class="dsw-testi-body">"Sunscreen Numa ini enak banget, nggak perih di mata dan nggak abu-abu. Dipasangin sama Toner 150ml harganya hemat Rp19 ribu, pengiriman COD juga cepat."</p>
+            <div class="dsw-testi-foot">
+              <span>Semarang</span>
+              <span>•</span>
+              <span>Pemakaian 4 Minggu</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- Section 7: Tabel Perbandingan -->
+      <section class="dsw-section--tinted">
+        <h2 class="dsw-h2">
+          Keunggulan <span class="dsw-hl-aqua">Sunscreen & Toner (150ml)</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Mengapa memilih Paket Sunscreen & Toner (150ml) jauh lebih hemat dan efektif dibandingkan membeli produk satuan:
+        </p>
+
+        <div class="dsw-cmp-card">
+          <div class="dsw-cmp-head">
+            <div class="dsw-cmp-col">Karakteristik</div>
+            <div class="dsw-cmp-col dsw-cmp-col--numa">Sunscreen + Toner 150ml</div>
+            <div class="dsw-cmp-col">Beli Satuan Biasa</div>
+          </div>
+
+          <div class="dsw-cmp-row">
+            <div class="dsw-cmp-cell dsw-cmp-cell--feature">Kapasitas Toner</div>
+            <div class="dsw-cmp-cell dsw-cmp-cell--numa">
+              <span class="dsw-icon-green" style="margin: 0 auto;">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">Full-Size Botol Jumbo 150ml</span>
+            </div>
+            <div class="dsw-cmp-cell">
+              <span class="dsw-icon-red" style="margin: 0 auto;">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">Ukuran kecil cepat habis</span>
+            </div>
+          </div>
+
+          <div class="dsw-cmp-row">
+            <div class="dsw-cmp-cell dsw-cmp-cell--feature">Teknologi Perisai UV</div>
+            <div class="dsw-cmp-cell dsw-cmp-cell--numa">
+              <span class="dsw-icon-green" style="margin: 0 auto;">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">SPF 50+ PA++++ & 3% Luceane™</span>
+            </div>
+            <div class="dsw-cmp-cell">
+              <span class="dsw-icon-red" style="margin: 0 auto;">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">Sunscreen biasa tanpa anti-aging</span>
+            </div>
+          </div>
+
+          <div class="dsw-cmp-row">
+            <div class="dsw-cmp-cell dsw-cmp-cell--feature">Kenyamanan di Kulit</div>
+            <div class="dsw-cmp-cell dsw-cmp-cell--numa">
+              <span class="dsw-icon-green" style="margin: 0 auto;">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">Hidrasi sejuk & nol whitecast</span>
+            </div>
+            <div class="dsw-cmp-cell">
+              <span class="dsw-icon-red" style="margin: 0 auto;">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">Lengket & tampak abu-abu</span>
+            </div>
+          </div>
+
+          <div class="dsw-cmp-row">
+            <div class="dsw-cmp-cell dsw-cmp-cell--feature">Harga Paket</div>
+            <div class="dsw-cmp-cell dsw-cmp-cell--numa">
+              <strong>Rp169.000</strong>
+              <span class="dsw-cmp-sub">Hemat Rp19.000</span>
+            </div>
+            <div class="dsw-cmp-cell">
+              <span>Rp188.000</span>
+              <span class="dsw-cmp-sub">Harga beli terpisah</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 8: Formulasi, Kandungan & Kemasan -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Formulasi <span class="dsw-hl-aqua">Marine Bio-Science Korea</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Sinergi mineral laut dalam Ulleungdo dan bio-fermentasi pelindung UV:
+        </p>
+
+        <div class="dsw-fig-stack">
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/formulasi-ulleung-luceane-150ml.webp`}
+                alt="Formulasi 76% Air Laut Dalam Ulleungdo dan 3% Luceane"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">76% Ulleungdo Deep Sea Water + 3% Luceane™</h3>
+              <p class="dsw-figcaption-desc">Menyuplai 72+ mineral ionik ke pori sekaligus menangkal kerusakan kolagen akibat paparan sinar UV.</p>
+            </figcaption>
+          </figure>
+
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/kandungan-galactomyces-luceane-spf50-150ml.webp`}
+                alt="Kandungan Galactomyces, 5X Ceramide, dan Phyllanthus Niruri"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">Galactomyces + 5X Ceramide + Phyllanthus Niruri</h3>
+              <p class="dsw-figcaption-desc">Menjaga kelembapan skin barrier dan menenangkan kulit dari paparan panas matahari.</p>
+            </figcaption>
+          </figure>
+
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/kemasan-sunscreen-toner-150ml.webp`}
+                alt="Kemasan resmi Paket Sunscreen dan Toner 150ml Numa Skin"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">2 Produk Full-Size Resmi BPOM (Toner 150ml + Sunscreen 30ml)</h3>
+              <p class="dsw-figcaption-desc">Terdiri dari Deep Sea Water Treatment Lotion 150ml (BPOM NA18220101400) dan Oxydew Sunscreen SPF 50+ PA++++ 30ml (BPOM NA18251703709).</p>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- Section 9: Garansi 100% Resmi -->
+      <section class="dsw-section" style="text-align: center; background: #f8fafc;">
+        <div style="margin: 0 auto 14px; display: flex; width: 52px; height: 52px; align-items: center; justify-content: center; color: #0b6e7d;">
+          <Icon name="lucide:shield-check" class="size-12" aria-hidden="true" />
+        </div>
+        <h2 class="dsw-h2" style="font-size: 32px;">GARANSI RESMI 100%</h2>
+        <p class="dsw-sub" style="max-width: 320px; margin: 8px auto 0;">
+          Pesanan dikirim langsung dari gudang resmi Numa Skin Indonesia.
+        </p>
+
+        <div class="dsw-guarantee-list">
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:badge-check" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">Produk Asli Tersegel BPOM</strong>
+              Terdaftar resmi di BPOM RI (NA18220101400 & NA18251703709) dan bersertifikat Halal Indonesia.
+            </p>
+          </div>
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:truck" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">Bisa Bayar di Tempat (COD)</strong>
+              Pesan hari ini, bayar langsung ke kurir saat paket tiba di rumah Anda.
+            </p>
+          </div>
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:package-check" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">Garansi Ganti Baru</strong>
+              Kami ganti baru tanpa biaya tambahan bila ada kemasan yang diterima rusak atau bocor.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 10: Checkout Form -->
+      <section id="form-pemesanan" class="dsw-section--checkout">
+        <div style="padding: 0 20px 14px; text-align: center;">
+          <h2 class="dsw-h2" style="font-size: 28px;">
+            Lengkapi Data <span class="dsw-hl-aqua">Pengiriman</span>
+          </h2>
+          <p class="dsw-sub" style="max-width: 340px; margin: 8px auto 0;">
+            Isi nama, nomor WhatsApp aktif, dan kecamatan tujuan untuk cek ongkir otomatis.
+          </p>
+        </div>
+
+        <GeoIpResolvedForm
+          mode="hybrid"
+          productSlug={product.slug}
+          embedded={true}
+          selectedVariantId={String(defaultVariant.id)}
+          codDisabledProvinceCodes={codDisabledProvinceCodes}
+        />
+      </section>
+    </main>
+
+    <!-- Floating Centered Sticky Button -->
+    <div id="floating-cta" data-sticky-cta class="dsw-float-wrap">
+      <a
+        href="#form-pemesanan"
+        class="dsw-float-btn"
+        data-scroll-to-form
+        aria-label="Ambil Paket Sunscreen & Toner (150ml) Sekarang"
+      >
+        <Icon name="lucide:shopping-bag" class="size-5" aria-hidden="true" />
+        <span>Ambil Sunscreen + Toner 150ml (Hemat Rp19rb)</span>
+        <Icon name="lucide:arrow-right" class="size-4" aria-hidden="true" />
+      </a>
+    </div>
+  </div>
+
+  <script is:inline>
+    (function () {
+      var sticky = document.getElementById('floating-cta');
+      var hero = document.getElementById('hero-section');
+      var formSection = document.getElementById('form-pemesanan');
+
+      document.querySelectorAll('[data-scroll-to-form]').forEach(function (link) {
+        link.addEventListener('click', function (ev) {
+          if (!formSection) return;
+          ev.preventDefault();
+          formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          setTimeout(function () {
+            var firstInput = formSection.querySelector('input[name="name"], input[type="text"]');
+            if (firstInput && typeof firstInput.focus === 'function') {
+              firstInput.focus({ preventScroll: true });
+            }
+          }, 480);
+        });
+      });
+
+      if (!sticky || !hero || !formSection || !('IntersectionObserver' in window)) return;
+
+      var heroVisible = true;
+      var formVisible = false;
+
+      function syncSticky() {
+        if (!heroVisible && !formVisible) {
+          sticky.classList.add('is-visible');
+        } else {
+          sticky.classList.remove('is-visible');
+        }
+      }
+
+      var observer = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.target === hero) {
+              heroVisible = entry.isIntersecting;
+            } else if (entry.target === formSection) {
+              formVisible = entry.isIntersecting;
+            }
+          });
+          syncSticky();
+        },
+        { threshold: 0.08 }
+      );
+
+      observer.observe(hero);
+      observer.observe(formSection);
+    })();
+  </script>
+</BaseLayout>

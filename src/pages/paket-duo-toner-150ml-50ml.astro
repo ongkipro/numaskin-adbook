@@ -1,0 +1,768 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import GeoIpResolvedForm from '../components/storefront/forms/GeoIpResolvedForm.astro';
+import MetaLandingTracker from '../components/storefront/tracking/MetaLandingTracker.astro';
+import Icon from '../components/storefront/shared/Icon.astro';
+import RatingStars from '../components/storefront/shared/RatingStars.astro';
+import { getStorefrontProduct } from '../lib/catalog';
+import { nativeLandingCanonicalPath } from '../lib/landing-pages';
+import { defaultCatalogContentId } from '../lib/catalog-feed';
+import { getRuntimeEnv } from '../lib/env';
+import { loadStoreCodDisabledProvinceCodes } from '../lib/form-mode';
+import { getStoreAdsConfig } from '../lib/store-ads';
+import '../styles/form-hybrid.css';
+import '../styles/landing-pages/paket-duo-toner-150ml-50ml.css';
+
+export const prerender = false;
+
+const PRODUCT_SLUG = 'paket-duo-toner-150ml-50ml';
+const LANDING_SLUG = 'paket-duo-toner-150ml-50ml';
+const PAGE_TITLE = 'Paket Duo Toner 150ml + 50ml - Deep Sea Water Treatment Lotion Rumah & Travel BPOM';
+const PAGE_DESC = 'Paket hemat 2 ukuran Deep Sea Water Treatment Lotion Numa Skin (BPOM NA18220101400): botol 150ml untuk meja rias di rumah + botol pump 50ml praktis untuk dibawa bepergian.';
+const IMG_BASE = '/images/landing/paket-duo-toner-150ml-50ml';
+const HERO_IMAGE = `${IMG_BASE}/hero-paket-duo-toner-150ml-50ml.webp`;
+
+const database = getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined;
+const claimedProductSlug = Astro.request.headers.get('x-adsbook-product-page');
+const [product, canonicalPath, codDisabledProvinceCodes] = await Promise.all([
+  getStorefrontProduct(Astro.locals, PRODUCT_SLUG),
+  claimedProductSlug
+    ? Promise.resolve(`/produk/${claimedProductSlug}`)
+    : nativeLandingCanonicalPath(Astro.locals, LANDING_SLUG),
+  loadStoreCodDisabledProvinceCodes(database),
+  getStoreAdsConfig(Astro.locals),
+]);
+if (!product) {
+  return Astro.rewrite('/404');
+}
+
+const canonical = `${Astro.locals.tenant.siteUrl}${canonicalPath}`;
+
+const variants = product.variants || [];
+const cheapestVariant = variants.reduce(
+  (min: any, v: any) => (!min || v.price < min.price ? v : min),
+  variants[0]
+);
+const defaultVariant = cheapestVariant || {
+  id: '20',
+  label: 'Toner 150ml + Toner 50ml',
+  price: 169000,
+  comparePrice: 188000,
+};
+---
+
+<BaseLayout
+  title={PAGE_TITLE}
+  description={PAGE_DESC}
+  image={HERO_IMAGE}
+  preloadImages={HERO_IMAGE}
+  canonical={canonical}
+  hideHeader={true}
+  hideFooter={true}
+>
+  <MetaLandingTracker
+    slug={LANDING_SLUG}
+    contentId={defaultCatalogContentId(product)}
+    contentName={product.contentName}
+    price={defaultVariant.price}
+  />
+
+  <div class="dsw-shell">
+    <main class="dsw-canvas">
+      <!-- Section 1: Hero -->
+      <section id="hero-section" class="dsw-hero">
+        <div class="dsw-hero-head">
+          <h1 class="dsw-h1">
+            <span class="dsw-hl-tilt">Kulit Kering di Kantor</span> Karena Botol Toner Kebesaran Dibawa?
+          </h1>
+          <p class="dsw-sub" style="max-width: 390px; margin: 14px auto 0; font-weight: 700;">
+            Hidrasi wajah tidak boleh berhenti saat Anda beraktivitas di ruangan ber-AC atau sedang bepergian.<br />
+            <span class="dsw-underline-teal">Sedia ukuran 150ml di rumah & 50ml di tas dengan Paket Duo Toner!</span>
+          </p>
+        </div>
+
+        <div class="dsw-hero-stage">
+          <div class="dsw-hero-top-tag">
+            <div class="dsw-hero-top-pill">
+              <Icon name="lucide:award" class="size-3.5" aria-hidden="true" />
+              <span>Duo Toner 150ml + 50ml • Hemat Rp19rb</span>
+            </div>
+          </div>
+
+          <img
+            src={HERO_IMAGE}
+            alt="Perbandingan kulit dehidrasi kasar vs kulit lembap bening dengan Paket Duo Toner 150ml dan 50ml Numa Skin"
+            width="720"
+            height="480"
+            class="dsw-hero-img"
+            fetchpriority="high"
+            loading="eager"
+            decoding="async"
+          />
+
+          <div class="dsw-hero-ba" aria-hidden="true">
+            <span class="dsw-hero-ba-pill dsw-hero-ba-pill--before">Dehidrasi & Ketarik</span>
+            <span class="dsw-hero-ba-pill dsw-hero-ba-pill--after">Lembap Plumpy 24 Jam</span>
+          </div>
+
+          <div class="dsw-hero-trust-strip" role="list" aria-label="Jaminan kualitas Numa Skin">
+            <div class="dsw-trust-item" role="listitem">
+              <span class="dsw-trust-icon">
+                <Icon name="lucide:shield-check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-trust-text">
+                <strong class="dsw-trust-label">BPOM Resmi</strong>
+                <span class="dsw-trust-sub">NA18220101400</span>
+              </span>
+            </div>
+            <div class="dsw-trust-item" role="listitem">
+              <span class="dsw-trust-icon">
+                <Icon name="lucide:droplets" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-trust-text">
+                <strong class="dsw-trust-label">Total 200ml</strong>
+                <span class="dsw-trust-sub">150ml + 50ml Pump</span>
+              </span>
+            </div>
+            <div class="dsw-trust-item" role="listitem">
+              <span class="dsw-trust-icon">
+                <Icon name="lucide:layers" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-trust-text">
+                <strong class="dsw-trust-label">76% Ulleungdo</strong>
+                <span class="dsw-trust-sub">Galactomyces + 5X Ceramide</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="dsw-hero-foot">
+          <p class="dsw-hero-caption">
+            Duet 2 ukuran paling praktis: <strong>Botol Full-Size 150ml</strong> untuk di rumah + <strong>Botol Travel Pump 50ml</strong> untuk dibawa ke mana saja.
+          </p>
+          <a href="#form-pemesanan" class="dsw-cta" data-scroll-to-form>
+            <span>Ambil Paket Duo Toner Ini</span>
+            <Icon name="lucide:arrow-right" class="size-5" aria-hidden="true" />
+          </a>
+        </div>
+      </section>
+
+      <!-- Section 2: Solusi Praktis -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Hidrasi Tanpa Jeda <span class="dsw-hl-aqua">di Rumah Maupun di Luar</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Solusi cerdas bagi pengguna setia Deep Sea Water Treatment Lotion:
+        </p>
+
+        <div class="dsw-solution-box">
+          <img
+            src={`${IMG_BASE}/solusi-hidrasi-rumah-dan-travel.webp`}
+            alt="Wanita Indonesia dengan kulit lembap bercahaya menggunakan Treatment Lotion di rumah dan saat bepergian"
+            width="648"
+            height="432"
+            class="dsw-solution-img"
+            loading="lazy"
+            fetchpriority="low"
+            decoding="async"
+          />
+
+          <div class="dsw-check-list">
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text"><strong>Botol 150ml untuk Ritual Pagi & Malam di Rumah:</strong> Kapasitas besar yang pas untuk ditepuk berlapis maupun dikompres menggunakan kapas (metode CSM).</p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text"><strong>Botol Pump 50ml untuk Tas Kerja & Traveling:</strong> Ukuran ringkas anti-tumpah yang praktis dibawa ke kantor, pengajian, atau liburan tanpa perlu repot memindahkan isi botol.</p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text"><strong>Formula 4-in-1 First Essence:</strong> Menggabungkan fungsi Toner, Essence, Ampoule, dan Masker Kompres dengan 76% Air Laut Dalam Ulleungdo.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Masalah Kulit -->
+      <section class="dsw-section--tinted">
+        <h2 class="dsw-h2">
+          Masalah Saat Hanya Punya <span class="dsw-hl-coral">Satu Botol Toner Saja</span>
+        </h2>
+
+        <div class="dsw-grid-2">
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/masalah-toner-habis-saat-bepergian.webp`}
+              alt="Kulit terasa kering ketarik saat berada di luar rumah atau perjalanan"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-red">Repot Bawa Botol Besar</span>
+              <p class="dsw-card-desc">Membawa botol 150ml di tas kecil terasa berat, sedangkan memindahkan ke botol isi ulang biasa rawan tidak higienis.</p>
+            </div>
+          </article>
+
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/masalah-skincare-sukar-meresap.webp`}
+              alt="Kulit kusam dan kasar karena kurang hidrasi setelah mencuci wajah"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-red">Kulit Ketarik Habis Cuci</span>
+              <p class="dsw-card-desc">Sehabis wudhu atau cuci muka di luar rumah, kulit langsung terasa kaku ketarik jika tidak segera diberi hidrasi.</p>
+            </div>
+          </article>
+        </div>
+
+        <div class="dsw-list-box">
+          <p class="dsw-list-box-title">Tanda Anda Membutuhkan Paket Ini:</p>
+          <div class="dsw-check-list" style="margin-top: 0;">
+            <div class="dsw-check-item">
+              <span class="dsw-icon-red">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">Sudah cocok memakai Deep Sea Water Treatment Lotion dan ingin punya stok di rumah sekaligus di tas kerja</p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-red">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">Kulit sering terasa kering ketarik sehabis wudhu di kantor atau saat terpapar AC seharian</p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-red">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">Ingin berhemat Rp19.000 dengan membeli paket kombinasi 150ml + 50ml (total 200ml)</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Transformasi Nyata -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Transformasi <span class="dsw-hl-aqua">Kulit Plumpy & Segar Seharian</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Perbedaan kondisi kulit saat hidrasi terjaga konsisten dari pagi hingga malam:
+        </p>
+
+        <div class="dsw-grid-2">
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/kondisi-kulit-dehidrasi-ketarik-kusam.webp`}
+              alt="Kondisi kulit kering, mengelupas halus, dan tampak kusam akibat dehidrasi"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-red">Sebelum Perawatan</span>
+              <p class="dsw-card-desc">Pori-pori tampak kasar, permukaan kulit terasa kaku ketarik, dan bedak mudah retak saat siang hari.</p>
+            </div>
+          </article>
+
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/kondisi-kulit-plumpy-segar-24jam.webp`}
+              alt="Kondisi kulit lembap, kenyal membal, dan tampak bening sehat"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-green">Rutin Duo Toner</span>
+              <p class="dsw-card-desc">Kulit terasa sejuk membal, keseimbangan air-minyak terjaga stabil, dan wajah tampak cerah segar.</p>
+            </div>
+          </article>
+        </div>
+
+        <div class="dsw-list-box">
+          <p class="dsw-list-box-title">Tahapan Hasil Pemakaian Rutin:</p>
+          <div class="dsw-check-list" style="margin-top: 0;">
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text"><strong>Hari Pertama:</strong> Kulit yang ketarik sehabis cuci muka atau wudhu langsung terasa adem dan lembap seketika</p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text"><strong>Minggu 2:</strong> Tekstur kulit yang kasar mengelupas tampak lebih halus dan skincare lain meresap lebih cepat</p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text"><strong>Minggu 4:</strong> Skin barrier terasa lebih sehat, wajah tampak bening (glass skin), dan tidak gampang kusam</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: Cara Pakai -->
+      <section class="dsw-section--tinted">
+        <h2 class="dsw-h2">
+          Cara Pakai <span class="dsw-hl-aqua">Praktis Setiap Hari</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Dua cara pakai favorit untuk hasil hidrasi maksimal:
+        </p>
+
+        <div class="dsw-grid-2">
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/cara-pakai-duo-toner-pagi-malam.webp`}
+              alt="Menuangkan Treatment Lotion ke telapak tangan untuk ditepuk ke wajah"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-teal">1. Tepuk Langsung (Harian & Travel)</span>
+              <p class="dsw-card-desc">Tuang 3–4 tetes ke telapak tangan, tepuk lembut ke wajah sehabis cuci muka di rumah maupun sehabis wudhu di kantor.</p>
+            </div>
+          </article>
+
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/cara-pakai-duo-toner-tap-wajah.webp`}
+              alt="Mengompres wajah dengan kapas yang dibasahi Treatment Lotion 150ml"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-teal">2. Kompres CSM (Malam di Rumah)</span>
+              <p class="dsw-card-desc">Basahi kapas tipis dengan botol <strong>150ml</strong>, tempelkan di pipi dan dahi selama 3–5 menit untuk hidrasi intensif.</p>
+            </div>
+          </article>
+        </div>
+
+        <div style="margin-top: 22px; text-align: center;">
+          <a href="#form-pemesanan" class="dsw-cta" data-scroll-to-form>
+            <span>Pesan Paket Duo Toner Sekarang</span>
+            <Icon name="lucide:arrow-right" class="size-5" aria-hidden="true" />
+          </a>
+        </div>
+      </section>
+
+      <!-- Section 6: Bukti Pelanggan -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Bukti Tekstur <span class="dsw-hl-aqua">& Kepuasan Pelanggan</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Alasan pelanggan memilih Paket Duo Toner 150ml + 50ml:
+        </p>
+
+        <div class="dsw-grid-2">
+          <div class="dsw-proof-cell">
+            <img
+              src={`${IMG_BASE}/bukti-tekstur-watery-essence-duo.webp`}
+              alt="Tekstur cair bening Deep Sea Water Treatment Lotion di telapak tangan"
+              width="480"
+              height="320"
+              class="dsw-proof-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-proof-OverlayCaption">Tekstur Ringan Cepat Meresap</p>
+          </div>
+          <div class="dsw-proof-cell">
+            <img
+              src={`${IMG_BASE}/bukti-wanita-34an-kulit-bening.webp`}
+              alt="Wanita Indonesia berhijab dengan kulit wajah lembap dan bening"
+              width="480"
+              height="320"
+              class="dsw-proof-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-proof-OverlayCaption">Segar Sehabis Wudhu & di Ruangan AC</p>
+          </div>
+          <div class="dsw-proof-cell">
+            <img
+              src={`${IMG_BASE}/bukti-pipi-lembap-segar-seharian.webp`}
+              alt="Close-up pipi lembap kenyal dengan pori-pori tampak halus"
+              width="480"
+              height="320"
+              class="dsw-proof-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-proof-OverlayCaption">Pori Halus & Kulit Membal</p>
+          </div>
+          <div class="dsw-proof-cell">
+            <img
+              src={`${IMG_BASE}/bukti-meja-rias-duo-toner.webp`}
+              alt="Botol Treatment Lotion 150ml dan 50ml berdampingan di meja rias"
+              width="480"
+              height="320"
+              class="dsw-proof-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-proof-OverlayCaption">150ml di Rumah + 50ml di Tas</p>
+          </div>
+        </div>
+
+        <div class="dsw-testi-list">
+          <article class="dsw-testi-card">
+            <div class="dsw-testi-head">
+              <div class="dsw-testi-avatar" aria-hidden="true">A</div>
+              <div class="dsw-testi-meta">
+                <p class="dsw-testi-name">
+                  Bunda Annisa Fitri (33 thn)
+                  <span class="dsw-verified-pill">Verified Buyer</span>
+                </p>
+                <div class="dsw-stars">
+                  <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
+                </div>
+              </div>
+            </div>
+            <p class="dsw-testi-body">"Paket paling kepake! Yang 150ml aku taruh di meja rias rumah buat kompres kapas tiap malam, yang 50ml selalu ada di pouch mukena kantor buat dipakai habis wudhu. Kulitku nggak pernah kering ketarik lagi."</p>
+            <div class="dsw-testi-foot">
+              <span>Bekasi</span>
+              <span>•</span>
+              <span>Pemakaian 6 Minggu</span>
+            </div>
+          </article>
+
+          <article class="dsw-testi-card">
+            <div class="dsw-testi-head">
+              <div class="dsw-testi-avatar" aria-hidden="true">Y</div>
+              <div class="dsw-testi-meta">
+                <p class="dsw-testi-name">
+                  Kak Yuniar Rahma (30 thn)
+                  <span class="dsw-verified-pill">Verified Buyer</span>
+                </p>
+                <div class="dsw-stars">
+                  <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
+                </div>
+              </div>
+            </div>
+            <p class="dsw-testi-body">"Botol 50ml-nya ada pump-nya jadi higienis banget dibawa traveling, nggak takut tumpah di koper. Tonernya sendiri emang udah kecintaanku karena bikin wajah adem dan kenyal."</p>
+            <div class="dsw-testi-foot">
+              <span>Yogyakarta</span>
+              <span>•</span>
+              <span>Pemakaian 4 Minggu</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- Section 7: Tabel Perbandingan -->
+      <section class="dsw-section--tinted">
+        <h2 class="dsw-h2">
+          Keunggulan <span class="dsw-hl-aqua">Paket Duo Toner (150ml+50ml)</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Mengapa memilih Paket Duo Toner (150ml+50ml) jauh lebih hemat dan efektif dibandingkan membeli produk satuan:
+        </p>
+
+        <div class="dsw-cmp-card">
+          <div class="dsw-cmp-head">
+            <div class="dsw-cmp-col">Karakteristik</div>
+            <div class="dsw-cmp-col dsw-cmp-col--numa">Duo 150ml + 50ml</div>
+            <div class="dsw-cmp-col">Beli Satuan Biasa</div>
+          </div>
+
+          <div class="dsw-cmp-row">
+            <div class="dsw-cmp-cell dsw-cmp-cell--feature">Total Isi Bersih</div>
+            <div class="dsw-cmp-cell dsw-cmp-cell--numa">
+              <span class="dsw-icon-green" style="margin: 0 auto;">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">200ml (150ml + 50ml)</span>
+            </div>
+            <div class="dsw-cmp-cell">
+              <span class="dsw-icon-red" style="margin: 0 auto;">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">Hanya 1 ukuran botol</span>
+            </div>
+          </div>
+
+          <div class="dsw-cmp-row">
+            <div class="dsw-cmp-cell dsw-cmp-cell--feature">Fleksibilitas Pakai</div>
+            <div class="dsw-cmp-cell dsw-cmp-cell--numa">
+              <span class="dsw-icon-green" style="margin: 0 auto;">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">Botol Rumah + Botol Travel Pump</span>
+            </div>
+            <div class="dsw-cmp-cell">
+              <span class="dsw-icon-red" style="margin: 0 auto;">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">Harus repot pindah botol kecil</span>
+            </div>
+          </div>
+
+          <div class="dsw-cmp-row">
+            <div class="dsw-cmp-cell dsw-cmp-cell--feature">Kandungan Utama</div>
+            <div class="dsw-cmp-cell dsw-cmp-cell--numa">
+              <span class="dsw-icon-green" style="margin: 0 auto;">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">76% Ulleung Water + Galactomyces + 5X Ceramide</span>
+            </div>
+            <div class="dsw-cmp-cell">
+              <span class="dsw-icon-red" style="margin: 0 auto;">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">Toner air biasa tanpa mineral laut dalam</span>
+            </div>
+          </div>
+
+          <div class="dsw-cmp-row">
+            <div class="dsw-cmp-cell dsw-cmp-cell--feature">Harga Paket</div>
+            <div class="dsw-cmp-cell dsw-cmp-cell--numa">
+              <strong>Rp169.000</strong>
+              <span class="dsw-cmp-sub">Hemat Rp19.000</span>
+            </div>
+            <div class="dsw-cmp-cell">
+              <span>Rp188.000</span>
+              <span class="dsw-cmp-sub">Harga beli terpisah</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 8: Formulasi, Kandungan & Kemasan -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Formulasi <span class="dsw-hl-aqua">Marine Bio-Science Korea</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Kekuatan 6 bahan aktif pilihan dalam setiap tetes Deep Sea Water Treatment Lotion:
+        </p>
+
+        <div class="dsw-fig-stack">
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/formulasi-ulleung-galactomyces-duo.webp`}
+                alt="Formulasi 76% Air Laut Dalam Ulleungdo Korea Selatan"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">76% Ulleungdo Deep Sea Water + Galactomyces</h3>
+              <p class="dsw-figcaption-desc">Air laut dalam dari kedalaman 200 meter Pulau Ulleung yang kaya 72+ mineral alami untuk menghidrasi sel kulit.</p>
+            </figcaption>
+          </figure>
+
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/kandungan-ceramide-ha-cica-duo.webp`}
+                alt="Kandungan 5X Ceramide, 4D Hyaluronic Acid, Centella Asiatica, dan Panthenol"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">5X Ceramide + 4D Hyaluronic Acid + Cica + Panthenol</h3>
+              <p class="dsw-figcaption-desc">Mengunci kelembapan di 4 lapisan kulit sekaligus menenangkan kemerahan dan merawat keutuhan skin barrier.</p>
+            </figcaption>
+          </figure>
+
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/kemasan-duo-toner-150ml-50ml.webp`}
+                alt="Kemasan resmi Paket Duo Toner 150ml dan 50ml Numa Skin"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">2 Botol Resmi BPOM (150ml + 50ml Travel Pump)</h3>
+              <p class="dsw-figcaption-desc">Terdiri dari 1 botol Deep Sea Water Treatment Lotion 150ml dan 1 botol Travel Size 50ml (BPOM RI NA18220101400).</p>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- Section 9: Garansi 100% Resmi -->
+      <section class="dsw-section" style="text-align: center; background: #f8fafc;">
+        <div style="margin: 0 auto 14px; display: flex; width: 52px; height: 52px; align-items: center; justify-content: center; color: #0b6e7d;">
+          <Icon name="lucide:shield-check" class="size-12" aria-hidden="true" />
+        </div>
+        <h2 class="dsw-h2" style="font-size: 32px;">GARANSI RESMI 100%</h2>
+        <p class="dsw-sub" style="max-width: 320px; margin: 8px auto 0;">
+          Pesanan dikirim langsung dari gudang resmi Numa Skin Indonesia.
+        </p>
+
+        <div class="dsw-guarantee-list">
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:badge-check" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">Produk Asli Tersegel BPOM</strong>
+              Terdaftar resmi di BPOM RI (NA18220101400) dan bersertifikat Halal Indonesia.
+            </p>
+          </div>
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:truck" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">Bisa Bayar di Tempat (COD)</strong>
+              Pesan hari ini, bayar langsung ke kurir saat paket tiba di rumah Anda.
+            </p>
+          </div>
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:package-check" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">Garansi Ganti Baru</strong>
+              Kami ganti baru tanpa biaya tambahan bila ada kemasan yang diterima rusak atau bocor.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 10: Checkout Form -->
+      <section id="form-pemesanan" class="dsw-section--checkout">
+        <div style="padding: 0 20px 14px; text-align: center;">
+          <h2 class="dsw-h2" style="font-size: 28px;">
+            Lengkapi Data <span class="dsw-hl-aqua">Pengiriman</span>
+          </h2>
+          <p class="dsw-sub" style="max-width: 340px; margin: 8px auto 0;">
+            Isi nama, nomor WhatsApp aktif, dan kecamatan tujuan untuk cek ongkir otomatis.
+          </p>
+        </div>
+
+        <GeoIpResolvedForm
+          mode="hybrid"
+          productSlug={product.slug}
+          embedded={true}
+          selectedVariantId={String(defaultVariant.id)}
+          codDisabledProvinceCodes={codDisabledProvinceCodes}
+        />
+      </section>
+    </main>
+
+    <!-- Floating Centered Sticky Button -->
+    <div id="floating-cta" data-sticky-cta class="dsw-float-wrap">
+      <a
+        href="#form-pemesanan"
+        class="dsw-float-btn"
+        data-scroll-to-form
+        aria-label="Ambil Paket Duo Toner (150ml+50ml) Sekarang"
+      >
+        <Icon name="lucide:shopping-bag" class="size-5" aria-hidden="true" />
+        <span>Ambil Paket Duo Toner (Hemat Rp19rb)</span>
+        <Icon name="lucide:arrow-right" class="size-4" aria-hidden="true" />
+      </a>
+    </div>
+  </div>
+
+  <script is:inline>
+    (function () {
+      var sticky = document.getElementById('floating-cta');
+      var hero = document.getElementById('hero-section');
+      var formSection = document.getElementById('form-pemesanan');
+
+      document.querySelectorAll('[data-scroll-to-form]').forEach(function (link) {
+        link.addEventListener('click', function (ev) {
+          if (!formSection) return;
+          ev.preventDefault();
+          formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          setTimeout(function () {
+            var firstInput = formSection.querySelector('input[name="name"], input[type="text"]');
+            if (firstInput && typeof firstInput.focus === 'function') {
+              firstInput.focus({ preventScroll: true });
+            }
+          }, 480);
+        });
+      });
+
+      if (!sticky || !hero || !formSection || !('IntersectionObserver' in window)) return;
+
+      var heroVisible = true;
+      var formVisible = false;
+
+      function syncSticky() {
+        if (!heroVisible && !formVisible) {
+          sticky.classList.add('is-visible');
+        } else {
+          sticky.classList.remove('is-visible');
+        }
+      }
+
+      var observer = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.target === hero) {
+              heroVisible = entry.isIntersecting;
+            } else if (entry.target === formSection) {
+              formVisible = entry.isIntersecting;
+            }
+          });
+          syncSticky();
+        },
+        { threshold: 0.08 }
+      );
+
+      observer.observe(hero);
+      observer.observe(formSection);
+    })();
+  </script>
+</BaseLayout>

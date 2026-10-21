@@ -363,6 +363,123 @@ export const nativeLandingPages: NativeLandingPage[] = [
     image:
       '/images/landing/paket-sunscreen-adenosine-toner-150ml/hero-paket-sunscreen-adenosine-toner-150ml.webp',
   },
+  {
+    slug: 'paket-exclusive-lotion-gloss-gel',
+    title: 'Paket Exclusive Lotion & Gloss Gel',
+    productSlug: 'paket-exclusive-lotion-gloss-gel',
+    description:
+      'Paket eksklusif Numa Skin dalam Gift Box & Pouch: Deep Sea Water Treatment Lotion 150ml + Travel Size 50ml + Calming Barrier Gloss Gel 30ml (2 BPOM Resmi).',
+    image:
+      '/images/landing/paket-exclusive-lotion-gloss-gel/hero-paket-exclusive-lotion-gloss-gel.webp',
+  },
+  {
+    slug: 'paket-ultimate-anti-aging-50ml',
+    title: 'Paket Ultimate Anti-Aging (50ml)',
+    productSlug: 'paket-ultimate-anti-aging-50ml',
+    description:
+      'Rangkaian 5-in-1 anti-aging lengkap ukuran praktis: Treatment Lotion 50ml + NAD+ Serum 20ml + PDRN Day Cream 30gr + Adenosine Moisturizer 30gr + Oxydew Sunscreen 30ml (5 BPOM Resmi).',
+    image:
+      '/images/landing/paket-ultimate-anti-aging-50ml/hero-paket-ultimate-50ml.webp',
+  },
+  {
+    slug: 'paket-skin-recharge-duo-50ml',
+    title: 'Paket Skin Recharge Duo (50ml)',
+    productSlug: 'paket-skin-recharge-duo-50ml',
+    description:
+      'Duet pembuka hidrasi & booster energi seluler praktis: Deep Sea Water Treatment Lotion 50ml + NAD+ Booster Anti-Aging Serum 20ml (2% RejuveNAD + 6X Peptide) (2 BPOM Resmi).',
+    image:
+      '/images/landing/paket-skin-recharge-duo-50ml/hero-paket-skin-recharge-50ml.webp',
+  },
+  {
+    slug: 'paket-duo-toner-150ml-50ml',
+    title: 'Paket Duo Toner (150ml+50ml)',
+    productSlug: 'paket-duo-toner-150ml-50ml',
+    description:
+      'Paket 2 ukuran Deep Sea Water Treatment Lotion (Total 200ml): Botol Full-Size 150ml untuk di rumah + Botol Travel Pump 50ml untuk dibawa bepergian (BPOM NA18220101400).',
+    image:
+      '/images/landing/paket-duo-toner-150ml-50ml/hero-paket-duo-toner-150ml-50ml.webp',
+  },
+  {
+    slug: 'paket-complete-routine-4-in-1-50ml',
+    title: 'Paket Complete Routine 4-in-1 (50ml)',
+    productSlug: 'paket-complete-routine-4-in-1-50ml',
+    description:
+      'Rangkaian 4 langkah anti-aging & proteksi UV praktis: Treatment Lotion 50ml + NAD+ Booster Serum 20ml + Adenosine Moisturizer 30gr + Oxydew Sunscreen SPF 50+ 30ml (4 BPOM Resmi).',
+    image:
+      '/images/landing/paket-complete-routine-4-in-1-50ml/hero-paket-complete-4in1-50ml.webp',
+  },
+  {
+    slug: 'paket-sunscreen-dan-toner-50ml',
+    title: 'Paket Sunscreen & Toner (50ml)',
+    productSlug: 'paket-sunscreen-dan-toner-50ml',
+    description:
+      'Duet hidrasi pagi & perisai UV praktis bebas whitecast: Deep Sea Water Treatment Lotion 50ml + Oxydew Sunscreen Luceane SPF 50+ PA++++ 30ml (2 BPOM Resmi).',
+    image:
+      '/images/landing/paket-sunscreen-dan-toner-50ml/hero-paket-sunscreen-toner-50ml.webp',
+  },
+  {
+    slug: 'paket-twin-pack-toner-2x150ml',
+    title: 'Paket Twin Pack Toner (2x150ml)',
+    productSlug: 'paket-twin-pack-toner-2x150ml',
+    description:
+      'Stok super hemat 2 botol besar (2 x 150ml = 300ml) Deep Sea Water Treatment Lotion dengan 76% Ulleungdo Deep Sea Water, Galactomyces, dan 5X Ceramide (BPOM NA18220101400).',
+    image:
+      '/images/landing/paket-twin-pack-toner-2x150ml/hero-paket-twin-pack-toner-2x150ml.webp',
+  },
+  {
+    slug: 'paket-toner-150ml-dan-gloss-gel',
+    title: 'Paket Toner 150ml & Gloss Gel',
+    productSlug: 'paket-toner-150ml-dan-gloss-gel',
+    description:
+      'Duet penenang skin barrier ukuran besar: Deep Sea Water Treatment Lotion 150ml + Calming Barrier Gloss Gel Moisturizer 30ml (Meadowestolide + Astragalus) (2 BPOM Resmi).',
+    image:
+      '/images/landing/paket-toner-150ml-dan-gloss-gel/hero-paket-toner-150ml-gloss-gel.webp',
+  },
+  {
+    slug: 'paket-rejuvenating-trio-50ml',
+    title: 'Paket Rejuvenating Trio (50ml)',
+    productSlug: 'paket-rejuvenating-trio-50ml',
+    description:
+      'Trio regenerasi malam ukuran praktis: Deep Sea Water Treatment Lotion 50ml + NAD+ Booster Serum 20ml + Adenosine Deep Sea Water Moisturizer 30gr (3 BPOM Resmi).',
+    image:
+      '/images/landing/paket-rejuvenating-trio-50ml/hero-paket-rejuvenating-50ml.webp',
+  },
+  {
+    slug: 'paket-sunscreen-dan-toner-150ml',
+    title: 'Paket Sunscreen & Toner (150ml)',
+    productSlug: 'paket-sunscreen-dan-toner-150ml',
+    description:
+      'Duet hidrasi ukuran besar & perisai UV harian bebas whitecast: Deep Sea Water Treatment Lotion 150ml + Oxydew Sunscreen Luceane SPF 50+ PA++++ 30ml (2 BPOM Resmi).',
+    image:
+      '/images/landing/paket-sunscreen-dan-toner-150ml/hero-paket-sunscreen-toner-150ml.webp',
+  },
+  {
+    slug: 'paket-toner-50ml-dan-gloss-gel',
+    title: 'Paket Toner 50ml & Gloss Gel',
+    productSlug: 'paket-toner-50ml-dan-gloss-gel',
+    description:
+      'Starter set penenang kulit rewel & kemerahan: Deep Sea Water Treatment Lotion 50ml + Calming Barrier Gloss Gel Moisturizer 30ml (2 BPOM Resmi).',
+    image:
+      '/images/landing/paket-toner-50ml-dan-gloss-gel/hero-paket-toner-50ml-gloss-gel.webp',
+  },
+  {
+    slug: 'paket-youth-glow-duo-50ml',
+    title: 'Paket Youth Glow Duo (50ml)',
+    productSlug: 'paket-youth-glow-duo-50ml',
+    description:
+      'Duet persiapan hidrasi praktis & pencerah pagi bebas dempul: Deep Sea Water Treatment Lotion 50ml + PDRN + Alpha-Arbutin Tone-Up Day Cream 30gr (Warm Beige) (2 BPOM Resmi).',
+    image:
+      '/images/landing/paket-youth-glow-duo-50ml/hero-paket-youth-glow-50ml.webp',
+  },
+  {
+    slug: 'paket-sunscreen-adenosine-toner-50ml',
+    title: 'Paket Sunscreen, Adenosine & Toner (50ml)',
+    productSlug: 'paket-sunscreen-adenosine-toner-50ml',
+    description:
+      'Trio anti-aging & proteksi sinar UV praktis: Deep Sea Water Treatment Lotion 50ml + Adenosine Moisturizer 30gr + Oxydew Sunscreen SPF 50+ PA++++ 30ml (3 BPOM Resmi).',
+    image:
+      '/images/landing/paket-sunscreen-adenosine-toner-50ml/hero-paket-sunscreen-adenosine-toner-50ml.webp',
+  },
 ];
 
 /**

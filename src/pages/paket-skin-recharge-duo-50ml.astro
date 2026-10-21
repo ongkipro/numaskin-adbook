@@ -1,0 +1,768 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import GeoIpResolvedForm from '../components/storefront/forms/GeoIpResolvedForm.astro';
+import MetaLandingTracker from '../components/storefront/tracking/MetaLandingTracker.astro';
+import Icon from '../components/storefront/shared/Icon.astro';
+import RatingStars from '../components/storefront/shared/RatingStars.astro';
+import { getStorefrontProduct } from '../lib/catalog';
+import { nativeLandingCanonicalPath } from '../lib/landing-pages';
+import { defaultCatalogContentId } from '../lib/catalog-feed';
+import { getRuntimeEnv } from '../lib/env';
+import { loadStoreCodDisabledProvinceCodes } from '../lib/form-mode';
+import { getStoreAdsConfig } from '../lib/store-ads';
+import '../styles/form-hybrid.css';
+import '../styles/landing-pages/paket-skin-recharge-duo-50ml.css';
+
+export const prerender = false;
+
+const PRODUCT_SLUG = 'paket-skin-recharge-duo-50ml';
+const LANDING_SLUG = 'paket-skin-recharge-duo-50ml';
+const PAGE_TITLE = 'Paket Skin Recharge Duo 50ml - Duet Toner & NAD+ Booster Serum Anti-Aging BPOM';
+const PAGE_DESC = 'Duet pengencang wajah praktis: Deep Sea Water Treatment Lotion 50ml (NA18220101400) dan NAD+ Booster Anti-Aging Serum 20ml (NA18262000245) dengan RejuveNAD™ & 6X Peptide.';
+const IMG_BASE = '/images/landing/paket-skin-recharge-duo-50ml';
+const HERO_IMAGE = `${IMG_BASE}/hero-paket-skin-recharge-50ml.webp`;
+
+const database = getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined;
+const claimedProductSlug = Astro.request.headers.get('x-adsbook-product-page');
+const [product, canonicalPath, codDisabledProvinceCodes] = await Promise.all([
+  getStorefrontProduct(Astro.locals, PRODUCT_SLUG),
+  claimedProductSlug
+    ? Promise.resolve(`/produk/${claimedProductSlug}`)
+    : nativeLandingCanonicalPath(Astro.locals, LANDING_SLUG),
+  loadStoreCodDisabledProvinceCodes(database),
+  getStoreAdsConfig(Astro.locals),
+]);
+if (!product) {
+  return Astro.rewrite('/404');
+}
+
+const canonical = `${Astro.locals.tenant.siteUrl}${canonicalPath}`;
+
+const variants = product.variants || [];
+const cheapestVariant = variants.reduce(
+  (min: any, v: any) => (!min || v.price < min.price ? v : min),
+  variants[0]
+);
+const defaultVariant = cheapestVariant || {
+  id: '39',
+  label: 'Toner 50ml + NAD+ Serum 20ml',
+  price: 169000,
+  comparePrice: 187999,
+};
+---
+
+<BaseLayout
+  title={PAGE_TITLE}
+  description={PAGE_DESC}
+  image={HERO_IMAGE}
+  preloadImages={HERO_IMAGE}
+  canonical={canonical}
+  hideHeader={true}
+  hideFooter={true}
+>
+  <MetaLandingTracker
+    slug={LANDING_SLUG}
+    contentId={defaultCatalogContentId(product)}
+    contentName={product.contentName}
+    price={defaultVariant.price}
+  />
+
+  <div class="dsw-shell">
+    <main class="dsw-canvas">
+      <!-- Section 1: Hero -->
+      <section id="hero-section" class="dsw-hero">
+        <div class="dsw-hero-head">
+          <h1 class="dsw-h1">
+            <span class="dsw-hl-tilt">Serum Anti-Aging Mahal</span> Cuma Numpuk di Atas Kulit yang Kering?
+          </h1>
+          <p class="dsw-sub" style="max-width: 390px; margin: 14px auto 0; font-weight: 700;">
+            Molekul peptide dan NAD+ membutuhkan pori yang lembap terbuka agar mampu meresap ke lapisan target.<br />
+            <span class="dsw-underline-teal">Buka jalur hidrasi & kencangkan kontur dengan Skin Recharge Duo 50ml!</span>
+          </p>
+        </div>
+
+        <div class="dsw-hero-stage">
+          <div class="dsw-hero-top-tag">
+            <div class="dsw-hero-top-pill">
+              <Icon name="lucide:award" class="size-3.5" aria-hidden="true" />
+              <span>Duet NAD+ & Toner 50ml • Hemat Rp19rb</span>
+            </div>
+          </div>
+
+          <img
+            src={HERO_IMAGE}
+            alt="Perbandingan wajah lelah bergaris senyum vs kontur wajah kencang dengan Paket Skin Recharge Duo 50ml Numa Skin"
+            width="720"
+            height="480"
+            class="dsw-hero-img"
+            fetchpriority="high"
+            loading="eager"
+            decoding="async"
+          />
+
+          <div class="dsw-hero-ba" aria-hidden="true">
+            <span class="dsw-hero-ba-pill dsw-hero-ba-pill--before">Garis Senyum & Lelah</span>
+            <span class="dsw-hero-ba-pill dsw-hero-ba-pill--after">Kencang & Berenergi</span>
+          </div>
+
+          <div class="dsw-hero-trust-strip" role="list" aria-label="Jaminan kualitas Numa Skin">
+            <div class="dsw-trust-item" role="listitem">
+              <span class="dsw-trust-icon">
+                <Icon name="lucide:shield-check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-trust-text">
+                <strong class="dsw-trust-label">2 BPOM Resmi</strong>
+                <span class="dsw-trust-sub">Toner & NAD+ Serum</span>
+              </span>
+            </div>
+            <div class="dsw-trust-item" role="listitem">
+              <span class="dsw-trust-icon">
+                <Icon name="lucide:droplets" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-trust-text">
+                <strong class="dsw-trust-label">RejuveNAD™</strong>
+                <span class="dsw-trust-sub">Booster Energi Sel</span>
+              </span>
+            </div>
+            <div class="dsw-trust-item" role="listitem">
+              <span class="dsw-trust-icon">
+                <Icon name="lucide:layers" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-trust-text">
+                <strong class="dsw-trust-label">6X Peptide</strong>
+                <span class="dsw-trust-sub">Ulleungdo 76%</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="dsw-hero-foot">
+          <p class="dsw-hero-caption">
+            Kombinasi 2 langkah pengencang: <strong>Deep Sea Water Treatment Lotion 50ml</strong> + <strong>NAD+ Booster Anti-Aging Serum</strong>.
+          </p>
+          <a href="#form-pemesanan" class="dsw-cta" data-scroll-to-form>
+            <span>Ambil Skin Recharge 50ml Ini</span>
+            <Icon name="lucide:arrow-right" class="size-5" aria-hidden="true" />
+          </a>
+        </div>
+      </section>
+
+      <!-- Section 2: Solusi Praktis -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          2 Langkah <span class="dsw-hl-aqua">Buka Pori & Recharge Kolagen</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Cara cerdas memaksimalkan penyerapan serum anti-aging tanpa rasa lengket:
+        </p>
+
+        <div class="dsw-solution-box">
+          <img
+            src={`${IMG_BASE}/solusi-hidrasi-pembuka-nad-serum-50ml.webp`}
+            alt="Wanita Indonesia mengaplikasikan NAD+ Booster Serum setelah Treatment Lotion 50ml"
+            width="648"
+            height="432"
+            class="dsw-solution-img"
+            loading="lazy"
+            fetchpriority="low"
+            decoding="async"
+          />
+
+          <div class="dsw-check-list">
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text"><strong>Langkah 1 — Treatment Lotion 50ml (Pembuka Hidrasi):</strong> 76% Air Laut Dalam Ulleungdo dan Galactomyces melunakkan stratum korneum yang kering agar siap menerima serum.</p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text"><strong>Langkah 2 — NAD+ Booster Serum (Lifting & Elastisitas):</strong> Swiss RejuveNAD™ dan 6X Peptide Complex langsung terserap masuk untuk merawat kekencangan garis senyum dan kontur pipi.</p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text"><strong>Kemasan 50ml Praktis & Ekonomis:</strong> Botol pump 50ml higienis, mudah dibawa bepergian, dan lebih hemat Rp19.000.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Masalah Kulit -->
+      <section class="dsw-section--tinted">
+        <h2 class="dsw-h2">
+          Kenapa Wajah Tetap Kendur <span class="dsw-hl-coral">Walau Sudah Pakai Serum?</span>
+        </h2>
+
+        <div class="dsw-grid-2">
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/masalah-serum-lengket-kulit-kering-50ml.webp`}
+              alt="Serum terasa lengket dan tidak meresap di permukaan kulit yang kering"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-red">Tertahan di Permukaan</span>
+              <p class="dsw-card-desc">Mengoleskan serum kental langsung ke kulit kering membuat bahan aktif menguap sebelum mencapai epidermis dalam.</p>
+            </div>
+          </article>
+
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/masalah-pipi-kendur-kusam-50ml.webp`}
+              alt="Garis senyum tampak dalam dan kontur pipi mulai turun akibat kurang energi sel"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-red">Energi Seluler Menurun</span>
+              <p class="dsw-card-desc">Memasuki usia 30+, kadar NAD+ alami kulit menyusut sehingga pipi tampak turun dan lipatan senyum memperdalam.</p>
+            </div>
+          </article>
+        </div>
+
+        <div class="dsw-list-box">
+          <p class="dsw-list-box-title">Tanda Anda Membutuhkan Paket Ini:</p>
+          <div class="dsw-check-list" style="margin-top: 0;">
+            <div class="dsw-check-item">
+              <span class="dsw-icon-red">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">Merasa serum anti-aging yang dipakai selama ini lambat memberikan hasil kencang di wajah</p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-red">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">Garis senyum (smile lines) dan kerutan halus di sudut mata mulai terlihat jelas saat bercermin</p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-red">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text">Ingin mencoba duet Treatment Lotion + NAD+ Booster Serum dengan ukuran Toner 50ml yang lebih hemat</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Transformasi Nyata -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Transformasi <span class="dsw-hl-aqua">Kontur Padat & Garis Halus Samar</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Perbedaan penyerapan dan elastisitas kulit dengan metode Skin Recharge 2 langkah:
+        </p>
+
+        <div class="dsw-grid-2">
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/kondisi-kulit-lelah-garis-senyum-50ml.webp`}
+              alt="Kondisi kulit lelah, kering, dan garis senyum tampak jelas sebelum perawatan"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-red">Sebelum Perawatan</span>
+              <p class="dsw-card-desc">Permukaan kulit tampak kusam dehidrasi, kurang membal saat disentuh, dan lipatan senyum tampak tegas.</p>
+            </div>
+          </article>
+
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/kondisi-kontur-kencang-segar-50ml.webp`}
+              alt="Kondisi kontur pipi tampak padat, kencang, dan segar bercahaya"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-green">Rutin Recharge Duo</span>
+              <p class="dsw-card-desc">Kulit terasa jauh lebih padat terisi, garis halus tampak lebih samar, dan rona wajah segar berenergi.</p>
+            </div>
+          </article>
+        </div>
+
+        <div class="dsw-list-box">
+          <p class="dsw-list-box-title">Tahapan Hasil Pemakaian Rutin:</p>
+          <div class="dsw-check-list" style="margin-top: 0;">
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text"><strong>Minggu 1:</strong> Serum NAD+ meresap jauh lebih cepat tanpa rasa lengket berkat dasar hidrasi Treatment Lotion</p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text"><strong>Minggu 2–3:</strong> Kulit pipi terasa lebih kenyal membal saat bangun pagi dan tidak mudah tampak lelah</p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text"><strong>Minggu 4–6:</strong> Tampilan garis senyum serta kerutan halus tampak lebih samar dan kontur wajah lebih tegas</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: Cara Pakai -->
+      <section class="dsw-section--tinted">
+        <h2 class="dsw-h2">
+          Cara Pakai <span class="dsw-hl-aqua">Praktis Setiap Hari</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Gunakan setiap pagi dan malam setelah mencuci wajah:
+        </p>
+
+        <div class="dsw-grid-2">
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/cara-pakai-recharge-50ml-step1-toner.webp`}
+              alt="Menepukkan Deep Sea Water Treatment Lotion 50ml ke wajah hingga lembap"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-teal">1. Tepuk Toner 50ml</span>
+              <p class="dsw-card-desc">Semprot/tuang <strong>Treatment Lotion 50ml</strong> ke telapak tangan, tepuk lembut ke wajah yang masih setengah lembap.</p>
+            </div>
+          </article>
+
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/cara-pakai-recharge-50ml-step2-nad.webp`}
+              alt="Meneteskan NAD+ Booster Serum lalu memijat wajah ke arah atas"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-teal">2. Pijat NAD+ Serum</span>
+              <p class="dsw-card-desc">Saat kulit masih lembap oleh toner, teteskan <strong>NAD+ Booster Serum</strong> dan pijat lembut ke arah atas tulang pipi.</p>
+            </div>
+          </article>
+        </div>
+
+        <div style="margin-top: 22px; text-align: center;">
+          <a href="#form-pemesanan" class="dsw-cta" data-scroll-to-form>
+            <span>Pesan Skin Recharge Duo 50ml</span>
+            <Icon name="lucide:arrow-right" class="size-5" aria-hidden="true" />
+          </a>
+        </div>
+      </section>
+
+      <!-- Section 6: Bukti Pelanggan -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Bukti Tekstur <span class="dsw-hl-aqua">& Kepuasan Pelanggan</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Kata pelanggan yang merasakan bedanya memakai NAD+ Serum dengan pembuka Treatment Lotion:
+        </p>
+
+        <div class="dsw-grid-2">
+          <div class="dsw-proof-cell">
+            <img
+              src={`${IMG_BASE}/bukti-tekstur-toner-dan-nad-50ml.webp`}
+              alt="Swatch tekstur watery Treatment Lotion dan silky emulsion NAD+ Serum di tangan"
+              width="480"
+              height="320"
+              class="dsw-proof-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-proof-OverlayCaption">Lotion Cair & Serum Silky Cepat Meresap</p>
+          </div>
+          <div class="dsw-proof-cell">
+            <img
+              src={`${IMG_BASE}/bukti-wanita-39an-kencang-50ml.webp`}
+              alt="Wanita Indonesia usia 39 tahun dengan kontur wajah kencang dan cerah"
+              width="480"
+              height="320"
+              class="dsw-proof-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-proof-OverlayCaption">Kontur Wajah Terasa Lebih Kencang</p>
+          </div>
+          <div class="dsw-proof-cell">
+            <img
+              src={`${IMG_BASE}/bukti-pipi-padat-elastis-50ml.webp`}
+              alt="Close-up pipi kenyal padat dengan garis senyum yang halus"
+              width="480"
+              height="320"
+              class="dsw-proof-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-proof-OverlayCaption">Pipi Padat & Elastis</p>
+          </div>
+          <div class="dsw-proof-cell">
+            <img
+              src={`${IMG_BASE}/bukti-meja-rias-skin-recharge-50ml.webp`}
+              alt="Botol Treatment Lotion 50ml dan NAD+ Booster Serum di meja rias"
+              width="480"
+              height="320"
+              class="dsw-proof-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-proof-OverlayCaption">Duet Praktis Pagi & Malam</p>
+          </div>
+        </div>
+
+        <div class="dsw-testi-list">
+          <article class="dsw-testi-card">
+            <div class="dsw-testi-head">
+              <div class="dsw-testi-avatar" aria-hidden="true">S</div>
+              <div class="dsw-testi-meta">
+                <p class="dsw-testi-name">
+                  Bunda Siska Amelia (38 thn)
+                  <span class="dsw-verified-pill">Verified Buyer</span>
+                </p>
+                <div class="dsw-stars">
+                  <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
+                </div>
+              </div>
+            </div>
+            <p class="dsw-testi-body">"Dulu pakai serum anti-aging merek lain rasanya cuma lengket di atas kulit. Pas nyoba paket Skin Recharge 50ml ini, ditepuk Toner dulu baru tetes NAD+ Serum, langsung nyerep dong! Garis senyumku kelihatan lebih samar setelah sebulan."</p>
+            <div class="dsw-testi-foot">
+              <span>Tangerang</span>
+              <span>•</span>
+              <span>Pemakaian 4 Minggu</span>
+            </div>
+          </article>
+
+          <article class="dsw-testi-card">
+            <div class="dsw-testi-head">
+              <div class="dsw-testi-avatar" aria-hidden="true">D</div>
+              <div class="dsw-testi-meta">
+                <p class="dsw-testi-name">
+                  Ibu Diana Kartika (42 thn)
+                  <span class="dsw-verified-pill">Verified Buyer</span>
+                </p>
+                <div class="dsw-stars">
+                  <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
+                </div>
+              </div>
+            </div>
+            <p class="dsw-testi-body">"Botol toner 50ml-nya praktis banget model pump, dipaduin sama NAD+ Booster Serum bener-bener bikin pipi berasa lebih kencang dan nggak kusam lagi waktu bangun pagi."</p>
+            <div class="dsw-testi-foot">
+              <span>Semarang</span>
+              <span>•</span>
+              <span>Pemakaian 5 Minggu</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- Section 7: Tabel Perbandingan -->
+      <section class="dsw-section--tinted">
+        <h2 class="dsw-h2">
+          Keunggulan <span class="dsw-hl-aqua">Skin Recharge Duo (50ml)</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Mengapa memilih Paket Skin Recharge Duo (50ml) jauh lebih hemat dan efektif dibandingkan membeli produk satuan:
+        </p>
+
+        <div class="dsw-cmp-card">
+          <div class="dsw-cmp-head">
+            <div class="dsw-cmp-col">Karakteristik</div>
+            <div class="dsw-cmp-col dsw-cmp-col--numa">Recharge Duo 50ml</div>
+            <div class="dsw-cmp-col">Beli Satuan Biasa</div>
+          </div>
+
+          <div class="dsw-cmp-row">
+            <div class="dsw-cmp-cell dsw-cmp-cell--feature">Daya Serap Serum</div>
+            <div class="dsw-cmp-cell dsw-cmp-cell--numa">
+              <span class="dsw-icon-green" style="margin: 0 auto;">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">Optimal berkat First Essence 76% Ulleung</span>
+            </div>
+            <div class="dsw-cmp-cell">
+              <span class="dsw-icon-red" style="margin: 0 auto;">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">Lambat meresap di kulit kering</span>
+            </div>
+          </div>
+
+          <div class="dsw-cmp-row">
+            <div class="dsw-cmp-cell dsw-cmp-cell--feature">Teknologi Anti-Aging</div>
+            <div class="dsw-cmp-cell dsw-cmp-cell--numa">
+              <span class="dsw-icon-green" style="margin: 0 auto;">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">RejuveNAD™ + 6X Peptide + Galactomyces</span>
+            </div>
+            <div class="dsw-cmp-cell">
+              <span class="dsw-icon-red" style="margin: 0 auto;">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">Pelembap biasa tanpa NAD+ booster</span>
+            </div>
+          </div>
+
+          <div class="dsw-cmp-row">
+            <div class="dsw-cmp-cell dsw-cmp-cell--feature">Kepraktisan Kemasan</div>
+            <div class="dsw-cmp-cell dsw-cmp-cell--numa">
+              <span class="dsw-icon-green" style="margin: 0 auto;">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">Toner Pump 50ml + Pipet Kaca Presisi</span>
+            </div>
+            <div class="dsw-cmp-cell">
+              <span class="dsw-icon-red" style="margin: 0 auto;">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">Beli terpisah lebih mahal</span>
+            </div>
+          </div>
+
+          <div class="dsw-cmp-row">
+            <div class="dsw-cmp-cell dsw-cmp-cell--feature">Harga Paket</div>
+            <div class="dsw-cmp-cell dsw-cmp-cell--numa">
+              <strong>Rp169.000</strong>
+              <span class="dsw-cmp-sub">Hemat Rp18.999</span>
+            </div>
+            <div class="dsw-cmp-cell">
+              <span>Rp187.999</span>
+              <span class="dsw-cmp-sub">Harga beli terpisah</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 8: Formulasi, Kandungan & Kemasan -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Formulasi <span class="dsw-hl-aqua">Marine Bio-Science Korea</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Sinergi mineral laut dalam Korea dan bioteknologi kecantikan Swiss:
+        </p>
+
+        <div class="dsw-fig-stack">
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/formulasi-ulleung-rejuvenad-50ml.webp`}
+                alt="Formulasi Air Laut Dalam Ulleungdo dan kecambah bunga matahari RejuveNAD"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">76% Ulleungdo Deep Sea Water + Swiss RejuveNAD™</h3>
+              <p class="dsw-figcaption-desc">Membuka jalur hidrasi seluler dengan 72+ mineral laut dalam sekaligus mengoptimalkan molekul longevitas NAD+.</p>
+            </figcaption>
+          </figure>
+
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/kandungan-galactomyces-nad-peptide-50ml.webp`}
+                alt="Kandungan Galactomyces, 6X Peptide Complex, dan 5X Ceramide"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">Galactomyces + 6X Peptide Complex + 5X Ceramide</h3>
+              <p class="dsw-figcaption-desc">Merawat kepadatan kolagen, menghaluskan kerutan ekspresi, dan menjaga keutuhan skin barrier.</p>
+            </figcaption>
+          </figure>
+
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/kemasan-skin-recharge-duo-50ml.webp`}
+                alt="Kemasan resmi Paket Skin Recharge Duo 50ml Numa Skin"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">2 Produk Resmi BPOM (Toner 50ml + NAD+ Serum)</h3>
+              <p class="dsw-figcaption-desc">Terdiri dari Deep Sea Water Treatment Lotion 50ml (BPOM NA18220101400) dan NAD+ Booster Anti-Aging Serum (BPOM NA18262000245).</p>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- Section 9: Garansi 100% Resmi -->
+      <section class="dsw-section" style="text-align: center; background: #f8fafc;">
+        <div style="margin: 0 auto 14px; display: flex; width: 52px; height: 52px; align-items: center; justify-content: center; color: #0b6e7d;">
+          <Icon name="lucide:shield-check" class="size-12" aria-hidden="true" />
+        </div>
+        <h2 class="dsw-h2" style="font-size: 32px;">GARANSI RESMI 100%</h2>
+        <p class="dsw-sub" style="max-width: 320px; margin: 8px auto 0;">
+          Pesanan dikirim langsung dari gudang resmi Numa Skin Indonesia.
+        </p>
+
+        <div class="dsw-guarantee-list">
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:badge-check" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">Produk Asli Tersegel BPOM</strong>
+              Terdaftar resmi di BPOM RI (NA18220101400 & NA18262000245) dan bersertifikat Halal Indonesia.
+            </p>
+          </div>
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:truck" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">Bisa Bayar di Tempat (COD)</strong>
+              Pesan hari ini, bayar langsung ke kurir saat paket tiba di rumah Anda.
+            </p>
+          </div>
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:package-check" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">Garansi Ganti Baru</strong>
+              Kami ganti baru tanpa biaya tambahan bila ada kemasan yang diterima rusak atau bocor.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 10: Checkout Form -->
+      <section id="form-pemesanan" class="dsw-section--checkout">
+        <div style="padding: 0 20px 14px; text-align: center;">
+          <h2 class="dsw-h2" style="font-size: 28px;">
+            Lengkapi Data <span class="dsw-hl-aqua">Pengiriman</span>
+          </h2>
+          <p class="dsw-sub" style="max-width: 340px; margin: 8px auto 0;">
+            Isi nama, nomor WhatsApp aktif, dan kecamatan tujuan untuk cek ongkir otomatis.
+          </p>
+        </div>
+
+        <GeoIpResolvedForm
+          mode="hybrid"
+          productSlug={product.slug}
+          embedded={true}
+          selectedVariantId={String(defaultVariant.id)}
+          codDisabledProvinceCodes={codDisabledProvinceCodes}
+        />
+      </section>
+    </main>
+
+    <!-- Floating Centered Sticky Button -->
+    <div id="floating-cta" data-sticky-cta class="dsw-float-wrap">
+      <a
+        href="#form-pemesanan"
+        class="dsw-float-btn"
+        data-scroll-to-form
+        aria-label="Ambil Paket Skin Recharge Duo (50ml) Sekarang"
+      >
+        <Icon name="lucide:shopping-bag" class="size-5" aria-hidden="true" />
+        <span>Ambil Skin Recharge 50ml (Hemat Rp19rb)</span>
+        <Icon name="lucide:arrow-right" class="size-4" aria-hidden="true" />
+      </a>
+    </div>
+  </div>
+
+  <script is:inline>
+    (function () {
+      var sticky = document.getElementById('floating-cta');
+      var hero = document.getElementById('hero-section');
+      var formSection = document.getElementById('form-pemesanan');
+
+      document.querySelectorAll('[data-scroll-to-form]').forEach(function (link) {
+        link.addEventListener('click', function (ev) {
+          if (!formSection) return;
+          ev.preventDefault();
+          formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          setTimeout(function () {
+            var firstInput = formSection.querySelector('input[name="name"], input[type="text"]');
+            if (firstInput && typeof firstInput.focus === 'function') {
+              firstInput.focus({ preventScroll: true });
+            }
+          }, 480);
+        });
+      });
+
+      if (!sticky || !hero || !formSection || !('IntersectionObserver' in window)) return;
+
+      var heroVisible = true;
+      var formVisible = false;
+
+      function syncSticky() {
+        if (!heroVisible && !formVisible) {
+          sticky.classList.add('is-visible');
+        } else {
+          sticky.classList.remove('is-visible');
+        }
+      }
+
+      var observer = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.target === hero) {
+              heroVisible = entry.isIntersecting;
+            } else if (entry.target === formSection) {
+              formVisible = entry.isIntersecting;
+            }
+          });
+          syncSticky();
+        },
+        { threshold: 0.08 }
+      );
+
+      observer.observe(hero);
+      observer.observe(formSection);
+    })();
+  </script>
+</BaseLayout>
