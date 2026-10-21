@@ -685,7 +685,7 @@ const defaultVariant = cheapestVariant || {
             Lengkapi Data <span class="dsw-hl-aqua">Pengiriman</span>
           </h2>
           <p class="dsw-sub" style="max-width: 340px; margin: 8px auto 0;">
-            Isi nama, nomor WhatsApp aktif, dan kecamatan tujuan untuk cek ongkir otomatis.
+            Isi nama lengkap, nomor WhatsApp aktif, dan alamat pengiriman Anda untuk memproses pesanan.
           </p>
         </div>
 
@@ -699,7 +699,7 @@ const defaultVariant = cheapestVariant || {
       </section>
     </main>
 
-    <!-- Floating Centered Sticky Button -->
+    <!-- Floating Centered Sticky Button (hidden on Hero and Form) -->
     <div id="floating-cta" data-sticky-cta class="dsw-float-wrap">
       <a
         href="#form-pemesanan"
@@ -707,61 +707,53 @@ const defaultVariant = cheapestVariant || {
         data-scroll-to-form
         aria-label="Ambil Paket Rejuvenating Trio (50ml) Sekarang"
       >
-        <Icon name="lucide:shopping-bag" class="size-5" aria-hidden="true" />
-        <span>Ambil Rejuvenating Trio 50ml (Hemat Rp27rb)</span>
-        <Icon name="lucide:arrow-right" class="size-4" aria-hidden="true" />
+        <span>Pesan Sekarang</span>
+        <span class="dsw-float-divider" aria-hidden="true"></span>
+        <span class="dsw-float-sub">Promo Rp240.000</span>
+        <Icon name="lucide:arrow-down" class="size-3.5 dsw-float-arrow" aria-hidden="true" />
       </a>
     </div>
   </div>
 
   <script is:inline>
     (function () {
-      var sticky = document.getElementById('floating-cta');
-      var hero = document.getElementById('hero-section');
-      var formSection = document.getElementById('form-pemesanan');
+      const heroSection = document.getElementById('hero-section');
+      const formSection = document.getElementById('form-pemesanan');
+      const floatingCta = document.getElementById('floating-cta');
 
-      document.querySelectorAll('[data-scroll-to-form]').forEach(function (link) {
-        link.addEventListener('click', function (ev) {
+      document.querySelectorAll('[data-scroll-to-form]').forEach((link) => {
+        link.addEventListener('click', (e) => {
           if (!formSection) return;
-          ev.preventDefault();
+          e.preventDefault();
           formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          setTimeout(function () {
-            var firstInput = formSection.querySelector('input[name="name"], input[type="text"]');
-            if (firstInput && typeof firstInput.focus === 'function') {
-              firstInput.focus({ preventScroll: true });
-            }
-          }, 480);
         });
       });
 
-      if (!sticky || !hero || !formSection || !('IntersectionObserver' in window)) return;
+      if (!floatingCta || !formSection || !('IntersectionObserver' in window)) return;
 
-      var heroVisible = true;
-      var formVisible = false;
+      let isHeroVisible = true;
+      let isFormVisible = false;
 
-      function syncSticky() {
-        if (!heroVisible && !formVisible) {
-          sticky.classList.add('is-visible');
-        } else {
-          sticky.classList.remove('is-visible');
-        }
+      function syncVisibility() {
+        const shouldShow = !isHeroVisible && !isFormVisible;
+        floatingCta.classList.toggle('is-visible', shouldShow);
       }
 
-      var observer = new IntersectionObserver(
-        function (entries) {
-          entries.forEach(function (entry) {
-            if (entry.target === hero) {
-              heroVisible = entry.isIntersecting;
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.target === heroSection) {
+              isHeroVisible = entry.isIntersecting;
             } else if (entry.target === formSection) {
-              formVisible = entry.isIntersecting;
+              isFormVisible = entry.isIntersecting;
             }
           });
-          syncSticky();
+          syncVisibility();
         },
-        { threshold: 0.08 }
+        { root: null, threshold: 0.05 }
       );
 
-      observer.observe(hero);
+      if (heroSection) observer.observe(heroSection);
       observer.observe(formSection);
     })();
   </script>
