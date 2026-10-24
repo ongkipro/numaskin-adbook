@@ -55,21 +55,33 @@ async function loadLocalDevCatalogRows() {
   }
 }
 
-const catalogRequestCache = new WeakMap<object, Promise<Product[]>>();
+// One catalog read per request. A product page read it twice (the page and its
+// order form), and every D1 round trip is a Pacific crossing when Cloudflare
+// serves an Indonesian visitor, or PageSpeed, from a US colo: measured 3.7-6 s
+// to the first byte on page.revenleather.com. Keyed on `locals`, so it never
+// outlives the request and an admin edit is seen by the next one.
+const catalogByRequest = new WeakMap<object, Promise<Product[]>>();
 
-async function loadStorefrontProductsUncached(
+export function getStorefrontProducts(locals?: App.Locals): Promise<Product[]> {
+  if (!locals) return loadStorefrontProducts(locals);
+  let pending = catalogByRequest.get(locals);
+  if (!pending) {
+    pending = loadStorefrontProducts(locals);
+    catalogByRequest.set(locals, pending);
+  }
+  return pending;
+}
+
+async function loadStorefrontProducts(
   locals?: App.Locals,
 ): Promise<Product[]> {
   const database = getRuntimeEnv(locals)?.OMS_DB as D1Database | undefined;
 
   try {
-    const [rows, runtimeContent] =
-      database && typeof database === "object"
-        ? await Promise.all([
-            loadCatalogRows(database),
-            loadPublishedProductContent(database),
-          ])
-        : [await loadLocalDevCatalogRows(), new Map()];
+    // In parallel, not in one batch: the content read fails soft on its own.
+    const [rows, runtimeContent] = database && typeof database === "object"
+      ? await Promise.all([loadCatalogRows(database), loadPublishedProductContent(database)])
+      : [await loadLocalDevCatalogRows(), new Map()];
 
     const presentations = mergeRuntimeProductContent(
       rows.products,
@@ -80,19 +92,6 @@ async function loadStorefrontProductsUncached(
     console.error("storefront-catalog-load", error);
     return [];
   }
-}
-
-export async function getStorefrontProducts(
-  locals?: App.Locals,
-): Promise<Product[]> {
-  if (!locals || typeof locals !== "object") {
-    return loadStorefrontProductsUncached(locals);
-  }
-  const cached = catalogRequestCache.get(locals);
-  if (cached) return cached;
-  const pending = loadStorefrontProductsUncached(locals);
-  catalogRequestCache.set(locals, pending);
-  return pending;
 }
 
 /**
