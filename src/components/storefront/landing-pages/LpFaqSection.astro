@@ -1,0 +1,39 @@
+---
+import Icon from '../shared/Icon.astro';
+
+export interface FaqEntry {
+  question: string;
+  answer: string;
+}
+
+interface Props {
+  heading?: string;
+  highlight?: string;
+  faqs: FaqEntry[];
+}
+
+const {
+  heading = 'Pertanyaan yang',
+  highlight = 'Sering Ditanyakan',
+  faqs,
+} = Astro.props;
+---
+
+{faqs.length > 0 && (
+  <section class="dsw-section">
+    <h2 class="dsw-h2">
+      {heading} <span class="dsw-hl-aqua">{highlight}</span>
+    </h2>
+    <div class="dsw-faq-list">
+      {faqs.map((faq, idx) => (
+        <details class="dsw-faq-item" open={idx === 0}>
+          <summary class="dsw-faq-q">
+            <span>{faq.question}</span>
+            <Icon name="lucide:chevron-down" class="size-4 dsw-faq-chevron" aria-hidden="true" />
+          </summary>
+          <p class="dsw-faq-a">{faq.answer}</p>
+        </details>
+      ))}
+    </div>
+  </section>
+)}

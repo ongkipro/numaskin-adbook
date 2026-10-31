@@ -1,0 +1,721 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import GeoIpResolvedForm from '../components/storefront/forms/GeoIpResolvedForm.astro';
+import MetaLandingTracker from '../components/storefront/tracking/MetaLandingTracker.astro';
+import Icon from '../components/storefront/shared/Icon.astro';
+import RatingStars from '../components/storefront/shared/RatingStars.astro';
+import LpHeroOffer from '../components/storefront/landing-pages/LpHeroOffer.astro';
+import LpBundleValueSection, {
+  type BundleTierSpec,
+} from '../components/storefront/landing-pages/LpBundleValueSection.astro';
+import LpFaqSection, {
+  type FaqEntry,
+} from '../components/storefront/landing-pages/LpFaqSection.astro';
+import LpFloatingCta from '../components/storefront/landing-pages/LpFloatingCta.astro';
+import { getStorefrontProduct } from '../lib/catalog';
+import { nativeLandingCanonicalPath } from '../lib/landing-pages';
+import { defaultCatalogContentId } from '../lib/catalog-feed';
+import { getRuntimeEnv } from '../lib/env';
+import { loadStoreCodDisabledProvinceCodes } from '../lib/form-mode';
+import { getStoreAdsConfig } from '../lib/store-ads';
+import '../styles/form-hybrid.css';
+import '../styles/landing-pages/lp-meta-ads.css';
+
+export const prerender = false;
+
+const PRODUCT_SLUG = 'deep-sea-water-treatment-lotion';
+const LANDING_SLUG = 'lp-toner-csm-ulleung';
+const PAGE_TITLE =
+  'Deep Sea Water Treatment Lotion — Toner Kompres CSM Air Laut Dalam Ulleung & 5X Ceramide BPOM';
+const PAGE_DESC =
+  'Toner-essence kompres CSM Numa Skin dengan 76% Ulleungdo Deep Sea Water, Galactomyces, 5X Ceramide, dan 4D Hyaluronic Acid (BPOM NA18220101400). Tersedia 50ml, 150ml, hingga Twin Pack 2x150ml Hemat Rp66.400.';
+const IMG_BASE = '/images/landing/paket-twin-pack-toner-2x150ml';
+const HERO_IMAGE = `${IMG_BASE}/hero-paket-twin-pack-toner-2x150ml.webp`;
+
+const database = getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined;
+const claimedProductSlug = Astro.request.headers.get('x-adsbook-product-page');
+const [product, canonicalPath, codDisabledProvinceCodes] = await Promise.all([
+  getStorefrontProduct(Astro.locals, PRODUCT_SLUG),
+  claimedProductSlug
+    ? Promise.resolve(`/produk/${claimedProductSlug}`)
+    : nativeLandingCanonicalPath(Astro.locals, LANDING_SLUG),
+  loadStoreCodDisabledProvinceCodes(database),
+  getStoreAdsConfig(Astro.locals),
+]);
+if (!product) {
+  return Astro.rewrite('/404');
+}
+
+const canonical = `${Astro.locals.tenant.siteUrl}${canonicalPath}`;
+
+const variants = product.variants || [];
+const twinVariant = variants.find(
+  (v: any) => String(v.id) === '55' || /2[×x]\s*150/i.test(String(v.label))
+);
+const defaultVariant = twinVariant || variants[0] || {
+  id: '55',
+  label: '2× 150ml',
+  price: 151600,
+  comparePrice: 218000,
+};
+// Compare against 2 × Rp109.000 single 150ml bottle price (Rp218.000) for factual Rp66.400 Twin Pack savings
+const heroComparePrice = 218000;
+
+const BUNDLE_TIERS: BundleTierSpec[] = [
+  {
+    productSlug: 'deep-sea-water-treatment-lotion',
+    variantId: '55',
+    badge: 'Paling Hemat • Twin Pack 2×150ml (300ml)',
+    featured: true,
+    image: `${IMG_BASE}/kemasan-twin-pack-toner-2x150ml.webp`,
+    imageAlt: 'Paket Twin Pack 2x150ml Deep Sea Water Treatment Lotion Numa Skin',
+    titleOverride: 'Twin Pack Treatment Lotion (2 × 150 ml)',
+    comparePriceOverride: 218000,
+    benefit: 'Jatuhnya hanya Rp75.800 per botol jumbo 150ml (hemat Rp66.400 dari harga 2 botol satuan Rp218.000).',
+    ctaLabel: 'Ambil Twin Pack',
+  },
+  {
+    productSlug: 'deep-sea-water-treatment-lotion',
+    variantId: '5',
+    badge: 'Ukuran Reguler • 1 Botol Jumbo 150ml',
+    image: '/images/landing/deep-sea-water-treatment-lotion/ukuran-50ml-dan-150ml.webp',
+    imageAlt: 'Perbandingan ukuran 50ml dan 150ml Deep Sea Water Treatment Lotion',
+    imageWidth: 480,
+    imageHeight: 320,
+    titleOverride: 'Treatment Lotion Full-Size (150 ml)',
+    benefit: '1 botol besar 150ml untuk rutinitas tepuk 3-layer & kompres CSM harian selama 4–6 minggu.',
+    ctaLabel: 'Pilih 150ml',
+  },
+  {
+    productSlug: 'paket-adenosine-dan-toner-150ml',
+    badge: 'Bundling Hidrasi + Kunci Pelembap',
+    image: '/images/landing/paket-adenosine-dan-toner-150ml/kemasan-adenosine-toner-150ml.webp',
+    imageAlt: 'Paket Treatment Lotion 150ml dan Adenosine Moisturizer 30gr',
+    benefit: 'Kombinasi Toner Jumbo 150ml + Adenosine Moisturizer 30gr (11X Hyaluronic Acid) untuk kulit ekstra lembap.',
+    ctaLabel: 'Pilih + Adenosine',
+  },
+  {
+    productSlug: 'paket-skin-recharge-duo-150ml',
+    badge: 'Bundling Toner 150ml + NAD+ Serum',
+    image: '/images/landing/paket-skin-recharge-duo-150ml/kemasan-skin-recharge-150ml.webp',
+    imageAlt: 'Paket Skin Recharge Duo Treatment Lotion 150ml dan NAD+ Booster Serum',
+    benefit: 'Toner 150ml membuka jalur penyerapan agar 2% Swiss RejuveNAD™ + 6X Peptide bekerja optimal.',
+    ctaLabel: 'Pilih + NAD+ Serum',
+  },
+];
+
+const FAQS: FaqEntry[] = [
+  {
+    question: 'Apa itu metode kompres CSM dengan Treatment Lotion ini?',
+    answer:
+      'CSM (Chizu Saeki Method) adalah teknik membasahi 3–4 lembar kapas tipis dengan Treatment Lotion lalu menempelkannya di pipi dan dahi selama 3–5 menit untuk hidrasi instan seperti habis memakai sheet mask.',
+  },
+  {
+    question: 'Apakah mengandung alkohol atau parfum menyengat yang bikin perih?',
+    answer:
+      'Tidak perih di kulit sensitif. Diformulasikan dengan 76% Air Laut Dalam Ulleungdo, Galactomyces, 5X Ceramide, Cica, dan Panthenol yang menenangkan kemerahan serta terdaftar resmi di BPOM (NA18220101400).',
+  },
+  {
+    question: 'Kenapa Twin Pack 2×150ml jauh lebih direkomendasikan daripada ukuran 50ml?',
+    answer:
+      'Ukuran 50ml harganya Rp79.000, sedangkan Twin Pack 2×150ml (total 300ml — 6x lipat volume 50ml) hanya Rp151.600, sehingga jatuh Rp75.800 saja per botol besar 150ml.',
+  },
+  {
+    question: 'Apakah bisa Bayar di Tempat (COD)?',
+    answer:
+      'Bisa. Pilih varian ukuran atau paket bundling di formulir bawah, isi kecamatan pengiriman, dan bayar langsung ke kurir saat paket tiba di rumah Anda.',
+  },
+];
+---
+
+<BaseLayout
+  title={PAGE_TITLE}
+  description={PAGE_DESC}
+  image={HERO_IMAGE}
+  preloadImages={HERO_IMAGE}
+  canonical={canonical}
+  noindex={true}
+  faqs={FAQS}
+  hideHeader={true}
+  hideFooter={true}
+>
+  <MetaLandingTracker
+    slug={LANDING_SLUG}
+    contentId={defaultCatalogContentId(product)}
+    contentName={product.contentName}
+    price={defaultVariant.price}
+  />
+
+  <div class="dsw-shell">
+    <main class="dsw-canvas">
+      <!-- Section 1: Hero -->
+      <section id="hero-section" class="dsw-hero">
+        <div class="dsw-hero-head">
+          <h1 class="dsw-h1">
+            <span class="dsw-hl-tilt">Ritual Kompres CSM 5 Menit</span> untuk Kulit Lembap Membal Seperti Habis Maskeran!
+          </h1>
+          <p class="dsw-sub" style="max-width: 390px; margin: 14px auto 0; font-weight: 600;">
+            2-in-1 Hydrating Toner & First Essence dengan 76% Air Laut Dalam Pulau Ulleung Korea, Galactomyces, & 5X Ceramide.<br />
+            <span class="dsw-underline-teal">Tersedia 50ml, 150ml, hingga Twin Pack 2×150ml (Hemat Rp66.400)!</span>
+          </p>
+        </div>
+
+        <div class="dsw-hero-stage">
+          <div class="dsw-hero-top-tag">
+            <div class="dsw-hero-top-pill">
+              <Icon name="lucide:droplets" class="size-3.5" aria-hidden="true" />
+              <span>76% Ulleungdo Water • Twin Pack 2×150ml Hemat Rp66.400</span>
+            </div>
+          </div>
+
+          <img
+            src={HERO_IMAGE}
+            alt="Perbandingan kulit kasar dehidrasi vs kulit kenyal glass skin dengan Deep Sea Water Treatment Lotion Numa Skin"
+            width="720"
+            height="480"
+            class="dsw-hero-img"
+            fetchpriority="high"
+            loading="eager"
+            decoding="async"
+          />
+
+          <div class="dsw-hero-ba" aria-hidden="true">
+            <span class="dsw-hero-ba-pill dsw-hero-ba-pill--before">Kasar & Dehidrasi</span>
+            <span class="dsw-hero-ba-pill dsw-hero-ba-pill--after">Kenyal Glass Skin</span>
+          </div>
+
+          <div class="dsw-hero-trust-strip" role="list" aria-label="Jaminan kualitas Numa Skin">
+            <div class="dsw-trust-item" role="listitem">
+              <span class="dsw-trust-icon">
+                <Icon name="lucide:shield-check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-trust-text">
+                <strong class="dsw-trust-label">BPOM Resmi</strong>
+                <span class="dsw-trust-sub">NA18220101400</span>
+              </span>
+            </div>
+            <div class="dsw-trust-item" role="listitem">
+              <span class="dsw-trust-icon">
+                <Icon name="lucide:droplets" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-trust-text">
+                <strong class="dsw-trust-label">76% Ulleungdo</strong>
+                <span class="dsw-trust-sub">+ 5X Ceramide</span>
+              </span>
+            </div>
+            <div class="dsw-trust-item" role="listitem">
+              <span class="dsw-trust-icon">
+                <Icon name="lucide:layers" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-trust-text">
+                <strong class="dsw-trust-label">Twin Pack 300ml</strong>
+                <span class="dsw-trust-sub">Rp75.800 / Botol</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <LpHeroOffer
+          price={defaultVariant.price}
+          comparePrice={heroComparePrice}
+          eyebrow="Promo Twin Pack 2×150ml (300ml) • Tersedia Juga 50ml & 150ml"
+          ctaText="Pilih Ukuran / Paket Toner"
+        />
+      </section>
+
+      <!-- Section 2: Solusi Praktis -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Puas Kompres CSM <span class="dsw-hl-aqua">Tanpa Takut Cepat Habis</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Kenapa Deep Sea Water Treatment Lotion menjadi fondasi wajib pelanggan Numa Skin:
+        </p>
+
+        <div class="dsw-solution-box">
+          <img
+            src={`${IMG_BASE}/solusi-stok-hidrasi-kompres-CSM.webp`}
+            alt="Wanita Indonesia menikmati kulit wajah yang lembap kenyal berkat pemakaian rutin Treatment Lotion 150ml"
+            width="720"
+            height="480"
+            class="dsw-solution-img"
+            loading="lazy"
+            fetchpriority="low"
+            decoding="async"
+          />
+
+          <div class="dsw-check-list">
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text"><strong>4-in-1 First Essence Korea:</strong> Menggabungkan 76% Air Laut Dalam Ulleungdo, Galactomyces Ferment Filtrate, 5X Ceramide, dan 4D Hyaluronic Acid dalam satu langkah cair sejuk.</p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text"><strong>Bebas Pakai 3–5 Layer & Kompres Kapas:</strong> Sangat nyaman ditepuk langsung dengan tangan maupun dikompres dengan kapas tipis selama 3–5 menit (metode CSM).</p>
+            </div>
+            <div class="dsw-check-item">
+              <span class="dsw-icon-green">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <p class="dsw-list-text"><strong>Pilihan Twin Pack Super Ekonomis:</strong> Ambil 2 botol 150ml sekaligus (Total 300ml) hanya Rp151.600 — jatuhnya Rp75.800 per botol besar 150ml!</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Masalah Kulit -->
+      <section class="dsw-section--tinted">
+        <h2 class="dsw-h2">
+          Kenapa Kulit Masih Terasa <span class="dsw-hl-coral">Kurang Lembap & Kusam?</span>
+        </h2>
+
+        <div class="dsw-grid-2">
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/masalah-cepat-habis-pakai-rutin.webp`}
+              alt="Wanita ragu menuangkan toner karena takut botol cepat habis"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-red">Krim Sulit Meresap</span>
+              <p class="dsw-card-desc">Mengoleskan serum atau krim langsung di atas kulit yang kering membuat penyerapan nutrisi kurang maksimal.</p>
+            </div>
+          </article>
+
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/masalah-kulit-kusam-kurang-hidrasi.webp`}
+              alt="Tekstur kulit kusam, kasar, dan pori tampak besar karena kurang asupan air"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-red">Kulit Kering & Ketarik</span>
+              <p class="dsw-card-desc">Sehabis mencuci muka atau berada di ruang AC, kulit kehilangan kelembapan alami sehingga tampak kusam.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- Section 4: Transformasi Nyata -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Transformasi <span class="dsw-hl-aqua">Dari Kulit Kering ke Glass Skin</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Hasil nyata pemakaian rutin setiap pagi dan malam:
+        </p>
+
+        <div class="dsw-grid-2">
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/kondisi-kulit-kasar-dehidrasi-kronis.webp`}
+              alt="Kondisi kulit kasar, kering, dan tampak kusam sebelum kompres rutin"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-red">Kondisi Kulit Kering</span>
+              <p class="dsw-card-desc">Permukaan kulit terasa kasar, kusam kurang bercahaya, dan pelembap terasa mengambang di permukaan.</p>
+            </div>
+          </article>
+
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/kondisi-kulit-kenyal-glass-skin-rutin.webp`}
+              alt="Kondisi kulit kenyal membal, pori tampak rapat, dan berkilau sehat"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-green">Rutin Kompres CSM</span>
+              <p class="dsw-card-desc">Cadangan air epidermis terjaga penuh, tekstur tampak lebih halus, dan wajah memantulkan kilau sehat.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- Section 5: Cara Pakai -->
+      <section class="dsw-section--tinted">
+        <h2 class="dsw-h2">
+          Cara Pakai <span class="dsw-hl-aqua">Praktis Setiap Hari</span>
+        </h2>
+
+        <div class="dsw-grid-2">
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/cara-pakai-twin-tuang-telapak.webp`}
+              alt="Menuangkan Treatment Lotion 150ml ke telapak tangan untuk 2-3 layer tepuk wajah"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-teal">1. Teknik 3-Layer Tepuk</span>
+              <p class="dsw-card-desc">Tuang ke telapak tangan, tepuk lembut ke seluruh wajah dan leher. Ulangi 2–3 lapis pada area pipi yang kering.</p>
+            </div>
+          </article>
+
+          <article class="dsw-card">
+            <img
+              src={`${IMG_BASE}/cara-pakai-twin-kompres-wajah.webp`}
+              alt="Mengompres pipi dengan kapas tipis yang dibasahi Treatment Lotion"
+              width="480"
+              height="320"
+              class="dsw-card-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <span class="dsw-badge-teal">2. Masker Kompres CSM 5 Menit</span>
+              <p class="dsw-card-desc">Basahi 3 lembar kapas tipis dengan <strong>Treatment Lotion</strong>, tempelkan di kedua pipi dan dahi selama 5 menit.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- Section 6: Bukti Pelanggan -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Bukti Tekstur <span class="dsw-hl-aqua">& Kepuasan Pelanggan</span>
+        </h2>
+
+        <div class="dsw-grid-2">
+          <div class="dsw-proof-cell">
+            <img
+              src={`${IMG_BASE}/bukti-tekstur-essence-cair-segar.webp`}
+              alt="Tekstur watery essence Deep Sea Water Treatment Lotion di tangan"
+              width="480"
+              height="320"
+              class="dsw-proof-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-proof-OverlayCaption">Watery Essence Murni Tanpa Lengket</p>
+          </div>
+          <div class="dsw-proof-cell">
+            <img
+              src={`${IMG_BASE}/bukti-bunda-setia-twin-pack.webp`}
+              alt="Wanita Indonesia berhijab tersenyum dengan kulit wajah lembap bercahaya"
+              width="480"
+              height="320"
+              class="dsw-proof-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-proof-OverlayCaption">Andalan Pelanggan Repeat Order</p>
+          </div>
+          <div class="dsw-proof-cell">
+            <img
+              src={`${IMG_BASE}/bukti-kulit-lembap-membal-pagi.webp`}
+              alt="Close-up pipi kenyal dan halus di pagi hari"
+              width="480"
+              height="320"
+              class="dsw-proof-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-proof-OverlayCaption">Kulit Tetap Kenyal Sampai Pagi</p>
+          </div>
+          <div class="dsw-proof-cell">
+            <img
+              src={`${IMG_BASE}/bukti-meja-rias-twin-pack-toner.webp`}
+              alt="Dua botol besar Deep Sea Water Treatment Lotion 150ml di meja rias"
+              width="480"
+              height="320"
+              class="dsw-proof-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-proof-OverlayCaption">Tersedia Kemasan 50ml, 150ml & Twin Pack</p>
+          </div>
+        </div>
+
+        <div class="dsw-testi-list">
+          <article class="dsw-testi-card">
+            <div class="dsw-testi-head">
+              <div class="dsw-testi-avatar" aria-hidden="true">E</div>
+              <div class="dsw-testi-meta">
+                <p class="dsw-testi-name">
+                  Bunda Erna Wijaya (40 thn)
+                  <span class="dsw-verified-pill">Verified Buyer</span>
+                </p>
+                <div class="dsw-stars">
+                  <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
+                </div>
+              </div>
+            </div>
+            <p class="dsw-testi-body">"Hitungannya jauh lebih murah ambil yang 2x150ml! Cuma Rp151.600 dapet 2 botol gede, padahal beli botol kecil 50ml aja 79 ribu. Aku pakai kompres kapas tiap malam, kulit jadi adem kenyal banget."</p>
+            <div class="dsw-testi-foot">
+              <span>Medan</span>
+              <span>•</span>
+              <span>Repeat Order ke-3</span>
+            </div>
+          </article>
+
+          <article class="dsw-testi-card">
+            <div class="dsw-testi-head">
+              <div class="dsw-testi-avatar" aria-hidden="true">T</div>
+              <div class="dsw-testi-meta">
+                <p class="dsw-testi-name">
+                  Ibu Tuti Handayani (37 thn)
+                  <span class="dsw-verified-pill">Verified Buyer</span>
+                </p>
+                <div class="dsw-stars">
+                  <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
+                </div>
+              </div>
+            </div>
+            <p class="dsw-testi-body">"Tonernya Numa Skin ini penyelamat kulit keringku. Beli langsung Twin Pack 2 botol 150ml hemat 66 ribu lebih, awet banget buat stok 3 bulan penuh."</p>
+            <div class="dsw-testi-foot">
+              <span>Solo</span>
+              <span>•</span>
+              <span>Pemakaian 8 Minggu</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- Section 7: Tabel Perbandingan Twin Pack vs Satuan -->
+      <section class="dsw-section--tinted">
+        <h2 class="dsw-h2">
+          Keunggulan <span class="dsw-hl-aqua">Twin Pack Toner (2×150ml)</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Mengapa pelanggan rutin memilih Twin Pack 2×150ml dibanding membeli 1 botol satuan:
+        </p>
+
+        <div class="dsw-cmp-card">
+          <div class="dsw-cmp-head">
+            <div class="dsw-cmp-col">Karakteristik</div>
+            <div class="dsw-cmp-col dsw-cmp-col--numa">Twin Pack 2×150ml</div>
+            <div class="dsw-cmp-col">Satuan 150ml</div>
+          </div>
+
+          <div class="dsw-cmp-row">
+            <div class="dsw-cmp-cell dsw-cmp-cell--feature">Total Volume</div>
+            <div class="dsw-cmp-cell dsw-cmp-cell--numa">
+              <span class="dsw-icon-green" style="margin: 0 auto;">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">300ml (2 × Botol 150ml)</span>
+            </div>
+            <div class="dsw-cmp-cell">
+              <span class="dsw-icon-red" style="margin: 0 auto;">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">150ml (1 botol)</span>
+            </div>
+          </div>
+
+          <div class="dsw-cmp-row">
+            <div class="dsw-cmp-cell dsw-cmp-cell--feature">Harga / Botol 150ml</div>
+            <div class="dsw-cmp-cell dsw-cmp-cell--numa">
+              <span class="dsw-icon-green" style="margin: 0 auto;">
+                <Icon name="lucide:check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">Hanya Rp75.800 / botol</span>
+            </div>
+            <div class="dsw-cmp-cell">
+              <span class="dsw-icon-red" style="margin: 0 auto;">
+                <Icon name="lucide:x" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-cmp-sub">Rp109.000 / botol</span>
+            </div>
+          </div>
+
+          <div class="dsw-cmp-row">
+            <div class="dsw-cmp-cell dsw-cmp-cell--feature">Total Harga</div>
+            <div class="dsw-cmp-cell dsw-cmp-cell--numa">
+              <strong>Rp151.600</strong>
+              <span class="dsw-cmp-sub">Hemat Rp66.400 (30%)</span>
+            </div>
+            <div class="dsw-cmp-cell">
+              <span>Rp218.000</span>
+              <span class="dsw-cmp-sub">Bila beli 2× terpisah</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 8: Formulasi, Kandungan & Kemasan -->
+      <section class="dsw-section dsw-section--knowledge">
+        <h2 class="dsw-h2">
+          Formulasi <span class="dsw-hl-aqua">Marine Bio-Science Korea</span>
+        </h2>
+        <p class="dsw-sub" style="margin-top: 8px;">
+          Konsentrasi tinggi mineral laut dalam Ulleungdo dan 5 bahan aktif pendukung skin barrier:
+        </p>
+
+        <div class="dsw-figure-stack">
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/formulasi-twin-ulleung-deep-sea.webp`}
+                alt="Formulasi 76% Air Laut Dalam Ulleungdo Korea Selatan"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">76% Ulleungdo Deep Sea Water + Galactomyces</h3>
+              <p class="dsw-figcaption-desc">Kaya akan Magnesium, Kalsium, dan Kalium alami dari kedalaman laut Pulau Ulleung untuk mempercepat hidrasi sel.</p>
+            </figcaption>
+          </figure>
+
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/kandungan-twin-galactomyces-ceramide.webp`}
+                alt="Kandungan 5X Ceramide, 4D Hyaluronic Acid, Centella Asiatica, dan Panthenol"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">5X Ceramide + 4D Hyaluronic Acid + Cica + Panthenol</h3>
+              <p class="dsw-figcaption-desc">Menenangkan kulit yang rewel, mengunci cadangan air di berbagai lapisan epidermis, dan menghaluskan tekstur pori.</p>
+            </figcaption>
+          </figure>
+
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/kemasan-twin-pack-toner-2x150ml.webp`}
+                alt="Kemasan resmi Paket Twin Pack 2x150ml Deep Sea Water Treatment Lotion Numa Skin"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">2 Botol Full-Size 150ml Resmi BPOM (NA18220101400)</h3>
+              <p class="dsw-figcaption-desc">Tersedia pilihan Twin Pack 2×150ml, 1 botol 150ml, trial 50ml, maupun bundling hemat dengan Adenosine & NAD+ Serum.</p>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- Section 9: Garansi 100% Resmi -->
+      <section class="dsw-section" style="text-align: center; background: #f8fafc;">
+        <div style="margin: 0 auto 14px; display: flex; width: 52px; height: 52px; align-items: center; justify-content: center; color: #0b6e7d;">
+          <Icon name="lucide:shield-check" class="size-12" aria-hidden="true" />
+        </div>
+        <h2 class="dsw-h2" style="font-size: 30px;">GARANSI RESMI 100%</h2>
+        <p class="dsw-sub" style="max-width: 320px; margin: 8px auto 0;">
+          Pesanan dikirim langsung dari gudang resmi Numa Skin Indonesia.
+        </p>
+
+        <div class="dsw-guarantee-list">
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:badge-check" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">Produk Asli Tersegel BPOM</strong>
+              Terdaftar resmi di BPOM RI (NA18220101400) dan bersertifikat Halal Indonesia.
+            </p>
+          </div>
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:truck" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">Bisa Bayar di Tempat (COD)</strong>
+              Pesan hari ini, bayar langsung ke kurir saat paket tiba di rumah Anda.
+            </p>
+          </div>
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:package-check" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">Garansi Ganti Baru</strong>
+              Kami ganti baru tanpa biaya tambahan bila ada kemasan yang diterima rusak atau bocor.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 10: Pre-Checkout Visual Tiered Bundle Showcase -->
+      <LpBundleValueSection
+        heading="Pilih Ukuran atau"
+        highlight="Paket Bundling Toner"
+        tiers={BUNDLE_TIERS}
+      />
+
+      <!-- Section 11: Objection-Handling FAQ -->
+      <LpFaqSection faqs={FAQS} />
+
+      <!-- Section 12: Checkout Form with Tiered Bundling -->
+      <section id="form-pemesanan" class="dsw-section--checkout">
+        <div style="padding: 0 20px 14px; text-align: center;">
+          <h2 class="dsw-h2" style="font-size: 26px;">
+            Pilih Ukuran / Paket & <span class="dsw-hl-aqua">Pengiriman</span>
+          </h2>
+          <p class="dsw-sub" style="max-width: 360px; margin: 8px auto 0;">
+            Twin Pack 2×150ml (Rp151.600 — Hemat Rp66.400) otomatis terpilih. Tersedia juga 150ml (Rp109.000), 50ml (Rp79.000), atau Paket Bundling.
+          </p>
+        </div>
+
+        <GeoIpResolvedForm
+          mode="hybrid"
+          productSlug={product.slug}
+          bundleProductSlugs={[
+            'paket-adenosine-dan-toner-150ml',
+            'paket-skin-recharge-duo-150ml',
+          ]}
+          embedded={true}
+          selectedVariantId={String(defaultVariant.id)}
+          codDisabledProvinceCodes={codDisabledProvinceCodes}
+        />
+      </section>
+    </main>
+
+    <LpFloatingCta
+      label="Ambil Twin Pack"
+      subLabel="Rp151.600 (2×150ml)"
+      ariaLabel="Pesan Deep Sea Water Treatment Lotion"
+    />
+  </div>
+</BaseLayout>

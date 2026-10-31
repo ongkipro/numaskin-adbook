@@ -1114,21 +1114,25 @@ export async function reconcileNativeLandingPages(
 export async function nativeLandingCanonicalPath(
   locals: App.Locals,
   slug: string,
+  entries: readonly NativeLandingPage[] = nativeLandingPages,
 ): Promise<string> {
-  const fallback = `/${slug}`;
+  const canonicalSlug =
+    entries.find((entry) => entry.slug === slug)?.canonicalSlug || slug;
+  const fallback = `/${canonicalSlug}`;
   try {
     const row = await getDatabase(locals)
       .prepare(
         `SELECT p.slug AS product_slug
            FROM landing_pages lp
            INNER JOIN products p ON CAST(p.id AS TEXT) = lp.product_id
-          WHERE lp.slug = ?
+          WHERE lp.slug IN (?, ?)
             AND lp.source = 'native'
             AND lp.is_product_page = 1
             AND lp.is_active = 1
+          ORDER BY CASE WHEN lp.slug = ? THEN 0 ELSE 1 END
           LIMIT 1`,
       )
-      .bind(slug)
+      .bind(slug, canonicalSlug, slug)
       .first<{ product_slug: string }>();
     return row?.product_slug ? `/produk/${row.product_slug}` : fallback;
   } catch {

@@ -1,0 +1,100 @@
+---
+import Icon from '../shared/Icon.astro';
+import { formatIdr } from '../../../lib/format-idr';
+
+interface Props {
+  label?: string;
+  price?: number;
+  subLabel?: string;
+  ariaLabel: string;
+}
+
+const {
+  label = 'Pesan Sekarang',
+  price,
+  subLabel,
+  ariaLabel,
+} = Astro.props;
+
+const rightLabel = subLabel || (typeof price === 'number' ? `Mulai ${formatIdr(price)}` : '');
+---
+
+<div id="floating-cta" data-sticky-cta class="dsw-float-wrap">
+  <a
+    href="#form-pemesanan"
+    class="dsw-float-btn"
+    data-scroll-to-form
+    aria-label={ariaLabel}
+  >
+    <span>{label}</span>
+    {rightLabel && (
+      <>
+        <span class="dsw-float-divider" aria-hidden="true"></span>
+        <span class="dsw-float-sub">{rightLabel}</span>
+      </>
+    )}
+    <Icon name="lucide:arrow-down" class="size-3.5 dsw-float-arrow" aria-hidden="true" />
+  </a>
+</div>
+
+<script is:inline>
+  (function () {
+    const heroSection = document.getElementById('hero-section');
+    const formSection = document.getElementById('form-pemesanan');
+    const floatingCta = document.getElementById('floating-cta');
+
+    document.querySelectorAll('[data-scroll-to-form]').forEach((link) => {
+      link.addEventListener('click', (e) => {
+        if (!formSection) return;
+        e.preventDefault();
+        formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+
+    document.querySelectorAll('[data-select-variant]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const variantId = btn.getAttribute('data-select-variant');
+        if (variantId && formSection) {
+          const radio = formSection.querySelector(
+            'input[name="variant"][value="' + CSS.escape(variantId) + '"]',
+          );
+          if (radio && !radio.checked) {
+            radio.checked = true;
+            radio.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+          const nameInput = formSection.querySelector('[data-field="customer-name"]');
+          formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          if (nameInput && typeof nameInput.focus === 'function') {
+            window.setTimeout(() => nameInput.focus({ preventScroll: true }), 450);
+          }
+        }
+      });
+    });
+
+    if (!floatingCta || !formSection) return;
+
+    function syncVisibility() {
+      const vh = window.innerHeight || document.documentElement.clientHeight || 800;
+      const heroRect = heroSection ? heroSection.getBoundingClientRect() : null;
+      const formRect = formSection.getBoundingClientRect();
+      const isHeroInView = heroRect ? heroRect.bottom > 80 : false;
+      const isFormReached = formRect.top < vh - 24;
+      const shouldShow = !isHeroInView && !isFormReached;
+      floatingCta.classList.toggle('is-visible', shouldShow);
+    }
+
+    let ticking = false;
+    function onScrollOrResize() {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(() => {
+        syncVisibility();
+        ticking = false;
+      });
+    }
+
+    window.addEventListener('scroll', onScrollOrResize, { passive: true });
+    window.addEventListener('resize', onScrollOrResize, { passive: true });
+    syncVisibility();
+  })();
+</script>

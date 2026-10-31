@@ -485,6 +485,107 @@ export const nativeLandingPages: NativeLandingPage[] = [
     image:
       '/images/landing/paket-sunscreen-adenosine-toner-50ml/hero-paket-sunscreen-adenosine-toner-50ml.webp',
   },
+  // ── 10 Dedicated Meta Ads Landing Pages (Tiered Bundling & High-ROAS Hooks) ──
+  {
+    slug: 'lp-pdrn-tone-up',
+    title: 'Meta Ads LP — PDRN + Alpha-Arbutin Tone-Up Day Cream (Tiered Bundle)',
+    productSlug: 'pdrn-alpha-arbutin-tone-up-day-cream',
+    canonicalSlug: 'pdrn-alpha-arbutin-tone-up-day-cream',
+    description:
+      'LP khusus Meta Ads (Hero Hook: Cerah Natural 30 Detik Tanpa Bedak & Bebas Dempul) dengan pilihan 1 Pcs (Rp79.499), Paket 2 Pcs (Hydra Glow / Protection Duo Rp142.500), dan Paket 3 Pcs (Age-Defense Trio Rp213.500) langsung di form.',
+    image:
+      '/images/landing/pdrn-alpha-arbutin-tone-up-day-cream/hero-pdrn-day-cream.webp',
+  },
+  {
+    slug: 'lp-adenosine-moisturizer',
+    title: 'Meta Ads LP — Adenosine Deep Sea Water Moisturizer (Tiered Bundle)',
+    productSlug: 'adenosine-deep-sea-water-moisturizer',
+    canonicalSlug: 'adenosine-deep-sea-water-moisturizer',
+    description:
+      'LP khusus Meta Ads (Hero Hook: Kunci Hidrasi 11X Hyaluronic & Rawat Garis Halus Usia 30–50+) dengan pilihan 1 Pcs (Rp78.999), Paket 2 Pcs (Rp142.000–Rp142.500), dan Paket 3 Pcs (Rp213.500) langsung di form.',
+    image:
+      '/images/landing/adenosine-deep-sea-water-moisturizer/hero-adenosine-moisturizer.webp',
+  },
+  {
+    slug: 'lp-paket-siang-malam',
+    title: 'Meta Ads LP — Paket Siang-Malam Hydra Glow Duo (PDRN + Adenosine)',
+    productSlug: 'paket-hydra-glow-duo',
+    canonicalSlug: 'paket-hydra-glow-duo',
+    description:
+      'LP khusus Meta Ads (Hero Hook: Duet Pagi Cerah Bebas Dempul + Malam Kenyal Terhidrasi Rp142.500) dengan opsi upgrade Paket 3 Pcs Age-Defense Trio (Rp213.500) atau 1 Pcs PDRN di form.',
+    image:
+      '/images/landing/paket-hydra-glow-duo/hero-paket-hydra-glow-duo.webp',
+  },
+  {
+    slug: 'lp-paket-pagi-anti-uv',
+    title: 'Meta Ads LP — Paket Pagi Anti-UV Protection Duo (PDRN + Sunscreen SPF 50+)',
+    productSlug: 'paket-protection-duo-pdrn',
+    canonicalSlug: 'paket-protection-duo-pdrn',
+    description:
+      'LP khusus Meta Ads (Hero Hook: Perisai Pagi Anti-Kusam & Anti-UV SPF 50+ PA++++ Tanpa Whitecast Rp142.500) dengan opsi upgrade Paket 3 Pcs Age-Defense Trio (Rp213.500) di form.',
+    image:
+      '/images/landing/paket-protection-duo-pdrn/hero-paket-protection-pdrn.webp',
+  },
+  {
+    slug: 'lp-paket-flek-matahari',
+    title: 'Meta Ads LP — Paket Penjaga Noda Hitam & UV (Adenosine + Sunscreen)',
+    productSlug: 'paket-adenosine-dan-sunscreen',
+    canonicalSlug: 'paket-adenosine-dan-sunscreen',
+    description:
+      'LP khusus Meta Ads (Hero Hook: Kunci Kelembapan & Cegah Noda Hitam Akibat Paparan Matahari Rp142.000) dengan opsi upgrade Paket 3 Pcs Age-Defense Trio (Rp213.500) atau Paket + Toner 150ml (Rp240.000).',
+    image:
+      '/images/landing/paket-adenosine-dan-sunscreen/hero-paket-adenosine-sunscreen.webp',
+  },
+  {
+    slug: 'lp-paket-nad-pdrn',
+    title: 'Meta Ads LP — Paket Luminous Duo (NAD+ Booster Serum + PDRN Day Cream)',
+    productSlug: 'paket-luminous-duo',
+    canonicalSlug: 'paket-luminous-duo',
+    description:
+      'LP khusus Meta Ads (Hero Hook: Sinergi NAD+ Booster Serum + Vegan Salmon DNA PDRN & Alpha-Arbutin Rp169.500) dengan opsi upgrade Paket 3 Pcs Anti-Aging Trio (Rp240.000) di form.',
+    image:
+      '/images/landing/paket-luminous-duo/hero-paket-luminous-duo.webp',
+  },
+  {
+    slug: 'lp-paket-nad-adenosine',
+    title: 'Meta Ads LP — Paket NAD+ Youth Boost Set (NAD+ Serum + Adenosine)',
+    productSlug: 'paket-nad-youth-boost-set',
+    canonicalSlug: 'paket-nad-youth-boost-set',
+    description:
+      'LP khusus Meta Ads (Hero Hook: Duet Intensif Malam Garis Halus & Elastisitas Kulit Dewasa Rp169.000) dengan opsi upgrade Paket 3 Pcs Anti-Aging Trio (Rp240.000) atau Rejuvenating Trio 150ml (Rp267.000).',
+    image:
+      '/images/landing/paket-nad-youth-boost-set/hero-paket-nad-youth-boost.webp',
+  },
+  {
+    slug: 'lp-paket-trio-24jam',
+    title: 'Meta Ads LP — Paket 3-in-1 Age-Defense Trio 24 Jam (PDRN + Adenosine + SPF 50+)',
+    productSlug: 'paket-age-defense-trio',
+    canonicalSlug: 'paket-age-defense-trio',
+    description:
+      'LP khusus Meta Ads (Hero Hook: 1 Paket Lengkap Pagi-Siang-Malam Rp213.500 — 3 BPOM Resmi) dengan opsi Paket 2 Pcs Hydra Glow Duo (Rp142.500) atau Paket Ultimate Anti-Aging (Rp409.500).',
+    image:
+      '/images/landing/paket-age-defense-trio/hero-paket-age-defense-trio.webp',
+  },
+  {
+    slug: 'lp-toner-csm-ulleung',
+    title: 'Meta Ads LP — Deep Sea Water Treatment Lotion CSM Method (Twin Pack 150ml)',
+    productSlug: 'deep-sea-water-treatment-lotion',
+    canonicalSlug: 'deep-sea-water-treatment-lotion',
+    description:
+      'LP khusus Meta Ads (Hero Hook: Metode Kompres CSM 3 Menit Air Laut Dalam Ulleung & Galactomyces) dengan pre-select Twin Pack 2× 150ml (Rp151.600) dan bundling Moisturizer/Serum di form.',
+    image:
+      '/images/landing/deep-sea-water-treatment-lotion/hero-treatment-lotion.webp',
+  },
+  {
+    slug: 'lp-paket-lengkap-awet-muda',
+    title: 'Meta Ads LP — Paket Lengkap 4-in-1 Complete Routine (150ml)',
+    productSlug: 'paket-complete-routine-4-in-1-150ml',
+    canonicalSlug: 'paket-complete-routine-4-in-1-150ml',
+    description:
+      'LP khusus Meta Ads (Hero Hook: Ritual 4 Langkah Lengkap Siang-Malam Tanpa Bingung Mix & Match Rp338.000) dengan pilihan Travel Size 50ml (Rp311.000), Ultimate 5-in-1 (Rp409.500), dan VIP 6-in-1 (Rp472.000).',
+    image:
+      '/images/landing/paket-complete-routine-4-in-1-150ml/hero-paket-complete-4in1.webp',
+  },
 ];
 
 /**
@@ -494,4 +595,7 @@ export const nativeLandingPages: NativeLandingPage[] = [
  * answers first, so the CMS refuses them. Every entry in `nativeLandingPages`
  * is refused the same way without being repeated here.
  */
-export const installRouteSlugs: string[] = [];
+export const installRouteSlugs: string[] = [
+  'pelembap-deep-sea-water',
+  'toner-deep-sea-water',
+];

@@ -1,0 +1,130 @@
+---
+import Icon from '../shared/Icon.astro';
+import { getStorefrontProduct } from '../../../lib/catalog';
+import { formatIdr } from '../../../lib/format-idr';
+
+export interface BundleTierSpec {
+  productSlug: string;
+  variantId?: string;
+  badge: string;
+  featured?: boolean;
+  image: string;
+  imageAlt: string;
+  imageWidth?: number;
+  imageHeight?: number;
+  titleOverride?: string;
+  comparePriceOverride?: number;
+  benefit: string;
+  ctaLabel?: string;
+}
+
+interface Props {
+  heading?: string;
+  highlight?: string;
+  subheading?: string;
+  tiers: BundleTierSpec[];
+}
+
+const {
+  heading = 'Lebih Hemat & Optimal dengan',
+  highlight = 'Paket Bundling Sinergis',
+  subheading = 'Ketuk paket pilihan Anda di bawah ini untuk langsung memilih varian di formulir pemesanan:',
+  tiers,
+} = Astro.props;
+
+const resolvedTiers = (
+  await Promise.all(
+    tiers.map(async (tier) => {
+      const prod = await getStorefrontProduct(Astro.locals, tier.productSlug);
+      if (!prod || !prod.variants?.length) return null;
+      const variant = tier.variantId
+        ? prod.variants.find((v: any) => String(v.id) === String(tier.variantId)) || prod.variants[0]
+        : prod.variants[0];
+      const comparePrice = tier.comparePriceOverride ?? variant.comparePrice ?? variant.price;
+      const saveAmount = comparePrice > variant.price ? comparePrice - variant.price : 0;
+      const title =
+        tier.titleOverride ||
+        (prod.variants.length > 1 && !String(variant.label).includes(prod.productName)
+          ? `${prod.productName} (${variant.label})`
+          : prod.productName);
+      return {
+        ...tier,
+        title,
+        contents: String(variant.label || ''),
+        variantId: String(variant.id),
+        price: variant.price,
+        comparePrice,
+        hasDiscount: comparePrice > variant.price,
+        saveAmount,
+      };
+    }),
+  )
+).filter(Boolean) as Array<
+  BundleTierSpec & {
+    title: string;
+    contents: string;
+    variantId: string;
+    price: number;
+    comparePrice: number;
+    hasDiscount: boolean;
+    saveAmount: number;
+  }
+>;
+---
+
+{resolvedTiers.length > 0 && (
+  <section class="dsw-section dsw-section--tint">
+    <h2 class="dsw-h2">
+      {heading} <span class="dsw-hl-aqua">{highlight}</span>
+    </h2>
+    <p class="dsw-sub">{subheading}</p>
+
+    <div class="dsw-bundle-stack">
+      {resolvedTiers.map((tier) => (
+        <article class:list={['dsw-bundle-card', tier.featured && 'dsw-bundle-card--featured']}>
+          <div class="dsw-bundle-ribbon">
+            <span>{tier.badge}</span>
+            {tier.saveAmount >= 5000 && (
+              <span class="dsw-bundle-ribbon-save">Hemat {formatIdr(tier.saveAmount)}</span>
+            )}
+          </div>
+          <div class="dsw-bundle-inner">
+            <div class="dsw-bundle-media">
+              <img
+                src={tier.image}
+                alt={tier.imageAlt}
+                width={tier.imageWidth ?? 720}
+                height={tier.imageHeight ?? 480}
+                class="dsw-bundle-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <div class="dsw-bundle-body">
+              <h3 class="dsw-bundle-title">{tier.title}</h3>
+              <p class="dsw-bundle-contents">{tier.contents}</p>
+              <p class="dsw-bundle-benefit">{tier.benefit}</p>
+            </div>
+          </div>
+          <div class="dsw-bundle-foot">
+            <div class="dsw-bundle-prices">
+              <strong class="dsw-bundle-price">{formatIdr(tier.price)}</strong>
+              {tier.hasDiscount && (
+                <span class="dsw-bundle-compare">{formatIdr(tier.comparePrice)}</span>
+              )}
+            </div>
+            <button
+              type="button"
+              class="dsw-bundle-pick-btn"
+              data-select-variant={tier.variantId}
+            >
+              <span>{tier.ctaLabel || 'Pilih Paket Ini'}</span>
+              <Icon name="lucide:arrow-down" class="size-3.5" aria-hidden="true" />
+            </button>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+)}

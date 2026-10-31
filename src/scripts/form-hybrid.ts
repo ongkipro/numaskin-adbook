@@ -335,6 +335,7 @@ function initHybridOrderFormInstance(formRoot: HTMLElement) {
   const addressInput = formRoot.querySelector<HTMLTextAreaElement>(
     'textarea[name="address"]',
   );
+  const summaryProductName = formRoot.querySelector("#summary-product-name");
   const summaryLabel = formRoot.querySelector("#summary-label");
   const summaryCompare = formRoot.querySelector("#summary-compare");
   const summaryPriceValue = formRoot.querySelector("#summary-price-value");
@@ -356,14 +357,16 @@ function initHybridOrderFormInstance(formRoot: HTMLElement) {
     );
     const variantUniqueId = String(checked?.value || "");
     // Ads identity is product-level: Product ID, Meta content_id, Google item_id
-    // and feed <g:id> are byte-identical. The selected variant remains a separate
-    // commerce field and never changes catalog identity.
-    const productId = String(config.productId || "");
+    // and feed <g:id> are byte-identical. When tiered bundle options are listed
+    // on one form, each option carries its own catalog Product ID.
+    const productId = String(checked?.dataset.productId || config.productId || "");
+    const productName = String(checked?.dataset.productName || config.productName || "");
     return {
       productId,
+      productName,
       variantUniqueId,
       contentId: productId,
-      contentName: String(checked?.dataset.label || config.productName),
+      contentName: String(checked?.dataset.label || productName),
       value: Number(checked?.dataset.price || 1),
     };
   };
@@ -428,7 +431,7 @@ function initHybridOrderFormInstance(formRoot: HTMLElement) {
     postMetaEvent({
       event_name: eventName,
       event_id: eventId,
-      lp_name: config.productSlug,
+      lp_name: window.location.pathname.replace(/^\/+|\/+$/g, "") || config.productSlug,
       product_id: meta.productId || undefined,
       content_name: meta.contentName,
       value: meta.value,
@@ -501,10 +504,16 @@ function initHybridOrderFormInstance(formRoot: HTMLElement) {
 
     const selectedVariant = getSelectedVariant();
     const variantId = selectedVariant ? Number(selectedVariant.value) : undefined;
+    const selectedProductId = String(
+      selectedVariant?.dataset.productId || config.productId || "",
+    );
+    const selectedProductName = String(
+      selectedVariant?.dataset.productName || config.productName || "",
+    );
     const fingerprint = createAbandonedLeadFingerprint({
       customerName,
       customerPhone,
-      productId: config.productId,
+      productId: selectedProductId,
       variantId,
     });
     if (!abandonedCapture.shouldStart(fingerprint)) return;
@@ -526,7 +535,7 @@ function initHybridOrderFormInstance(formRoot: HTMLElement) {
             new FormData(form).get("contact_url_confirm") || "",
           ),
           customer_phone: customerPhone,
-          product_id: config.productId,
+          product_id: selectedProductId,
           variant_id:
             Number.isFinite(variantId) && (variantId ?? 0) > 0
               ? variantId
@@ -535,7 +544,7 @@ function initHybridOrderFormInstance(formRoot: HTMLElement) {
             typeof totalAmount === "number" && totalAmount > 0
               ? totalAmount
               : undefined,
-          product_title: config.productName,
+          product_title: selectedProductName,
           address: addressInput ? addressInput.value.trim() : "",
           province: state.selectedProvince || state.geoProvince || "",
         }),
@@ -966,7 +975,14 @@ function initHybridOrderFormInstance(formRoot: HTMLElement) {
     const comparePrice = Number(checked?.dataset.compare || productPrice);
     const hasDiscount = comparePrice > productPrice;
     summaryCompareRow?.toggleAttribute("hidden", !hasDiscount);
-    setNodeText(summaryLabel, checked?.dataset.label || config.productName);
+    setNodeText(
+      summaryProductName,
+      checked?.dataset.productName || config.productName,
+    );
+    setNodeText(
+      summaryLabel,
+      checked?.dataset.shortLabel || checked?.dataset.label || config.productName,
+    );
     setNodeText(summaryCompare, fmt(comparePrice));
     setNodeText(summaryPriceValue, fmt(productPrice));
     const shippingLabel = state.shippingLoading
@@ -2107,8 +2123,9 @@ function initHybridOrderFormInstance(formRoot: HTMLElement) {
       name: customerName,
       phone: customerPhone,
       address,
-      product_id: String(config.productId || ''),
-      product_name: config.productName,
+      lp_name: window.location.pathname.replace(/^\/+|\/+$/g, "") || config.productSlug,
+      product_id: String(checked.dataset.productId || config.productId || ''),
+      product_name: String(checked.dataset.productName || config.productName || ''),
       product_price: price,
       quantity: 1,
       shipping_cost: shippingCost,

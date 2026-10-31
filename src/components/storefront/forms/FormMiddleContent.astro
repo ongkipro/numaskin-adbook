@@ -9,6 +9,7 @@ import Icon from '../shared/Icon.astro';
 
 interface Props {
   productSlug?: string;
+  bundleProductSlugs?: string[];
   selectedVariantId?: string;
   province?: string;
   embedded?: boolean;
@@ -19,6 +20,7 @@ interface Props {
 
 const {
   productSlug = '',
+  bundleProductSlugs,
   province = '',
   selectedVariantId,
   embedded = false,
@@ -27,7 +29,61 @@ const {
 } = Astro.props;
 const product = await getStorefrontProduct(Astro.locals, productSlug);
 if (!product) throw new Error(`Product ${productSlug} not found`);
-const defaultVariant = resolveFormVariant(product, selectedVariantId) || product.variants[0];
+const bundleProducts = bundleProductSlugs?.length
+  ? (
+      await Promise.all(
+        bundleProductSlugs.map((slug) => getStorefrontProduct(Astro.locals, slug)),
+      )
+    ).filter(Boolean)
+  : [];
+const isBundledMode = bundleProducts.length > 0;
+const buildVariantOption = (prod: any, v: any) => {
+  const shortLabel = String(v.label || '').trim();
+  const displayTitle = isBundledMode
+    ? prod.variants.length > 1 && !shortLabel.includes(prod.productName)
+      ? `${prod.productName} (${shortLabel})`
+      : prod.productName
+    : shortLabel;
+  const fullLabel =
+    isBundledMode && !shortLabel.includes(prod.productName)
+      ? `${prod.productName} (${shortLabel})`
+      : shortLabel;
+  const plusCount = (shortLabel.match(/\+/g) || []).length;
+  const itemCount =
+    plusCount > 0 ? plusCount + 1 : /2[×x]\s*/i.test(shortLabel) ? 2 : 1;
+  const tierBadge = !isBundledMode
+    ? ''
+    : itemCount >= 4
+      ? `Paket Lengkap ${itemCount}-in-1`
+      : itemCount === 3
+        ? 'Paket Lengkap 3-in-1'
+        : itemCount === 2
+          ? 'Paket Hemat 2 Produk'
+          : '';
+  return {
+    ...v,
+    label: fullLabel,
+    shortLabel,
+    displayTitle,
+    showSubLabel: isBundledMode && !displayTitle.includes(shortLabel),
+    tierBadge,
+    productId: String(prod.productId || ''),
+    productSlug: String(prod.slug || ''),
+    productName: String(prod.productName || ''),
+    image: String(prod.image || ''),
+  };
+};
+const allVariants = isBundledMode
+  ? [
+      ...product.variants.map((v: any) => buildVariantOption(product, v)),
+      ...bundleProducts.flatMap((bp: any) =>
+        (bp.variants || []).map((v: any) => buildVariantOption(bp, v)),
+      ),
+    ]
+  : product.variants;
+const defaultVariant =
+  resolveFormVariant({ ...product, variants: allVariants }, selectedVariantId) ||
+  allVariants[0];
 const defaultComparePrice = defaultVariant.comparePrice ?? defaultVariant.price;
 const defaultHasDiscount = defaultComparePrice > defaultVariant.price;
 const database = getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined;
@@ -59,14 +115,15 @@ const fieldUid = crypto.randomUUID().slice(0, 8);
       <div class="px-4">
         <section class="form-block form-block-first">
           <div class="form-block-head gap-1.5">
-            <h2 class="section-title">Pilih Varian</h2>
-            <p class="section-lead">Pilih varian produk yang ingin dipesan.</p>
+            <h2 class="section-title">{isBundledMode ? 'Pilih Paket Pemesanan' : 'Pilih Varian'}</h2>
+            <p class="section-lead">{isBundledMode ? 'Pilih satuan atau paket bundling hemat resmi BPOM di bawah ini.' : 'Pilih varian produk yang ingin dipesan.'}</p>
           </div>
           <div class="variant-group simple-variant-group">
             {
-              product.variants.map((variant: any) => {
+              allVariants.map((variant: any) => {
                 const comparePrice = variant.comparePrice ?? variant.price;
                 const hasDiscount = comparePrice > variant.price;
+                const saveAmount = hasDiscount ? comparePrice - variant.price : 0;
                 return (
                   <label class="variant-option simple-variant-option">
                     <input
@@ -75,19 +132,45 @@ const fieldUid = crypto.randomUUID().slice(0, 8);
                       value={variant.id}
                       checked={variant.id === defaultVariant.id}
                       data-label={variant.label}
+                      data-short-label={variant.shortLabel || variant.label}
+                      data-product-id={variant.productId || product.productId}
+                      data-product-slug={variant.productSlug || product.slug}
+                      data-product-name={variant.productName || product.productName}
                       data-price={variant.price}
                       data-compare={comparePrice}
                     />
-                    <div class="variant-copy simple-variant-copy">
+                    <div class:list={['variant-copy simple-variant-copy', isBundledMode && 'bundle-variant-copy']}>
                       <div class="variant-radio" />
+                      {isBundledMode && variant.image && (
+                        <div class="bundle-variant-thumb">
+                          <img
+                            src={variant.image}
+                            alt={variant.displayTitle || variant.label}
+                            width="48"
+                            height="48"
+                            loading="lazy"
+                            decoding="async"
+                            onerror="this.parentElement.hidden=true"
+                          />
+                        </div>
+                      )}
                       <div class="variant-main simple-variant-main">
                         <div class="simple-variant-head">
-                          <p class="variant-label">{variant.label}</p>
+                          <p class="variant-label">{variant.displayTitle || variant.label}</p>
+                          {variant.tierBadge && (
+                            <span class="bundle-tier-pill">{variant.tierBadge}</span>
+                          )}
                         </div>
+                        {variant.showSubLabel && (
+                          <p class="bundle-variant-sub">{variant.shortLabel}</p>
+                        )}
                         <div class="variant-price-row simple-variant-price-row">
                           <span class="variant-price">{formatIdr(variant.price)}</span>
                           {hasDiscount && <span class="simple-variant-dot" aria-hidden="true" />}
                           {hasDiscount && <span class="variant-compare">{formatIdr(comparePrice)}</span>}
+                          {saveAmount >= 5000 && (
+                            <span class="bundle-save-pill">Hemat {formatIdr(saveAmount)}</span>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -143,9 +226,9 @@ const fieldUid = crypto.randomUUID().slice(0, 8);
           </div>
           <div class="summary-card">
             <div class="summary-row summary-row-product">
-              <strong class="summary-product-name">{product.productName}</strong>
+              <strong id="summary-product-name" class="summary-product-name">{defaultVariant.productName || product.productName}</strong>
               <div class="summary-price">
-                <span id="summary-label" class="summary-variant">{defaultVariant.label}</span>
+                <span id="summary-label" class="summary-variant">{defaultVariant.shortLabel || defaultVariant.label}</span>
                 <span class="summary-price-figures">
                   <span id="summary-compare-row" class="summary-compare-wrap" hidden={!defaultHasDiscount}
                     ><span id="summary-compare">{formatIdr(defaultComparePrice)}</span></span

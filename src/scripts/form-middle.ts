@@ -152,9 +152,10 @@ function initMiddleOrderFormInstance(
     const selected = form?.querySelector<HTMLInputElement>(
       'input[name="variant"]:checked',
     );
-    const contentName = String(selected?.dataset.label || productName);
+    const selectedProductName = String(selected?.dataset.productName || productName);
+    const contentName = String(selected?.dataset.label || selectedProductName);
     // content_ids Meta harus product ID (match katalog + funnel ViewContent), bukan variant unique id.
-    const contentId = String(productId || '');
+    const contentId = String(selected?.dataset.productId || productId || '');
     const variantUniqueId = String(selected?.value || "");
     const value = Number(selected?.dataset.price || 1);
     const metaTrack = (window as any).__PS_META_TRACK__;
@@ -176,7 +177,7 @@ function initMiddleOrderFormInstance(
     postMetaEvent({
       event_name: eventName,
       event_id: eventId,
-      lp_name: productSlug,
+      lp_name: window.location.pathname.replace(/^\/+|\/+$/g, "") || productSlug,
       product_id: contentId || undefined,
       content_name: contentName,
       value,
@@ -245,23 +246,20 @@ function initMiddleOrderFormInstance(
     const customerPhone = normalizePhone(String(phoneInput?.value || ""));
     if (customerName.length < 3 || !isValidWa62(customerPhone)) return;
 
-    const fingerprint = createAbandonedLeadFingerprint({
-      customerName,
-      customerPhone,
-      productId,
-    });
-    if (!abandonedCapture.shouldStart(fingerprint)) return;
-
-    // The capture used to send product_id and product_title and no variant. The
-    // endpoint reads neither of those - only variant_id - so every lead from
-    // this form landed with no order_items at all, and the operator saw "Produk
-    // belum dipilih" on a lead that was filled in on a product page. The full
-    // form always sent it; this one did not.
     const selectedVariant = formRoot?.querySelector<HTMLInputElement>(
       'input[name="variant"]:checked',
     );
     const abandonedVariantId = Number(selectedVariant?.value);
     const abandonedPrice = Number(selectedVariant?.dataset.price || 0);
+    const selectedProductId = String(selectedVariant?.dataset.productId || productId || "");
+    const selectedProductName = String(selectedVariant?.dataset.productName || productName || "");
+    const fingerprint = createAbandonedLeadFingerprint({
+      customerName,
+      customerPhone,
+      productId: selectedProductId,
+      variantId: Number.isInteger(abandonedVariantId) && abandonedVariantId > 0 ? abandonedVariantId : undefined,
+    });
+    if (!abandonedCapture.shouldStart(fingerprint)) return;
 
     window.clearTimeout(abandonedTimer);
     abandonedTimer = window.setTimeout(() => {
@@ -277,8 +275,8 @@ function initMiddleOrderFormInstance(
           ),
           customer_name: customerName,
           customer_phone: customerPhone,
-          product_id: productId,
-          product_title: productName,
+          product_id: selectedProductId,
+          product_title: selectedProductName,
           variant_id:
             Number.isInteger(abandonedVariantId) && abandonedVariantId > 0
               ? abandonedVariantId
@@ -326,6 +324,7 @@ function initMiddleOrderFormInstance(
     "#submit-button",
   ) as HTMLButtonElement | null;
   const submitButtonLabel = submitButton?.querySelector(".submit-main-label");
+  const summaryProductName = formRoot?.querySelector("#summary-product-name");
   const summaryLabel = formRoot?.querySelector("#summary-label");
   const summaryCompare = formRoot?.querySelector("#summary-compare");
   const summaryPriceValue = formRoot?.querySelector("#summary-price-value");
@@ -523,7 +522,14 @@ function initMiddleOrderFormInstance(
     const hasDiscount = compare > price;
     const total = price;
     summaryCompareRow?.toggleAttribute("hidden", !hasDiscount);
-    setNodeText(summaryLabel, checked.dataset.label || productName);
+    setNodeText(
+      summaryProductName,
+      checked.dataset.productName || productName,
+    );
+    setNodeText(
+      summaryLabel,
+      checked.dataset.shortLabel || checked.dataset.label || productName,
+    );
     setNodeText(summaryCompare, fmt(compare));
     setNodeText(summaryPriceValue, fmt(price));
     setNodeText(
@@ -787,7 +793,10 @@ function initMiddleOrderFormInstance(
             // address mentioning "Jl. Aceh" is enough to trip the area scan)
             // was redirected to the catalog and lost everything they typed.
             // Name the product and keep their chosen variant instead.
-            target.searchParams.set("product_id", productSlug);
+            target.searchParams.set(
+              "product_id",
+              String(checked.dataset.productSlug || productSlug),
+            );
             if (checked.value) target.searchParams.set("variant_id", String(checked.value));
             window.setTimeout(() => {
               navigateAfterCheckout(target.toString());
@@ -863,8 +872,9 @@ function initMiddleOrderFormInstance(
       name: customerName,
       phone: customerPhone,
       address,
-      product_id: String(productId || ''),
-      product_name: productName,
+      lp_name: window.location.pathname.replace(/^\/+|\/+$/g, "") || productSlug,
+      product_id: String(checked.dataset.productId || productId || ''),
+      product_name: String(checked.dataset.productName || productName || ''),
       product_price: price,
       quantity: 1,
       shipping_cost: 0,

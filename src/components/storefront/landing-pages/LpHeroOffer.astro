@@ -1,0 +1,41 @@
+---
+import Icon from '../shared/Icon.astro';
+import { formatIdr } from '../../../lib/format-idr';
+
+interface Props {
+  price: number;
+  comparePrice?: number;
+  eyebrow?: string;
+  ctaText?: string;
+  microText?: string;
+}
+
+const {
+  price,
+  comparePrice = 0,
+  eyebrow = 'Harga Promo Resmi Hari Ini',
+  ctaText = 'Pilih Paket & Cek Ongkir',
+  microText = 'Bisa Bayar di Tempat (COD) / QRIS • Garansi 100% Resmi BPOM',
+} = Astro.props;
+
+const hasDiscount = comparePrice > price;
+const saveAmount = hasDiscount ? comparePrice - price : 0;
+---
+
+<div class="dsw-hero-offer">
+  <div class="dsw-hero-price-bar">
+    <span class="dsw-hero-price-eyebrow">{eyebrow}</span>
+    <span class="dsw-hero-price-main">{formatIdr(price)}</span>
+    {hasDiscount && (
+      <span class="dsw-hero-price-strike">{formatIdr(comparePrice)}</span>
+    )}
+    {saveAmount >= 5000 && (
+      <span class="dsw-hero-save-pill">Hemat {formatIdr(saveAmount)}</span>
+    )}
+  </div>
+  <a href="#form-pemesanan" class="dsw-cta" data-scroll-to-form>
+    <span>{ctaText}</span>
+    <Icon name="lucide:arrow-right" class="size-4" aria-hidden="true" />
+  </a>
+  <p class="dsw-hero-micro">{microText}</p>
+</div>

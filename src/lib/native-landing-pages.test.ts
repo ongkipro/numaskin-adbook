@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import {
   activeNativeLandingPages,
   isNativeLandingId,
@@ -91,4 +91,17 @@ test("a second ad slug canonical to another page stays out of the sitemap", () =
   // The sitemap reads this set.
   const sitemap = readFileSync(new URL("../pages/sitemap.xml.ts", import.meta.url), "utf8");
   assert.match(sitemap, /!duplicates\.has\(p\.slug\)/);
+});
+
+test("every local thumbnail image declared in nativeLandingPages exists in public/", () => {
+  for (const item of nativeLandingPages) {
+    if (item.image && item.image.startsWith("/") && !item.image.startsWith("/assets/")) {
+      const diskUrl = new URL(`../../public${item.image}`, import.meta.url);
+      assert.equal(
+        existsSync(diskUrl),
+        true,
+        `Missing thumbnail in public/ for ${item.slug}: ${item.image}`,
+      );
+    }
+  }
 });

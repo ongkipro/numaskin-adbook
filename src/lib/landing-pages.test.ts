@@ -740,3 +740,20 @@ test("a CMS landing page opens with an eager hero image and its own h1", () => {
   // An image section that opens the page is the LCP and must not wait for the scroll.
   assert.match(route, /index === 0\s*\?\s*<section class="lp-section"><img[^>]*loading="eager" fetchpriority="high"/);
 });
+
+test("nativeLandingCanonicalPath honors canonicalSlug and resolves claimed product pages", async () => {
+  const { nativeLandingCanonicalPath } = await import("./landing-pages.ts");
+  const { database, locals } = createLocals();
+  const entries = [
+    { slug: "promo-utama", title: "Promo Utama", productSlug: "pupuk-organik", description: "Utama" },
+    { slug: "lp-iklan-meta", title: "LP Iklan Meta", productSlug: "pupuk-organik", canonicalSlug: "promo-utama", description: "Iklan" },
+  ];
+  await reconcileNativeLandingPages(database as unknown as D1Database, entries);
+
+  assert.equal(await nativeLandingCanonicalPath(locals, "promo-utama", entries), "/promo-utama");
+  assert.equal(await nativeLandingCanonicalPath(locals, "lp-iklan-meta", entries), "/promo-utama");
+
+  await setLandingPageAsProductPage(locals, "native:promo-utama", true);
+  assert.equal(await nativeLandingCanonicalPath(locals, "promo-utama", entries), "/produk/pupuk-organik");
+  assert.equal(await nativeLandingCanonicalPath(locals, "lp-iklan-meta", entries), "/produk/pupuk-organik");
+});

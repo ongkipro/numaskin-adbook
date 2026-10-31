@@ -12,6 +12,7 @@ interface Props {
   bannerImage?: string;
   mode?: FormMode;
   productSlug?: string;
+  bundleProductSlugs?: string[];
   selectedVariantId?: string;
   province?: string;
   embedded?: boolean;
@@ -22,6 +23,7 @@ const {
   mode = 'hybrid',
   province = '',
   productSlug = 'asahan-portable',
+  bundleProductSlugs,
   embedded = false,
   selectedVariantId,
   bannerImage,
@@ -49,6 +51,7 @@ const resolvedProvince = province || formContext.province;
     resolvedMode === 'full' ? (
       <FormHybridContent
         productSlug={productSlug}
+        bundleProductSlugs={bundleProductSlugs}
         selectedVariantId={selectedVariantId}
         province={resolvedProvince}
         embedded={embedded}
@@ -58,6 +61,7 @@ const resolvedProvince = province || formContext.province;
     ) : (
       <FormMiddleContent
         productSlug={productSlug}
+        bundleProductSlugs={bundleProductSlugs}
         selectedVariantId={selectedVariantId}
         province={resolvedProvince}
         embedded={embedded}
