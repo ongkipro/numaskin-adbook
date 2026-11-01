@@ -125,6 +125,14 @@ html [data-middle-form-root] {
   color: #002b49;
 }
 
+/* Standalone buttons outside the form root (404, testimoni, thanks, landing
+   index) read var(--sf-accent, #C2410C): without a :root declaration they fall
+   back to the product's orange (1.9.x), against the marine brand. */
+:root {
+  --sf-accent: #002b49;
+  --sf-accent-strong: #081b2b;
+}
+
 /* form-hybrid.css writes its ink as #111111 per selector; the same selectors,
    scoped under the roots, carry the brand marine instead. Colour only. */
 html :is([data-hybrid-form-root], [data-middle-form-root]) :is(
