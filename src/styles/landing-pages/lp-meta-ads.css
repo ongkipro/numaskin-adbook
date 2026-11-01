@@ -211,7 +211,7 @@ body:has(.dsw-shell) {
 
 .dsw-hero-ba {
   position: relative;
-  z-index: 10;
+  z-index: 25;
   height: 0;
   padding: 0 10px;
   display: flex;
@@ -220,6 +220,10 @@ body:has(.dsw-shell) {
   gap: 6px;
   transform: translateY(-10px);
   pointer-events: none;
+}
+
+.dsw-hero-ba:has(+ .dsw-hero-overlap) {
+  transform: translateY(-32px);
 }
 
 .dsw-hero-ba-pill {
@@ -1302,24 +1306,21 @@ html :is([data-hybrid-form-root], [data-middle-form-root]) .section-title::befor
   content: none;
 }
 
-html :is([data-hybrid-form-root], [data-middle-form-root]) .submit-main-icon,
-html :is([data-hybrid-form-root], [data-middle-form-root]) .trust-strip {
-  display: none;
-}
-
 html :is([data-hybrid-form-root], [data-middle-form-root]) .submit-main {
-  min-height: 48px;
+  min-height: 52px;
   border-radius: 9999px;
-  box-shadow: none;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
+  background: linear-gradient(135deg, #0b6e7d 0%, #08333e 100%) !important;
+  border-color: #08333e !important;
+  box-shadow: 0 10px 24px -6px rgba(8, 51, 62, 0.38);
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
 }
 
 html :is([data-hybrid-form-root], [data-middle-form-root]) .submit-main[data-state="disabled"] {
-  background: var(--sf-accent) !important;
-  border-color: var(--sf-accent) !important;
+  background: linear-gradient(135deg, #0b6e7d 0%, #08333e 100%) !important;
+  border-color: #08333e !important;
   color: #fff !important;
   cursor: pointer;
 }

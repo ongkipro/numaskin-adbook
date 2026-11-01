@@ -60,8 +60,15 @@ const buildVariantOption = (prod: any, v: any) => {
         : itemCount === 2
           ? 'Paket Hemat 2 Produk'
           : '';
+  const normalizedComparePrice =
+    prod.slug === 'deep-sea-water-treatment-lotion' && /2[×x]\s*150/i.test(shortLabel)
+      ? 218000
+      : prod.slug === 'deep-sea-water-treatment-lotion' && shortLabel === '150ml'
+        ? 135000
+        : v.comparePrice;
   return {
     ...v,
+    comparePrice: normalizedComparePrice,
     label: fullLabel,
     shortLabel,
     displayTitle,
@@ -184,7 +191,7 @@ const fieldUid = crypto.randomUUID().slice(0, 8);
         <section class="form-block">
           <div class="form-block-head gap-1.5">
             <h2 class="section-title">Data penerima</h2>
-            <p class="section-lead">Isi data dengan benar agar admin dan kurir lebih mudah memproses pesanan.</p>
+            <p class="section-lead">{isBundledMode ? 'Cukup isi Nama, No. WhatsApp aktif, & Alamat — Bisa Bayar di Tempat (COD) saat paket tiba di rumah.' : 'Isi data dengan benar agar admin dan kurir lebih mudah memproses pesanan.'}</p>
           </div>
           <div class="field-grid address-field-grid">
             <div class="form-field form-field-full">
@@ -250,7 +257,7 @@ const fieldUid = crypto.randomUUID().slice(0, 8);
 
           <div class="info-box">
             <span
-              >Harga divalidasi ulang saat order diproses. Pastikan nomor WhatsApp aktif untuk konfirmasi.</span
+              >{isBundledMode ? '✓ Garansi 100% Produk Resmi BPOM & Tersegel • Bisa Bayar di Tempat (COD) ke Kurir maupun QRIS.' : 'Harga divalidasi ulang saat order diproses. Pastikan nomor WhatsApp aktif untuk konfirmasi.'}</span
             >
           </div>
 

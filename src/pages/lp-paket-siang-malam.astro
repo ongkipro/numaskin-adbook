@@ -8,9 +8,6 @@ import LpHeroOffer from '../components/storefront/landing-pages/LpHeroOffer.astr
 import LpBundleValueSection, {
   type BundleTierSpec,
 } from '../components/storefront/landing-pages/LpBundleValueSection.astro';
-import LpFaqSection, {
-  type FaqEntry,
-} from '../components/storefront/landing-pages/LpFaqSection.astro';
 import LpFloatingCta from '../components/storefront/landing-pages/LpFloatingCta.astro';
 import { getStorefrontProduct } from '../lib/catalog';
 import { nativeLandingCanonicalPath } from '../lib/landing-pages';
@@ -87,29 +84,6 @@ const BUNDLE_TIERS: BundleTierSpec[] = [
     ctaLabel: 'Pilih Krim Pagi',
   },
 ];
-
-const FAQS: FaqEntry[] = [
-  {
-    question: 'Apakah paket krim siang-malam ini membuat kulit mengelupas atau perih?',
-    answer:
-      'Tidak mengelupas dan tidak perih. Keduanya resmi BPOM (NA18262000246 & NA18250109281) tanpa merkuri atau hidrokuinon, mencerahkan bertahap lewat Double Alpha-Arbutin dan Niacinamide sambil menjaga kelembapan 11X HA.',
-  },
-  {
-    question: 'Apakah krim paginya cocok untuk warna kulit sawo matang?',
-    answer:
-      'Sangat cocok. PDRN Tone-Up Day Cream memiliki pigmen Warm Natural Beige yang menyatu alami dengan kulit sawo matang maupun kuning langsat tanpa efek topeng abu-abu.',
-  },
-  {
-    question: 'Bagaimana urutan pemakaian kedua krim ini?',
-    answer:
-      'Pagi hari setelah cuci muka gunakan PDRN Tone-Up Day Cream. Malam hari sebelum tidur gunakan 1–2 pump Adenosine Moisturizer ke seluruh wajah dan leher.',
-  },
-  {
-    question: 'Apakah bisa Bayar di Tempat (COD)?',
-    answer:
-      'Bisa. Paket Siang-Malam sudah terpilih otomatis di formulir bawah — cukup lengkapi nama, WhatsApp, dan kecamatan pengiriman Anda.',
-  },
-];
 ---
 
 <BaseLayout
@@ -119,7 +93,6 @@ const FAQS: FaqEntry[] = [
   preloadImages={HERO_IMAGE}
   canonical={canonical}
   noindex={true}
-  faqs={FAQS}
   hideHeader={true}
   hideFooter={true}
 >
@@ -136,11 +109,11 @@ const FAQS: FaqEntry[] = [
       <section id="hero-section" class="dsw-hero">
         <div class="dsw-hero-head">
           <h1 class="dsw-h1">
-            <span class="dsw-hl-tilt">Duet Krim Pagi & Malam</span> Double Alpha-Arbutin untuk Kulit Cerah Merata
+            <span class="dsw-hl-tilt">Duet Krim Siang & Malam</span> Gempur Flek Hitam 24 Jam Tanpa Muka Abu-Abu!
           </h1>
           <p class="dsw-sub" style="max-width: 390px; margin: 14px auto 0; font-weight: 700;">
-            Krim siang biasa bikin kulit sawo matang tampak abu-abu, sedangkan malam hari kulit kekurangan pengunci hidrasi.<br />
-            <span class="dsw-underline-teal">Rawat 24 jam dengan Paket Siang-Malam Hydra Glow Duo Numa Skin!</span>
+            Krim siang putih biasa bikin muka sawo matang dempul abu-abu, sedangkan malam hari flek tidak dirawat.<br />
+            <span class="dsw-underline-teal">Tuntaskan 24 jam dengan Double Alpha-Arbutin Hydra Glow Duo!</span>
           </p>
         </div>
 
@@ -154,7 +127,7 @@ const FAQS: FaqEntry[] = [
 
           <img
             src={HERO_IMAGE}
-            alt="Ilustrasi perawatan kulit cerah natural menyatu dengan Paket Hydra Glow Duo Numa Skin"
+            alt="Perbandingan wajah flek hitam belang abu-abu vs kulit cerah kenyal 24 jam dengan Paket Hydra Glow Duo Numa Skin"
             width="720"
             height="480"
             class="dsw-hero-img"
@@ -163,11 +136,16 @@ const FAQS: FaqEntry[] = [
             decoding="async"
           />
 
+          <div class="dsw-hero-ba" aria-hidden="true">
+            <span class="dsw-hero-ba-pill dsw-hero-ba-pill--before">SEBELUM — Flek & Dempul Belang</span>
+            <span class="dsw-hero-ba-pill dsw-hero-ba-pill--after">SESUDAH — Cerah & Kenyal 24 Jam</span>
+          </div>
+
           <div class="dsw-hero-overlap">
             <div class="dsw-hero-overlap-inner">
-              <h2 class="dsw-hero-overlap-title">Duet Double Alpha-Arbutin Siang & Malam</h2>
+              <h2 class="dsw-hero-overlap-title">Serangan Ganda Double Alpha-Arbutin Siang & Malam!</h2>
               <p class="dsw-hero-overlap-text">
-                Pagi hari <strong style="color: #be123c;">PDRN Day Cream meratakan warna kulit secara natural</strong>, malam hari <strong style="color: #be123c;">Adenosine Moisturizer mengunci hidrasi 11X HA & merawat rona kusam</strong>.
+                Pagi hari <strong style="color: #be123c;">PDRN Day Cream menyamarkan flek & meratakan rona tanpa dempul</strong>, malam hari <strong style="color: #be123c;">Adenosine Moisturizer mengunci 11X HA & memudarkan flek dari dalam</strong>.
               </p>
             </div>
           </div>
@@ -247,7 +225,7 @@ const FAQS: FaqEntry[] = [
               <Icon name="lucide:droplets" class="size-4" aria-hidden="true" />
             </span>
             <p class="dsw-list-text">
-              <strong style="color: #0f172a;">Adenosine Deep Sea Water Moisturizer (30 gr):</strong> Gel-cream dingin dengan Adenosine, Alpha-Arbutin, & 11X Hyaluronic Acid untuk merawat rona kusam dan garis halus saat tidur.
+              <strong style="color: #0f172a;">Adenosine Deep Sea Water Moisturizer (30 gr):</strong> Gel-cream dingin dengan Adenosine, Alpha-Arbutin, & 11X Hyaluronic Acid untuk memudarkan flek hitam dan garis halus saat tidur.
             </p>
           </div>
           <div class="dsw-list-row">
@@ -255,7 +233,7 @@ const FAQS: FaqEntry[] = [
               <Icon name="lucide:layers" class="size-4" aria-hidden="true" />
             </span>
             <p class="dsw-list-text">
-              <strong style="color: #0f172a;">Double Alpha-Arbutin:</strong> Kedua krim sama-sama mengandung Alpha-Arbutin murni sehingga perawatan rona kulit kurang merata berjalan konsisten pagi dan malam.
+              <strong style="color: #0f172a;">Double Alpha-Arbutin:</strong> Kedua krim sama-sama mengandung Alpha-Arbutin murni sehingga penghambatan flek hitam membandel berjalan 24 jam tanpa jeda.
             </p>
           </div>
         </div>
@@ -264,40 +242,40 @@ const FAQS: FaqEntry[] = [
       <!-- Section 3: Tanda Masalah Kulit + Visual Grid -->
       <section class="dsw-section dsw-section--warn">
         <h2 class="dsw-h2">
-          Mengapa memakai <span class="dsw-underline-warn">satu krim saja</span> tidak cukup untuk rona kusam?
+          Kenapa pakai <span class="dsw-underline-warn">satu krim saja</span> bikin flek hitam gak kunjung hilang?
         </h2>
 
         <div class="dsw-photo-grid-2">
           <div class="dsw-photo-card">
             <img
               src={`${IMG_BASE}/masalah-satu-krim-tak-cukup.webp`}
-              alt="Wanita bercermin melihat bercak warna kulit kurang merata di pipi yang sulit memudar karena hanya memakai satu krim biasa"
-              width="480"
-              height="320"
+              alt="Krim pekat mengendap di permukaan kulit yang kering mengelupas dan flek hitam membandel"
+              width="315"
+              height="210"
               class="dsw-photo-img"
               loading="lazy"
               fetchpriority="low"
               decoding="async"
             />
             <p class="dsw-photo-caption">
-              <strong style="color: #be123c; display: block;">Kebutuhan Pagi & Malam Berbeda</strong>
-              Pagi butuh tone-up & penangkal UV, sedangkan malam butuh hidrasi dalam & regenerasi.
+              <strong style="color: #be123c; display: block;">Krim Biasa Mengendap di Atas</strong>
+              Pagi butuh perata rona & UV filter, malam butuh hidrasi 11X HA ke dalam pori.
             </p>
           </div>
           <div class="dsw-photo-card">
             <img
               src={`${IMG_BASE}/masalah-muka-abu-pagi-kering-malam.webp`}
-              alt="Close-up kulit pipi yang tampak belang abu-abu di pagi hari dan kering bergaris halus"
-              width="480"
-              height="320"
+              alt="Close-up kulit pipi yang tampak belang abu-abu dempul di pagi hari dan kering bergaris halus"
+              width="315"
+              height="210"
               class="dsw-photo-img"
               loading="lazy"
               fetchpriority="low"
               decoding="async"
             />
             <p class="dsw-photo-caption">
-              <strong style="color: #be123c; display: block;">Dempul di Pagi, Kering di Malam</strong>
-              Krim siang putih biasa membuat wajah keabu-abuan dan menyumbat pori.
+              <strong style="color: #be123c; display: block;">Dempul di Pagi, Keriput di Malam</strong>
+              Krim siang putih kapur pecah di garis kerutan dan menyumbat pori.
             </p>
           </div>
         </div>
@@ -308,7 +286,7 @@ const FAQS: FaqEntry[] = [
               <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
             </span>
             <p class="dsw-list-text">
-              Pagi hari ingin wajah tampak rapi cerah tanpa foundation, tapi <strong style="color: #be123c;">krim biasa bikin muka belang dengan leher</strong>.
+              Pagi hari ingin menutupi flek tanpa foundation tebal, tapi <strong style="color: #be123c;">krim putih biasa bikin muka abu-abu belang dengan leher</strong>.
             </p>
           </div>
           <div class="dsw-list-row">
@@ -316,7 +294,7 @@ const FAQS: FaqEntry[] = [
               <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
             </span>
             <p class="dsw-list-text">
-              Warna kulit kurang merata di tulang pipi <strong style="color: #be123c;">tampak makin jelas saat kulit sedang kering</strong>.
+              Flek hitam di tulang pipi <strong style="color: #be123c;">tampak makin gosong dan garis senyum makin dalam saat kulit kering di malam hari</strong>.
             </p>
           </div>
           <div class="dsw-list-row">
@@ -324,7 +302,7 @@ const FAQS: FaqEntry[] = [
               <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
             </span>
             <p class="dsw-list-text">
-              Takut memakai krim pengelupasan keras yang <strong style="color: #be123c;">membuat kulit tipis dan memerah saat kena panas</strong>.
+              Kapok pakai krim malam pengelupasan keras yang <strong style="color: #be123c;">bikin wajah tipis memerah seperti udang rebus saat kena panas</strong>.
             </p>
           </div>
         </div>
@@ -333,7 +311,7 @@ const FAQS: FaqEntry[] = [
       <!-- Section 4: Ilustrasi Perawatan Rutin -->
       <section class="dsw-section">
         <h2 class="dsw-h2">
-          Perbedaan hasil <span class="dsw-hl-aqua">dengan perawatan rutin</span>
+          Bukti nyata perubahan <span class="dsw-hl-aqua">dengan duet siang-malam</span>
         </h2>
         <p class="dsw-sub">Tanpa pengelupasan perih, aman untuk pemakaian jangka panjang karena resmi BPOM.</p>
 
@@ -341,7 +319,7 @@ const FAQS: FaqEntry[] = [
           <div class="dsw-photo-card">
             <img
               src={`${IMG_BASE}/kondisi-flek-belang-kering-kasar.webp`}
-              alt="Kondisi pipi dengan noda warna kulit kurang merata, rona kusam belang, dan tekstur kering saat kulit membutuhkan kelembapan"
+              alt="Kondisi pipi dengan noda flek hitam membandel, rona kusam belang, dan tekstur kering kasar"
               width="480"
               height="320"
               class="dsw-photo-img"
@@ -349,9 +327,9 @@ const FAQS: FaqEntry[] = [
               fetchpriority="low"
               decoding="async"
             />
-            <span class="dsw-photo-badge dsw-photo-badge--before">Sebelum Hydra Glow Duo</span>
+            <span class="dsw-photo-badge dsw-photo-badge--before">SEBELUM — Flek & Belang Kusam</span>
             <p class="dsw-photo-caption">
-              Noda kecokelatan tampak tegas di tulang pipi, kulit kering kasar, dan warna wajah tidak merata.
+              Flek hitam kecokelatan tampak tegas di tulang pipi, kulit kering kasar, dan warna wajah belang tidak merata.
             </p>
           </div>
 
@@ -366,9 +344,9 @@ const FAQS: FaqEntry[] = [
               fetchpriority="low"
               decoding="async"
             />
-            <span class="dsw-photo-badge dsw-photo-badge--after">Rutin Hydra Glow Duo</span>
+            <span class="dsw-photo-badge dsw-photo-badge--after">SESUDAH RUTIN — Cerah & Kenyal 24 Jam</span>
             <p class="dsw-photo-caption">
-              Rona wajah tampak cerah natural bebas abu-abu di pagi hari, dan terasa kenyal lembap saat bangun tidur.
+              Flek hitam tersamarkan halus, rona wajah cerah natural bebas abu-abu di pagi hari, dan kenyal membal saat bangun tidur.
             </p>
           </div>
         </div>
@@ -475,7 +453,7 @@ const FAQS: FaqEntry[] = [
               <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
             </div>
             <p class="dsw-review-quote">
-              "Gak pakai ngelupas atau perih sama sekali. <strong style="color: #0f172a;">Rona Kusam di pipi pelan-pelan memudar</strong> dan <span class="dsw-hl-aqua">tiap pagi gak usah pakai foundation lagi udah rapi</span>."
+              "Gak pakai ngelupas atau perih sama sekali. <strong style="color: #0f172a;">Flek hitam di pipi pelan-pelan memudar</strong> dan <span class="dsw-hl-aqua">tiap pagi gak usah pakai foundation lagi udah rapi</span>."
             </p>
           </div>
           <div class="dsw-review-row">
@@ -603,7 +581,7 @@ const FAQS: FaqEntry[] = [
             <figcaption class="dsw-figcaption">
               <h3 class="dsw-figcaption-title">1% PDRN + Double Alpha-Arbutin + Adenosine + 11X HA</h3>
               <p class="dsw-figcaption-desc">
-                Perpaduan pencerah rona kulit kurang merata ganda dengan 11 jenis asam hialuronat tanpa merkuri maupun hidrokuinon.
+                Perpaduan penghambat flek hitam membandel ganda dengan 11 jenis asam hialuronat tanpa merkuri maupun hidrokuinon.
               </p>
             </figcaption>
           </figure>
@@ -678,10 +656,7 @@ const FAQS: FaqEntry[] = [
         tiers={BUNDLE_TIERS}
       />
 
-      <!-- Section 11: Objection-Handling FAQ -->
-      <LpFaqSection faqs={FAQS} />
-
-      <!-- Section 12: Checkout Form with Tiered Bundling -->
+      <!-- Section 11: Checkout Form with Tiered Bundling -->
       <section id="form-pemesanan" class="dsw-section--checkout">
         <div style="padding: 0 20px 14px; text-align: center;">
           <h2 class="dsw-h2" style="font-size: 26px;">

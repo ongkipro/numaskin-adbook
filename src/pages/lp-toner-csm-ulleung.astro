@@ -8,9 +8,6 @@ import LpHeroOffer from '../components/storefront/landing-pages/LpHeroOffer.astr
 import LpBundleValueSection, {
   type BundleTierSpec,
 } from '../components/storefront/landing-pages/LpBundleValueSection.astro';
-import LpFaqSection, {
-  type FaqEntry,
-} from '../components/storefront/landing-pages/LpFaqSection.astro';
 import LpFloatingCta from '../components/storefront/landing-pages/LpFloatingCta.astro';
 import { getStorefrontProduct } from '../lib/catalog';
 import { nativeLandingCanonicalPath } from '../lib/landing-pages';
@@ -83,6 +80,7 @@ const BUNDLE_TIERS: BundleTierSpec[] = [
     imageWidth: 480,
     imageHeight: 320,
     titleOverride: 'Treatment Lotion Full-Size (150 ml)',
+    comparePriceOverride: 135000,
     benefit: '1 botol besar 150ml untuk rutinitas tepuk 3-layer & kompres CSM harian selama 4–6 minggu.',
     ctaLabel: 'Pilih 150ml',
   },
@@ -103,29 +101,6 @@ const BUNDLE_TIERS: BundleTierSpec[] = [
     ctaLabel: 'Pilih + NAD+ Serum',
   },
 ];
-
-const FAQS: FaqEntry[] = [
-  {
-    question: 'Apa itu metode kompres CSM dengan Treatment Lotion ini?',
-    answer:
-      'CSM (Chizu Saeki Method) adalah teknik membasahi 3–4 lembar kapas tipis dengan Treatment Lotion lalu menempelkannya di pipi dan dahi selama 3–5 menit untuk hidrasi instan seperti habis memakai sheet mask.',
-  },
-  {
-    question: 'Apakah mengandung alkohol atau parfum menyengat yang bikin perih?',
-    answer:
-      'Tidak perih di kulit sensitif. Diformulasikan dengan 76% Air Laut Dalam Ulleungdo, Galactomyces, 5X Ceramide, Cica, dan Panthenol yang menenangkan kemerahan serta terdaftar resmi di BPOM (NA18220101400).',
-  },
-  {
-    question: 'Kenapa Twin Pack 2×150ml jauh lebih direkomendasikan daripada ukuran 50ml?',
-    answer:
-      'Ukuran 50ml harganya Rp79.000, sedangkan Twin Pack 2×150ml (total 300ml — 6x lipat volume 50ml) hanya Rp151.600, sehingga jatuh Rp75.800 saja per botol besar 150ml.',
-  },
-  {
-    question: 'Apakah bisa Bayar di Tempat (COD)?',
-    answer:
-      'Bisa. Pilih varian ukuran atau paket bundling di formulir bawah, isi kecamatan pengiriman, dan bayar langsung ke kurir saat paket tiba di rumah Anda.',
-  },
-];
 ---
 
 <BaseLayout
@@ -135,7 +110,6 @@ const FAQS: FaqEntry[] = [
   preloadImages={HERO_IMAGE}
   canonical={canonical}
   noindex={true}
-  faqs={FAQS}
   hideHeader={true}
   hideFooter={true}
 >
@@ -152,11 +126,11 @@ const FAQS: FaqEntry[] = [
       <section id="hero-section" class="dsw-hero">
         <div class="dsw-hero-head">
           <h1 class="dsw-h1">
-            <span class="dsw-hl-tilt">Ritual Kompres CSM 5 Menit</span> untuk Kulit Lembap Membal Seperti Habis Maskeran!
+            Skincare Mahal Cuma Nempel di Atas Kulit & <span class="dsw-hl-tilt">Wajah Tetap Kering Mengelupas?</span>
           </h1>
-          <p class="dsw-sub" style="max-width: 390px; margin: 14px auto 0; font-weight: 600;">
-            2-in-1 Hydrating Toner & First Essence dengan 76% Air Laut Dalam Pulau Ulleung Korea, Galactomyces, & 5X Ceramide.<br />
-            <span class="dsw-underline-teal">Tersedia 50ml, 150ml, hingga Twin Pack 2×150ml (Hemat Rp66.400)!</span>
+          <p class="dsw-sub" style="max-width: 390px; margin: 14px auto 0; font-weight: 700;">
+            Krim termahal sekalipun cuma mengendap di luar kalau jalur pori tertutup sel kulit kering.<br />
+            <span class="dsw-underline-teal">Buka jalur penyerapan 3x lipat dengan Kompres CSM 76% Ulleungdo Deep Sea Water!</span>
           </p>
         </div>
 
@@ -170,7 +144,7 @@ const FAQS: FaqEntry[] = [
 
           <img
             src={HERO_IMAGE}
-            alt="Perbandingan kulit kasar dehidrasi vs kulit kenyal glass skin dengan Deep Sea Water Treatment Lotion Numa Skin"
+            alt="Perbandingan kulit kasar dehidrasi mengelupas vs kulit kenyal glass skin dengan Deep Sea Water Treatment Lotion Numa Skin"
             width="720"
             height="480"
             class="dsw-hero-img"
@@ -180,8 +154,17 @@ const FAQS: FaqEntry[] = [
           />
 
           <div class="dsw-hero-ba" aria-hidden="true">
-            <span class="dsw-hero-ba-pill dsw-hero-ba-pill--before">Kasar & Dehidrasi</span>
-            <span class="dsw-hero-ba-pill dsw-hero-ba-pill--after">Kenyal Glass Skin</span>
+            <span class="dsw-hero-ba-pill dsw-hero-ba-pill--before">SEBELUM — Kering Mengelupas & Krim Nempel</span>
+            <span class="dsw-hero-ba-pill dsw-hero-ba-pill--after">SESUDAH — Meresap & Kenyal Glass Skin</span>
+          </div>
+
+          <div class="dsw-hero-overlap">
+            <div class="dsw-hero-overlap-inner">
+              <h2 class="dsw-hero-overlap-title">Skincare Mahal Percuma Kalau Pori Tertutup Kulit Mati!</h2>
+              <p class="dsw-hero-overlap-text">
+                Tanpa hidrasi pembuka 76% Air Laut Dalam Ulleung, <strong style="color: #be123c;">serum dan krim mahal Anda cuma menempel lengket di atas permukaan kulit yang kering mengelupas</strong>.
+              </p>
+            </div>
           </div>
 
           <div class="dsw-hero-trust-strip" role="list" aria-label="Jaminan kualitas Numa Skin">
@@ -332,8 +315,8 @@ const FAQS: FaqEntry[] = [
               decoding="async"
             />
             <div class="dsw-card-body">
-              <span class="dsw-badge-red">Kondisi Kulit Kering</span>
-              <p class="dsw-card-desc">Permukaan kulit terasa kasar, kusam kurang bercahaya, dan pelembap terasa mengambang di permukaan.</p>
+              <span class="dsw-badge-red">SEBELUM — Kasar & Mengelupas</span>
+              <p class="dsw-card-desc">Permukaan kulit bersisik kasar, kusam kurang bercahaya, dan krim malam mengendap tidak meresap.</p>
             </div>
           </article>
 
@@ -349,8 +332,8 @@ const FAQS: FaqEntry[] = [
               decoding="async"
             />
             <div class="dsw-card-body">
-              <span class="dsw-badge-green">Rutin Kompres CSM</span>
-              <p class="dsw-card-desc">Cadangan air epidermis terjaga penuh, tekstur tampak lebih halus, dan wajah memantulkan kilau sehat.</p>
+              <span class="dsw-badge-green">SESUDAH RUTIN — Glass Skin Membal</span>
+              <p class="dsw-card-desc">Cadangan air epidermis penuh, pori tampak rapat halus, dan wajah memantulkan kilau sehat alami.</p>
             </div>
           </article>
         </div>
@@ -684,10 +667,7 @@ const FAQS: FaqEntry[] = [
         tiers={BUNDLE_TIERS}
       />
 
-      <!-- Section 11: Objection-Handling FAQ -->
-      <LpFaqSection faqs={FAQS} />
-
-      <!-- Section 12: Checkout Form with Tiered Bundling -->
+      <!-- Section 11: Checkout Form with Tiered Bundling -->
       <section id="form-pemesanan" class="dsw-section--checkout">
         <div style="padding: 0 20px 14px; text-align: center;">
           <h2 class="dsw-h2" style="font-size: 26px;">

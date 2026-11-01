@@ -8,9 +8,6 @@ import LpHeroOffer from '../components/storefront/landing-pages/LpHeroOffer.astr
 import LpBundleValueSection, {
   type BundleTierSpec,
 } from '../components/storefront/landing-pages/LpBundleValueSection.astro';
-import LpFaqSection, {
-  type FaqEntry,
-} from '../components/storefront/landing-pages/LpFaqSection.astro';
 import LpFloatingCta from '../components/storefront/landing-pages/LpFloatingCta.astro';
 import { getStorefrontProduct } from '../lib/catalog';
 import { nativeLandingCanonicalPath } from '../lib/landing-pages';
@@ -87,29 +84,6 @@ const BUNDLE_TIERS: BundleTierSpec[] = [
     ctaLabel: 'Pilih Sunscreen',
   },
 ];
-
-const FAQS: FaqEntry[] = [
-  {
-    question: 'Apakah PDRN Day Cream ditumpuk Oxydew Sunscreen terasa berat atau abu-abu?',
-    answer:
-      'Sama sekali tidak abu-abu dan tidak berat. PDRN Day Cream berwarna Warm Natural Beige menyatu di kulit sawo matang, lalu Oxydew Sunscreen bertekstur fluid transparan mengunci SPF 50+ tanpa menggeser rona tone-up.',
-  },
-  {
-    question: 'Apakah aman dipakai setiap hari di cuaca panas atau saat berhijab?',
-    answer:
-      'Sangat nyaman. Kedua formula berbahan dasar Ulleung Deep Sea Water yang ringan, cepat set dalam 30 detik, tidak perih di mata saat berkeringat, dan resmi BPOM (NA18262000246 & NA18251703709).',
-  },
-  {
-    question: 'Mana yang dioleskan lebih dulu di pagi hari?',
-    answer:
-      'Oleskan PDRN Tone-Up Day Cream tipis-tipis secara merata lebih dulu, tunggu sekitar 30 detik, lalu tepuk lembut 2 ruas jari Oxydew Sunscreen SPF 50+ PA++++.',
-  },
-  {
-    question: 'Apakah tersedia layanan Bayar di Tempat (COD)?',
-    answer:
-      'Tersedia. Pilih paket di formulir bawah, masukkan kecamatan untuk cek ongkir otomatis, lalu pilih pembayaran COD atau QRIS.',
-  },
-];
 ---
 
 <BaseLayout
@@ -119,7 +93,6 @@ const FAQS: FaqEntry[] = [
   preloadImages={HERO_IMAGE}
   canonical={canonical}
   noindex={true}
-  faqs={FAQS}
   hideHeader={true}
   hideFooter={true}
 >
@@ -136,10 +109,10 @@ const FAQS: FaqEntry[] = [
       <section id="hero-section" class="dsw-hero">
         <div class="dsw-hero-head">
           <h1 class="dsw-h1">
-            <span class="dsw-hl-tilt">Cerah Pagi Tanpa Dempul</span> + Tameng UV SPF 50+ PA++++ Bebas Abu-Abu
+            Bedak Luntur Jadi Abu-Abu & <span class="dsw-hl-tilt">Flek Makin Hitam Terbakar UV?</span> Kunci Cerah Pagi + SPF 50+ PA++++!
           </h1>
           <p class="dsw-sub" style="max-width: 390px; margin: 14px auto 0; font-weight: 700;">
-            Tampil cerah segar tiap pagi tanpa perlu foundation tebal yang menyumbat pori.<br />
+            Krim pagi biasa langsung pecah dempul saat berkeringat dan gagal menahan sengatan UV.<br />
             <span class="dsw-underline-teal">Ratakan warna kulit & kunci SPF 50+ dengan Protection Duo PDRN!</span>
           </p>
         </div>
@@ -154,7 +127,7 @@ const FAQS: FaqEntry[] = [
 
           <img
             src={HERO_IMAGE}
-            alt="Ilustrasi perawatan kulit cerah natural terlindungi UV dengan Paket Protection Duo PDRN Numa Skin"
+            alt="Perbandingan wajah dempul abu-abu terbakar UV vs kulit cerah natural terlindungi SPF 50+ dengan Paket Protection Duo PDRN Numa Skin"
             width="720"
             height="480"
             class="dsw-hero-img"
@@ -163,11 +136,16 @@ const FAQS: FaqEntry[] = [
             decoding="async"
           />
 
+          <div class="dsw-hero-ba" aria-hidden="true">
+            <span class="dsw-hero-ba-pill dsw-hero-ba-pill--before">SEBELUM — Dempul Luntur & Flek UV</span>
+            <span class="dsw-hero-ba-pill dsw-hero-ba-pill--after">SESUDAH — Cerah Menyatu SPF 50+</span>
+          </div>
+
           <div class="dsw-hero-overlap">
             <div class="dsw-hero-overlap-inner">
-              <h2 class="dsw-hero-overlap-title">Krim Siang Biasa Tidak Cukup Menangkal UV!</h2>
+              <h2 class="dsw-hero-overlap-title">Krim Siang Biasa Bikin Flek Makin Gosong Kena UV!</h2>
               <p class="dsw-hero-overlap-text">
-                Krim tone-up putih biasa sering <strong style="color: #be123c;">membuat kulit sawo matang tampak abu-abu dan tetap membiarkan sinar UVA memicu warna kulit kurang merata</strong>.
+                Krim tone-up putih biasa <strong style="color: #be123c;">membuat kulit sawo matang belang abu-abu dan membiarkan sinar UVA membakar flek hitam makin pekat</strong>.
               </p>
             </div>
           </div>
@@ -239,7 +217,7 @@ const FAQS: FaqEntry[] = [
               <Icon name="lucide:layers" class="size-4" aria-hidden="true" />
             </span>
             <p class="dsw-list-text">
-              <strong style="color: #0f172a;">PDRN + Alpha Arbutin Day Cream (30 gr):</strong> Rona hangat Natural Beige menyamarkan kusam & rona kulit kurang merata seketika sambil menutrisi dengan 1% Encapsulated PDRN.
+              <strong style="color: #0f172a;">PDRN + Alpha Arbutin Day Cream (30 gr):</strong> Rona hangat Natural Beige menyamarkan kusam & flek hitam seketika sambil menutrisi dengan 1% Encapsulated PDRN.
             </p>
           </div>
           <div class="dsw-list-row">
@@ -308,7 +286,7 @@ const FAQS: FaqEntry[] = [
               <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
             </span>
             <p class="dsw-list-text">
-              Tidak percaya diri keluar rumah tanpa bedak karena <strong style="color: #be123c;">wajah tampak kusam lelah dan banyak noda bekas jerawat/rona kusam</strong>.
+              Malu keluar rumah tanpa bedak tebal karena <strong style="color: #be123c;">flek hitam di tulang pipi dan noda bekas jerawat tampak jelas</strong>.
             </p>
           </div>
           <div class="dsw-list-row">
@@ -316,7 +294,7 @@ const FAQS: FaqEntry[] = [
               <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
             </span>
             <p class="dsw-list-text">
-              Saat pakai cushion/foundation setiap hari, <strong style="color: #be123c;">pori-pori justru makin tersumbat dan muncul bruntusan</strong>.
+              Saat dipaksa pakai cushion/foundation setiap hari, <strong style="color: #be123c;">bedak pecah masuk ke garis senyum dan memicu bruntusan</strong>.
             </p>
           </div>
           <div class="dsw-list-row">
@@ -324,7 +302,7 @@ const FAQS: FaqEntry[] = [
               <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
             </span>
             <p class="dsw-list-text">
-              Krim siang biasa <strong style="color: #be123c;">tidak memiliki SPF 50+ PA++++</strong> sehingga warna kulit kurang merata tetap bertambah gelap.
+              Krim siang biasa <strong style="color: #be123c;">tidak punya tameng SPF 50+ PA++++</strong> sehingga flek hitam makin gosong terbakar matahari.
             </p>
           </div>
         </div>
@@ -333,15 +311,15 @@ const FAQS: FaqEntry[] = [
       <!-- Section 4: Ilustrasi Perawatan Rutin -->
       <section class="dsw-section">
         <h2 class="dsw-h2">
-          Perbandingan tampilan <span class="dsw-hl-aqua">dengan perawatan rutin</span>
+          Perbandingan nyata <span class="dsw-hl-aqua">sebelum vs sesudah rutin</span>
         </h2>
-        <p class="dsw-sub">Efek cerah natural di menit pertama sekaligus perawatan pencerah jangka panjang.</p>
+        <p class="dsw-sub">Efek cerah menyatu di menit pertama sekaligus tameng anti-flek sepanjang siang.</p>
 
         <div class="dsw-photo-stack">
           <div class="dsw-photo-card">
             <img
               src={`${IMG_BASE}/kondisi-kusam-belang-matahari.webp`}
-              alt="Kondisi pipi tampak kusam, noda gelap terlihat jelas, dan residu bedak menggumpal"
+              alt="Kondisi pipi tampak kusam, flek hitam terlihat jelas, dan residu bedak menggumpal"
               width="648"
               height="432"
               class="dsw-photo-img"
@@ -349,9 +327,9 @@ const FAQS: FaqEntry[] = [
               fetchpriority="low"
               decoding="async"
             />
-            <span class="dsw-photo-badge dsw-photo-badge--before">Kondisi Kulit Kering</span>
+            <span class="dsw-photo-badge dsw-photo-badge--before">SEBELUM — Flek & Dempul Belang</span>
             <p class="dsw-photo-caption">
-              Warna kulit tidak merata, noda kecokelatan terlihat kontras, dan krim biasa meninggalkan bercak abu-abu di pori.
+              Flek hitam kecokelatan tampak kontras di tulang pipi dan krim putih biasa meninggalkan bercak abu-abu di pori.
             </p>
           </div>
 
@@ -366,7 +344,7 @@ const FAQS: FaqEntry[] = [
               fetchpriority="low"
               decoding="async"
             />
-            <span class="dsw-photo-badge dsw-photo-badge--after">Sesudah Protection Duo</span>
+            <span class="dsw-photo-badge dsw-photo-badge--after">SESUDAH RUTIN — Cerah & Terlindungi UV</span>
             <p class="dsw-photo-caption">
               Rona kulit langsung setingkat lebih cerah merata secara alami, bebas dempul, dan terlindungi penuh dari sinar UV.
             </p>
@@ -495,7 +473,7 @@ const FAQS: FaqEntry[] = [
               <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
             </div>
             <p class="dsw-review-quote">
-              "Bukan cuma bikin cerah instan pas dipakai, tapi karena <span class="dsw-hl-rose">ada 1% Encapsulated PDRN sama Arbutin-nya</span>, <span class="dsw-hl-aqua">noda bekas jerawat dan rona kusam tipis di pipi ikut memudar beneran</span>."
+              "Bukan cuma bikin cerah instan pas dipakai, tapi karena <span class="dsw-hl-rose">ada 1% Encapsulated PDRN sama Arbutin-nya</span>, <span class="dsw-hl-aqua">noda bekas jerawat dan flek hitam tipis di pipi ikut memudar beneran</span>."
             </p>
           </div>
         </div>
@@ -683,10 +661,7 @@ const FAQS: FaqEntry[] = [
         tiers={BUNDLE_TIERS}
       />
 
-      <!-- Section 11: Objection-Handling FAQ -->
-      <LpFaqSection faqs={FAQS} />
-
-      <!-- Section 12: Checkout Form with Tiered Bundling -->
+      <!-- Section 11: Checkout Form with Tiered Bundling -->
       <section id="form-pemesanan" class="dsw-section--checkout">
         <div style="padding: 0 20px 14px; text-align: center;">
           <h2 class="dsw-h2" style="font-size: 26px;">

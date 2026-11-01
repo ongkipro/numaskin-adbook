@@ -8,9 +8,6 @@ import LpHeroOffer from '../components/storefront/landing-pages/LpHeroOffer.astr
 import LpBundleValueSection, {
   type BundleTierSpec,
 } from '../components/storefront/landing-pages/LpBundleValueSection.astro';
-import LpFaqSection, {
-  type FaqEntry,
-} from '../components/storefront/landing-pages/LpFaqSection.astro';
 import LpFloatingCta from '../components/storefront/landing-pages/LpFloatingCta.astro';
 import { getStorefrontProduct } from '../lib/catalog';
 import { nativeLandingCanonicalPath } from '../lib/landing-pages';
@@ -88,34 +85,12 @@ const BUNDLE_TIERS: BundleTierSpec[] = [
   },
   {
     productSlug: 'paket-lengkap-6-in-1-routine',
-    badge: 'VIP Ekosistem Lengkap 6-in-1',
+    variantId: '30',
+    badge: 'VIP Ekosistem Lengkap 6-in-1 (Toner 150ml)',
     image: '/images/landing/paket-lengkap-6-in-1-routine/kemasan-paket-lengkap-6in1.webp',
     imageAlt: 'Paket Lengkap 6-in-1 Routine Numa Skin',
     benefit: 'Rangkaian paling komplit dari Facial Wash Gel, Toner 150ml, NAD+ Serum, Adenosine, PDRN Day Cream, hingga Sunscreen.',
     ctaLabel: 'Pilih VIP 6-in-1',
-  },
-];
-
-const FAQS: FaqEntry[] = [
-  {
-    question: 'Bagaimana urutan memakai keempat produk agar tidak salah langkah?',
-    answer:
-      'Gunakan dari tekstur paling cair ke pelindung akhir: (1) Treatment Lotion 150ml, (2) NAD+ Booster Serum, (3) Adenosine Moisturizer pagi & malam, lalu (4) Oxydew Sunscreen SPF 50+ khusus pagi/siang hari.',
-  },
-  {
-    question: 'Apakah ditumpuk 4 lapis terasa berat atau menggumpal (pilling)?',
-    answer:
-      'Tidak menggumpal. Keempat produk diformulasikan dalam satu matriks Air Laut Dalam Pulau Ulleung sehingga setiap lapisan langsung menyatu ringan dalam waktu kurang dari 3 menit.',
-  },
-  {
-    question: 'Apakah keempat produk sudah terdaftar resmi di BPOM RI?',
-    answer:
-      'Sudah 100% resmi BPOM: Treatment Lotion (NA18220101400), NAD+ Booster Serum (NA18262000245), Adenosine Moisturizer (NA18250109281), dan Oxydew Sunscreen (NA18251703709).',
-  },
-  {
-    question: 'Apakah bisa pesan COD (Bayar di Tempat) untuk paket lengkap ini?',
-    answer:
-      'Bisa. Pilih paket 4-in-1, 5-in-1, atau 6-in-1 di formulir bawah, masukkan kecamatan untuk cek ongkir otomatis, lalu pilih pembayaran COD atau QRIS.',
   },
 ];
 ---
@@ -127,7 +102,6 @@ const FAQS: FaqEntry[] = [
   preloadImages={HERO_IMAGE}
   canonical={canonical}
   noindex={true}
-  faqs={FAQS}
   hideHeader={true}
   hideFooter={true}
 >
@@ -144,11 +118,11 @@ const FAQS: FaqEntry[] = [
       <section id="hero-section" class="dsw-hero">
         <div class="dsw-hero-head">
           <h1 class="dsw-h1">
-            Rahasia <span class="dsw-hl-tilt">#AwetMudaBersama</span> dengan 4 Langkah Rangkaian Lengkap Numa Skin
+            Flek Menahun, Garis Senyum Dalam & <span class="dsw-hl-tilt">Wajah Tampak 10 Tahun Lebih Tua?</span> Reset Total dengan 4 Langkah Seluler!
           </h1>
-          <p class="dsw-sub" style="max-width: 390px; margin: 14px auto 0; font-weight: 600;">
-            Hentikan coba-coba skincare beda merek yang bahan aktifnya saling bertabrakan.<br />
-            <span class="dsw-underline-teal">Tuntaskan dengan 4 Tahap Sinergis Air Laut Dalam Pulau Ulleung Korea!</span>
+          <p class="dsw-sub" style="max-width: 390px; margin: 14px auto 0; font-weight: 700;">
+            Hentikan coba-coba skincare beda merek yang bahan aktifnya saling bertabrakan dan bikin kulit iritasi.<br />
+            <span class="dsw-underline-teal">Tuntaskan dari level seluler dengan 4 Tahap Sinergis Air Laut Dalam Pulau Ulleung!</span>
           </p>
         </div>
 
@@ -162,7 +136,7 @@ const FAQS: FaqEntry[] = [
 
           <img
             src={HERO_IMAGE}
-            alt="Ilustrasi perawatan kulit kenyal bercahaya dengan Paket Complete Routine 4-in-1 150ml Numa Skin"
+            alt="Perbandingan wajah flek menahun kerutan dalam vs kulit kencang kenyal bercahaya dengan Paket Complete Routine 4-in-1 150ml Numa Skin"
             width="720"
             height="480"
             class="dsw-hero-img"
@@ -171,11 +145,16 @@ const FAQS: FaqEntry[] = [
             decoding="async"
           />
 
+          <div class="dsw-hero-ba" aria-hidden="true">
+            <span class="dsw-hero-ba-pill dsw-hero-ba-pill--before">SEBELUM — Flek Menahun & Kerutan Dalam</span>
+            <span class="dsw-hero-ba-pill dsw-hero-ba-pill--after">SESUDAH — Kencang & Tampak 10 Thn Muda</span>
+          </div>
+
           <div class="dsw-hero-overlap">
             <div class="dsw-hero-overlap-inner">
-              <h2 class="dsw-hero-overlap-title">Satu Ekosistem Formulasi, Menyerap Tanpa Menggumpal</h2>
+              <h2 class="dsw-hero-overlap-title">Campur Aduk Skincare Beda Merek = Flek & Kerutan Makin Parah!</h2>
               <p class="dsw-hero-overlap-text">
-                Saat toner, serum, pelembap, dan sunscreen berasal dari satu basis <strong style="color: #0b6e7d;">Ulleung Deep Sea Water</strong>, setiap lapisan saling mengunci dengan nyaman.
+                Bahan aktif beda merek sering <strong style="color: #be123c;">menggumpal di permukaan, merusak skin barrier, dan gagal menembus akar flek hitam menahun</strong>.
               </p>
             </div>
           </div>
@@ -255,7 +234,7 @@ const FAQS: FaqEntry[] = [
               <Icon name="lucide:layers" class="size-4" aria-hidden="true" />
             </span>
             <p class="dsw-list-text">
-              <strong style="color: #0f172a;">Tahap 3 & 4 (Kunci Kelembapan & Perisai UV):</strong> Adenosine Moisturizer (30 gr) merawat rona kusam & garis kering, lalu Oxydew Sunscreen SPF 50+ PA++++ (30 ml) menjaga kulit dari terik matahari.
+              <strong style="color: #0f172a;">Tahap 3 & 4 (Kunci Kelembapan & Perisai UV):</strong> Adenosine Moisturizer (30 gr) memudarkan flek hitam & garis kering, lalu Oxydew Sunscreen SPF 50+ PA++++ (30 ml) menjaga kulit dari terik matahari.
             </p>
           </div>
           <div class="dsw-list-row">
@@ -272,14 +251,14 @@ const FAQS: FaqEntry[] = [
       <!-- Section 3: Tanda Masalah Kulit + Visual Grid -->
       <section class="dsw-section dsw-section--warn">
         <h2 class="dsw-h2">
-          Tanda kulit Anda butuh <span class="dsw-underline-warn">perawatan menyeluruh 4 dimensi</span>:
+          Kenapa campur-campur merek bikin <span class="dsw-underline-warn">flek hitam & kerutan makin parah</span>:
         </h2>
 
         <div class="dsw-photo-grid-2">
           <div class="dsw-photo-card">
             <img
               src={`${IMG_BASE}/masalah-bingung-campur-skincare.webp`}
-              alt="Meja rias penuh botol skincare berbeda merek yang membuat kulit justru kusam"
+              alt="Kulit mengelupas merah dan iritasi akibat mencampur skincare beda merek"
               width="315"
               height="210"
               class="dsw-photo-img"
@@ -288,14 +267,14 @@ const FAQS: FaqEntry[] = [
               decoding="async"
             />
             <p class="dsw-photo-caption">
-              <strong style="color: #be123c; display: block;">Beli Satu-Satu Kurang Cocok</strong>
-              Lelah ganti-ganti merek yang berujung tidak terpakai di meja rias.
+              <strong style="color: #be123c; display: block;">Barrier Rusak & Mengelupas</strong>
+              Campur merek sembarangan bikin kulit iritasi dan krim tidak meresap.
             </p>
           </div>
           <div class="dsw-photo-card">
             <img
               src={`${IMG_BASE}/masalah-flek-kerut-barrier-rusak.webp`}
-              alt="Kulit usia 40 tahun dengan kombinasi warna kulit kurang merata, garis senyum, dan dehidrasi"
+              alt="Kulit usia 40 tahun dengan kombinasi flek hitam membandel, kerutan mata, dan dehidrasi"
               width="315"
               height="210"
               class="dsw-photo-img"
@@ -304,8 +283,8 @@ const FAQS: FaqEntry[] = [
               decoding="async"
             />
             <p class="dsw-photo-caption">
-              <strong style="color: #be123c; display: block;">Masalah Kulit Datang Bersamaan</strong>
-              Rona kusam, garis halus, dan kulit kering muncul sekaligus di usia 35+.
+              <strong style="color: #be123c; display: block;">Flek Hitam & Kerutan Dalam</strong>
+              Flek membandel, garis senyum, dan kulit kendur muncul sekaligus di usia 35+.
             </p>
           </div>
         </div>
@@ -314,7 +293,7 @@ const FAQS: FaqEntry[] = [
       <!-- Section 4: Ilustrasi Perawatan Rutin -->
       <section class="dsw-section">
         <h2 class="dsw-h2">
-          Perbandingan visual <span class="dsw-hl-aqua">perawatan rutin 4 langkah</span>
+          Bukti nyata transformasi <span class="dsw-hl-aqua">perawatan 4 langkah</span>
         </h2>
         <p class="dsw-sub">Hasil nyata saat keempat langkah bekerja dalam satu basis air laut dalam Pulau Ulleung.</p>
 
@@ -322,7 +301,7 @@ const FAQS: FaqEntry[] = [
           <div class="dsw-photo-card">
             <img
               src={`${IMG_BASE}/kondisi-penuaan-kompleks-kusam.webp`}
-              alt="Kondisi wajah dengan warna kulit kurang merata, garis tekstur kulit kering, dan rona kusam"
+              alt="Kondisi wajah dengan flek hitam membandel, kerutan garis senyum, dan rona kusam"
               width="648"
               height="432"
               class="dsw-photo-img"
@@ -330,9 +309,9 @@ const FAQS: FaqEntry[] = [
               fetchpriority="low"
               decoding="async"
             />
-            <span class="dsw-photo-badge dsw-photo-badge--before">Kondisi Kulit Kering</span>
+            <span class="dsw-photo-badge dsw-photo-badge--before">SEBELUM — Flek, Kerutan & Kusam</span>
             <p class="dsw-photo-caption">
-              Kulit tampak lelah dehidrasi, noda rona kusam di tulang pipi terlihat jelas, dan garis lipatan senyum tampak tegas.
+              Kulit tampak lelah dehidrasi, bercak flek hitam di tulang pipi terlihat jelas, dan garis lipatan senyum tampak tegas.
             </p>
           </div>
 
@@ -347,9 +326,9 @@ const FAQS: FaqEntry[] = [
               fetchpriority="low"
               decoding="async"
             />
-            <span class="dsw-photo-badge dsw-photo-badge--after">Rutin 4-in-1 Routine</span>
+            <span class="dsw-photo-badge dsw-photo-badge--after">SESUDAH RUTIN — Kencang Glass Skin</span>
             <p class="dsw-photo-caption">
-              Permukaan kulit tampak bercahaya sehat (glass skin), rona wajah lebih merata, dan pipi terasa padat kenyal.
+              Permukaan kulit tampak bercahaya sehat (glass skin), flek hitam memudar, dan pipi terasa padat kenyal.
             </p>
           </div>
         </div>
@@ -440,7 +419,7 @@ const FAQS: FaqEntry[] = [
               <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
             </div>
             <p class="dsw-review-quote">
-              "Dulu pusing beli skincare beda-beda merek malah muka jadi kusam. Sejak ambil paket 4-in-1 yang botol besar 150ml ini, <span class="dsw-hl-aqua">wajah jauh lebih segar, rona kusam memudar, dan suami ikut pakai juga</span>."
+              "Dulu pusing beli skincare beda-beda merek malah muka jadi kusam. Sejak ambil paket 4-in-1 yang botol besar 150ml ini, <span class="dsw-hl-aqua">wajah jauh lebih segar, flek hitam memudar, dan suami ikut pakai juga</span>."
             </p>
           </div>
 
@@ -664,10 +643,7 @@ const FAQS: FaqEntry[] = [
         tiers={BUNDLE_TIERS}
       />
 
-      <!-- Section 11: Objection-Handling FAQ -->
-      <LpFaqSection faqs={FAQS} />
-
-      <!-- Section 12: Checkout Form with Tiered Bundling -->
+      <!-- Section 11: Checkout Form with Tiered Bundling -->
       <section id="form-pemesanan" class="dsw-section--checkout">
         <div style="padding: 0 20px 14px; text-align: center;">
           <h2 class="dsw-h2" style="font-size: 26px;">

@@ -8,9 +8,6 @@ import LpHeroOffer from '../components/storefront/landing-pages/LpHeroOffer.astr
 import LpBundleValueSection, {
   type BundleTierSpec,
 } from '../components/storefront/landing-pages/LpBundleValueSection.astro';
-import LpFaqSection, {
-  type FaqEntry,
-} from '../components/storefront/landing-pages/LpFaqSection.astro';
 import LpFloatingCta from '../components/storefront/landing-pages/LpFloatingCta.astro';
 import { getStorefrontProduct } from '../lib/catalog';
 import { nativeLandingCanonicalPath } from '../lib/landing-pages';
@@ -87,29 +84,6 @@ const BUNDLE_TIERS: BundleTierSpec[] = [
     ctaLabel: 'Pilih NAD+ Serum',
   },
 ];
-
-const FAQS: FaqEntry[] = [
-  {
-    question: 'Kenapa kombinasi NAD+ Serum dan PDRN Day Cream sangat cocok untuk usia 35+?',
-    answer:
-      'Di usia 35+, bedak tebal sering menggumpal (cakey) di garis senyum. NAD+ Serum mengencangkan dan melembapkan kontur kulit terlebih dulu, sehingga krim pagi PDRN Warm Beige menyatu halus seperti kulit asli yang cerah segar.',
-  },
-  {
-    question: 'Apakah PDRN Day Cream membuat wajah belang keabuan di kulit sawo matang?',
-    answer:
-      'Tidak keabuan. Krimnya menggunakan pigmen Warm Natural Beige yang menyatu dalam 15 detik dengan kulit sawo matang maupun kuning langsat.',
-  },
-  {
-    question: 'Apakah kedua produk aman dan resmi BPOM?',
-    answer:
-      'Aman dan terdaftar resmi di BPOM RI: NAD+ Booster Serum (NA18262000245) serta PDRN Tone-Up Day Cream (NA18262000246), bersertifikat Halal Indonesia, tanpa pengelupasan perih.',
-  },
-  {
-    question: 'Apakah bisa Bayar di Tempat (COD)?',
-    answer:
-      'Bisa. Paket Luminous Duo sudah terpilih otomatis di formulir bawah, tinggal isi nama, WhatsApp, dan kecamatan pengiriman.',
-  },
-];
 ---
 
 <BaseLayout
@@ -119,7 +93,6 @@ const FAQS: FaqEntry[] = [
   preloadImages={HERO_IMAGE}
   canonical={canonical}
   noindex={true}
-  faqs={FAQS}
   hideHeader={true}
   hideFooter={true}
 >
@@ -136,10 +109,10 @@ const FAQS: FaqEntry[] = [
       <section id="hero-section" class="dsw-hero">
         <div class="dsw-hero-head">
           <h1 class="dsw-h1">
-            <span class="dsw-hl-tilt">Duet Sultan NAD+ & PDRN:</span> Kencangkan Kontur & Cerahkan Wajah Tanpa Bedak Tebal
+            Pipi Kendur & Bedak Dempul <span class="dsw-hl-tilt">Nyangkut di Garis Senyum?</span> Kencangkan Kontur + Cerah Tanpa Bedak Tebal!
           </h1>
           <p class="dsw-sub" style="max-width: 390px; margin: 14px auto 0; font-weight: 700;">
-            Menutupi kulit lelah dengan foundation tebal justru memperjelas garis senyum.<br />
+            Menutupi kulit lelah dengan foundation tebal justru memperjelas lipatan kerutan wajah.<br />
             <span class="dsw-underline-teal">Padukan 2% Swiss RejuveNAD™ + 10.000 PPM Encapsulated PDRN!</span>
           </p>
         </div>
@@ -154,7 +127,7 @@ const FAQS: FaqEntry[] = [
 
           <img
             src={HERO_IMAGE}
-            alt="Ilustrasi perawatan kulit kencang cerah natural warm-beige dengan Paket Luminous Duo Numa Skin"
+            alt="Perbandingan wajah kendur dempul di garis senyum vs kulit kencang cerah natural warm-beige dengan Paket Luminous Duo Numa Skin"
             width="720"
             height="480"
             class="dsw-hero-img"
@@ -162,6 +135,11 @@ const FAQS: FaqEntry[] = [
             loading="eager"
             decoding="async"
           />
+
+          <div class="dsw-hero-ba" aria-hidden="true">
+            <span class="dsw-hero-ba-pill dsw-hero-ba-pill--before">SEBELUM — Kendur & Dempul Pecah</span>
+            <span class="dsw-hero-ba-pill dsw-hero-ba-pill--after">SESUDAH — Kontur Kencang & Cerah</span>
+          </div>
 
           <div class="dsw-hero-overlap">
             <div class="dsw-hero-overlap-inner">
@@ -264,7 +242,7 @@ const FAQS: FaqEntry[] = [
       <!-- Section 3: Tanda Masalah Kulit + Visual Grid -->
       <section class="dsw-section dsw-section--warn">
         <h2 class="dsw-h2">
-          Mengapa riasan pagi sering <span class="dsw-underline-warn">terlihat retak & kurang segar</span> di usia 35+?
+          Kenapa riasan pagi selalu <span class="dsw-underline-warn">retak di kerutan & bikin muka tua</span> di usia 35+?
         </h2>
 
         <div class="dsw-photo-grid-2">
@@ -280,14 +258,14 @@ const FAQS: FaqEntry[] = [
               decoding="async"
             />
             <p class="dsw-photo-caption">
-              <strong style="color: #be123c; display: block;">Cakey di Garis Senyum</strong>
-              Saat elastisitas pipi menurun, bedak tebal mudah terjebak di lipatan tekstur kering.
+              <strong style="color: #be123c; display: block;">Dempul Pecah di Garis Senyum</strong>
+              Saat kolagen pipi kendur, bedak tebal langsung terjebak di lipatan kerutan.
             </p>
           </div>
           <div class="dsw-photo-card">
             <img
               src={`${IMG_BASE}/masalah-wajah-lelah-kusam-pagi.webp`}
-              alt="Wanita bercermin di pagi hari melihat wajah tampak kusam, lelah, dan berrona kulit kurang merata"
+              alt="Kerutan sudut mata dan flek hitam membandel di wajah usia 35+"
               width="315"
               height="210"
               class="dsw-photo-img"
@@ -296,8 +274,8 @@ const FAQS: FaqEntry[] = [
               decoding="async"
             />
             <p class="dsw-photo-caption">
-              <strong style="color: #be123c; display: block;">Kusam & Rona Tidak Merata</strong>
-              Tanpa pencerah aktif Alpha-Arbutin & Niacinamide, warna kulit tampak belang.
+              <strong style="color: #be123c; display: block;">Kerutan Mata & Flek Hitam</strong>
+              Tanpa 6X Peptide & Alpha-Arbutin, kerutan dan noda gelap makin tegas.
             </p>
           </div>
         </div>
@@ -308,7 +286,7 @@ const FAQS: FaqEntry[] = [
               <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
             </span>
             <p class="dsw-list-text">
-              Saat memakai bedak atau foundation pagi hari, <strong style="color: #be123c;">garis senyum dan tekstur kering bawah mata justru makin terlihat retak (cakey)</strong>.
+              Tiap pakai bedak atau foundation pagi hari, <strong style="color: #be123c;">garis senyum dan kerutan bawah mata justru makin terlihat retak (cakey)</strong>.
             </p>
           </div>
           <div class="dsw-list-row">
@@ -316,7 +294,7 @@ const FAQS: FaqEntry[] = [
               <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
             </span>
             <p class="dsw-list-text">
-              Krim tone-up putih biasa membuat <strong style="color: #be123c;">kulit sawo matang/kuning langsat terlihat abu-abu seperti topeng</strong>.
+              Krim tone-up putih biasa membuat <strong style="color: #be123c;">flek hitam di kulit sawo matang berubah abu-abu seperti topeng</strong>.
             </p>
           </div>
           <div class="dsw-list-row">
@@ -324,7 +302,7 @@ const FAQS: FaqEntry[] = [
               <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
             </span>
             <p class="dsw-list-text">
-              Ingin tampil rapi dan segar setiap pagi dalam 2 menit <strong style="color: #be123c;">tanpa harus memakai riasan berlapis-lapis</strong>.
+              Ingin wajah kencang, cerah, dan flek tertutup mulus dalam 2 menit <strong style="color: #be123c;">tanpa harus dempul tebal berlapis-lapis</strong>.
             </p>
           </div>
         </div>
@@ -333,15 +311,15 @@ const FAQS: FaqEntry[] = [
       <!-- Section 4: Ilustrasi Perawatan Rutin -->
       <section class="dsw-section">
         <h2 class="dsw-h2">
-          Perbandingan hasil <span class="dsw-hl-aqua">Luminous Duo NAD+ & PDRN</span>
+          Bukti nyata perubahan <span class="dsw-hl-aqua">Luminous Duo NAD+ & PDRN</span>
         </h2>
-        <p class="dsw-sub">Perawatan kekencangan dari dalam berpadu dengan efek cerah sehat seketika di permukaan.</p>
+        <p class="dsw-sub">Tarikan kontur dari dalam berpadu dengan efek cerah sehat seketika di permukaan.</p>
 
         <div class="dsw-photo-stack">
           <div class="dsw-photo-card">
             <img
               src={`${IMG_BASE}/kondisi-kendur-kusam-retak.webp`}
-              alt="Kondisi pipi kendur, kusam bernoda, dan riasan tampak retak di garis halus"
+              alt="Kondisi pipi kendur, kusam bernoda flek hitam, dan riasan tampak retak di garis halus"
               width="648"
               height="432"
               class="dsw-photo-img"
@@ -349,9 +327,9 @@ const FAQS: FaqEntry[] = [
               fetchpriority="low"
               decoding="async"
             />
-            <span class="dsw-photo-badge dsw-photo-badge--before">Dempul Biasa Tanpa Serum</span>
+            <span class="dsw-photo-badge dsw-photo-badge--before">SEBELUM — Kendur, Flek & Retak</span>
             <p class="dsw-photo-caption">
-              Garis lipatan tampak dalam, rona kulit kurang merata membayang, dan warna krim tidak menyatu dengan kulit asli.
+              Garis lipatan senyum tampak dalam, flek hitam membayang keabuan, dan krim biasa menggumpal di pori.
             </p>
           </div>
 
@@ -366,9 +344,9 @@ const FAQS: FaqEntry[] = [
               fetchpriority="low"
               decoding="async"
             />
-            <span class="dsw-photo-badge dsw-photo-badge--after">Rutin NAD+ Serum + PDRN Cream</span>
+            <span class="dsw-photo-badge dsw-photo-badge--after">SESUDAH RUTIN — Kencang & Cerah Alami</span>
             <p class="dsw-photo-caption">
-              Permukaan kulit lembap terawat oleh NAD+ Serum, lalu PDRN Warm Beige meratakan rona wajah menjadi cerah segar tanpa bedak.
+              Permukaan kulit kencang terawat oleh NAD+ Serum, lalu PDRN Warm Beige menyamarkan flek menjadi cerah segar tanpa bedak.
             </p>
           </div>
         </div>
@@ -492,7 +470,7 @@ const FAQS: FaqEntry[] = [
               <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
             </div>
             <p class="dsw-review-quote">
-              "Dapet <span class="dsw-hl-rose">NAD+ plus 1% Encapsulated PDRN 10.000 PPM cuma 169 ribuan</span> itu hemat banget. <span class="dsw-hl-aqua">Rona Kusam memudar dan gak perlu beli foundation lagi</span>."
+              "Dapet <span class="dsw-hl-rose">NAD+ plus 1% Encapsulated PDRN 10.000 PPM cuma 169 ribuan</span> itu hemat banget. <span class="dsw-hl-aqua">Flek hitam memudar dan gak perlu beli foundation lagi</span>."
             </p>
           </div>
         </div>
@@ -678,10 +656,7 @@ const FAQS: FaqEntry[] = [
         tiers={BUNDLE_TIERS}
       />
 
-      <!-- Section 11: Objection-Handling FAQ -->
-      <LpFaqSection faqs={FAQS} />
-
-      <!-- Section 12: Checkout Form with Tiered Bundling -->
+      <!-- Section 11: Checkout Form with Tiered Bundling -->
       <section id="form-pemesanan" class="dsw-section--checkout">
         <div style="padding: 0 20px 14px; text-align: center;">
           <h2 class="dsw-h2" style="font-size: 26px;">

@@ -8,9 +8,6 @@ import LpHeroOffer from '../components/storefront/landing-pages/LpHeroOffer.astr
 import LpBundleValueSection, {
   type BundleTierSpec,
 } from '../components/storefront/landing-pages/LpBundleValueSection.astro';
-import LpFaqSection, {
-  type FaqEntry,
-} from '../components/storefront/landing-pages/LpFaqSection.astro';
 import LpFloatingCta from '../components/storefront/landing-pages/LpFloatingCta.astro';
 import { getStorefrontProduct } from '../lib/catalog';
 import { nativeLandingCanonicalPath } from '../lib/landing-pages';
@@ -87,29 +84,6 @@ const BUNDLE_TIERS: BundleTierSpec[] = [
     ctaLabel: 'Upgrade 5-in-1',
   },
 ];
-
-const FAQS: FaqEntry[] = [
-  {
-    question: 'Bagaimana urutan pemakaian ketiga produk dalam Paket Age Defense Trio?',
-    answer:
-      'Pagi hari: oleskan PDRN Tone-Up Day Cream tipis merata, lalu kunci dengan 2 ruas jari Oxydew Sunscreen SPF 50+ PA++++. Malam hari: tekan 1–2 pump Adenosine Moisturizer ke seluruh wajah & leher.',
-  },
-  {
-    question: 'Apakah aman untuk kulit sawo matang tanpa membuat wajah keabuan?',
-    answer:
-      'Sangat aman. PDRN Day Cream berwarna Warm Natural Beige (bukan putih kapur) dan Oxydew Sunscreen bertekstur transparan zero-whitecast sehingga rona wajah menyatu alami dengan leher.',
-  },
-  {
-    question: 'Apakah ketiga produk sudah terdaftar resmi di BPOM RI?',
-    answer:
-      'Sudah 100% resmi BPOM: PDRN Day Cream (NA18262000246), Adenosine Moisturizer (NA18250109281), dan Oxydew Sunscreen (NA18251703709), serta bersertifikat Halal Indonesia.',
-  },
-  {
-    question: 'Apakah bisa Bayar di Tempat (COD)?',
-    answer:
-      'Bisa. Paket Trio 24 Jam sudah terpilih otomatis di formulir bawah — cukup isi nama, WhatsApp, dan kecamatan pengiriman.',
-  },
-];
 ---
 
 <BaseLayout
@@ -119,7 +93,6 @@ const FAQS: FaqEntry[] = [
   preloadImages={HERO_IMAGE}
   canonical={canonical}
   noindex={true}
-  faqs={FAQS}
   hideHeader={true}
   hideFooter={true}
 >
@@ -136,7 +109,7 @@ const FAQS: FaqEntry[] = [
       <section id="hero-section" class="dsw-hero">
         <div class="dsw-hero-head">
           <h1 class="dsw-h1">
-            <span class="dsw-hl-tilt">Trio Perisai 24 Jam:</span> Krim Pagi PDRN, Pelembap Malam Adenosine & Tameng SPF 50+
+            Flek Hitam Membandel, <span class="dsw-hl-tilt">Muka Dempul di Pagi Hari</span> & Kerutan Makin Dalam? Kepung 24 Jam Tanpa Celah!
           </h1>
           <p class="dsw-sub" style="max-width: 390px; margin: 14px auto 0; font-weight: 700;">
             Solusi 3 langkah komplit: cerahkan wajah natural di pagi hari, blokir sinar UV siang hari, dan kunci hidrasi 11X HA malam hari.<br />
@@ -163,11 +136,16 @@ const FAQS: FaqEntry[] = [
             decoding="async"
           />
 
+          <div class="dsw-hero-ba" aria-hidden="true">
+            <span class="dsw-hero-ba-pill dsw-hero-ba-pill--before">SEBELUM — Flek & Dempul Belang</span>
+            <span class="dsw-hero-ba-pill dsw-hero-ba-pill--after">SESUDAH — Cerah & Terlindungi 24 Jam</span>
+          </div>
+
           <div class="dsw-hero-overlap">
             <div class="dsw-hero-overlap-inner">
-              <h2 class="dsw-hero-overlap-title">Mengapa Warna Kulit Kurang Merata Harus Dijaga Pagi & Malam?</h2>
+              <h2 class="dsw-hero-overlap-title">Flek Hitam Harus Dikepung 24 Jam Tanpa Celah!</h2>
               <p class="dsw-hero-overlap-text">
-                Rona kusam yang dirawat malam hari akan <strong style="color: #be123c;">kembali menggelap di siang hari bila wajah tidak dilindungi tone-up pencerah & SPF 50+ PA++++</strong>.
+                Flek hitam yang dipudarkan malam hari akan <strong style="color: #be123c;">kembali gosong di siang hari bila wajah tidak dikunci tone-up pencerah & SPF 50+ PA++++</strong>.
               </p>
             </div>
           </div>
@@ -247,7 +225,7 @@ const FAQS: FaqEntry[] = [
               <Icon name="lucide:sun-dim" class="size-4" aria-hidden="true" />
             </span>
             <p class="dsw-list-text">
-              <strong style="color: #0f172a;">Oxydew Sunscreen SPF 50+ PA++++ (30 ml):</strong> Melindungi kulit dari sinar UVA/UVB pemicu rona kusam baru dengan 3% Luceane™ tanpa rasa gerah atau berminyak.
+              <strong style="color: #0f172a;">Oxydew Sunscreen SPF 50+ PA++++ (30 ml):</strong> Melindungi kulit dari sinar UVA/UVB pemicu flek hitam baru dengan 3% Luceane™ tanpa rasa gerah atau berminyak.
             </p>
           </div>
           <div class="dsw-list-row">
@@ -255,7 +233,7 @@ const FAQS: FaqEntry[] = [
               <Icon name="lucide:droplets" class="size-4" aria-hidden="true" />
             </span>
             <p class="dsw-list-text">
-              <strong style="color: #0f172a;">Adenosine Moisturizer (30 gr):</strong> Gel-cream malam & pagi yang mengunci hidrasi 11X Hyaluronic Acid sekaligus merawat garis halus dan rona kulit kurang merata.
+              <strong style="color: #0f172a;">Adenosine Moisturizer (30 gr):</strong> Gel-cream malam & pagi yang mengunci hidrasi 11X Hyaluronic Acid sekaligus merawat garis halus dan memudarkan flek hitam.
             </p>
           </div>
         </div>
@@ -264,40 +242,40 @@ const FAQS: FaqEntry[] = [
       <!-- Section 3: Tanda Masalah Kulit + Visual Grid -->
       <section class="dsw-section dsw-section--warn">
         <h2 class="dsw-h2">
-          Mengapa warna kulit kurang merata <span class="dsw-underline-warn">sulit memudar</span> meski sudah pakai krim?
+          Kenapa <span class="dsw-underline-warn">flek hitam membandel</span> gak kunjung hilang meski sudah pakai krim?
         </h2>
 
         <div class="dsw-photo-grid-2">
           <div class="dsw-photo-card">
             <img
               src={`${IMG_BASE}/masalah-flek-makin-gelap-siang.webp`}
-              alt="Wanita di bawah terik matahari dengan noda warna kulit kurang merata di tulang pipi yang makin gelap"
-              width="480"
-              height="320"
+              alt="Kulit pipi dengan noda flek hitam di tulang pipi yang makin gelap akibat UV"
+              width="315"
+              height="210"
               class="dsw-photo-img"
               loading="lazy"
               fetchpriority="low"
               decoding="async"
             />
             <p class="dsw-photo-caption">
-              <strong style="color: #be123c; display: block;">Sinar UV Memicu Melanin Baru</strong>
-              Tanpa pelindung SPF 50+ PA++++, paparan matahari 15 menit saja kembali menggelapkan rona kulit.
+              <strong style="color: #be123c; display: block;">Sinar UV Membakar Flek Baru</strong>
+              Tanpa pelindung SPF 50+ PA++++, paparan matahari 15 menit langsung menggelapkan flek.
             </p>
           </div>
           <div class="dsw-photo-card">
             <img
               src={`${IMG_BASE}/masalah-bedak-dempul-menyumbat.webp`}
-              alt="Wajah tampak belang abu-abu dan cakey karena menutupi rona kusam dengan foundation tebal"
-              width="480"
-              height="320"
+              alt="Wajah tampak belang abu-abu dan cakey karena menutupi flek hitam dengan foundation tebal"
+              width="315"
+              height="210"
               class="dsw-photo-img"
               loading="lazy"
               fetchpriority="low"
               decoding="async"
             />
             <p class="dsw-photo-caption">
-              <strong style="color: #be123c; display: block;">Bedak Tebal Bikin Muka Abu-Abu</strong>
-              Krim pemutih instan biasa meninggalkan bercak dempul yang retak di garis senyum.
+              <strong style="color: #be123c; display: block;">Dempul Tebal Bikin Abu-Abu</strong>
+              Krim pemutih instan putih kapur meninggalkan bercak dempul yang retak di kerutan.
             </p>
           </div>
         </div>
@@ -308,7 +286,7 @@ const FAQS: FaqEntry[] = [
               <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
             </span>
             <p class="dsw-list-text">
-              Bercak cokelat di tulang pipi <strong style="color: #be123c;">tampak makin kontras dan sulit ditutupi bedak</strong>.
+              Flek hitam di tulang pipi <strong style="color: #be123c;">tampak makin gosong dan sulit ditutupi bedak</strong>.
             </p>
           </div>
           <div class="dsw-list-row">
@@ -316,7 +294,7 @@ const FAQS: FaqEntry[] = [
               <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
             </span>
             <p class="dsw-list-text">
-              Pakai krim siang biasa <strong style="color: #be123c;">luntur saat berkeringat dan membuat wajah belang</strong> dengan leher.
+              Pakai krim siang biasa <strong style="color: #be123c;">luntur saat berkeringat dan membuat wajah belang keabuan</strong> dengan leher.
             </p>
           </div>
           <div class="dsw-list-row">
@@ -324,7 +302,7 @@ const FAQS: FaqEntry[] = [
               <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
             </span>
             <p class="dsw-list-text">
-              Malam hari kulit terasa <strong style="color: #be123c;">kering ketarik sehingga garis halus makin cepat muncul</strong>.
+              Malam hari kulit terasa <strong style="color: #be123c;">kering ketarik sehingga garis senyum makin cepat tercetak</strong>.
             </p>
           </div>
         </div>
@@ -333,7 +311,7 @@ const FAQS: FaqEntry[] = [
       <!-- Section 4: Ilustrasi Perawatan Rutin -->
       <section class="dsw-section">
         <h2 class="dsw-h2">
-          Perbandingan kulit <span class="dsw-hl-aqua">dengan perawatan rutin</span>
+          Bukti nyata perubahan <span class="dsw-hl-aqua">dengan perawatan 24 jam</span>
         </h2>
         <p class="dsw-sub">Sinergi pencerah pagi, perisai UV, dan gel-cream pengunci kelembapan malam.</p>
 
@@ -341,7 +319,7 @@ const FAQS: FaqEntry[] = [
           <div class="dsw-photo-card">
             <img
               src={`${IMG_BASE}/kondisi-flek-hitam-terbakar-uv.webp`}
-              alt="Kondisi kulit pipi dengan warna kulit kurang merata matahari, kemerahan UV, dan pori kering saat kulit membutuhkan kelembapan"
+              alt="Kondisi kulit pipi dengan flek hitam matahari, kemerahan UV, dan pori kering"
               width="480"
               height="320"
               class="dsw-photo-img"
@@ -349,9 +327,9 @@ const FAQS: FaqEntry[] = [
               fetchpriority="low"
               decoding="async"
             />
-            <span class="dsw-photo-badge dsw-photo-badge--before">Sebelum Age Defense Trio</span>
+            <span class="dsw-photo-badge dsw-photo-badge--before">SEBELUM — Flek Hitam & Belang UV</span>
             <p class="dsw-photo-caption">
-              Warna kulit tampak belang kusam, rona kulit kurang merata tegas di pipi, dan tekstur kering kasar.
+              Warna kulit tampak belang kusam, flek hitam tegas di tulang pipi, dan tekstur kering kasar.
             </p>
           </div>
 
@@ -366,9 +344,9 @@ const FAQS: FaqEntry[] = [
               fetchpriority="low"
               decoding="async"
             />
-            <span class="dsw-photo-badge dsw-photo-badge--after">Rutin Age Defense Trio</span>
+            <span class="dsw-photo-badge dsw-photo-badge--after">SESUDAH RUTIN — Cerah Merata 24 Jam</span>
             <p class="dsw-photo-caption">
-              Rona wajah tampak cerah natural menyatu dengan kulit asli, noda rona kusam memudar, dan lembap seharian.
+              Rona wajah tampak cerah natural menyatu dengan kulit asli, flek hitam memudar, dan lembap seharian.
             </p>
           </div>
         </div>
@@ -475,7 +453,7 @@ const FAQS: FaqEntry[] = [
               <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
             </div>
             <p class="dsw-review-quote">
-              "Sering antar jemput anak siang bolong tapi <strong style="color: #0f172a;">rona kusam di pipi gak pernah tambah gelap lagi</strong>. <span class="dsw-hl-aqua">Malah makin samar dan kulit terasa adem kenyal</span>."
+              "Sering antar jemput anak siang bolong tapi <strong style="color: #0f172a;">flek hitam di pipi gak pernah tambah gelap lagi</strong>. <span class="dsw-hl-aqua">Malah makin samar dan kulit terasa adem kenyal</span>."
             </p>
           </div>
           <div class="dsw-review-row">
@@ -678,10 +656,7 @@ const FAQS: FaqEntry[] = [
         tiers={BUNDLE_TIERS}
       />
 
-      <!-- Section 11: Objection-Handling FAQ -->
-      <LpFaqSection faqs={FAQS} />
-
-      <!-- Section 12: Checkout Form with Tiered Bundling -->
+      <!-- Section 11: Checkout Form with Tiered Bundling -->
       <section id="form-pemesanan" class="dsw-section--checkout">
         <div style="padding: 0 20px 14px; text-align: center;">
           <h2 class="dsw-h2" style="font-size: 26px;">

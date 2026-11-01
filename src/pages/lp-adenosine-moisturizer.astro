@@ -8,9 +8,6 @@ import LpHeroOffer from '../components/storefront/landing-pages/LpHeroOffer.astr
 import LpBundleValueSection, {
   type BundleTierSpec,
 } from '../components/storefront/landing-pages/LpBundleValueSection.astro';
-import LpFaqSection, {
-  type FaqEntry,
-} from '../components/storefront/landing-pages/LpFaqSection.astro';
 import LpFloatingCta from '../components/storefront/landing-pages/LpFloatingCta.astro';
 import { getStorefrontProduct } from '../lib/catalog';
 import { nativeLandingCanonicalPath } from '../lib/landing-pages';
@@ -95,29 +92,6 @@ const BUNDLE_TIERS: BundleTierSpec[] = [
     ctaLabel: 'Pilih Paket Trio',
   },
 ];
-
-const FAQS: FaqEntry[] = [
-  {
-    question: 'Apakah Adenosine Moisturizer lengket bila dipakai pagi hari di bawah makeup?',
-    answer:
-      'Tidak lengket. Teksturnya berupa cooling water-gel berbasis Air Laut Dalam Pulau Ulleung yang meresap dalam hitungan detik tanpa residu minyak, nyaman ditumpuk sunscreen maupun bedak.',
-  },
-  {
-    question: 'Apakah aman untuk kulit sensitif, ibu hamil, dan pemakaian jangka panjang?',
-    answer:
-      'Aman. Terdaftar resmi di BPOM RI (NA18250109281), bersertifikat Halal Indonesia, tanpa merkuri, hidrokuinon, ataupun asam pengelupas keras.',
-  },
-  {
-    question: 'Satu botol Airless Pump 30 gr cukup untuk berapa lama?',
-    answer:
-      'Dengan takaran 1–2 pump setiap pagi dan malam, satu botol 30 gr rata-rata cukup untuk 4–6 minggu pemakaian rutin.',
-  },
-  {
-    question: 'Apakah bisa Bayar di Tempat (COD) saat kurir datang?',
-    answer:
-      'Bisa. Anda cukup memilih metode pembayaran COD (Bayar di Tempat) atau QRIS/Transfer di formulir bawah, lalu ongkir otomatis dihitung sesuai kecamatan Anda.',
-  },
-];
 ---
 
 <BaseLayout
@@ -127,7 +101,6 @@ const FAQS: FaqEntry[] = [
   preloadImages={HERO_IMAGE}
   canonical={canonical}
   noindex={true}
-  faqs={FAQS}
   hideHeader={true}
   hideFooter={true}
 >
@@ -144,11 +117,11 @@ const FAQS: FaqEntry[] = [
       <section id="hero-section" class="dsw-hero">
         <div class="dsw-hero-head">
           <h1 class="dsw-h1">
-            Kunci <span class="dsw-hl-tilt">Hidrasi 11X Hyaluronic</span> & Rawat Rona Kusam Tanpa Rasa Lengket
+            Habis Ratusan Ribu Tapi <span class="dsw-hl-tilt">Flek Hitam & Garis Senyum</span> Makin Dalam?
           </h1>
-          <p class="dsw-sub" style="max-width: 390px; margin: 14px auto 0; font-weight: 600;">
-            Tekstur water-gel sejuk dari Air Laut Dalam Pulau Ulleung Korea yang cepat meresap.<br />
-            <span class="dsw-underline-teal">Dilengkapi Adenosine, Alpha-Arbutin, Niacinamide & Botol Airless Pump 30 gr!</span>
+          <p class="dsw-sub" style="max-width: 390px; margin: 14px auto 0; font-weight: 700;">
+            Krim pekat biasa cuma mengendap lengket di permukaan tanpa menembus 5 lapis kulit kering.<br />
+            <span class="dsw-underline-teal">Gempur flek & kunci 11X Hyaluronic Acid dengan Adenosine Deep Sea Water!</span>
           </p>
         </div>
 
@@ -156,26 +129,31 @@ const FAQS: FaqEntry[] = [
           <div class="dsw-hero-top-tag">
             <div class="dsw-hero-top-pill">
               <Icon name="lucide:droplets" class="size-3.5" aria-hidden="true" />
-              <span>11X Hyaluronic + 2% AQUAXYL • Airless Pump 30gr</span>
+              <span>11X Hyaluronic + Alpha-Arbutin • Airless Pump 30gr</span>
             </div>
           </div>
 
           <img
             src={HERO_IMAGE}
-            alt="Kemasan Airless Pump Numa Skin Adenosine Deep Sea Water Moisturizer 30gr"
-            width="960"
-            height="768"
-            class="dsw-hero-img dsw-hero-img--5x4"
+            alt="Perbandingan sebelum dan sesudah pemakaian rutin Numa Skin Adenosine Deep Sea Water Moisturizer"
+            width="720"
+            height="480"
+            class="dsw-hero-img"
             fetchpriority="high"
             loading="eager"
             decoding="async"
           />
 
+          <div class="dsw-hero-ba" aria-hidden="true">
+            <span class="dsw-hero-ba-pill dsw-hero-ba-pill--before">SEBELUM — Flek Hitam & Garis Kering</span>
+            <span class="dsw-hero-ba-pill dsw-hero-ba-pill--after">SESUDAH — Kenyal & Flek Memudar</span>
+          </div>
+
           <div class="dsw-hero-overlap">
             <div class="dsw-hero-overlap-inner">
-              <h2 class="dsw-hero-overlap-title">Hidrasi 5 Lapis Kulit Pagi & Malam</h2>
+              <h2 class="dsw-hero-overlap-title">Flek Membandel Muncul Karena Barrier Kering!</h2>
               <p class="dsw-hero-overlap-text">
-                Kulit yang dehidrasi di ruang AC maupun terpapar panas siang hari membuat <strong style="color: #be123c;">garis halus tampak makin tegas dan rona wajah terlihat kusam lelah</strong>.
+                Saat 5 lapis kulit kekurangan air, <strong style="color: #be123c;">flek hitam di tulang pipi tampak makin gosong dan garis senyum langsung tercetak dalam</strong>.
               </p>
             </div>
           </div>
@@ -265,7 +243,7 @@ const FAQS: FaqEntry[] = [
               <Icon name="lucide:sparkles" class="size-4" aria-hidden="true" />
             </span>
             <p class="dsw-list-text">
-              <strong style="color: #0f172a;">0.04% Adenosine + Alpha-Arbutin + Niacinamide:</strong> Merawat garis halus sekaligus membantu menyamarkan rona kusam secara bertahap tanpa perih.
+              <strong style="color: #0f172a;">0.04% Adenosine + Alpha-Arbutin + Niacinamide:</strong> Merawat garis kerutan halus sekaligus menyamarkan flek hitam membandel tanpa pengelupasan perih.
             </p>
           </div>
         </div>
@@ -274,14 +252,14 @@ const FAQS: FaqEntry[] = [
       <!-- Section 3: Tanda Masalah Kulit + Visual Grid -->
       <section class="dsw-section dsw-section--warn">
         <h2 class="dsw-h2">
-          Mengapa kulit tetap <span class="dsw-underline-warn">terlihat kusam & bergaris halus</span> meski rajin cuci muka?
+          Kenapa <span class="dsw-underline-warn">flek hitam & kerutan halus</span> makin parah di usia 30–50an?
         </h2>
 
         <div class="dsw-photo-grid-2">
           <div class="dsw-photo-card">
             <img
               src={`${IMG_BASE}/masalah-flek-membandel.webp`}
-              alt="Tampilan rona kulit kurang merata di area tulang pipi akibat skin barrier kering"
+              alt="Flek hitam membandel dan noda gelap di area tulang pipi akibat skin barrier kering"
               width="315"
               height="210"
               class="dsw-photo-img"
@@ -290,24 +268,24 @@ const FAQS: FaqEntry[] = [
               decoding="async"
             />
             <p class="dsw-photo-caption">
-              <strong style="color: #be123c; display: block;">Rona Kusam di Tulang Pipi</strong>
-              Skin barrier yang kering membuat noda gelap tampak semakin kontras.
+              <strong style="color: #be123c; display: block;">Flek Hitam di Tulang Pipi</strong>
+              Skin barrier yang kering membuat bercak flek hitam tampak makin pekat.
             </p>
           </div>
           <div class="dsw-photo-card">
             <img
               src={`${IMG_BASE}/masalah-garis-halus-kusam.webp`}
-              alt="Tekstur kulit kering dan garis halus di sekitar senyum serta bawah mata"
-              width="648"
-              height="432"
+              alt="Tekstur kulit kering kasar dan garis senyum dalam serta kerutan bawah mata"
+              width="315"
+              height="210"
               class="dsw-photo-img"
               loading="lazy"
               fetchpriority="low"
               decoding="async"
             />
             <p class="dsw-photo-caption">
-              <strong style="color: #be123c; display: block;">Garis Halus Dehidrasi</strong>
-              Kekurangan pengunci air membuat lipatan senyum tampak tegas.
+              <strong style="color: #be123c; display: block;">Garis Senyum & Kerutan</strong>
+              Kekurangan pengunci 11X HA membuat lipatan wajah tercetak permanen.
             </p>
           </div>
         </div>
@@ -318,7 +296,7 @@ const FAQS: FaqEntry[] = [
               <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
             </span>
             <p class="dsw-list-text">
-              Pelembap krim pekat biasa sering terasa <strong style="color: #be123c;">berat, gerah, dan memicu komedo</strong> di cuaca lembap Indonesia.
+              Krim malam pekat biasa cuma <strong style="color: #be123c;">mengendap lengket di bantal, bikin gerah, dan menyumbat pori</strong>.
             </p>
           </div>
           <div class="dsw-list-row">
@@ -326,7 +304,7 @@ const FAQS: FaqEntry[] = [
               <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
             </span>
             <p class="dsw-list-text">
-              Kemasan jar terbuka yang dicolek jari setiap hari berisiko <strong style="color: #be123c;">mengurangi higienitas dan kestabilan bahan aktif</strong>.
+              Krim racikan pengelupas keras justru <strong style="color: #be123c;">menipiskan kulit dan bikin flek hitam kambuh 2x lebih gelap</strong> saat kena matahari.
             </p>
           </div>
         </div>
@@ -335,25 +313,25 @@ const FAQS: FaqEntry[] = [
       <!-- Section 4: Perbandingan Visual Perawatan Rutin -->
       <section class="dsw-section">
         <h2 class="dsw-h2">
-          Perbedaan kondisi kulit <span class="dsw-hl-aqua">dengan hidrasi teratur</span>
+          Bukti perubahan nyata <span class="dsw-hl-aqua">dengan hidrasi 5 lapis</span>
         </h2>
-        <p class="dsw-sub">Saat cadangan air 5 lapis epidermis terjaga pagi dan malam hari.</p>
+        <p class="dsw-sub">Saat cadangan air epidermis dikunci rapat pagi dan malam hari.</p>
 
         <div class="dsw-photo-stack">
           <div class="dsw-photo-card">
             <img
               src={`${IMG_BASE}/kondisi-flek-kerutan-kasar.webp`}
-              alt="Kondisi permukaan kulit kering kasar dengan garis halus dan rona kurang merata"
-              width="315"
-              height="210"
+              alt="Kondisi permukaan kulit kering kasar dengan flek hitam dan garis kerutan halus"
+              width="648"
+              height="432"
               class="dsw-photo-img"
               loading="lazy"
               fetchpriority="low"
               decoding="async"
             />
-            <span class="dsw-photo-badge dsw-photo-badge--before">Saat Barrier Dehidrasi</span>
+            <span class="dsw-photo-badge dsw-photo-badge--before">SEBELUM — Flek & Kerutan Kering</span>
             <p class="dsw-photo-caption">
-              Permukaan kulit terasa kasar ketarik, riasan mudah retak, dan warna kulit tampak tidak merata.
+              Permukaan kulit kasar ketarik, flek hitam kecokelatan tampak jelas di tulang pipi, dan pori-pori terlihat besar.
             </p>
           </div>
 
@@ -368,9 +346,9 @@ const FAQS: FaqEntry[] = [
               fetchpriority="low"
               decoding="async"
             />
-            <span class="dsw-photo-badge dsw-photo-badge--after">Rutin Pagi & Malam</span>
+            <span class="dsw-photo-badge dsw-photo-badge--after">SESUDAH RUTIN — Kenyal & Cerah Merata</span>
             <p class="dsw-photo-caption">
-              Tekstur pipi terasa halus membal, garis kering tersamarkan, dan wajah memantulkan kilau sehat alami.
+              Tekstur pipi terasa halus membal, garis kering terisi penuh, dan noda hitam memudar bertahap secara sehat.
             </p>
           </div>
         </div>
@@ -473,7 +451,7 @@ const FAQS: FaqEntry[] = [
               <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
             </div>
             <p class="dsw-review-quote">
-              "Tidur di kamar AC biasanya bangun pagi pipi berasa ketarik. Sejak rutin pakai Adenosine ini <span class="dsw-hl-aqua">kulit tetap lembap kenyal sampai pagi</span> dan rona kusam mulai rata."
+              "Tidur di kamar AC biasanya bangun pagi pipi berasa ketarik. Sejak rutin pakai Adenosine ini <span class="dsw-hl-aqua">kulit tetap lembap kenyal sampai pagi</span> dan flek hitam di pipi mulai memudar."
             </p>
           </div>
 
@@ -533,8 +511,8 @@ const FAQS: FaqEntry[] = [
             <img
               src={`${IMG_BASE}/bukti-pipi-kenyal-halus.webp`}
               alt="Close-up tekstur pipi yang lembap kenyal dan halus"
-              width="648"
-              height="432"
+              width="315"
+              height="210"
               class="dsw-photo-img"
               loading="lazy"
               fetchpriority="low"
@@ -603,7 +581,7 @@ const FAQS: FaqEntry[] = [
             <figcaption class="dsw-figcaption">
               <h3 class="dsw-figcaption-title">11X Hyaluronic Acid + 2% AQUAXYL™ + Adenosine + Alpha-Arbutin</h3>
               <p class="dsw-figcaption-desc">
-                Menghidrasi hingga 5 lapisan stratum korneum sekaligus merawat garis ekspresi halus dan rona kulit kurang merata.
+                Menghidrasi hingga 5 lapisan stratum korneum sekaligus merawat garis ekspresi halus dan memudarkan flek hitam membandel.
               </p>
             </figcaption>
           </figure>
@@ -679,10 +657,7 @@ const FAQS: FaqEntry[] = [
         tiers={BUNDLE_TIERS}
       />
 
-      <!-- Section 11: Objection-Handling FAQ -->
-      <LpFaqSection faqs={FAQS} />
-
-      <!-- Section 12: Order Form with Tiered Bundling -->
+      <!-- Section 11: Order Form with Tiered Bundling -->
       <section id="form-pemesanan" class="dsw-section--checkout">
         <div style="padding: 0 20px 14px; text-align: center;">
           <h2 class="dsw-h2" style="font-size: 26px;">

@@ -8,9 +8,6 @@ import LpHeroOffer from '../components/storefront/landing-pages/LpHeroOffer.astr
 import LpBundleValueSection, {
   type BundleTierSpec,
 } from '../components/storefront/landing-pages/LpBundleValueSection.astro';
-import LpFaqSection, {
-  type FaqEntry,
-} from '../components/storefront/landing-pages/LpFaqSection.astro';
 import LpFloatingCta from '../components/storefront/landing-pages/LpFloatingCta.astro';
 import { getStorefrontProduct } from '../lib/catalog';
 import { nativeLandingCanonicalPath } from '../lib/landing-pages';
@@ -95,29 +92,6 @@ const BUNDLE_TIERS: BundleTierSpec[] = [
     ctaLabel: 'Pilih Paket Trio',
   },
 ];
-
-const FAQS: FaqEntry[] = [
-  {
-    question: 'Apakah PDRN Tone-Up Day Cream bikin wajah abu-abu di kulit sawo matang?',
-    answer:
-      'Tidak abu-abu. Krimnya berwarna Warm Natural Beige (bukan putih kapur) sehingga langsung menyatu halus di kulit sawo matang maupun kuning langsat Indonesia dalam 15 detik.',
-  },
-  {
-    question: 'Apakah ini sekadar makeup atau skincare pencerah sungguhan?',
-    answer:
-      'Skincare aktif ber-BPOM (NA18262000246) dengan 10.000 ppm (1%) Encapsulated Vegan PDRN, Alpha-Arbutin, dan 5% Niacinamide yang merawat rona kusam sekaligus memberi tampilan cerah rapi seketika.',
-  },
-  {
-    question: 'Apakah perlu ditimpa sunscreen lagi bila beraktivitas di luar ruangan?',
-    answer:
-      'Untuk aktivitas di bawah terik matahari langsung, sangat disarankan melapisinya dengan Oxydew Sunscreen SPF 50+ PA++++ (tersedia dalam Paket Pagi Anti-UV & Paket Trio Lebih Hemat).',
-  },
-  {
-    question: 'Apakah bisa Bayar di Tempat (COD) saat paket sampai?',
-    answer:
-      'Bisa. Pilih satuan atau paket bundling di formulir bawah, isi kecamatan Anda untuk cek ongkir otomatis, lalu pilih metode pembayaran COD atau QRIS.',
-  },
-];
 ---
 
 <BaseLayout
@@ -127,7 +101,6 @@ const FAQS: FaqEntry[] = [
   preloadImages={HERO_IMAGE}
   canonical={canonical}
   noindex={true}
-  faqs={FAQS}
   hideHeader={true}
   hideFooter={true}
 >
@@ -144,11 +117,11 @@ const FAQS: FaqEntry[] = [
       <section id="hero-section" class="dsw-hero">
         <div class="dsw-hero-head">
           <h1 class="dsw-h1">
-            Oles 15 Detik Langsung <span class="dsw-hl-tilt">Cerah Menyatu</span> Tanpa Muka Abu-Abu!
+            Oles 15 Detik <span class="dsw-hl-tilt">Samarkan Flek & Kusam</span> Tanpa Muka Abu-Abu Dempul!
           </h1>
           <p class="dsw-sub" style="max-width: 390px; margin: 14px auto 0; font-weight: 700;">
-            Bukan krim tone-up putih kapur yang bikin belang di leher.<br />
-            <span class="dsw-underline-teal">Pigmen Warm Natural Beige khusus kulit sawo matang & kuning langsat Indonesia!</span>
+            Bukan krim pemutih putih kapur yang bikin muka belang di leher.<br />
+            <span class="dsw-underline-teal">Pigmen Warm Natural Beige menyatu di kulit sawo matang + 10.000 PPM PDRN & Alpha-Arbutin!</span>
           </p>
         </div>
 
@@ -162,7 +135,7 @@ const FAQS: FaqEntry[] = [
 
           <img
             src={HERO_IMAGE}
-            alt="Ilustrasi perawatan wajah cerah alami menyatu dengan Numa Skin PDRN Alpha Arbutin Tone-Up Day Cream"
+            alt="Perbandingan wajah belang abu-abu dempul dan flek hitam vs cerah alami menyatu dengan Numa Skin PDRN Alpha Arbutin Tone-Up Day Cream"
             width="720"
             height="480"
             class="dsw-hero-img"
@@ -171,11 +144,16 @@ const FAQS: FaqEntry[] = [
             decoding="async"
           />
 
+          <div class="dsw-hero-ba" aria-hidden="true">
+            <span class="dsw-hero-ba-pill dsw-hero-ba-pill--before">SEBELUM — Abu-Abu Dempul & Flek</span>
+            <span class="dsw-hero-ba-pill dsw-hero-ba-pill--after">SESUDAH — Cerah Natural Menyatu</span>
+          </div>
+
           <div class="dsw-hero-overlap">
             <div class="dsw-hero-overlap-inner">
-              <h2 class="dsw-hero-overlap-title">Cerah Instan di Luar, Rawat Rona Kusam dari Dalam</h2>
+              <h2 class="dsw-hero-overlap-title">Bukan Sekadar Tone-Up, Tapi Gempur Flek dari Dalam!</h2>
               <p class="dsw-hero-overlap-text">
-                Krim tone-up putih biasa <strong style="color: #be123c;">mengendap di pori dan membuat kulit sawo matang terlihat belang keabuan</strong> saat berkeringat di siang hari.
+                Krim tone-up putih biasa <strong style="color: #be123c;">mengendap pecah di pori, bikin flek hitam tampak abu-abu kotor</strong>, dan luntur belang saat berkeringat.
               </p>
             </div>
           </div>
@@ -255,7 +233,7 @@ const FAQS: FaqEntry[] = [
               <Icon name="lucide:sun" class="size-4" aria-hidden="true" />
             </span>
             <p class="dsw-list-text">
-              <strong style="color: #0f172a;">Alpha-Arbutin + 5% Niacinamide</strong> menghambat pembentukan rona kulit kurang merata hingga 9x lebih efektif dibanding Beta-Arbutin.
+              <strong style="color: #0f172a;">Alpha-Arbutin + 5% Niacinamide</strong> menghambat pemicu flek hitam & noda gelap hingga 9x lebih efektif dibanding Beta-Arbutin.
             </p>
           </div>
           <div class="dsw-list-row">
@@ -263,7 +241,7 @@ const FAQS: FaqEntry[] = [
               <Icon name="lucide:shield-plus" class="size-4" aria-hidden="true" />
             </span>
             <p class="dsw-list-text">
-              <strong style="color: #0f172a;">4X UV Filter & Natural Beige Tint</strong> meratakan warna kulit seketika tanpa rasa lengket maupun efek topeng.
+              <strong style="color: #0f172a;">4X UV Filter & Natural Beige Tint</strong> menyamarkan flek dan meratakan warna kulit seketika tanpa rasa lengket maupun efek topeng.
             </p>
           </div>
         </div>
@@ -272,7 +250,7 @@ const FAQS: FaqEntry[] = [
       <!-- Section 3: Tanda Masalah Kulit + Visual Grid -->
       <section class="dsw-section dsw-section--warn">
         <h2 class="dsw-h2">
-          Mengapa krim pagi biasa sering <span class="dsw-underline-warn">bikin wajah terlihat kusam</span> di siang hari:
+          Kenapa krim siang biasa bikin <span class="dsw-underline-warn">muka dempul & flek makin gelap</span>:
         </h2>
 
         <div class="dsw-photo-grid-2">
@@ -288,14 +266,14 @@ const FAQS: FaqEntry[] = [
               decoding="async"
             />
             <p class="dsw-photo-caption">
-              <strong style="color: #be123c; display: block;">Belang & Abu-Abu</strong>
-              Krim putih tampak seperti topeng di kulit sawo matang.
+              <strong style="color: #be123c; display: block;">Abu-Abu & Dempul Pecah</strong>
+              Krim putih kapur menyumbat pori dan belang di kulit sawo matang.
             </p>
           </div>
           <div class="dsw-photo-card">
             <img
               src={`${IMG_BASE}/masalah-flek-kusam-pagi.webp`}
-              alt="Noda warna kulit kurang merata dan warna kulit tidak merata saat bangun pagi sebelum beraktivitas"
+              alt="Flek hitam membandel dan noda gelap di tulang pipi yang sulit tertutup krim biasa"
               width="315"
               height="210"
               class="dsw-photo-img"
@@ -304,8 +282,8 @@ const FAQS: FaqEntry[] = [
               decoding="async"
             />
             <p class="dsw-photo-caption">
-              <strong style="color: #be123c; display: block;">Rona Kusam & Pori Kasar</strong>
-              Bedak menggumpal di garis halus saat wajah mulai berminyak.
+              <strong style="color: #be123c; display: block;">Flek Hitam Membandel</strong>
+              Noda gelap di tulang pipi makin tegas saat terpapar panas siang.
             </p>
           </div>
         </div>
@@ -316,7 +294,7 @@ const FAQS: FaqEntry[] = [
               <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
             </span>
             <p class="dsw-list-text">
-              Terpaksa menumpuk <strong style="color: #be123c;">foundation tebal setiap pagi</strong> demi menutupi rona kulit kurang merata di tulang pipi.
+              Capek menumpuk <strong style="color: #be123c;">foundation & bedak tebal setiap pagi</strong> demi menutupi flek hitam membandel di tulang pipi.
             </p>
           </div>
           <div class="dsw-list-row">
@@ -324,7 +302,7 @@ const FAQS: FaqEntry[] = [
               <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
             </span>
             <p class="dsw-list-text">
-              Baru jam 11 siang, riasan sudah <strong style="color: #be123c;">luntur, cakey di garis senyum, dan menggelap (oksidasi)</strong>.
+              Baru jam 11 siang, dempul sudah <strong style="color: #be123c;">pecah mengendap di garis senyum dan berubah kusam keabuan</strong>.
             </p>
           </div>
           <div class="dsw-list-row">
@@ -332,7 +310,7 @@ const FAQS: FaqEntry[] = [
               <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
             </span>
             <p class="dsw-list-text">
-              Krim siang biasa hanya memberi warna sementara <strong style="color: #be123c;">tanpa bahan aktif yang benar-benar memudarkan rona kusam</strong>.
+              Krim siang murah hanya menutup di permukaan <strong style="color: #be123c;">tanpa PDRN & Alpha-Arbutin yang benar-benar memudarkan flek hitam</strong>.
             </p>
           </div>
         </div>
@@ -341,15 +319,15 @@ const FAQS: FaqEntry[] = [
       <!-- Section 4: Ilustrasi Perawatan Rutin -->
       <section class="dsw-section">
         <h2 class="dsw-h2">
-          Perbandingan visual <span class="dsw-hl-aqua">di kulit Indonesia</span>
+          Bukti nyata perubahan <span class="dsw-hl-aqua">di kulit sawo matang</span>
         </h2>
-        <p class="dsw-sub">Beda hasil krim tone-up putih kapur vs pigmen Natural Beige PDRN Numa Skin.</p>
+        <p class="dsw-sub">Beda telak krim tone-up putih kapur vs pigmen Natural Beige PDRN Numa Skin.</p>
 
         <div class="dsw-photo-stack">
           <div class="dsw-photo-card">
             <img
               src={`${IMG_BASE}/kondisi-kusam-abu-dempul.webp`}
-              alt="Kulit pipi tampak kusam dengan sisa krim putih yang menggumpal abu-abu di pori"
+              alt="Kulit pipi tampak kusam dengan flek hitam dan sisa krim putih yang menggumpal abu-abu di pori"
               width="648"
               height="432"
               class="dsw-photo-img"
@@ -357,9 +335,9 @@ const FAQS: FaqEntry[] = [
               fetchpriority="low"
               decoding="async"
             />
-            <span class="dsw-photo-badge dsw-photo-badge--before">Kondisi Kulit Kering</span>
+            <span class="dsw-photo-badge dsw-photo-badge--before">SEBELUM — Flek & Abu-Abu Dempul</span>
             <p class="dsw-photo-caption">
-              Rona kulit kurang merata masih membayang keabuan dan residu krim putih mengendap jelas di pori-pori pipi.
+              Flek hitam di pipi membayang keabuan dan residu krim putih menggumpal kasar di dalam pori-pori.
             </p>
           </div>
 
@@ -374,9 +352,9 @@ const FAQS: FaqEntry[] = [
               fetchpriority="low"
               decoding="async"
             />
-            <span class="dsw-photo-badge dsw-photo-badge--after">Dengan Perawatan Rutin</span>
+            <span class="dsw-photo-badge dsw-photo-badge--after">SESUDAH RUTIN — Cerah Menyatu Alami</span>
             <p class="dsw-photo-caption">
-              Warna kulit tampak setingkat lebih cerah merata, noda tersamarkan halus, dan menyatu alami dengan leher.
+              Warna kulit langsung setingkat lebih cerah merata, flek hitam tersamarkan mulus, dan menyatu alami dengan leher.
             </p>
           </div>
         </div>
@@ -485,7 +463,7 @@ const FAQS: FaqEntry[] = [
               <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
             </div>
             <p class="dsw-review-quote">
-              "Pagi-pagi buru-buru ngajar tinggal oles krim PDRN ini aja udah kelihatan rapi dan segar. Setelah habis 1 jar, <span class="dsw-hl-aqua">bekas rona kusam di pipi juga kelihatan makin tipis</span>."
+              "Pagi-pagi buru-buru ngajar tinggal oles krim PDRN ini aja udah kelihatan rapi dan segar. Setelah habis 1 jar, <span class="dsw-hl-aqua">flek hitam bekas matahari di pipi juga kelihatan makin tipis</span>."
             </p>
           </div>
 
@@ -615,7 +593,7 @@ const FAQS: FaqEntry[] = [
             <figcaption class="dsw-figcaption">
               <h3 class="dsw-figcaption-title">Alpha-Arbutin + 5% Niacinamide + 4X UV Defense</h3>
               <p class="dsw-figcaption-desc">
-                Sinergi penghambat tirosinase Alpha-Arbutin (9x lebih kuat dari Beta-Arbutin) dan 5% Niacinamide untuk menyamarkan warna kulit kurang merata sekaligus mencegah kusam akibat sinar UV.
+                Sinergi penghambat tirosinase Alpha-Arbutin (9x lebih kuat dari Beta-Arbutin) dan 5% Niacinamide untuk memudarkan flek hitam membandel sekaligus mencegah kusam akibat sinar UV.
               </p>
             </figcaption>
           </figure>
@@ -636,7 +614,7 @@ const FAQS: FaqEntry[] = [
             <figcaption class="dsw-figcaption">
               <h3 class="dsw-figcaption-title">Kemasan Frosted Jar 30 gr (Awet 6–8 Minggu)</h3>
               <p class="dsw-figcaption-desc">
-                Cukup seukuran biji mutiara setiap pagi untuk meratakan warna kulit sekaligus merawat rona kulit kurang merata sepanjang hari.
+                Cukup seukuran biji mutiara setiap pagi untuk meratakan warna kulit sekaligus merawat noda hitam sepanjang hari.
               </p>
             </figcaption>
           </figure>
@@ -691,10 +669,7 @@ const FAQS: FaqEntry[] = [
         tiers={BUNDLE_TIERS}
       />
 
-      <!-- Section 11: Objection-Handling FAQ -->
-      <LpFaqSection faqs={FAQS} />
-
-      <!-- Section 12: Checkout Form with Tiered Bundling -->
+      <!-- Section 11: Checkout Form with Tiered Bundling -->
       <section id="form-pemesanan" class="dsw-section--checkout">
         <div style="padding: 0 20px 14px; text-align: center;">
           <h2 class="dsw-h2" style="font-size: 26px;">

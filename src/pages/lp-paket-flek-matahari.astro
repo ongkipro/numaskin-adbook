@@ -8,9 +8,6 @@ import LpHeroOffer from '../components/storefront/landing-pages/LpHeroOffer.astr
 import LpBundleValueSection, {
   type BundleTierSpec,
 } from '../components/storefront/landing-pages/LpBundleValueSection.astro';
-import LpFaqSection, {
-  type FaqEntry,
-} from '../components/storefront/landing-pages/LpFaqSection.astro';
 import LpFloatingCta from '../components/storefront/landing-pages/LpFloatingCta.astro';
 import { getStorefrontProduct } from '../lib/catalog';
 import { nativeLandingCanonicalPath } from '../lib/landing-pages';
@@ -87,29 +84,6 @@ const BUNDLE_TIERS: BundleTierSpec[] = [
     ctaLabel: 'Upgrade + Toner 150ml',
   },
 ];
-
-const FAQS: FaqEntry[] = [
-  {
-    question: 'Kenapa rona kusam di pipi wajib dirawat dengan kombinasi Pelembap + Sunscreen?',
-    answer:
-      'Tanpa SPF 50+ PA++++ di siang hari, paparan sinar UVA selama 15 menit langsung memicu produksi melanin baru sehingga perawatan malam hari menjadi sia-sia. Kombinasi ini menjaga siklus 24 jam penuh.',
-  },
-  {
-    question: 'Apakah menggumpal (pilling) saat Adenosine ditumpuk Oxydew Sunscreen?',
-    answer:
-      'Tidak menggumpal. Keduanya menggunakan basis Ulleung Deep Sea Water yang ringan sehingga menyatu mulus bahkan di bawah bedak atau cushion.',
-  },
-  {
-    question: 'Apakah aman untuk ibu hamil, menyusui, dan kulit sensitif?',
-    answer:
-      'Aman. Terdaftar resmi di BPOM RI (NA18250109281 & NA18251703709), Halal Indonesia, serta bebas retinol keras, hidrokuinon, maupun merkuri.',
-  },
-  {
-    question: 'Apakah bisa Bayar di Tempat (COD)?',
-    answer:
-      'Bisa. Paket Duo Adenosine & Sunscreen sudah terpilih otomatis di formulir bawah, tinggal isi nama, WhatsApp, dan kecamatan pengiriman.',
-  },
-];
 ---
 
 <BaseLayout
@@ -119,7 +93,6 @@ const FAQS: FaqEntry[] = [
   preloadImages={HERO_IMAGE}
   canonical={canonical}
   noindex={true}
-  faqs={FAQS}
   hideHeader={true}
   hideFooter={true}
 >
@@ -136,10 +109,10 @@ const FAQS: FaqEntry[] = [
       <section id="hero-section" class="dsw-hero">
         <div class="dsw-hero-head">
           <h1 class="dsw-h1">
-            <span class="dsw-hl-tilt">Rawat Malam, Kunci Pagi:</span> Sinergi Adenosine & Tameng UV SPF 50+ PA++++
+            Rawat Malam Tapi <span class="dsw-hl-tilt">Flek Gosong Lagi Saat Kena Panas Siang?</span> Kunci Adenosine & Tameng SPF 50+!
           </h1>
           <p class="dsw-sub" style="max-width: 390px; margin: 14px auto 0; font-weight: 700;">
-            Merawat rona kusam di malam hari wajib dikunci perlindungan UV di pagi hari agar noda tidak kambuh.<br />
+            Pakai krim malam semahal apapun percuma kalau siang hari flek hitam kembali terbakar sinar UV.<br />
             <span class="dsw-underline-teal">Paket Bundling #1 Terlaris Numa Skin — Hemat Rp16.000!</span>
           </p>
         </div>
@@ -154,7 +127,7 @@ const FAQS: FaqEntry[] = [
 
           <img
             src={HERO_IMAGE}
-            alt="Ilustrasi perawatan kulit cerah kenyal terlindungi dengan Paket Adenosine & Oxydew Sunscreen"
+            alt="Perbandingan wajah flek hitam terbakar matahari vs kulit cerah kenyal terlindungi dengan Paket Adenosine & Oxydew Sunscreen"
             width="720"
             height="480"
             class="dsw-hero-img"
@@ -163,11 +136,16 @@ const FAQS: FaqEntry[] = [
             decoding="async"
           />
 
+          <div class="dsw-hero-ba" aria-hidden="true">
+            <span class="dsw-hero-ba-pill dsw-hero-ba-pill--before">SEBELUM — Flek Gosong Terbakar UV</span>
+            <span class="dsw-hero-ba-pill dsw-hero-ba-pill--after">SESUDAH — Cerah Kenyal Terlindungi</span>
+          </div>
+
           <div class="dsw-hero-overlap">
             <div class="dsw-hero-overlap-inner">
-              <h2 class="dsw-hero-overlap-title">Sinergi Hidrasi Malam & Proteksi UV Pagi Hari</h2>
+              <h2 class="dsw-hero-overlap-title">15 Menit Kena Panas Tanpa SPF = Flek Hitam Kambuh!</h2>
               <p class="dsw-hero-overlap-text">
-                Hanya 15 menit terkena terik matahari tanpa SPF 50+ sudah cukup untuk <strong style="color: #be123c;">mengaktifkan kembali pigmen melanin dan mempertebal rona kusam di tulang pipi</strong>.
+                Hanya 15 menit terkena terik matahari tanpa SPF 50+ sudah cukup untuk <strong style="color: #be123c;">membakar pigmen melanin dan mempertebal flek hitam membandel di tulang pipi</strong>.
               </p>
             </div>
           </div>
@@ -239,7 +217,7 @@ const FAQS: FaqEntry[] = [
               <Icon name="lucide:droplets" class="size-4" aria-hidden="true" />
             </span>
             <p class="dsw-list-text">
-              <strong style="color: #0f172a;">Adenosine Moisturizer (30 gr):</strong> Merawat warna kulit kurang merata, garis senyum, dan cadangan air 5 lapis dengan Adenosine, Alpha-Arbutin, & 11X Hyaluronic Acid.
+              <strong style="color: #0f172a;">Adenosine Moisturizer (30 gr):</strong> Memudarkan flek hitam membandel, garis senyum, dan mengisi cadangan air 5 lapis dengan Adenosine, Alpha-Arbutin, & 11X Hyaluronic Acid.
             </p>
           </div>
           <div class="dsw-list-row">
@@ -247,7 +225,7 @@ const FAQS: FaqEntry[] = [
               <Icon name="lucide:sun-dim" class="size-4" aria-hidden="true" />
             </span>
             <p class="dsw-list-text">
-              <strong style="color: #0f172a;">Oxydew Sunscreen SPF 50+ PA++++ (30 ml):</strong> Memblokir radiasi UVA/UVB pemicu rona kusam baru dengan 3% Luceane™ tanpa whitecast abu-abu.
+              <strong style="color: #0f172a;">Oxydew Sunscreen SPF 50+ PA++++ (30 ml):</strong> Memblokir radiasi UVA/UVB pemicu flek hitam baru dengan 3% Luceane™ tanpa whitecast abu-abu.
             </p>
           </div>
           <div class="dsw-list-row">
@@ -264,14 +242,14 @@ const FAQS: FaqEntry[] = [
       <!-- Section 3: Tanda Masalah Kulit + Visual Grid -->
       <section class="dsw-section dsw-section--warn">
         <h2 class="dsw-h2">
-          Mengapa warna kulit kurang merata <span class="dsw-underline-warn">tidak kunjung hilang</span> jika hanya pakai 1 produk?
+          Kenapa <span class="dsw-underline-warn">flek hitam makin melebar</span> kalau cuma pakai 1 krim saja?
         </h2>
 
         <div class="dsw-photo-grid-2">
           <div class="dsw-photo-card">
             <img
               src={`${IMG_BASE}/masalah-pakai-krim-tanpa-spf.webp`}
-              alt="Wanita bercermin melihat bercak warna kulit kurang merata di pipi yang kembali menggelap karena lupa memakai sunscreen"
+              alt="Kulit pipi terbakar UV dan bercak flek hitam kembali menggelap karena tanpa sunscreen SPF 50+"
               width="315"
               height="210"
               class="dsw-photo-img"
@@ -280,14 +258,14 @@ const FAQS: FaqEntry[] = [
               decoding="async"
             />
             <p class="dsw-photo-caption">
-              <strong style="color: #be123c; display: block;">Rawat Malam, Rusak Siang</strong>
-              Kulit yang baru diregenerasi malam hari langsung terpapar UV saat pagi.
+              <strong style="color: #be123c; display: block;">Rawat Malam, Gosong Siang</strong>
+              Kulit yang baru diregenerasi malam hari langsung terbakar UV saat pagi.
             </p>
           </div>
           <div class="dsw-photo-card">
             <img
               src={`${IMG_BASE}/masalah-flek-kambuh-terik.webp`}
-              alt="Kulit pipi memerah dan rona kulit kurang merata makin tegas akibat sengatan matahari tropis"
+              alt="Flek hitam membandel di tulang pipi makin tegas akibat sengatan matahari tropis"
               width="315"
               height="210"
               class="dsw-photo-img"
@@ -296,8 +274,8 @@ const FAQS: FaqEntry[] = [
               decoding="async"
             />
             <p class="dsw-photo-caption">
-              <strong style="color: #be123c; display: block;">Photoaging & Garis Halus</strong>
-              Sinar UVA menembus dermis dan memutus serat kolagen penyangga pipi.
+              <strong style="color: #be123c; display: block;">Flek Menahun & Kerutan</strong>
+              Sinar UVA menembus dermis, mempertebal flek, dan memutus kolagen pipi.
             </p>
           </div>
         </div>
@@ -308,7 +286,7 @@ const FAQS: FaqEntry[] = [
               <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
             </span>
             <p class="dsw-list-text">
-              Sudah habis berbotol-botol pelembap/serum, tapi <strong style="color: #be123c;">bercak cokelat di tulang pipi tetap muncul kembali</strong> tiap habis keluar rumah.
+              Sudah habis ratusan ribu ganti pelembap/serum, tapi <strong style="color: #be123c;">flek hitam di tulang pipi tetap gosong kembali</strong> tiap habis keluar rumah.
             </p>
           </div>
           <div class="dsw-list-row">
@@ -316,7 +294,7 @@ const FAQS: FaqEntry[] = [
               <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
             </span>
             <p class="dsw-list-text">
-              Malas pakai sunscreen karena <strong style="color: #be123c;">takut lengket, gerah, atau bikin muka abu-abu</strong> saat ditumpuk di atas pelembap.
+              Malas pakai sunscreen biasa karena <strong style="color: #be123c;">lengket, perih di mata, dan bikin muka abu-abu</strong> saat ditumpuk pelembap.
             </p>
           </div>
           <div class="dsw-list-row">
@@ -324,7 +302,7 @@ const FAQS: FaqEntry[] = [
               <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
             </span>
             <p class="dsw-list-text">
-              Kulit mulai tampak <strong style="color: #be123c;">kusam, belang di batas hijab, dan muncul tekstur kulit kering</strong> di sudut mata.
+              Kulit makin <strong style="color: #be123c;">kusam belang di batas hijab dan muncul kerutan halus</strong> di sudut mata.
             </p>
           </div>
         </div>
@@ -333,15 +311,15 @@ const FAQS: FaqEntry[] = [
       <!-- Section 4: Ilustrasi Perawatan Rutin -->
       <section class="dsw-section">
         <h2 class="dsw-h2">
-          Perbandingan hasil <span class="dsw-hl-aqua">kombinasi 24 jam</span>
+          Bukti nyata perubahan <span class="dsw-hl-aqua">kombinasi 24 jam</span>
         </h2>
-        <p class="dsw-sub">Ketika nutrisi pencerah malam dan tameng UV siang bekerja berkesinambungan.</p>
+        <p class="dsw-sub">Ketika pencerah malam dan tameng UV SPF 50+ bekerja tanpa celah.</p>
 
         <div class="dsw-photo-stack">
           <div class="dsw-photo-card">
             <img
               src={`${IMG_BASE}/kondisi-flek-makin-gelap-uv.webp`}
-              alt="Kondisi pipi dengan noda warna kulit kurang merata pekat, kemerahan matahari, dan garis halus saat kulit membutuhkan kelembapan"
+              alt="Kondisi pipi dengan noda flek hitam pekat, kemerahan matahari, dan garis halus"
               width="648"
               height="432"
               class="dsw-photo-img"
@@ -349,9 +327,9 @@ const FAQS: FaqEntry[] = [
               fetchpriority="low"
               decoding="async"
             />
-            <span class="dsw-photo-badge dsw-photo-badge--before">Tanpa Proteksi Lengkap</span>
+            <span class="dsw-photo-badge dsw-photo-badge--before">SEBELUM — Flek Hitam Terbakar UV</span>
             <p class="dsw-photo-caption">
-              Rona kulit kurang merata di tulang pipi tampak gelap kontras, kulit kemerahan terpapar panas, dan tekstur pori kering kasar.
+              Flek hitam di tulang pipi tampak gelap kontras, kulit kemerahan terpapar panas, dan tekstur pori kering kasar.
             </p>
           </div>
 
@@ -366,9 +344,9 @@ const FAQS: FaqEntry[] = [
               fetchpriority="low"
               decoding="async"
             />
-            <span class="dsw-photo-badge dsw-photo-badge--after">Rutin Duo Adenosine + SPF</span>
+            <span class="dsw-photo-badge dsw-photo-badge--after">SESUDAH RUTIN — Cerah & Terlindungi UV</span>
             <p class="dsw-photo-caption">
-              Bercak hitam memudar bertahap, noda baru tercegah, dan kulit tampak kenyal bercahaya sehat sepanjang hari.
+              Bercak flek hitam memudar bertahap, noda baru tercegah total, dan kulit tampak kenyal bercahaya sehat sepanjang hari.
             </p>
           </div>
         </div>
@@ -459,7 +437,7 @@ const FAQS: FaqEntry[] = [
               <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
             </div>
             <p class="dsw-review-quote">
-              "Awalnya cuma beli Adenosine-nya aja, ternyata pas digabung sama Oxydew Sunscreen hasilnya jauh lebih cepat kelihatan! <span class="dsw-hl-aqua">Rona Kusam di pipi gak pernah menghitam lagi walau sering antar jemput anak</span> siang bolong."
+              "Awalnya cuma beli Adenosine-nya aja, ternyata pas digabung sama Oxydew Sunscreen hasilnya jauh lebih cepat kelihatan! <span class="dsw-hl-aqua">Flek hitam di pipi gak pernah menghitam lagi walau sering antar jemput anak</span> siang bolong."
             </p>
           </div>
 
@@ -683,10 +661,7 @@ const FAQS: FaqEntry[] = [
         tiers={BUNDLE_TIERS}
       />
 
-      <!-- Section 11: Objection-Handling FAQ -->
-      <LpFaqSection faqs={FAQS} />
-
-      <!-- Section 12: Checkout Form with Tiered Bundling -->
+      <!-- Section 11: Checkout Form with Tiered Bundling -->
       <section id="form-pemesanan" class="dsw-section--checkout">
         <div style="padding: 0 20px 14px; text-align: center;">
           <h2 class="dsw-h2" style="font-size: 26px;">

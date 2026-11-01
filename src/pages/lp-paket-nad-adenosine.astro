@@ -8,9 +8,6 @@ import LpHeroOffer from '../components/storefront/landing-pages/LpHeroOffer.astr
 import LpBundleValueSection, {
   type BundleTierSpec,
 } from '../components/storefront/landing-pages/LpBundleValueSection.astro';
-import LpFaqSection, {
-  type FaqEntry,
-} from '../components/storefront/landing-pages/LpFaqSection.astro';
 import LpFloatingCta from '../components/storefront/landing-pages/LpFloatingCta.astro';
 import { getStorefrontProduct } from '../lib/catalog';
 import { nativeLandingCanonicalPath } from '../lib/landing-pages';
@@ -87,29 +84,6 @@ const BUNDLE_TIERS: BundleTierSpec[] = [
     ctaLabel: 'Upgrade + Toner 150ml',
   },
 ];
-
-const FAQS: FaqEntry[] = [
-  {
-    question: 'Apakah paket NAD+ dan Adenosine ini aman untuk kulit yang tidak tahan Retinol?',
-    answer:
-      'Sangat aman. Formula ini bebas retinol keras maupun asam pengelupas, sehingga merawat kekencangan garis senyum lewat 2% RejuveNAD™, 6X Peptide, dan Adenosine tanpa membuat kulit tipis, merah, atau perih.',
-  },
-  {
-    question: 'Kenapa NAD+ Serum harus dikunci dengan Adenosine Moisturizer?',
-    answer:
-      'Di ruang ber-AC atau pada kulit usia 35+, hidrasi serum berair mudah menguap. Lapisan water-gel 11X Hyaluronic Acid & 2% AQUAXYL pada Adenosine menyegel peptida dan NAD+ agar bekerja penuh sepanjang hari & malam.',
-  },
-  {
-    question: 'Apakah keduanya terdaftar resmi di BPOM RI?',
-    answer:
-      'Sudah terdaftar resmi di BPOM RI: NAD+ Booster Serum (NA18262000245) dan Adenosine Deep Sea Water Moisturizer (NA18250109281), serta bersertifikat Halal Indonesia.',
-  },
-  {
-    question: 'Apakah bisa Bayar di Tempat (COD)?',
-    answer:
-      'Bisa. Paket NAD+ Youth Boost Set sudah terpilih otomatis di formulir bawah, tinggal isi nama, WhatsApp, dan kecamatan pengiriman.',
-  },
-];
 ---
 
 <BaseLayout
@@ -119,7 +93,6 @@ const FAQS: FaqEntry[] = [
   preloadImages={HERO_IMAGE}
   canonical={canonical}
   noindex={true}
-  faqs={FAQS}
   hideHeader={true}
   hideFooter={true}
 >
@@ -154,7 +127,7 @@ const FAQS: FaqEntry[] = [
 
           <img
             src={HERO_IMAGE}
-            alt="Ilustrasi perawatan kontur pipi kencang kenyal dengan Paket NAD+ Youth Boost Set Numa Skin"
+            alt="Perbandingan pipi kendur garis senyum tegas vs kontur wajah kencang kenyal dengan Paket NAD+ Youth Boost Set Numa Skin"
             width="720"
             height="480"
             class="dsw-hero-img"
@@ -162,6 +135,11 @@ const FAQS: FaqEntry[] = [
             loading="eager"
             decoding="async"
           />
+
+          <div class="dsw-hero-ba" aria-hidden="true">
+            <span class="dsw-hero-ba-pill dsw-hero-ba-pill--before">SEBELUM — Pipi Kendur & Lipatan Dalam</span>
+            <span class="dsw-hero-ba-pill dsw-hero-ba-pill--after">SESUDAH — Kontur Padat & Kenyal</span>
+          </div>
 
           <div class="dsw-hero-overlap">
             <div class="dsw-hero-overlap-inner">
@@ -264,14 +242,14 @@ const FAQS: FaqEntry[] = [
       <!-- Section 3: Tanda Masalah Kulit + Visual Grid -->
       <section class="dsw-section dsw-section--warn">
         <h2 class="dsw-h2">
-          Tanda kulit usia 35+ butuh <span class="dsw-underline-warn">kombinasi Serum + Moisturizer</span>:
+          Kenapa <span class="dsw-underline-warn">garis senyum & flek hitam</span> makin dalam di usia 35–55 tahun?
         </h2>
 
         <div class="dsw-photo-grid-2">
           <div class="dsw-photo-card">
             <img
               src={`${IMG_BASE}/masalah-serum-menguap-kering.webp`}
-              alt="Kulit pipi tetap terasa kering karena serum tidak dikunci dengan pelembap"
+              alt="Kulit pipi kering dengan bercak flek hitam karena serum menguap tanpa pelembap"
               width="315"
               height="210"
               class="dsw-photo-img"
@@ -280,14 +258,14 @@ const FAQS: FaqEntry[] = [
               decoding="async"
             />
             <p class="dsw-photo-caption">
-              <strong style="color: #be123c; display: block;">Serum Menguap di AC</strong>
-              Tanpa pelembap pengunci, hidrasi serum hilang dalam 2 jam.
+              <strong style="color: #be123c; display: block;">Serum Menguap & Flek Pekat</strong>
+              Tanpa pengunci 11X HA, serum hilang dalam 2 jam dan flek makin kontras.
             </p>
           </div>
           <div class="dsw-photo-card">
             <img
               src={`${IMG_BASE}/masalah-garis-senyum-40an.webp`}
-              alt="Lipatan garis senyum nasolabial dan tekstur kering sudut mata yang makin tegas di usia 40-an"
+              alt="Lipatan garis senyum nasolabial dalam dan pori kendur di usia 40-an"
               width="315"
               height="210"
               class="dsw-photo-img"
@@ -296,8 +274,8 @@ const FAQS: FaqEntry[] = [
               decoding="async"
             />
             <p class="dsw-photo-caption">
-              <strong style="color: #be123c; display: block;">Kontur Pipi Kurang Kencang</strong>
-              Garis senyum dan bawah mata kering membuat wajah terlihat lelah.
+              <strong style="color: #be123c; display: block;">Garis Senyum & Pipi Turun</strong>
+              Kolagen yang menyusut membuat lipatan hidung-bibir tercetak dalam.
             </p>
           </div>
         </div>
@@ -308,7 +286,7 @@ const FAQS: FaqEntry[] = [
               <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
             </span>
             <p class="dsw-list-text">
-              Sudah pakai serum tapi <strong style="color: #be123c;">kulit kembali terasa kering kaku</strong> saat bangun pagi atau berada di ruang ber-AC.
+              Sudah beli serum mahal tapi <strong style="color: #be123c;">kulit tetap kering ketarik</strong> karena tidak dikunci pelembap Adenosine.
             </p>
           </div>
           <div class="dsw-list-row">
@@ -316,7 +294,7 @@ const FAQS: FaqEntry[] = [
               <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
             </span>
             <p class="dsw-list-text">
-              Garis lipatan dari hidung ke bibir (<strong style="color: #be123c;">smile lines</strong>) dan tekstur kering ekor mata semakin terlihat saat tersenyum.
+              Lipatan <strong style="color: #be123c;">garis senyum (smile lines) dan kerutan ekor mata</strong> makin dalam setiap kali bercermin.
             </p>
           </div>
           <div class="dsw-list-row">
@@ -324,7 +302,7 @@ const FAQS: FaqEntry[] = [
               <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
             </span>
             <p class="dsw-list-text">
-              Muncul <strong style="color: #be123c;">rona kusam di tulang pipi</strong> yang disertai berkurangnya kekenyalan kulit.
+              Muncul <strong style="color: #be123c;">flek hitam membandel di tulang pipi</strong> disertai kontur pipi yang mulai kendur.
             </p>
           </div>
         </div>
@@ -333,15 +311,15 @@ const FAQS: FaqEntry[] = [
       <!-- Section 4: Ilustrasi Perawatan Rutin -->
       <section class="dsw-section">
         <h2 class="dsw-h2">
-          Perbandingan visual <span class="dsw-hl-aqua">perawatan rutin</span>
+          Bukti nyata perubahan <span class="dsw-hl-aqua">Youth Boost Set</span>
         </h2>
-        <p class="dsw-sub">Transformasi kepadatan kulit, garis halus, dan kecerahan dengan pemakaian teratur.</p>
+        <p class="dsw-sub">Transformasi kepadatan kontur pipi, garis senyum, dan kecerahan dengan pemakaian teratur.</p>
 
         <div class="dsw-photo-stack">
           <div class="dsw-photo-card">
             <img
               src={`${IMG_BASE}/kondisi-kerutan-dalam-kendur.webp`}
-              alt="Kondisi kulit usia 40-an dengan garis senyum tegas, tekstur kering sudut mata, dan rona kusam saat kulit membutuhkan kelembapan"
+              alt="Kondisi kulit usia 40-an dengan garis senyum tegas, kerutan sudut mata, dan flek hitam"
               width="648"
               height="432"
               class="dsw-photo-img"
@@ -349,9 +327,9 @@ const FAQS: FaqEntry[] = [
               fetchpriority="low"
               decoding="async"
             />
-            <span class="dsw-photo-badge dsw-photo-badge--before">Kondisi Kulit Kering</span>
+            <span class="dsw-photo-badge dsw-photo-badge--before">SEBELUM — Garis Dalam & Pipi Kendur</span>
             <p class="dsw-photo-caption">
-              Elastisitas menurun, garis lipatan senyum tampak dalam, dan rona kusam membuat wajah tampak kurang segar.
+              Elastisitas menurun drastis, garis lipatan senyum tampak dalam, dan flek hitam membuat wajah tampak tua.
             </p>
           </div>
 
@@ -366,9 +344,9 @@ const FAQS: FaqEntry[] = [
               fetchpriority="low"
               decoding="async"
             />
-            <span class="dsw-photo-badge dsw-photo-badge--after">Dengan Perawatan Rutin</span>
+            <span class="dsw-photo-badge dsw-photo-badge--after">SESUDAH RUTIN — Padat, Kencang & Membal</span>
             <p class="dsw-photo-caption">
-              Kontur pipi terasa jauh lebih padat membal, garis senyum & tekstur kering mata tersamarkan, serta rona kulit tampak cerah segar.
+              Kontur pipi terasa jauh lebih padat terangkat, garis senyum & kerutan mata tersamarkan, serta flek memudar.
             </p>
           </div>
         </div>
@@ -495,7 +473,7 @@ const FAQS: FaqEntry[] = [
               <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
             </div>
             <p class="dsw-review-quote">
-              "Serumnya cepat meresap, terus langsung dikunci pakai gel Adenosine yang dingin. <span class="dsw-hl-rose">Warna kulit kurang merata memudar dan pori-pori pipi jadi rapet</span>. <span class="dsw-hl-aqua">Teman-teman arisan sampai nanya pakai perawatan apa</span>."
+              "Serumnya cepat meresap, terus langsung dikunci pakai gel Adenosine yang dingin. <span class="dsw-hl-rose">Flek hitam memudar dan pori-pori pipi jadi rapet</span>. <span class="dsw-hl-aqua">Teman-teman arisan sampai nanya pakai perawatan apa</span>."
             </p>
           </div>
         </div>
@@ -683,10 +661,7 @@ const FAQS: FaqEntry[] = [
         tiers={BUNDLE_TIERS}
       />
 
-      <!-- Section 11: Objection-Handling FAQ -->
-      <LpFaqSection faqs={FAQS} />
-
-      <!-- Section 12: Checkout Form with Tiered Bundling -->
+      <!-- Section 11: Checkout Form with Tiered Bundling -->
       <section id="form-pemesanan" class="dsw-section--checkout">
         <div style="padding: 0 20px 14px; text-align: center;">
           <h2 class="dsw-h2" style="font-size: 26px;">
