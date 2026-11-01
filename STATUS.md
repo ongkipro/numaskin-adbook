@@ -1,6 +1,46 @@
 # STATUS — AdsBookCMS
 
-> Verified against disk: 2026-10-31 @ `d61afbe` (A38 cancelled; local development, not deployed; headless-browser evidence on a local store). Fleet evidence remains 2026-10-24 (1.7.13 on revenleather, zvarashop, taniniaga, agritani-shop, halotanishop, permatamall, numaskin-adbook, bavenshop, beranda-tani; zanobyshop on 1.7.2); not rechecked.
+> Verified against disk: 2026-11-01 @ `fbcb8ba` (1.8.4 released and deployed to seven installs; fleet registry in `docs/FLEET.md`; the sections below retain their dated evidence)
+
+## 2026-11-01 — 1.8.4 released and deployed
+
+`main` is `fbcb8ba` (PR #127), version 1.8.4, schema 80, no migration.
+BUILD-LOG Entry 226: dashboard layout with comparisons drawn in the chart,
+AOV / lead conversion / COD vs non-COD, Action needed aging, English metric
+names, "What's new". Deployed the same day to zvarashop (93/93), permatamall,
+agritani-shop, taniniaga, halotanishop, bavenshop and numaskin-adbook (80/80);
+each live domain answers 200 on `/` and `/produk`, `/hello` shows v1.8.4 and
+`/api/admin/orders/attention` answers 401 without a session.
+
+The install fleet — versions, repositories, visibility, infrastructure,
+per-install merge rules — is registered in `docs/FLEET.md`. All store
+repositories and the product are public since 2026-11-01. carukesi and
+zanobyshop were decommissioned on 2026-11-01.
+
+## 2026-11-01 — 1.8.3 released and deployed
+
+`main` is `d0ea0d2` (PR #125), version 1.8.3, schema 80 (no migration since
+`0079` in 1.8.2). BUILD-LOG Entry 225 has the change set: dashboard "Perlu
+tindakan", period comparison, funnel and rankings; CSV export of orders, leads
+and shipments; "Belum dibayar" fixed to mean online orders awaiting payment and
+expired instructions read from `payment_transactions`; storefront header and
+footer; checkout field states.
+
+Deployed 2026-11-01 (`npm run fleet:status`: 1.8.3, 0 behind, schema applied =
+expected): zvarashop (93/93, renumbered chain), permatamall, agritani-shop,
+taniniaga, halotanishop, bavenshop, numaskin-adbook (80/80). Live check on each
+domain: `/` and `/produk` 200, `/hello` shows v1.8.3, the new admin endpoints
+answer 401 without a session. numaskin keeps its own header, footer and home
+template; permatamall keeps its `/meta-ads` footer link.
+
+Not on 1.8.3: revenleather, beranda-tani, klikinaja, skincarebpom (and
+cekat-shop on 1.8.0) — each behind and with install-specific changes; they take
+their own merge. (carukesi and zanobyshop were decommissioned on 2026-11-01.)
+
+Evidence: `npm test` 1139 pass, `npm run check` 0/0/0, `npm run build`; all 35
+admin pages opened in a browser with no script error or failed request; the
+dashboard's counts checked against the lists they open. Not verified: the
+dashboard as customer service or advertiser (no such local account).
 
 ## 2026-10-31 — Local development (not deployed, not released)
 
