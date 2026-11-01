@@ -586,6 +586,57 @@ export const nativeLandingPages: NativeLandingPage[] = [
     image:
       '/images/landing/paket-complete-routine-4-in-1-150ml/hero-paket-complete-4in1.webp',
   },
+  // ── 5 New Dedicated Meta Ads Landing Pages (CPAS Numa 2 25-Video Scale Pack) ──
+  {
+    slug: 'lp-pdrn-klinik-glow',
+    title: 'Meta Ads LP — PDRN Tone-Up Day Cream (Glowing Sat-Set Rasa Klinik)',
+    productSlug: 'pdrn-alpha-arbutin-tone-up-day-cream',
+    canonicalSlug: 'pdrn-alpha-arbutin-tone-up-day-cream',
+    description:
+      'LP khusus Meta Ads Batch 1 KOL (Hero Hook: Glowing Sat-Set Rasa Treatment Klinik 15 Detik Tanpa Bedak Tebal) dengan pilihan 1 Jar (Rp79.499) & Paket Bundling Siang-Malam.',
+    image:
+      '/images/landing/pdrn-alpha-arbutin-tone-up-day-cream/hero-pdrn-klinik-glow.webp',
+  },
+  {
+    slug: 'lp-pdrn-flek-kerutan',
+    title: 'Meta Ads LP — PDRN Tone-Up Day Cream (Sapu Bersih Flek Menahun & Kerutan)',
+    productSlug: 'pdrn-alpha-arbutin-tone-up-day-cream',
+    canonicalSlug: 'pdrn-alpha-arbutin-tone-up-day-cream',
+    description:
+      'LP khusus Meta Ads Batch 2 Nurdin (Hero Hook: Sapu Bersih Flek Menahun & Kerutan Tampak 10 Tahun Lebih Muda Tanpa Krim Merkuri) dengan pilihan 1 Jar & Paket Double Alpha-Arbutin.',
+    image:
+      '/images/landing/pdrn-alpha-arbutin-tone-up-day-cream/hero-pdrn-flek-kerutan.webp',
+  },
+  {
+    slug: 'lp-pdrn-anti-abu',
+    title: 'Meta Ads LP — PDRN Tone-Up Day Cream (0% Abu-Abu Kulit Sawo Matang)',
+    productSlug: 'pdrn-alpha-arbutin-tone-up-day-cream',
+    canonicalSlug: 'pdrn-alpha-arbutin-tone-up-day-cream',
+    description:
+      'LP khusus Meta Ads Batch 3 High-CTR KOL (Hero Hook: Kulit Sawo Matang Langsung Cerah Menyatu 0% Abu-Abu Dempul Seharian) dengan pilihan 1 Jar & Paket Pagi Anti-UV.',
+    image:
+      '/images/landing/pdrn-alpha-arbutin-tone-up-day-cream/hero-pdrn-anti-abu.webp',
+  },
+  {
+    slug: 'lp-adenosine-awet-muda',
+    title: 'Meta Ads LP — Adenosine Deep Sea Water Moisturizer (Kunci Flek & Kerutan 14 Hari)',
+    productSlug: 'adenosine-deep-sea-water-moisturizer',
+    canonicalSlug: 'adenosine-deep-sea-water-moisturizer',
+    description:
+      'LP khusus Meta Ads Batch 4 Website Purchase Winner (Hero Hook: Kunci Flek Hitam & Lipatan Kerutan Dalam 14 Hari Tampak 5 Tahun Lebih Muda dari KTP) dengan pilihan 1 Tube & Paket Bundling.',
+    image:
+      '/images/landing/adenosine-deep-sea-water-moisturizer/hero-adenosine-awet-muda.webp',
+  },
+  {
+    slug: 'lp-nad-serum-kerutan',
+    title: 'Meta Ads LP — NAD+ Booster Anti-Aging Serum (Tarik Kencang Pipi Kendur & Garis Senyum)',
+    productSlug: 'nad-booster-anti-aging-serum',
+    canonicalSlug: 'nad-booster-anti-aging-serum',
+    description:
+      'LP khusus Meta Ads Batch 5 Website Purchase Winner (Hero Hook: Tarik Kencang Pipi Kendur & Garis Senyum Tanpa Jarum & Tarik Benang) dengan pilihan 1 Botol & Paket Youth Boost.',
+    image:
+      '/images/landing/nad-booster-anti-aging-serum/hero-nad-serum-kerutan.webp',
+  },
 ];
 
 /**

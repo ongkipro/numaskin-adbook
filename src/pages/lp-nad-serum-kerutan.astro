@@ -1,0 +1,704 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import GeoIpResolvedForm from '../components/storefront/forms/GeoIpResolvedForm.astro';
+import MetaLandingTracker from '../components/storefront/tracking/MetaLandingTracker.astro';
+import Icon from '../components/storefront/shared/Icon.astro';
+import RatingStars from '../components/storefront/shared/RatingStars.astro';
+import LpHeroOffer from '../components/storefront/landing-pages/LpHeroOffer.astro';
+import LpBundleValueSection, {
+  type BundleTierSpec,
+} from '../components/storefront/landing-pages/LpBundleValueSection.astro';
+import LpFloatingCta from '../components/storefront/landing-pages/LpFloatingCta.astro';
+import { getStorefrontProduct } from '../lib/catalog';
+import { nativeLandingCanonicalPath } from '../lib/landing-pages';
+import { defaultCatalogContentId } from '../lib/catalog-feed';
+import { getRuntimeEnv } from '../lib/env';
+import { loadStoreCodDisabledProvinceCodes } from '../lib/form-mode';
+import { getStoreAdsConfig } from '../lib/store-ads';
+import '../styles/form-hybrid.css';
+import '../styles/landing-pages/lp-meta-ads.css';
+
+export const prerender = false;
+
+const PRODUCT_SLUG = 'nad-booster-anti-aging-serum';
+const LANDING_SLUG = 'lp-nad-serum-kerutan';
+const PAGE_TITLE =
+  'NAD+ Booster Anti-Aging Serum — Tarik Kencang Pipi Kendur & Garis Senyum Tanpa Tarik Benang BPOM';
+const PAGE_DESC =
+  'Serum pengencang kontur wajah dengan 2% Swiss RejuveNAD, 6X Biomimetic Peptide, 29% Cica, dan 4% Niacinamide untuk merawat pipi kendur & garis senyum dalam (BPOM NA18262000245).';
+const IMG_BASE = '/images/landing/nad-booster-anti-aging-serum';
+const HERO_IMAGE = `${IMG_BASE}/hero-nad-serum-kerutan.webp`;
+
+const database = getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined;
+const claimedProductSlug = Astro.request.headers.get('x-adsbook-product-page');
+const [product, canonicalPath, codDisabledProvinceCodes] = await Promise.all([
+  getStorefrontProduct(Astro.locals, PRODUCT_SLUG),
+  claimedProductSlug
+    ? Promise.resolve(`/produk/${claimedProductSlug}`)
+    : nativeLandingCanonicalPath(Astro.locals, LANDING_SLUG),
+  loadStoreCodDisabledProvinceCodes(database),
+  getStoreAdsConfig(Astro.locals),
+]);
+if (!product) {
+  return Astro.rewrite('/404');
+}
+
+const canonical = `${Astro.locals.tenant.siteUrl}${canonicalPath}`;
+
+const variants = product.variants || [];
+const cheapestVariant = variants.reduce(
+  (min: any, v: any) => (!min || v.price < min.price ? v : min),
+  variants[0]
+);
+const defaultVariant = cheapestVariant || {
+  id: '6',
+  label: '20 ml',
+  price: 108999,
+  comparePrice: 175000,
+};
+
+const BUNDLE_TIERS: BundleTierSpec[] = [
+  {
+    productSlug: 'nad-booster-anti-aging-serum',
+    badge: 'Pilihan Coba Satuan',
+    image: `${IMG_BASE}/kemasan-nad-serum-27ml.webp`,
+    imageAlt: 'Kemasan Botol Kaca Pipet NAD+ Booster Anti-Aging Serum',
+    benefit: '1 Botol NAD+ Booster Serum (2% Swiss RejuveNAD™ + 6X Peptide Complex) pengencang kontur pipi & garis senyum.',
+    ctaLabel: 'Pilih 1 Botol',
+  },
+  {
+    productSlug: 'paket-nad-youth-boost-set',
+    badge: 'Terfavorit • Duet Pengencang & Kunci Hidrasi',
+    featured: true,
+    image: '/images/landing/paket-nad-youth-boost-set/kemasan-duo-nad-adenosine.webp',
+    imageAlt: 'Paket NAD+ Youth Boost Set Serum dan Adenosine Moisturizer',
+    benefit: 'NAD+ Booster Serum (2% Swiss RejuveNAD™ + 6X Peptide) + Adenosine Moisturizer 30gr (11X Hyaluronic Acid).',
+    ctaLabel: 'Ambil Paket Duo',
+  },
+  {
+    productSlug: 'paket-luminous-duo',
+    badge: 'Duet Sultan • + PDRN Tone-Up Day Cream',
+    image: '/images/landing/paket-luminous-duo/kemasan-luminous-duo-nad-pdrn.webp',
+    imageAlt: 'Paket Luminous Duo NAD+ Booster Serum dan PDRN Tone-Up Day Cream',
+    benefit: 'NAD+ Booster Serum + PDRN Tone-Up Day Cream 30gr (10.000 PPM Salmon DNA Warm Beige bebas dempul).',
+    ctaLabel: 'Pilih + PDRN Cream',
+  },
+  {
+    productSlug: 'paket-anti-aging-trio',
+    badge: 'Perawatan Lengkap 3-in-1 (24 Jam)',
+    image: '/images/landing/paket-anti-aging-trio/kemasan-trio-nad-adenosine-oxydew.webp',
+    imageAlt: 'Paket Anti-Aging Trio Numa Skin',
+    benefit: 'Komplit 3 produk full-size: NAD+ Booster Serum + Adenosine Moisturizer 30gr + Oxydew Sunscreen SPF 50+.',
+    ctaLabel: 'Pilih Paket Trio',
+  },
+];
+---
+
+<BaseLayout
+  title={PAGE_TITLE}
+  description={PAGE_DESC}
+  image={HERO_IMAGE}
+  preloadImages={HERO_IMAGE}
+  canonical={canonical}
+  noindex={true}
+  hideHeader={true}
+  hideFooter={true}
+>
+  <MetaLandingTracker
+    slug={LANDING_SLUG}
+    contentId={defaultCatalogContentId(product)}
+    contentName={product.contentName}
+    price={defaultVariant.price}
+  />
+
+  <div class="dsw-shell">
+    <main class="dsw-canvas">
+      <!-- Section 1: Hero (Matched to CPAS 2 Batch 5 Proven Website Purchase NAD+ Serum Videos) -->
+      <section id="hero-section" class="dsw-hero">
+        <div class="dsw-hero-head">
+          <h1 class="dsw-h1">
+            Tarik Kencang <span class="dsw-hl-tilt">Pipi Kendur & Garis Senyum</span> — Tanpa Jarum & Tarik Benang!
+          </h1>
+          <p class="dsw-sub" style="max-width: 390px; margin: 14px auto 0; font-weight: 700;">
+            Memasuki usia 35–55+, energi sel NAD+ anjlok 50% sehingga pipi turun & lipatan mulut makin dalam.<br />
+            <span class="dsw-underline-teal">2% Swiss RejuveNAD™ + 6X Peptide bangkitkan kembali kepadatan kolagen tampak 8,2 tahun lebih muda!</span>
+          </p>
+        </div>
+
+        <div class="dsw-hero-stage">
+          <div class="dsw-hero-top-tag">
+            <div class="dsw-hero-top-pill">
+              <Icon name="lucide:award" class="size-3.5" aria-hidden="true" />
+              <span>2% Swiss RejuveNAD™ • 6X Biomimetic Peptide</span>
+            </div>
+          </div>
+
+          <img
+            src={HERO_IMAGE}
+            alt="Perbandingan kontur pipi kendur dan garis senyum dalam vs wajah kencang terangkat V-shape dengan Numa Skin NAD+ Booster Serum"
+            width="720"
+            height="480"
+            class="dsw-hero-img"
+            fetchpriority="high"
+            loading="eager"
+            decoding="async"
+          />
+
+          <div class="dsw-hero-ba" aria-hidden="true">
+            <span class="dsw-hero-ba-pill dsw-hero-ba-pill--before">SEBELUM — Pipi Turun & Lipatan Dalam</span>
+            <span class="dsw-hero-ba-pill dsw-hero-ba-pill--after">SESUDAH — Kontur Kencang Terangkat</span>
+          </div>
+
+          <div class="dsw-hero-overlap">
+            <div class="dsw-hero-overlap-inner">
+              <h2 class="dsw-hero-overlap-title">Kencangkan Kontur Wajah Tanpa Perih & Tanpa Ngelupas Retinol!</h2>
+              <p class="dsw-hero-overlap-text">
+                Saat energi sel (NAD+) habis di usia 35+, <strong style="color: #be123c;">jaringan penyangga pipi melorot turun dan krim pelembap biasa tidak mampu mengangkatnya</strong>.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="dsw-trust-row">
+          <div class="dsw-trust-item">
+            <span class="dsw-trust-icon">
+              <Icon name="lucide:shield-check" class="size-4" aria-hidden="true" />
+            </span>
+            <div>
+              <span class="dsw-trust-label">BPOM Resmi</span>
+              <span class="dsw-trust-sub">NA18262000245</span>
+            </div>
+          </div>
+          <div class="dsw-trust-item">
+            <span class="dsw-trust-icon">
+              <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+            </span>
+            <div>
+              <span class="dsw-trust-label">Swiss Actives</span>
+              <span class="dsw-trust-sub">0% Retinol Perih</span>
+            </div>
+          </div>
+          <div class="dsw-trust-item">
+            <span class="dsw-trust-icon">
+              <Icon name="lucide:truck" class="size-4" aria-hidden="true" />
+            </span>
+            <div>
+              <span class="dsw-trust-label">Bisa COD</span>
+              <span class="dsw-trust-sub">Bayar di Rumah</span>
+            </div>
+          </div>
+        </div>
+
+        <LpHeroOffer
+          price={defaultVariant.price}
+          comparePrice={defaultVariant.comparePrice}
+          eyebrow="Promo Resmi Hari Ini • Tersedia Paket Bundling Youth Boost"
+          ctaText="Pilih Paket & Cek Ongkir"
+        />
+      </section>
+
+      <!-- Section 2: Solusi Singkat + Visual -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Bantu kulit tampak <span class="dsw-hl-aqua">8,2 tahun lebih muda</span> secara klinis
+        </h2>
+        <p class="dsw-sub">Emulsi serum selembut sutra yang meresap cepat tanpa rasa perih atau pengelupasan.</p>
+
+        <div class="dsw-photo-stack">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/solusi-serum-lifting-halus.webp`}
+              alt="Wanita Indonesia mengaplikasikan tetesan Numa Skin NAD+ Booster Serum di tulang pipi"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+        </div>
+
+        <div class="dsw-list">
+          <div class="dsw-list-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:zap" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a;">2% RejuveNAD™ (Mibelle Biochemistry Swiss)</strong> menstimulasi enzim NAMPT untuk mengisi ulang energi peremajaan sel kulit.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:layers" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a;">6X Biomimetic Peptide + Vegan Collagen</strong> membantu merawat kepadatan kontur rahang, pipi, dan bawah mata.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:shield-plus" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a;">29% Cica Complex + 4% Niacinamide</strong> menenangkan kulit sensitif sekaligus mencerahkan rona wajah yang lelah.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Tanda Masalah Kulit + Visual Grid -->
+      <section class="dsw-section dsw-section--warn">
+        <h2 class="dsw-h2">
+          Tanda kolagen melemah ketika <span class="dsw-underline-warn">energi sel kulit menurun</span>:
+        </h2>
+
+        <div class="dsw-photo-grid-2">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/masalah-pipi-mulai-turun.webp`}
+              alt="Kontur pipi dan garis rahang mulai kendur dengan lipatan garis senyum yang tegas"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #be123c; display: block;">Pipi & Rahang Turun</strong>
+              Kontur wajah kehilangan kekencangan dan garis senyum memperdalam.
+            </p>
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/masalah-kerutan-mata-lelah.webp`}
+              alt="Kerutan halus crow's feet di sudut mata dan tekstur kulit tampak lelah"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #be123c; display: block;">Kerutan Sudut Mata</strong>
+              Garis halus di ekor mata tidak kembali rata setelah tersenyum.
+            </p>
+          </div>
+        </div>
+
+        <div class="dsw-list">
+          <div class="dsw-list-row">
+            <span class="dsw-icon-warn">
+              <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              Saat bercermin, <strong style="color: #be123c;">lipatan senyum (nasolabial fold) tampak makin dalam</strong> dan membuat wajah terlihat lelah.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-warn">
+              <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              Bekas bantal di pipi saat bangun pagi <strong style="color: #be123c;">butuh waktu lama untuk kembali membal</strong> karena elastisitas menurun.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-icon-warn">
+              <Icon name="lucide:triangle-alert" class="size-4" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              Ingin memakai serum anti-aging kuat, tetapi <strong style="color: #be123c;">kulit tidak tahan perih dan mengelupas akibat Retinol</strong>.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Ilustrasi Perawatan Rutin -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Perbandingan visual <span class="dsw-hl-aqua">42 hari pemakaian</span>
+        </h2>
+        <p class="dsw-sub">Perbedaan kepadatan kontur pipi dan kehalusan garis senyum dengan pemakaian teratur.</p>
+
+        <div class="dsw-photo-stack">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/kondisi-garis-senyum-kendur.webp`}
+              alt="Kondisi pipi bawah dan sudut mata dengan lipatan senyum dalam serta tekstur kulit kering"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <span class="dsw-photo-badge dsw-photo-badge--before">SEBELUM — Kontur Turun & Lipatan Dalam</span>
+            <p class="dsw-photo-caption">
+              Kontur pipi tampak turun, lipatan garis senyum terlihat dalam, dan sudut mata tampak berkerut halus.
+            </p>
+          </div>
+
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/kondisi-kontur-kencang-padat.webp`}
+              alt="Kondisi pipi dan garis rahang tampak padat, kencang, kenyal, dan halus setelah rutin memakai NAD+ Booster Serum"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <span class="dsw-photo-badge dsw-photo-badge--after">SESUDAH RUTIN — Padat, Kencang & Halus</span>
+            <p class="dsw-photo-caption">
+              Kulit pipi terasa lebih padat membal, tampilan garis senyum tampak lebih samar, dan rona wajah tampak segar.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: Dark Marine Section — Cara Pakai Praktis -->
+      <section class="dsw-section dsw-section--dark">
+        <h2 class="dsw-h2">
+          Ritual Pijat Lifting <span style="color: #99e2ec;">3 Tetes Pagi & Malam</span>
+        </h2>
+        <p class="dsw-sub">Lembut tanpa efek iritasi, aman dipakai pagi maupun malam hari termasuk di area sekitar mata.</p>
+
+        <div class="dsw-photo-stack">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/cara-pakai-pipet-tetes.webp`}
+              alt="Meneteskan 3 tetes emulsi Numa Skin NAD+ Booster Serum dari pipet kaca ke telapak tangan"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #ffffff;">Langkah 1 (3 Tetes Pipet):</strong> Ambil 3–4 tetes serum ke telapak tangan setelah pemakaian toner.
+            </p>
+          </div>
+
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/cara-pakai-pijat-lifting.webp`}
+              alt="Memijat wajah ke arah atas mengikuti garis rahang dan tulang pipi untuk efek lifting"
+              width="648"
+              height="432"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+            <p class="dsw-photo-caption">
+              <strong style="color: #ffffff;">Langkah 2 (Pijat Lifting):</strong> Usapkan dari dagu ke arah telinga dan dari garis senyum ke arah pelipis.
+            </p>
+          </div>
+        </div>
+
+        <div class="dsw-list">
+          <div class="dsw-list-row">
+            <span class="dsw-step-num">1</span>
+            <p class="dsw-step-text">
+              Gunakan <strong style="color: #ffffff;">pagi dan malam hari</strong> pada wajah yang bersih.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-step-num">2</span>
+            <p class="dsw-step-text">
+              Tepuk lembut sisa serum di jari manis pada <strong style="color: #ffffff; background: #104452; padding: 1px 6px; border-radius: 4px;">area bawah mata dan garis senyum</strong>.
+            </p>
+          </div>
+          <div class="dsw-list-row">
+            <span class="dsw-step-num">3</span>
+            <p class="dsw-step-text">
+              Untuk hasil maksimal, ambil <strong style="color: #ffffff;">Paket NAD+ Youth Boost Set (+ Adenosine Moisturizer)</strong> di form bawah.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 6: Ulasan Pelanggan -->
+      <section class="dsw-section">
+        <h2 class="dsw-h2">
+          Apa kata pelanggan usia 35+ yang <span class="dsw-hl-aqua">sudah membuktikan?</span>
+        </h2>
+        <p class="dsw-sub">Solusi favorit bagi Bunda yang mencari perawatan pengencang intensif tanpa rasa perih.</p>
+
+        <div class="dsw-reviews-divide">
+          <div class="dsw-review-row">
+            <div class="dsw-review-head">
+              <div>
+                <p class="dsw-review-author">
+                  Ibu Veronica T.
+                  <span style="color: #0b6e7d; display: inline-flex;">
+                    <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+                  </span>
+                </p>
+                <p class="dsw-review-meta">Jakarta Barat • Usia 44 Tahun</p>
+              </div>
+              <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
+            </div>
+            <p class="dsw-review-quote">
+              "Kulitku sensitif banget sama retinol, pasti langsung ngelupas perih. Pakai NAD+ Booster Numa Skin ini <span class="dsw-hl-aqua">nyaman banget karena ada 29% Cica-nya</span>, dan setelah sebulan <strong style="color: #0f172a;">pipi berasa jauh lebih kencang</strong>."
+            </p>
+          </div>
+
+          <div class="dsw-review-row">
+            <div class="dsw-review-head">
+              <div>
+                <p class="dsw-review-author">
+                  Ibu Hj. Laila M.
+                  <span style="color: #0b6e7d; display: inline-flex;">
+                    <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+                  </span>
+                </p>
+                <p class="dsw-review-meta">Bandung • Pembelian Botol ke-2</p>
+              </div>
+              <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
+            </div>
+            <p class="dsw-review-quote">
+              "Garis senyumku tadinya dalam banget kalau difoto. Sekarang masuk botol kedua, <span class="dsw-hl-aqua">lipatan di pinggir mulut dan bawah mata tampak jauh lebih halus</span> dan padat."
+            </p>
+          </div>
+
+          <div class="dsw-review-row">
+            <div class="dsw-review-head">
+              <div>
+                <p class="dsw-review-author">
+                  Ibu Sinta D.
+                  <span style="color: #0b6e7d; display: inline-flex;">
+                    <Icon name="lucide:badge-check" class="size-4" aria-hidden="true" />
+                  </span>
+                </p>
+                <p class="dsw-review-meta">Yogyakarta • Usia 38 Tahun</p>
+              </div>
+              <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
+            </div>
+            <p class="dsw-review-quote">
+              "Teksturnya <span class="dsw-hl-aqua">milky ringan dan cepat meresap</span>. Bangun tidur muka kelihatan segar membal, gak kelihatan sayu walaupun tidur agak malam."
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 7: Galeri Bukti Visual -->
+      <section class="dsw-section dsw-section--tint">
+        <h2 class="dsw-h2">
+          Konsentrat <span style="color: #0b6e7d;">Pengencang Seluler Generasi Baru</span>
+        </h2>
+        <p class="dsw-sub">Tekstur silky-emulsion yang menghidrasi dalam tanpa meninggalkan lapisan berminyak.</p>
+
+        <div class="dsw-photo-grid-2">
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-tekstur-emulsi-serum.webp`}
+              alt="Tetesan tekstur milky-translucent NAD+ Booster Serum di punggung tangan"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-wanita-40an-awet-muda.webp`}
+              alt="Potret wanita Indonesia usia 40-an berhijab dengan kulit wajah kencang dan bercahaya"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-elastisitas-pipi.webp`}
+              alt="Close-up kulit tulang pipi dan bawah mata yang tampak kencang, halus, dan kenyal"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+          <div class="dsw-photo-card">
+            <img
+              src={`${IMG_BASE}/bukti-meja-rias-nad-serum.webp`}
+              alt="Botol pipet kaca frosted Numa Skin NAD+ Booster Serum di meja rias"
+              width="315"
+              height="210"
+              class="dsw-photo-img"
+              loading="lazy"
+              fetchpriority="low"
+              decoding="async"
+            />
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 8: Product Knowledge (Full-Bleed Figures) -->
+      <section class="dsw-section dsw-section--knowledge">
+        <h2 class="dsw-h2">
+          Mengapa <span class="dsw-hl-aqua">Swiss RejuveNAD™</span> menjadi terobosan anti-aging?
+        </h2>
+        <p class="dsw-sub">
+          Molekul NAD+ murni tidak stabil di dalam krim biasa, sehingga Numa Skin mengaktifkan jalur pembentukan alaminya langsung di dalam sel kulit.
+        </p>
+
+        <div class="dsw-figure-stack">
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/formulasi-swiss-rejuvenad.webp`}
+                alt="Formulasi kecambah bunga matahari organik Swiss RejuveNAD, daun Centella asiatica, dan Ulleung Deep Sea Water"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">2% RejuveNAD™ (Mibelle Biochemistry, Swiss)</h3>
+              <p class="dsw-figcaption-desc">
+                Diekstrak dari kecambah <em>Helianthus annuus</em> organik yang teruji klinis selama 42 hari membantu kulit tampak hingga 8,2 tahun lebih muda dengan mengaktifkan enzim penghasil NAD+.
+              </p>
+            </figcaption>
+          </figure>
+
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/kandungan-6x-peptide-cica.webp`}
+                alt="Kombinasi 6X Biomimetic Peptide, Vegan Collagen, dan 29% Cica Complex di laboratorium"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">6X Biomimetic Peptide + 29% Cica Complex</h3>
+              <p class="dsw-figcaption-desc">
+                Enam jenis peptida pengencang kolagen dipadukan dengan 29% ekstrak Centella Asiatica dan 4% Niacinamide untuk hasil lifting tanpa iritasi.
+              </p>
+            </figcaption>
+          </figure>
+
+          <figure class="dsw-figure">
+            <div class="dsw-figure-bleed">
+              <img
+                src={`${IMG_BASE}/kemasan-nad-serum-27ml.webp`}
+                alt="Kemasan botol kaca frosted pipet Numa Skin NAD+ Booster Anti-Aging Serum"
+                width="720"
+                height="480"
+                class="dsw-figure-img"
+                loading="lazy"
+                fetchpriority="low"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="dsw-figcaption">
+              <h3 class="dsw-figcaption-title">Botol Frosted Pipet Eksklusif</h3>
+              <p class="dsw-figcaption-desc">
+                Botol kaca tebal berlapis frosted menjaga kestabilan bahan aktif bioteknologi Swiss dari paparan cahaya.
+              </p>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- Section 9: Garansi 100% Resmi -->
+      <section class="dsw-section" style="text-align: center; background: #f8fafc;">
+        <div style="margin: 0 auto 14px; display: flex; width: 52px; height: 52px; align-items: center; justify-content: center; color: #0b6e7d;">
+          <Icon name="lucide:shield-check" class="size-12" aria-hidden="true" />
+        </div>
+        <h2 class="dsw-h2" style="font-size: 32px;">GARANSI RESMI 100%</h2>
+        <p class="dsw-sub" style="max-width: 320px; margin: 8px auto 0;">
+          Pesanan dikirim langsung dari gudang resmi Numa Skin Indonesia.
+        </p>
+
+        <div class="dsw-guarantee-list">
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:badge-check" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">100% Produk Asli Tersegel</strong>
+              Terdaftar resmi di BPOM (NA18262000245) dan bersertifikat Halal Indonesia.
+            </p>
+          </div>
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:truck" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">Bisa Bayar di Tempat (COD)</strong>
+              Pesan hari ini, bayar langsung ke kurir saat paket tiba di alamat Anda.
+            </p>
+          </div>
+          <div class="dsw-guarantee-row">
+            <span class="dsw-icon-teal">
+              <Icon name="lucide:package-check" class="size-5" aria-hidden="true" />
+            </span>
+            <p class="dsw-list-text">
+              <strong style="color: #0f172a; display: block;">Garansi Ganti Baru</strong>
+              Kami ganti baru tanpa biaya tambahan bila botol kaca diterima pecah atau bocor.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 10: Pre-Checkout Visual Tiered Bundle Showcase -->
+      <LpBundleValueSection
+        heading="Pilih Satuan atau"
+        highlight="Paket Pengencang Lebih Hemat"
+        tiers={BUNDLE_TIERS}
+      />
+
+      <!-- Section 11: Checkout Form with Tiered Bundling -->
+      <section id="form-pemesanan" class="dsw-section--checkout">
+        <div style="padding: 0 20px 14px; text-align: center;">
+          <h2 class="dsw-h2" style="font-size: 26px;">
+            Pilih Paket & <span class="dsw-hl-aqua">Alamat Pengiriman</span>
+          </h2>
+          <p class="dsw-sub" style="max-width: 360px; margin: 8px auto 0;">
+            Pilih 1 Botol NAD+ Serum (Rp108.999) atau Paket Bundling Hemat bersama Adenosine / PDRN di bawah ini.
+          </p>
+        </div>
+
+        <GeoIpResolvedForm
+          mode="hybrid"
+          productSlug={product.slug}
+          bundleProductSlugs={[
+            'paket-nad-youth-boost-set',
+            'paket-luminous-duo',
+            'paket-anti-aging-trio',
+          ]}
+          embedded={true}
+          selectedVariantId={String(defaultVariant.id)}
+          codDisabledProvinceCodes={codDisabledProvinceCodes}
+        />
+      </section>
+    </main>
+
+    <LpFloatingCta
+      label="Pesan Sekarang"
+      price={defaultVariant.price}
+      ariaLabel="Pesan NAD+ Booster Anti-Aging Serum"
+    />
+  </div>
+</BaseLayout>
