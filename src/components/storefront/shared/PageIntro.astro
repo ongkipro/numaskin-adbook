@@ -1,7 +1,9 @@
 ---
 import { cn } from '../../../lib/cn';
-import { introSectionClass } from '../../../lib/ui-variants';
 import Breadcrumb from './Breadcrumb.astro';
+
+// Install-owned: the product dropped this shared class in 1.8.x.
+const introSectionClass = 'border-b border-slate-100 bg-white px-5 py-7';
 
 interface BreadcrumbItem {
   label: string;
