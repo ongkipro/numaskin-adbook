@@ -76,6 +76,8 @@ const cardContents = (p: { variants: Array<{ label?: string }>; contentsText?: s
 </div>
 
 <script>
+  import { autoLoadMore } from '../../../lib/auto-load-more';
+
   // Progressive: the link works without script (moreHref); with it, the next
   // step of already-rendered cards is revealed in place and focus moves to the
   // first new card so a keyboard user continues from where the list grew.
@@ -95,5 +97,6 @@ const cardContents = (p: { variants: Array<{ label?: string }>; contentsText?: s
       if (status) status.textContent = `Menampilkan ${shown} dari ${items.length} produk`;
       if (shown >= items.length) button.hidden = true;
     });
+    autoLoadMore(button);
   });
 </script>
