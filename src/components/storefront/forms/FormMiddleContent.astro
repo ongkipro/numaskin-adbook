@@ -1,7 +1,7 @@
 ---
 import { formatIdr } from '../../../lib/format-idr';
 import { getStorefrontProduct } from '../../../lib/catalog';
-import { resolveFormVariant } from '../../../lib/form-config';
+import { cheapestVariant, resolveFormVariant } from '../../../lib/form-config';
 import { getRuntimeEnv } from '../../../lib/env';
 import { loadStoreCodDisabledProvinceCodes } from '../../../lib/form-mode';
 import { jsonForScript } from '../../../lib/json-script';
@@ -90,7 +90,7 @@ const allVariants = isBundledMode
   : product.variants;
 const defaultVariant =
   resolveFormVariant({ ...product, variants: allVariants }, selectedVariantId) ||
-  allVariants[0];
+  cheapestVariant(allVariants)!;
 const defaultComparePrice = defaultVariant.comparePrice ?? defaultVariant.price;
 const defaultHasDiscount = defaultComparePrice > defaultVariant.price;
 const database = getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined;

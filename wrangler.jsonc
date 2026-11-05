@@ -38,7 +38,7 @@
   // sequential D1 reads, and part of Indonesian traffic (and all of PageSpeed)
   // is served from US colos (ADR-030).
   "placement": {
-    "mode": "smart"
+    "region": "aws:ap-southeast-1"
   },
 
   // The one secret a store cannot run without, and the only one the Deploy
