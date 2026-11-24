@@ -1,0 +1,320 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import GeoIpResolvedForm from '../components/storefront/forms/GeoIpResolvedForm.astro';
+import MetaLandingTracker from '../components/storefront/tracking/MetaLandingTracker.astro';
+import Icon from '../components/storefront/shared/Icon.astro';
+import RatingStars from '../components/storefront/shared/RatingStars.astro';
+import { getStorefrontProduct } from '../lib/catalog';
+import { defaultCatalogContentId } from '../lib/catalog-feed';
+import { getRuntimeEnv } from '../lib/env';
+import { loadStoreCodDisabledProvinceCodes } from '../lib/form-mode';
+import { getStoreAdsConfig } from '../lib/store-ads';
+import '../styles/form-hybrid.css';
+import '../styles/landing-pages/adenosine-deep-sea-water-moisturizer.css';
+
+export const prerender = false;
+
+const PRODUCT_SLUG = 'adenosine-deep-sea-water-moisturizer';
+const LANDING_SLUG = 'pelembap-deep-sea-water';
+const PAGE_TITLE =
+  'Numa Skin Deep Sea Water Moisturizer — Pelembap Gel-Cream Harian BPOM';
+const PAGE_DESC =
+  'Pelembap wajah harian bertekstur gel-cream ringan dengan Ulleung Deep Sea Water, 11X Hyaluronic Acid, AQUAXYL, dan Niacinamide dalam kemasan botol pump 30gr higienis (BPOM NA18250109281).';
+const IMG_BASE = '/images/landing/adenosine-deep-sea-water-moisturizer';
+const HERO_IMAGE = '/images/numaskin/hero-960.webp';
+
+const database = getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined;
+const [product, codDisabledProvinceCodes] = await Promise.all([
+  getStorefrontProduct(Astro.locals, PRODUCT_SLUG),
+  loadStoreCodDisabledProvinceCodes(database),
+  getStoreAdsConfig(Astro.locals),
+]);
+if (!product) {
+  return Astro.rewrite('/404');
+}
+
+const canonical = `${Astro.locals.tenant.siteUrl}${Astro.url.pathname}`;
+
+const variants = product.variants || [];
+const cheapestVariant = variants.reduce(
+  (min: any, v: any) => (!min || v.price < min.price ? v : min),
+  variants[0]
+);
+const defaultVariant = cheapestVariant || {
+  id: '1',
+  label: '30 gr',
+  price: 78999,
+  comparePrice: 125000,
+};
+---
+
+<BaseLayout
+  title={PAGE_TITLE}
+  description={PAGE_DESC}
+  image={HERO_IMAGE}
+  preloadImages={HERO_IMAGE}
+  canonical={canonical}
+  hideHeader={true}
+  hideFooter={true}
+>
+  <MetaLandingTracker
+    slug={LANDING_SLUG}
+    contentId={defaultCatalogContentId(product)}
+    contentName={product.contentName}
+    price={defaultVariant.price}
+  />
+
+  <div class="dsw-shell">
+    <main class="dsw-canvas">
+      <!-- Section 1: Hero -->
+      <section id="hero-section" class="dsw-hero">
+        <div class="dsw-hero-head">
+          <h1 class="dsw-h1">
+            Pelembap <span class="dsw-hl-tilt">Gel-Cream Air Laut Dalam</span> untuk Kelembapan Kulit Wajah Setiap Hari
+          </h1>
+          <p class="dsw-sub" style="max-width: 390px; margin: 14px auto 0; font-weight: 700;">
+            Tekstur ringan, sejuk, dan cepat meresap tanpa rasa lengket.<br />
+            <span class="dsw-underline-teal">Diformulasikan dengan Ulleung Deep Sea Water & 11X Hyaluronic Acid</span>
+          </p>
+        </div>
+
+        <div class="dsw-hero-stage">
+          <div class="dsw-hero-top-tag">
+            <div class="dsw-hero-top-pill">
+              <Icon name="lucide:award" class="size-3.5" aria-hidden="true" />
+              <span>BPOM Resmi NA18250109281 • Kemasan 30 gr</span>
+            </div>
+          </div>
+
+          <img
+            src={HERO_IMAGE}
+            alt="Kemasan Numa Skin Adenosine Deep Sea Water Moisturizer 30gr"
+            width="720"
+            height="480"
+            class="dsw-hero-img"
+            fetchpriority="high"
+            loading="eager"
+            decoding="async"
+          />
+
+          <div class="dsw-hero-overlap">
+            <div class="dsw-hero-overlap-inner">
+              <h2 class="dsw-hero-overlap-title">Hidrasi Harian Pagi & Malam</h2>
+              <p class="dsw-hero-overlap-text">
+                Membantu menjaga kelembapan alami kulit wajah saat beraktivitas di dalam ruangan ber-AC maupun di luar ruangan.
+              </p>
+            </div>
+          </div>
+
+          <div class="dsw-hero-trust-strip" role="list" aria-label="Keunggulan produk Numa Skin">
+            <div class="dsw-trust-item" role="listitem">
+              <span class="dsw-trust-icon">
+                <Icon name="lucide:shield-check" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-trust-text">
+                <strong class="dsw-trust-label">BPOM Resmi</strong>
+                <span class="dsw-trust-sub">NA18250109281</span>
+              </span>
+            </div>
+            <div class="dsw-trust-item" role="listitem">
+              <span class="dsw-trust-icon">
+                <Icon name="lucide:droplets" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-trust-text">
+                <strong class="dsw-trust-label">11X Hyaluronic</strong>
+                <span class="dsw-trust-sub">+ Deep Sea Water</span>
+              </span>
+            </div>
+            <div class="dsw-trust-item" role="listitem">
+              <span class="dsw-trust-icon">
+                <Icon name="lucide:sparkles" class="size-3.5" aria-hidden="true" />
+              </span>
+              <span class="dsw-trust-text">
+                <strong class="dsw-trust-label">Airless Pump</strong>
+                <span class="dsw-trust-sub">Higienis 30 gr</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="dsw-hero-foot">
+          <a href="#order-form" class="dsw-btn-cta">
+            <span>Pesan Sekarang — Bisa Bayar di Tempat (COD)</span>
+            <Icon name="lucide:arrow-right" class="size-4" aria-hidden="true" />
+          </a>
+        </div>
+      </section>
+
+      <!-- Section 2: Product Overview -->
+      <section class="dsw-section">
+        <div class="dsw-sec-head">
+          <span class="dsw-eyebrow">Keunggulan Formula</span>
+          <h2 class="dsw-h2">
+            Pelembap Harian yang <span class="dsw-hl-aqua">Nyaman & Sejuk</span> di Kulit Tropis
+          </h2>
+          <p class="dsw-sub">
+            Dirancang untuk menjaga kelembapan kulit wajah tanpa meninggalkan residu berminyak.
+          </p>
+        </div>
+
+        <div class="dsw-card dsw-card--padded">
+          <img
+            src={`${IMG_BASE}/kemasan-adenosine-30g.webp`}
+            alt="Botol Airless Pump Numa Skin Deep Sea Water Moisturizer 30gr"
+            width="640"
+            height="420"
+            class="dsw-img-rounded"
+            loading="lazy"
+            decoding="async"
+          />
+          <ul class="dsw-check-list" style="margin-top: 16px;">
+            <li>
+              <Icon name="lucide:check-circle-2" class="size-5 text-teal-700 shrink-0" aria-hidden="true" />
+              <span><strong style="color: #0f172a;">Ulleung Deep Sea Water:</strong> Air laut dalam Korea yang kaya mineral alami untuk menyegarkan kulit wajah.</span>
+            </li>
+            <li>
+              <Icon name="lucide:check-circle-2" class="size-5 text-teal-700 shrink-0" aria-hidden="true" />
+              <span><strong style="color: #0f172a;">11X Hyaluronic Acid & 2% AQUAXYL:</strong> Membantu menjaga cadangan kelembapan kulit agar tetap terasa kenyal dan lembut.</span>
+            </li>
+            <li>
+              <Icon name="lucide:check-circle-2" class="size-5 text-teal-700 shrink-0" aria-hidden="true" />
+              <span><strong style="color: #0f172a;">Niacinamide & Alpha-Arbutin:</strong> Merawat tampilan kulit wajah agar tampak cerah, bersih, dan segar terawat.</span>
+            </li>
+            <li>
+              <Icon name="lucide:check-circle-2" class="size-5 text-teal-700 shrink-0" aria-hidden="true" />
+              <span><strong style="color: #0f172a;">Kemasan Airless Pump 30 gr:</strong> Praktis dibawa bepergian dan menjaga higienitas krim di setiap pemakaian.</span>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Section 3: Texture & Packaging Showcase -->
+      <section class="dsw-section dsw-section--alt">
+        <div class="dsw-sec-head">
+          <span class="dsw-eyebrow">Tekstur & Kemasan</span>
+          <h2 class="dsw-h2">Ringan, Cepat Meresap, dan Praktis Dipakai</h2>
+        </div>
+
+        <div class="dsw-grid-2">
+          <div class="dsw-card">
+            <img
+              src={`${IMG_BASE}/cara-pakai-pump-tangan.webp`}
+              alt="Tekstur gel-cream Numa Skin dari botol pump higienis"
+              width="360"
+              height="360"
+              class="dsw-card-img"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <strong style="color: #0f172a; display: block; margin-bottom: 4px;">Takaran Pas & Higienis</strong>
+              <p class="dsw-card-desc">Botol airless pump memudahkan pengambilan produk sebanyak 1–2 pump tanpa kontak jari langsung ke dalam wadah.</p>
+            </div>
+          </div>
+
+          <div class="dsw-card">
+            <img
+              src={`${IMG_BASE}/bukti-tekstur-gel-cream.webp`}
+              alt="Tekstur water-gel Numa Skin yang ringan dan mudah diratakan"
+              width="360"
+              height="360"
+              class="dsw-card-img"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <strong style="color: #0f172a; display: block; margin-bottom: 4px;">Tekstur Water-Gel Sejuk</strong>
+              <p class="dsw-card-desc">Mudah diratakan di kulit wajah dan leher, nyaman digunakan sebelum memakai sunscreen atau makeup di pagi hari.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Daily Routine Steps -->
+      <section class="dsw-section">
+        <div class="dsw-sec-head">
+          <span class="dsw-eyebrow">Cara Pemakaian</span>
+          <h2 class="dsw-h2">3 Langkah Mudah Rutinitas Pagi & Malam</h2>
+        </div>
+
+        <div class="dsw-card dsw-card--padded">
+          <img
+            src={`${IMG_BASE}/bukti-meja-rias-adenosine.webp`}
+            alt="Numa Skin Deep Sea Water Moisturizer untuk rutinitas harian"
+            width="640"
+            height="420"
+            class="dsw-img-rounded"
+            loading="lazy"
+            decoding="async"
+          />
+          <ol class="dsw-check-list" style="margin-top: 16px;">
+            <li>
+              <Icon name="lucide:sparkles" class="size-5 text-teal-700 shrink-0" aria-hidden="true" />
+              <span><strong>Langkah 1:</strong> Bersihkan wajah terlebih dahulu dan keringkan dengan lembut.</span>
+            </li>
+            <li>
+              <Icon name="lucide:droplets" class="size-5 text-teal-700 shrink-0" aria-hidden="true" />
+              <span><strong>Langkah 2:</strong> Tekan 1–2 pump Numa Skin Deep Sea Water Moisturizer ke ujung jari.</span>
+            </li>
+            <li>
+              <Icon name="lucide:sun" class="size-5 text-teal-700 shrink-0" aria-hidden="true" />
+              <span><strong>Langkah 3:</strong> Usapkan secara merata ke seluruh wajah dan leher setiap pagi dan malam hari.</span>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- Section 5: Customer Impressions -->
+      <section class="dsw-section dsw-section--alt">
+        <div class="dsw-sec-head">
+          <span class="dsw-eyebrow">Ulasan Pelanggan</span>
+          <h2 class="dsw-h2">Nyaman Dipakai untuk Aktivitas Sehari-hari</h2>
+        </div>
+
+        <div class="dsw-card dsw-card--padded">
+          <img
+            src={`${IMG_BASE}/bukti-bunda-hijab-cerah.webp`}
+            alt="Pelanggan pengguna Numa Skin Deep Sea Water Moisturizer"
+            width="640"
+            height="420"
+            class="dsw-img-rounded"
+            loading="lazy"
+            decoding="async"
+          />
+          <div style="margin-top: 14px;">
+            <RatingStars rating={5} />
+            <p style="margin-top: 8px; color: #334155; font-size: 15px; line-height: 1.6;">
+              "Teksturnya ringan dan adem waktu dioles ke wajah. Dipakai pagi sebelum beraktivitas nyaman, tidak terasa lengket, dan kemasannya model pump jadi praktis dibawa ke mana-mana."
+            </p>
+            <p style="margin-top: 6px; font-weight: 700; color: #0f172a; font-size: 14px;">
+              — Ibu Rina, Bandung
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 6: Order Form -->
+      <section id="order-form" class="dsw-section">
+        <div class="dsw-sec-head">
+          <span class="dsw-eyebrow">Formulir Pemesanan Resmi</span>
+          <h2 class="dsw-h2">Pesan Numa Skin Deep Sea Water Moisturizer</h2>
+          <p class="dsw-sub">
+            Isi nama, nomor WhatsApp aktif, dan alamat pengiriman di bawah ini. Tersedia pembayaran COD (Bayar di Tempat) maupun Transfer/QRIS.
+          </p>
+        </div>
+
+        <GeoIpResolvedForm
+          mode="hybrid"
+          productSlug={product.slug}
+          embedded={true}
+          selectedVariantId={String(defaultVariant.id)}
+          codDisabledProvinceCodes={codDisabledProvinceCodes}
+        />
+
+        <p style="text-align: center; font-size: 12px; color: #64748b; margin-top: 16px;">
+          Produk Kosmetik Terdaftar BPOM Resmi NA18250109281 • Dikirim dari Gudang Resmi Numa Skin Indonesia.
+        </p>
+      </section>
+    </main>
+  </div>
+</BaseLayout>

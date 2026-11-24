@@ -1,0 +1,320 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import GeoIpResolvedForm from '../components/storefront/forms/GeoIpResolvedForm.astro';
+import MetaLandingTracker from '../components/storefront/tracking/MetaLandingTracker.astro';
+import Icon from '../components/storefront/shared/Icon.astro';
+import RatingStars from '../components/storefront/shared/RatingStars.astro';
+import { getStorefrontProduct } from '../lib/catalog';
+import { defaultCatalogContentId } from '../lib/catalog-feed';
+import { getRuntimeEnv } from '../lib/env';
+import { loadStoreCodDisabledProvinceCodes } from '../lib/form-mode';
+import { getStoreAdsConfig } from '../lib/store-ads';
+import '../styles/form-hybrid.css';
+import '../styles/landing-pages/deep-sea-water-treatment-lotion.css';
+
+export const prerender = false;
+
+const PRODUCT_SLUG = 'deep-sea-water-treatment-lotion';
+const LANDING_SLUG = 'toner-deep-sea-water';
+const PAGE_TITLE =
+  'Numa Skin Deep Sea Water Treatment Lotion — Toner Hidrasi Wajah Harian BPOM';
+const PAGE_DESC =
+  'Toner-essence perawatan kelembapan wajah harian dengan Ulleung Deep Sea Water, Hyaluronic Acid, Ceramide, Niacinamide, dan Allantoin yang ringan, sejuk, dan cepat meresap (BPOM NA18251202454).';
+const IMG_BASE = '/images/landing/deep-sea-water-treatment-lotion';
+const HERO_IMAGE = `${IMG_BASE}/ukuran-50ml-dan-150ml.webp`;
+
+const database = getRuntimeEnv(Astro.locals)?.OMS_DB as D1Database | undefined;
+const [product, codDisabledProvinceCodes] = await Promise.all([
+  getStorefrontProduct(Astro.locals, PRODUCT_SLUG),
+  loadStoreCodDisabledProvinceCodes(database),
+  getStoreAdsConfig(Astro.locals),
+]);
+if (!product) {
+  return Astro.rewrite('/404');
+}
+
+const canonical = `${Astro.locals.tenant.siteUrl}${Astro.url.pathname}`;
+
+const variants = product.variants || [];
+const cheapestVariant = variants.reduce(
+  (min: any, v: any) => (!min || v.price < min.price ? v : min),
+  variants[0]
+);
+const defaultVariant = cheapestVariant || {
+  id: '4',
+  label: '50ml',
+  price: 79000,
+  comparePrice: 125000,
+};
+---
+
+<BaseLayout
+  title={PAGE_TITLE}
+  description={PAGE_DESC}
+  image={HERO_IMAGE}
+  preloadImages={HERO_IMAGE}
+  canonical={canonical}
+  hideHeader={true}
+  hideFooter={true}
+>
+  <MetaLandingTracker
+    slug={LANDING_SLUG}
+    contentId={defaultCatalogContentId(product)}
+    contentName={product.contentName}
+    price={defaultVariant.price}
+  />
+
+  <div class="dsw-shell">
+    <main class="dsw-canvas">
+      <!-- Section 1: Hero -->
+      <section id="hero-section" class="dsw-hero">
+        <div class="dsw-hero-head">
+          <h1 class="dsw-h1">
+            Toner-Essence <span class="dsw-hl-tilt">Air Laut Dalam Ulleung</span> untuk Hidrasi Kulit Segar Setiap Hari
+          </h1>
+          <p class="dsw-sub" style="max-width: 400px; margin: 14px auto 0; font-weight: 700;">
+            Tekstur cair ringan yang terasa sejuk dan cepat meresap tanpa rasa lengket.<br />
+            <span class="dsw-underline-teal">Diperkaya Ulleung Deep Sea Water, Hyaluronic Acid, Ceramide, Niacinamide & Allantoin</span>
+          </p>
+        </div>
+
+        <div class="dsw-hero-stage">
+          <div class="dsw-hero-top-tag">
+            <div class="dsw-hero-top-pill">
+              <Icon name="lucide:droplets" class="size-3.5" aria-hidden="true" />
+              <span>BPOM Resmi NA18251202454 • Tersedia 50 ml & 150 ml</span>
+            </div>
+          </div>
+
+          <img
+            src={HERO_IMAGE}
+            alt="Kemasan Numa Skin Deep Sea Water Treatment Lotion 150ml dan 50ml"
+            width="720"
+            height="480"
+            class="dsw-hero-img"
+            fetchpriority="high"
+            loading="eager"
+            decoding="async"
+          />
+
+          <div class="dsw-hero-overlap">
+            <div class="dsw-hero-overlap-inner">
+              <h2 class="dsw-hero-overlap-title">Langkah Awal Hidrasi Pagi & Malam</h2>
+              <p class="dsw-hero-overlap-text">
+                Membantu menyegarkan dan menyiapkan kelembapan kulit wajah sehabis mencuci muka sebelum menggunakan pelembap atau tabir surya harian.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="dsw-trust-row">
+          <div class="dsw-trust-item">
+            <span class="dsw-trust-icon">
+              <Icon name="lucide:shield-check" class="size-4" aria-hidden="true" />
+            </span>
+            <div>
+              <span class="dsw-trust-label">BPOM Resmi</span>
+              <span class="dsw-trust-sub">NA18251202454</span>
+            </div>
+          </div>
+          <div class="dsw-trust-item">
+            <span class="dsw-trust-icon">
+              <Icon name="lucide:droplets" class="size-4" aria-hidden="true" />
+            </span>
+            <div>
+              <span class="dsw-trust-label">Deep Sea Water</span>
+              <span class="dsw-trust-sub">+ Hyaluronic & Ceramide</span>
+            </div>
+          </div>
+          <div class="dsw-trust-item">
+            <span class="dsw-trust-icon">
+              <Icon name="lucide:sparkles" class="size-4" aria-hidden="true" />
+            </span>
+            <div>
+              <span class="dsw-trust-label">Niacinamide</span>
+              <span class="dsw-trust-sub">+ Allantoin Sejuk</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="dsw-hero-foot" style="margin-top: 18px; text-align: center;">
+          <a href="#order-form" class="dsw-btn-cta">
+            <span>Pesan Sekarang — Bisa Bayar di Tempat (COD)</span>
+            <Icon name="lucide:arrow-right" class="size-4" aria-hidden="true" />
+          </a>
+        </div>
+      </section>
+
+      <!-- Section 2: Key Ingredients -->
+      <section class="dsw-section">
+        <div class="dsw-sec-head">
+          <span class="dsw-eyebrow">Komposisi Pilihan</span>
+          <h2 class="dsw-h2">
+            Perpaduan <span class="dsw-hl-aqua">Hidrasi & Kesegaran</span> dalam Satu Botol Toner
+          </h2>
+          <p class="dsw-sub">
+            Dirancang agar nyaman digunakan untuk semua jenis kulit di iklim tropis.
+          </p>
+        </div>
+
+        <div class="dsw-card dsw-card--padded">
+          <img
+            src={`${IMG_BASE}/formulasi-ulleung-deep-sea-water.webp`}
+            alt="Formulasi Numa Skin Deep Sea Water Treatment Lotion"
+            width="640"
+            height="420"
+            class="dsw-img-rounded"
+            loading="lazy"
+            decoding="async"
+          />
+          <ul class="dsw-check-list" style="margin-top: 16px;">
+            <li>
+              <Icon name="lucide:check-circle-2" class="size-5 text-teal-700 shrink-0" aria-hidden="true" />
+              <span><strong style="color: #0f172a;">Ulleung Deep Sea Water:</strong> Air laut dalam Korea yang kaya mineral alami untuk membantu menghidrasi dan menyegarkan kulit wajah.</span>
+            </li>
+            <li>
+              <Icon name="lucide:check-circle-2" class="size-5 text-teal-700 shrink-0" aria-hidden="true" />
+              <span><strong style="color: #0f172a;">Hyaluronic Acid & Ceramide:</strong> Membantu mengunci kelembapan alami kulit dan menjaga kulit tetap terasa kenyal serta lembut.</span>
+            </li>
+            <li>
+              <Icon name="lucide:check-circle-2" class="size-5 text-teal-700 shrink-0" aria-hidden="true" />
+              <span><strong style="color: #0f172a;">Allantoin:</strong> Memberikan sensasi sejuk yang nyaman dan membantu menenangkan kulit wajah setelah beraktivitas.</span>
+            </li>
+            <li>
+              <Icon name="lucide:check-circle-2" class="size-5 text-teal-700 shrink-0" aria-hidden="true" />
+              <span><strong style="color: #0f172a;">Niacinamide:</strong> Merawat tampilan kulit wajah agar tampak cerah, bersih, dan segar terawat setiap hari.</span>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Section 3: Texture & 3 Ways to Use -->
+      <section class="dsw-section dsw-section--alt">
+        <div class="dsw-sec-head">
+          <span class="dsw-eyebrow">Tekstur & Cara Pakai</span>
+          <h2 class="dsw-h2">Fleksibel Dipakai dengan Tangan, Kapas, atau Metode CSM</h2>
+        </div>
+
+        <div class="dsw-grid-2">
+          <div class="dsw-card">
+            <img
+              src={`${IMG_BASE}/cara-pakai-tetes-tap.webp`}
+              alt="Tuang Numa Skin Deep Sea Water Treatment Lotion ke telapak tangan"
+              width="360"
+              height="360"
+              class="dsw-card-img"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <strong style="color: #0f172a; display: block; margin-bottom: 4px;">Tuang & Tepuk Lembut</strong>
+              <p class="dsw-card-desc">Tuangkan beberapa tetes ke telapak tangan, lalu tepuk-tepuk lembut ke seluruh wajah dan leher hingga meresap.</p>
+            </div>
+          </div>
+
+          <div class="dsw-card">
+            <img
+              src={`${IMG_BASE}/ritual-cara-pakai-csm.webp`}
+              alt="Gunakan Numa Skin Deep Sea Water Treatment Lotion dengan kapas atau metode CSM"
+              width="360"
+              height="360"
+              class="dsw-card-img"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="dsw-card-body">
+              <strong style="color: #0f172a; display: block; margin-bottom: 4px;">Kapas atau Metode CSM</strong>
+              <p class="dsw-card-desc">Dapat diusapkan menggunakan kapas wajah atau dikompreskan selama 3–5 menit (metode Chizu Saeki / CSM) untuk sensasi ekstra sejuk.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Daily Routine Showcase -->
+      <section class="dsw-section">
+        <div class="dsw-sec-head">
+          <span class="dsw-eyebrow">Rutinitas Harian</span>
+          <h2 class="dsw-h2">Tekstur Ringan & Tidak Lengket di Kulit</h2>
+        </div>
+
+        <div class="dsw-card dsw-card--padded">
+          <img
+            src={`${IMG_BASE}/bukti-tekstur-tangan.webp`}
+            alt="Tekstur cair segar Numa Skin Deep Sea Water Treatment Lotion"
+            width="640"
+            height="420"
+            class="dsw-img-rounded"
+            loading="lazy"
+            decoding="async"
+          />
+          <ol class="dsw-check-list" style="margin-top: 16px;">
+            <li>
+              <Icon name="lucide:sparkles" class="size-5 text-teal-700 shrink-0" aria-hidden="true" />
+              <span><strong>Langkah 1:</strong> Gunakan setelah mencuci wajah di pagi dan malam hari.</span>
+            </li>
+            <li>
+              <Icon name="lucide:droplets" class="size-5 text-teal-700 shrink-0" aria-hidden="true" />
+              <span><strong>Langkah 2:</strong> Aplikasikan dengan telapak tangan, kapas lembut, atau metode kompres CSM.</span>
+            </li>
+            <li>
+              <Icon name="lucide:sun" class="size-5 text-teal-700 shrink-0" aria-hidden="true" />
+              <span><strong>Langkah 3:</strong> Lanjutkan dengan pelembap Numa Skin dan sunscreen di pagi hari.</span>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- Section 5: Customer Impressions -->
+      <section class="dsw-section dsw-section--alt">
+        <div class="dsw-sec-head">
+          <span class="dsw-eyebrow">Ulasan Pelanggan</span>
+          <h2 class="dsw-h2">Favorit untuk Kelembapan Wajah Sehari-hari</h2>
+        </div>
+
+        <div class="dsw-card dsw-card--padded">
+          <img
+            src={`${IMG_BASE}/bukti-kulit-sehat-hijab.webp`}
+            alt="Pelanggan pengguna Numa Skin Deep Sea Water Treatment Lotion"
+            width="640"
+            height="420"
+            class="dsw-img-rounded"
+            loading="lazy"
+            decoding="async"
+          />
+          <div style="margin-top: 14px;">
+            <RatingStars rating={5} />
+            <p style="margin-top: 8px; color: #334155; font-size: 15px; line-height: 1.6;">
+              "Teksturnya ringan dan berasa sejuk banget waktu ditepuk ke wajah. Dipakai pakai tangan atau dikompres pakai kapas (metode CSM) sama-sama nyaman, cepat meresap dan nggak lengket."
+            </p>
+            <p style="margin-top: 6px; font-weight: 700; color: #0f172a; font-size: 14px;">
+              — Kak Nadya, Jakarta
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 6: Order Form -->
+      <section id="order-form" class="dsw-section">
+        <div class="dsw-sec-head">
+          <span class="dsw-eyebrow">Formulir Pemesanan Resmi</span>
+          <h2 class="dsw-h2">Pesan Numa Skin Deep Sea Water Treatment Lotion</h2>
+          <p class="dsw-sub">
+            Pilih ukuran kemasan, isi nama, nomor WhatsApp aktif, dan alamat pengiriman di bawah ini. Tersedia pembayaran COD (Bayar di Tempat) maupun Transfer/QRIS.
+          </p>
+        </div>
+
+        <GeoIpResolvedForm
+          mode="hybrid"
+          productSlug={product.slug}
+          embedded={true}
+          selectedVariantId={String(defaultVariant.id)}
+          codDisabledProvinceCodes={codDisabledProvinceCodes}
+        />
+
+        <p style="text-align: center; font-size: 12px; color: #64748b; margin-top: 16px;">
+          Produk Kosmetik Terdaftar BPOM Resmi NA18251202454 • Dikirim dari Gudang Resmi Numa Skin Indonesia.
+        </p>
+      </section>
+    </main>
+  </div>
+</BaseLayout>

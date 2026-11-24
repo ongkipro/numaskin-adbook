@@ -18,7 +18,7 @@ export const prerender = false;
 const PRODUCT_SLUG = 'paket-triple-protection-3-in-1';
 const LANDING_SLUG = 'paket-triple-protection-3-in-1';
 const PAGE_TITLE = 'Paket Triple Protection 3-in-1 - Cuci, Lembap & Tameng SPF 50+ Harian BPOM';
-const PAGE_DESC = 'Paket bundling 3-in-1 Numa Skin: Deep Sea Water Facial Wash 100ml + Adenosine Moisturizer 30gr + Oxydew Sunscreen SPF 50+ PA++++ 30ml untuk perlindungan harian anti-flek (3 BPOM Resmi).';
+const PAGE_DESC = 'Paket bundling 3-in-1 Numa Skin: Deep Sea Water Facial Wash 100ml + Adenosine Moisturizer 30gr + Oxydew Sunscreen SPF 50+ PA++++ 30ml untuk perlindungan harian Pencerah & Pelembap (3 BPOM Resmi).';
 const IMG_BASE = '/images/landing/paket-triple-protection-3-in-1';
 const HERO_IMAGE = `${IMG_BASE}/hero-paket-triple-protection.webp`;
 
@@ -73,10 +73,10 @@ const defaultVariant = cheapestVariant || {
       <section id="hero-section" class="dsw-hero">
         <div class="dsw-hero-head">
           <h1 class="dsw-h1">
-            <span class="dsw-hl-tilt">Wajah Kusam Polusi</span> & Muncul Flek Akibat Malas Ribet Pagi Hari?
+            <span class="dsw-hl-tilt">Wajah Kusam Polusi</span> & Muncul Rona Kusam Akibat Malas Ribet Pagi Hari?
           </h1>
           <p class="dsw-sub" style="max-width: 390px; margin: 14px auto 0; font-weight: 700;">
-            Debu jalanan, keringat, dan sinar matahari tropis mempercepat timbulnya flek hitam bila kulit tidak dibersihkan dan diproteksi.<br />
+            Debu jalanan, keringat, dan sinar matahari tropis mempercepat timbulnya warna kulit kurang merata bila kulit tidak dibersihkan dan diproteksi.<br />
             <span class="dsw-underline-teal">Cukup 3 langkah simpel dengan Paket Triple Protection 3-in-1!</span>
           </p>
         </div>
@@ -91,7 +91,7 @@ const defaultVariant = cheapestVariant || {
 
           <img
             src={HERO_IMAGE}
-            alt="Perbandingan wajah kusam berflek akibat polusi dan UV vs kulit bersih terlindungi dengan Paket Triple Protection 3-in-1"
+            alt="Ilustrasi perawatan kulit bersih terlindungi dengan Paket Triple Protection 3-in-1"
             width="720"
             height="480"
             class="dsw-hero-img"
@@ -104,7 +104,7 @@ const defaultVariant = cheapestVariant || {
             <div class="dsw-hero-overlap-inner">
               <h2 class="dsw-hero-overlap-title">3 Langkah Wajib untuk Anda yang Sibuk</h2>
               <p class="dsw-hero-overlap-text">
-                Tanpa ribet banyak botol: <strong style="color: #be123c;">cuci bersih pori, kunci kelembapan anti-flek Adenosine, dan blokir sinar UVA/UVB dengan SPF 50+ PA++++</strong>.
+                Tanpa ribet banyak botol: <strong style="color: #be123c;">cuci bersih pori, kunci kelembapan Pencerah & Pelembap Adenosine, dan blokir sinar UVA/UVB dengan SPF 50+ PA++++</strong>.
               </p>
             </div>
           </div>
@@ -177,7 +177,7 @@ const defaultVariant = cheapestVariant || {
               <Icon name="lucide:layers" class="size-4" aria-hidden="true" />
             </span>
             <p class="dsw-list-text">
-              <strong style="color: #0f172a;">Adenosine Moisturizer (30 gr):</strong> Pelembap gel-cream dingin dengan Adenosine, Alpha-Arbutin, & 11X Hyaluronic Acid untuk merawat flek dan garis halus.
+              <strong style="color: #0f172a;">Adenosine Moisturizer (30 gr):</strong> Pelembap gel-cream dingin dengan Adenosine, Alpha-Arbutin, & 11X Hyaluronic Acid untuk merawat rona kusam dan garis halus.
             </p>
           </div>
           <div class="dsw-list-row">
@@ -211,7 +211,7 @@ const defaultVariant = cheapestVariant || {
             />
             <p class="dsw-photo-caption">
               <strong style="color: #be123c; display: block;">Keluar Rumah Tanpa Tameng UV</strong>
-              Sinar matahari pagi hingga siang langsung memicu munculnya bintik flek hitam baru.
+              Sinar matahari pagi hingga siang langsung memicu munculnya bintik warna kulit kurang merata baru.
             </p>
           </div>
           <div class="dsw-photo-card">
@@ -260,10 +260,10 @@ const defaultVariant = cheapestVariant || {
         </div>
       </section>
 
-      <!-- Section 4: Perbandingan Visual Sebelum vs Sesudah -->
+      <!-- Section 4: Ilustrasi Perawatan Rutin -->
       <section class="dsw-section">
         <h2 class="dsw-h2">
-          Perbedaan nyata <span class="dsw-hl-aqua">sebelum vs sesudah rutin</span>
+          Perbedaan nyata <span class="dsw-hl-aqua">dengan perawatan rutin</span>
         </h2>
         <p class="dsw-sub">Tiga langkah ringkas yang menjaga kulit tetap bersih, kenyal, dan bebas kusam matahari.</p>
 
@@ -271,7 +271,7 @@ const defaultVariant = cheapestVariant || {
           <div class="dsw-photo-card">
             <img
               src={`${IMG_BASE}/kondisi-kusam-polusi-flek-uv.webp`}
-              alt="Kondisi kulit pipi kusam berpori kotor dengan noda flek matahari sebelum perawatan"
+              alt="Kondisi kulit pipi kusam berpori kotor dengan noda rona kusam matahari saat kulit membutuhkan kelembapan"
               width="648"
               height="432"
               class="dsw-photo-img"
@@ -281,7 +281,7 @@ const defaultVariant = cheapestVariant || {
             />
             <span class="dsw-photo-badge dsw-photo-badge--before">Sebelum Triple Protection</span>
             <p class="dsw-photo-caption">
-              Wajah tampak kusam kemerahan akibat panas matahari, pori tersumbat, dan flek hitam terlihat tegas.
+              Wajah tampak kusam kemerahan akibat panas matahari, pori tersumbat, dan warna kulit kurang merata terlihat tegas.
             </p>
           </div>
 
@@ -405,7 +405,7 @@ const defaultVariant = cheapestVariant || {
               <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
             </div>
             <p class="dsw-review-quote">
-              "Sunscreen-nya beneran gak ada whitecast dan gak perih di mata. <strong style="color: #0f172a;">Dipadu sama Adenosine & Facial Wash-nya</strong>, <span class="dsw-hl-aqua">flek di pipi perlahan memudar dan muka bersih banget</span>."
+              "Sunscreen-nya beneran gak ada whitecast dan gak perih di mata. <strong style="color: #0f172a;">Dipadu sama Adenosine & Facial Wash-nya</strong>, <span class="dsw-hl-aqua">rona kusam di pipi perlahan memudar dan muka bersih banget</span>."
             </p>
           </div>
           <div class="dsw-review-row">
@@ -422,7 +422,7 @@ const defaultVariant = cheapestVariant || {
               <RatingStars rating={5} starClass="h-3.5 w-3.5 !fill-[#d97706] !text-[#d97706]" />
             </div>
             <p class="dsw-review-quote">
-              "Cuma 204 ribu udah dapet sabun, pelembap anti-aging, sama sunscreen SPF 50+. <span class="dsw-hl-rose">Hemat 23 ribu</span> dan <span class="dsw-hl-aqua">semua ukuran full size awet dipakai</span>."
+              "Cuma 204 ribu udah dapet sabun, pelembap Perawatan Elastisitas, sama sunscreen SPF 50+. <span class="dsw-hl-rose">Hemat 23 ribu</span> dan <span class="dsw-hl-aqua">semua ukuran full size awet dipakai</span>."
             </p>
           </div>
         </div>
@@ -513,7 +513,7 @@ const defaultVariant = cheapestVariant || {
             <figcaption class="dsw-figcaption">
               <h3 class="dsw-figcaption-title">Daily Cleanse, Repair & UV Shield</h3>
               <p class="dsw-figcaption-desc">
-                Melindungi kulit dari 3 penyebab utama penuaan dini: residu polusi pori, dehidrasi kolagen, dan radiasi UVA/UVB.
+                Melindungi kulit dari 3 penyebab utama kulit kering: residu polusi pori, dehidrasi kolagen, dan radiasi UVA/UVB.
               </p>
             </figcaption>
           </figure>
@@ -533,7 +533,7 @@ const defaultVariant = cheapestVariant || {
             <figcaption class="dsw-figcaption">
               <h3 class="dsw-figcaption-title">5% Niacinamide + Adenosine + 3% Luceane™ SPF 50+</h3>
               <p class="dsw-figcaption-desc">
-                Kombinasi pencerah pori, penghalus kerutan & flek hitam, serta filter matahari spektrum luas PA++++.
+                Kombinasi pencerah pori, penghalus tekstur kering & warna kulit kurang merata, serta filter matahari spektrum luas PA++++.
               </p>
             </figcaption>
           </figure>
